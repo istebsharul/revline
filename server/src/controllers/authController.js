@@ -66,15 +66,13 @@ export const loginUser = asyncErrors(async (req, res) => {
 });
 
 export const logoutUser = asyncErrors(async (req, res) => {
-    // Destroy the user session
-    req.session.destroy((err) => {
-        if (err) {
-            logger.error(`Failed to logout user: ${err.message}`);
-            return res.status(500).json({ success: false, message: 'Failed to logout' });
-        }
-
-        // Send success response
-        res.status(200).json({ success: true, message: 'Logged out successfully' });
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+    });
+    res.status(200).json({
+        success: true,
+        message: 'logged out successfully',
     });
 });
 
