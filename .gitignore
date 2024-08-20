@@ -1,0 +1,51 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variable files
+.env
+.env.* # To ignore other environment files (e.g., .env.local)
+
+# Build output
+dist/
+build/
+*.log
+
+# Logs
+*.log
+
+# Operating system files
+.DS_Store # macOS
+Thumbs.db # Windows
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp # Vim swap files
+*.swo # Vim swap files
+
+# Package distribution files
+*.tgz
+*.zip
+
+# Temporary files
+tmp/
+temp/
+
+# NPM cache
+.npm/
+.yarn-cache/
+
+# Optional npm cache directory
+.npmrc
+
+# ESLint cache
+.eslintcache
+
+# Debug files
+*.pid
+*.seed
+*.pid.lock
+
+# Docker files
+Dockerfile
+docker-compose.yml
