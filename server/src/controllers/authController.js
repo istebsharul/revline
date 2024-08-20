@@ -19,7 +19,7 @@ export const registerUser = asyncErrors(async (req, res) => {
         fullName,
         email,
         contactNumber,
-        passwordHash: password, // Use passwordHash instead of password
+        password: password, // Use password instead of password
         zipCode,
     });
 
@@ -45,7 +45,7 @@ export const loginUser = asyncErrors(async (req, res) => {
         return res.status(400).json({ success: false, message: 'Email and Password are required' });
     }
 
-    const user = await User.findOne({ email }).select('+passwordHash');
+    const user = await User.findOne({ email }).select('+password');
 
     logger.info(user);
     if (!user) {
@@ -65,7 +65,6 @@ export const loginUser = asyncErrors(async (req, res) => {
     logger.info(`User logged in successfully: ${email}`);
 });
 
-
 export const logoutUser = asyncErrors(async (req, res) => {
     // Destroy the user session
     req.session.destroy((err) => {
@@ -79,48 +78,64 @@ export const logoutUser = asyncErrors(async (req, res) => {
     });
 });
 
-export const forgotPassword = asyncErrors(async (req, res, next) => {
-    const user = await User.findOne({ email: req.body.email });
+export const forgotPassword = asyncErrors(async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    const user = await User.findOne({ email });
 
     if (!user) {
-        logger.error('User not found');
-        return next(new ErrorHandler('User not found', 404));
+        logger.warn(`Failed password reset request: User not found with email: ${email}`);
+        return res.status(404).json({ success: false, message: `User not found with email: ${email}` });
     }
 
-    const resetToken = user.getResetPasswordToken(); //defined models/userModel
+    const resetToken = crypto.randomBytes(20).toString('hex');
 
-    await user.save({ validateBeforeSave: false }); //in getResetPasswordtoken() we are changing some variables of user, those are needed to be updated in the database
+    const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
 
-    const resetPasswordUrl = `${req.protocol}://localhost:3000/password/reset/${resetToken}`;
 
-    console.log(`${host}`);
+    // const resetToken = user.getResetPasswordToken(); //defined models/userModel
+    // const resetToken = user.getResetPasswordToken();
+    logger.info("Reset Token ",resetToken);
+    logger.info("Hashed Reset Token ",resetPasswordToken);
 
-    const message = `Follow the url to reset your password : \n\n ${resetPasswordUrl} \n\n If u haven't requested it , ignore it `;
+    await user.save({ validateBeforeSave: false }); 
+
+    // Set token and expiry date in the user document
+    user.resetPasswordToken = resetPasswordToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+    logger.info("Saving on Db",user.resetPasswordToken)
+    await user.save();
+
+    // Send the reset token via email
+    const resetUrl = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`;
+    const message = `You are receiving this email because you (or someone else) has requested to reset your password. Please make a PUT request to:\n\n${resetUrl}`;
 
     try {
-        //defined in utils/sendEmail
         await sendMail({
             email: user.email,
-            subject: `Password Recovery`,
-            message,
+            subject: 'Password Reset Request',
+            message
         });
-        logger.info(`User Email sent successfully to: ${user.email}`);
-        res.status(201).json({
-            success: true,
-            message: `mail sent to ${user.email} successfully`,
-        });
+
+        logger.info(`Password reset token sent to email: ${email}`);
+        res.status(200).json({ success: true, message: 'Password reset token sent to email' });
     } catch (error) {
-        logger.error(`Error sending email: ${error.message}`);
-        //in getResetPasswordtoken() we were changing some variables of user, those were also  updated in the database on failure/success they need to be assigned their original value and update the database
+        logger.error(`Failed to send password reset email: ${error.message}`);
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
+        await user.save();
 
-        await user.save({ validateBeforeSave: false });
-
-        return next(new ErrorHandler(error.message, 500));
+        res.status(500).json({ success: false, message: 'Failed to send password reset email' });
     }
 });
-
 
 export const resetPassword = asyncErrors(async (req, res) => {
     const { token } = req.params; // Get the reset token from the URL parameters
@@ -155,12 +170,13 @@ export const resetPassword = asyncErrors(async (req, res) => {
     }
 
     // Hash the new password and save it to the user's document
-    user.passwordHash = await bcrypt.hash(newPassword, 12);
+    // user.password = await bcrypt.hash(newPassword, 12);
+    user.password = newPassword;
     user.resetPasswordToken = undefined; // Clear the reset token
     user.resetPasswordExpires = undefined; // Clear the expiration time
 
     await user.save();
 
     logger.info(`Password successfully reset for user: ${user.email}`);
-    res.status(200).json({ success: true, message: 'Password has been reset successfully' });
+    res.status(200).json({ success: true, message: `Password has been reset successfully${user.password}` });
 });

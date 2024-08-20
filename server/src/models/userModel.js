@@ -25,7 +25,7 @@ const userSchema = new Schema(
             required: [true, 'Please enter your contact number'],
             trim: true,
         },
-        passwordHash: {
+        password: {
             type: String,
             required: [true, 'Please enter your password'],
             select: false, // Exclude from query results by default
@@ -57,17 +57,21 @@ const userSchema = new Schema(
 
 // Middleware to hash the user's password before saving it to the database
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('passwordHash')) {
+    if (!this.isModified('password')) {
         next();
     }
 
     // Hash the password with bcrypt
-    this.passwordHash = await bcrypt.hash(this.passwordHash, 10);
+    this.password = await bcrypt.hash(this.password, 10);
 });
 
 // Method to compare the provided password with the stored hash
 userSchema.methods.comparePassword = async function (password) {
-    return await bcrypt.compare(password, this.passwordHash);
+    console.log("Compare Password Hitttt");
+    const newPass = await bcrypt.compare(password, this.password);
+    console.log("From Login",password);
+    console.log("From DB",this.password);
+    return newPass ;
 };
 
 // Method to generate a JWT token
@@ -79,6 +83,7 @@ userSchema.methods.getJWTToken = function () {
 
 // Method to generate a password reset token
 userSchema.methods.getResetPasswordToken = function () {
+    console.log("getResetTokenHitttttt");
     const resetToken = crypto.randomBytes(20).toString('hex');
 
     this.resetPasswordToken = crypto
