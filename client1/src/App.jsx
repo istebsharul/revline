@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
-import { Toaster } from 'react-hot-toast';
 
 // User Pages
 import HomePage from './Pages/Landing/HomePage';
@@ -28,21 +27,15 @@ import AdminRoute from './Utils/AdminRoute';
 
 const App = () => (
   <BrowserRouter>
-    <Toaster
-      position="top-center"
-      reverseOrder={false}
-    />
-    <div className='mb-14'>
-      <Navbar />
-    </div>
+    <Navbar />
     <Routes>
       {/* User Routes */}
       <Route path="/" element={<HomePage />} />
-      <Route path="contact" element={<ContactUsPage />} />
-      <Route path="about" element={<AboutUsPage />} />
-      <Route path="warranty" element={<WarrantyReturnsPage />} />
+      <Route path="contact-us" element={<ContactUsPage />} />
+      <Route path="about-us" element={<AboutUsPage />} />
+      <Route path="warranty-returns" element={<WarrantyReturnsPage />} />
       <Route path="faq" element={<FAQPage />} />
-      <Route path="product" element={<StaticProductPage />} />
+      <Route path="static-product" element={<StaticProductPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="signup" element={<SignupPage />} />
       <Route path="reset-password" element={<ResetPasswordPage />} />
