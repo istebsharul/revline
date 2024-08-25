@@ -1,15 +1,67 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import Cta from './Cta';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../Actions/userActions';
 
 function Navbar() {
     const [navbar, setNavbar] = useState(false);
+    const [userDropdown, setUserDropdown] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const dropdownRef = useRef(null);
+    const dispatch = useDispatch();
+    const currentUser = useSelector((state)=> state.auth.user?.user);
+    const [username, setUsername] = useState(""); 
+
+    // Hardcoded username for testing
+    // const isLoggedIn = userName !== ''; // Determine login status
+
+    const handleLogout = () => {
+        dispatch(logout());
+        setUserDropdown(false);
+        setIsLoggedIn(false);
+    };
+
+    useEffect(()=>{
+        const fetchUserProfile = () =>{
+            try {
+                if(currentUser){
+                    setUsername(currentUser.name);
+                    setIsLoggedIn(!isLoggedIn);
+                }
+            } catch (error) {
+                setUsername("");
+                console.log("Error fetching profile",error.message);
+            }
+        }
+
+        if(currentUser){
+            fetchUserProfile();
+        }
+    },[currentUser])
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setUserDropdown(false);
+            }
+        };
+        window.addEventListener("click", handleClickOutside);
+        return () => {
+            window.removeEventListener("click", handleClickOutside);
+        };
+    }, []);
+
+    const toggleUserDropdown = () => {
+        if(isLoggedIn){
+            setUserDropdown(!userDropdown);
+        }
+        console.log(userDropdown);
+    };
 
     return (
-        <nav className="w-full flex justify-center items-center fixed top-0 left-0 right-0 z-50 bg-white">
-            <div className="w-full lg:w-4/6 md:flex md:justify-between md:items-center md:px-4 md:rounded-full md:p-0 p-4">
+        <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50">
+            <div className="w-full h-14 lg:w-4/6 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-4">
                 {/* LOGO */}
                 <div className='flex md:flex-col items-center justify-between md:block'>
                     <div className="w-[9rem]">
@@ -40,9 +92,31 @@ function Navbar() {
                         ))}
                     </ul>
                 </div>
-                <div className="hidden md:block">
-                    <Cta />
-                </div>
+                <li className="md:px-8 md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
+                    <div className="cursor-pointer p-2" onClick={toggleUserDropdown}>
+                        {isLoggedIn ? (
+                            <button>{username}</button>
+                        ) : (
+                            <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-red-600' to="/login">LOGIN</Link>
+                        )}
+                    </div>
+                    {isLoggedIn && userDropdown && (
+                        <div className="absolute right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
+                            <div
+                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </div>
+                            <Link to="/profile" className="block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg">
+                                Profile
+                            </Link>
+                            <Link to="/orders" className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
+                                Orders
+                            </Link>
+                        </div>
+                    )}
+                </li>
             </div>
         </nav>
     );

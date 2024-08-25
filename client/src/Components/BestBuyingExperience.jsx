@@ -3,8 +3,8 @@ import { FaArrowAltCircleUp, FaArrowUp } from 'react-icons/fa'
 
 function BestBuyingExperience() {
     return (
-        <div className='flex flex-col justify-center items-center my-10'>
-            <div className='text-center md:py-10'>
+        <div className='flex flex-col justify-center items-center my-40'>
+            <div className='text-center py-10'>
                 <h1 className='text-5xl font-inter tracking-tight'>BEST <span className='text-red-600'>BUYING</span> EXPERIENCE</h1>
                 <p className='p-4'>Explore our best-selling auto parts, renowned for their quality and reliability.</p>
             </div>

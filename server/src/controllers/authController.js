@@ -12,11 +12,11 @@ import bcrypt from 'bcryptjs';
  * @param {import('express').Response} res - The response object.
  */
 export const registerUser = asyncErrors(async (req, res) => {
-    const { fullName, email, contactNumber, password, zipCode } = req.body;
+    const { name, email, contactNumber, password, zipCode } = req.body;
 
     // Create a new user with the provided details
     const user = await User.create({
-        fullName,
+        name,
         email,
         contactNumber,
         password: password, // Use password instead of password
@@ -87,7 +87,7 @@ export const forgotPassword = asyncErrors(async (req, res) => {
 
     if (!user) {
         logger.warn(`Failed password reset request: User not found with email: ${email}`);
-        return res.status(404).json({ success: false, message: `User not found with email: ${email}` });
+        return res.status(404).json({ success: false, message: `User not found! Please Check your email` });
     }
 
     const resetToken = crypto.randomBytes(20).toString('hex');

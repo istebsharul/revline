@@ -84,7 +84,7 @@ const ContactForm = () => {
                             placeholder="Name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            className={`w-full pl-5 py-2 bg-transparent text-white border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.name ? 'border-blue-500 border-2' : 'border-gray-400'}`}
+                            className={`w-full pl-5 py-2 bg-transparent text-black border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.name ? 'border-blue-500 border-2' : 'border-gray-400'}`}
                         />
                     </div>
                     <div className="mb-4">
@@ -95,7 +95,7 @@ const ContactForm = () => {
                             placeholder="Email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className={`w-full pl-5 py-2 bg-transparent text-white border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.email ? 'border-blue-500 border-2' : 'border-gray-400'}`}
+                            className={`w-full pl-5 py-2 bg-transparent text-black border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.email ? 'border-blue-500 border-2' : 'border-gray-400'}`}
                         />
                     </div>
                     <div className="mb-4">
@@ -109,7 +109,7 @@ const ContactForm = () => {
                             placeholder="Phone number"
                             value={formData.phoneNumber}
                             onChange={handleInputChange}
-                            className={`w-full pl-5 py-2 bg-transparent text-white border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.phoneNumber ? 'border-blue-500 border-2' : 'border-gray-400'}`}
+                            className={`w-full pl-5 py-2 bg-transparent text-black border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.phoneNumber ? 'border-blue-500 border-2' : 'border-gray-400'}`}
                         />
                     </div>
                     <div className="mb-4">
@@ -119,13 +119,13 @@ const ContactForm = () => {
                             placeholder="Message"
                             value={formData.message}
                             onChange={handleInputChange}
-                            className={`w-full pl-5 py-2 bg-transparent text-white border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.message ? 'border-blue-500 border-2' : 'border-gray-400'}`}
+                            className={`w-full pl-5 py-2 bg-transparent text-black border rounded-xl placeholder-gray-400 placeholder:text-sm focus:border-blue-500 ${invalidFields.message ? 'border-blue-500 border-2' : 'border-gray-400'}`}
                         />
                     </div>
                     <div className="md:w-full flex md:flex-row flex-col md:space-x-4 md:space-y-0 space-y-4">
                         <button
                             type="submit"
-                            className="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-xl"
+                            className="w-full bg-red-600 hover:bg-red-700 py-2 px-4 rounded-xl"
                         >
                             Send message
                         </button>

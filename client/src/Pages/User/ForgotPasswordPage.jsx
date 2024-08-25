@@ -1,7 +1,7 @@
 import React from 'react'
-import Signup from '../../Components/User/SignUpForm'
+import ForgotPassword from '../../Components/User/ForgotPasswordForm'
 
-function SignUpPage() {
+function ForgotPasswordPage() {
   return (
     <div className='relative h-[94vh] w-full overflow-hidden'>
       <img
@@ -10,12 +10,11 @@ function SignUpPage() {
         alt="Background"
       />
       <div className="w-full h-full absolute inset-0 flex justify-center items-center">
-      <Signup/>
+        <ForgotPassword/>
       </div>
       
     </div>
-
   )
 }
 
-export default SignUpPage
+export default ForgotPasswordPage

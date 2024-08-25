@@ -8,7 +8,7 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
     {
-        fullName: {
+        name: {
             type: String,
             required: [true, 'Please enter your full name'],
         },
@@ -22,8 +22,7 @@ const userSchema = new Schema(
         },
         contactNumber: {
             type: String,
-            required: [true, 'Please enter your contact number'],
-            trim: true,
+            trim: true
         },
         password: {
             type: String,
