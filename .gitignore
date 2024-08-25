@@ -49,3 +49,7 @@ temp/
 # Docker files
 Dockerfile
 docker-compose.yml
+
+
+#personal
+db_upgrade
