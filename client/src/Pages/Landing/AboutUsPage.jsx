@@ -1,11 +1,11 @@
 import React from 'react'
-import Banner from '../../Components/Banner'
-import Tagline from '../../Components/Tagline'
-import TrustBanner from '../../Components/TrustBanner'
+import Banner from '../../Components/User/Banner'
+import Tagline from '../../Components/User/Tagline'
+import TrustBanner from '../../Components/User/TrustBanner'
 
 function AboutUsPage() {
   return (
-    <div>
+    <div className='md:pt-10 pt-16'>
       <div className='relative'>
         <Banner />
         <p className='absolute text-4xl inset-0 flex justify-center items-center text-white '>

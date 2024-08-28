@@ -18,7 +18,21 @@ export default {
           '100%': { transform: 'translateX(-100%)' },
         },
       },
+      maxHeight: {
+        'screen': '100vh',  // Ensure 'max-h-screen' covers the viewport height
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities(
+        {
+          '.transition-max-height': {
+            transition: 'max-height 0.5s ease-in-out',
+          },
+        },
+        ['responsive', 'hover']
+      );
+    },
+  ],
 }

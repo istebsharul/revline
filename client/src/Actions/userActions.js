@@ -29,27 +29,18 @@ const setCookie = (name, value, days) => {
 export const login = (email, password) => {
     return async (dispatch) => {
         try {
-            // Simulate API call for login
-            const endpoint = '/api/v1/auth/login';
-
-            const response = await axios.post(
-                endpoint,
-                { email, password }
-            );
-
-            const token = response.data.token;
-            toast.success("Login Successful");
-            console.log("Login Successful");
-            setCookie("jwt", token, 1); // Set cookie expiry for 1 day
-            console.log(token);
-            dispatch({ type: LOGIN_SUCCESS, payload: response.data });
-            return { isLoggedIn: true };
+            const response = await axios.post('/api/v1/auth/login', { email, password });
+            const { token, user } = response.data;
+            setCookie("jwt", token, 1);
+            dispatch({ type: LOGIN_SUCCESS, payload: user });
+            return { isLoggedIn: true, isAdmin: user.isAdmin };  // Include admin status
         } catch (error) {
             toast.error('Login Failed: ' + error.message);
             dispatch({ type: LOGIN_FAILURE, payload: error.message });
         }
     };
 };
+
 
 export const loadUser = () => async (dispatch) => {
     try {
@@ -93,7 +84,7 @@ export const logout = () => async (dispatch) => {
     try {
         console.log("apple in a day");
         await axios.get(
-            "/api/user/logout"
+            "/api/v1/auth/logout"
         );
         toast.success('Logout Successful');
         dispatch({ type: LOGOUT_SUCCESS });

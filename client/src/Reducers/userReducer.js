@@ -14,21 +14,24 @@ import {
 const initialState = {
     user: null,
     isAuthenticated: false,
+    isAdmin: true,  // Added isAdmin to the state
     error: null,
+    message: null,
 };
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_SUCCESS:
         case SIGNUP_SUCCESS:
-        case LOGIN_SUCCESS:{
-            return{
+        case LOGIN_SUCCESS:
+            return {
                 ...state,
                 user: action.payload,
-                error: null,
                 isAuthenticated: true,
-            }
-        }
+                isAdmin: action.payload.isAdmin,  // Set isAdmin based on user data
+                error: null,
+                message: null,
+            };
         case LOAD_FAILURE:
         case LOGIN_FAILURE:
         case SIGNUP_FAILURE:
@@ -36,31 +39,34 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 user: null,
-                error: action.payload,
                 isAuthenticated: false,
-            };
-        case LOGOUT_FAILURE:
-            return {
-                ...state,
-                user: null,
+                isAdmin: false,  // Reset isAdmin on failure
                 error: action.payload,
-                isAuthenticated: false,
+                message: null,
             };
         case LOGOUT_SUCCESS:
             return {
                 ...state,
                 user: null,
-                error: null,
                 isAuthenticated: false,
+                isAdmin: false,  // Reset isAdmin on logout
+                error: null,
+                message: 'Successfully logged out',
+            };
+        case LOGOUT_FAILURE:
+            return {
+                ...state,
+                user: null,
+                isAuthenticated: false,
+                isAdmin: false,  // Reset isAdmin on logout failure
+                error: action.payload,
+                message: null,
             };
         case FORGOT_PASSWORD_SUCCESS:
             return {
                 ...state,
-                // You might want to handle the success scenario differently,
-                // such as displaying a message to the user.
-                // For example, you could set user to null and error to a success message.
-                user: null,
-                error: action.payload,
+                error: null,
+                message: action.payload,
             };
         default:
             return state;

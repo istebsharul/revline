@@ -1,10 +1,10 @@
 import React from 'react'
-import Banner from '../../Components/Banner'
-import TrustBanner from '../../Components/TrustBanner'
+import Banner from '../../Components/User/Banner'
+import TrustBanner from '../../Components/User/TrustBanner'
 
 function WarrantyReturnsPage() {
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center md:pt-10 pt-16'>
       <div className='relative'>
         <Banner />
         <p className='absolute text-4xl inset-0 flex justify-center items-center text-white font-inter'>
