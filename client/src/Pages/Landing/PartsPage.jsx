@@ -7,171 +7,171 @@ const categories = [
   {
     name: "Engine Components",
     parts: [
-      { name: "Engine Blocks", image: "" },
-      { name: "Cylinder Heads", image: "" },
-      { name: "Pistons", image: "" },
-      { name: "Crankshafts", image: "" },
-      { name: "Camshafts", image: "" },
-      { name: "Timing Belts and Chains", image: "" },
-      { name: "Gaskets and Seals", image: "" },
-      { name: "Oil Pumps", image: "" },
-      { name: "Water Pumps", image: "" },
-      { name: "Fuel Injectors", image: "" },
-      { name: "Turbochargers", image: "" }
+      { name: "Engine Blocks", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863249/revline/parts/dauoclx1zkezh9gks8cg.jpg" },
+      { name: "Cylinder Heads", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863247/revline/parts/cmr08qjnglxbdyaafi4p.webp" },
+      { name: "Pistons", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863248/revline/parts/m5puo1gyp62z9phc5rr0.jpg" },
+      { name: "Crankshafts", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863248/revline/parts/nri2xnzvnli8qi79ewyv.jpg" },
+      { name: "Camshafts", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863247/revline/parts/e9a8nr1mytp5shywup8w.jpg" },
+      { name: "Timing Belts and Chains", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863249/revline/parts/vxaso1vchp7rrvoyqlgi.jpg" },
+      { name: "Gaskets and Seals", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863248/revline/parts/co8mrzhvo1cmqkubed9o.jpg" },
+      { name: "Oil Pumps", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863249/revline/parts/ffyhyrk54hgrpcam8pzn.jpg" },
+      { name: "Water Pumps", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863249/revline/parts/qnnwz5ts8o7gf3ebqwpq.jpg" },
+      { name: "Fuel Injectors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863248/revline/parts/qxdafczvao5ih4l9855e.jpg" },
+      { name: "Turbochargers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863248/revline/parts/ezg2alapil1phnrresvr.jpg" }
     ]
   },
   {
     name: "Transmission and Drivetrain",
     parts: [
-      { name: "Transmissions", image: "" },
-      { name: "Clutch Kits", image: "" },
-      { name: "Flywheels", image: "" },
-      { name: "Differentials", image: "" },
-      { name: "Drive Shafts", image: "" },
-      { name: "Axles", image: "" },
-      { name: "CV Joints", image: "" },
-      { name: "Transfer Cases", image: "" }
+      { name: "Transmissions", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863257/revline/parts/g0jhcvu8revtyqoynjc4.jpg" },
+      { name: "Clutch Kits", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863257/revline/parts/mnajklodjmmrfkmppkxo.webp" },
+      { name: "Flywheels", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863257/revline/parts/vz5sodzqvhxwtt4vwdyj.jpg" },
+      { name: "Differentials", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863257/revline/parts/ks2fixkafs95rik0cl6t.jpg" },
+      { name: "Drive Shafts", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863258/revline/parts/r2fqf7bopqdulifrxvug.jpg" },
+      { name: "Axles", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863258/revline/parts/zuciorxyv6yxa0mk5z2v.jpg" },
+      { name: "CV Joints", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863258/revline/parts/xjtqsfkczrcmxpzajqh8.jpg" },
+      { name: "Transfer Cases", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863258/revline/parts/ngyz0bxolze6cyyxcxin.jpg" }
     ]
   },
   {
     name: "Brakes and Suspension",
     parts: [
-      { name: "Brake Pads", image: "" },
-      { name: "Brake Rotors", image: "" },
-      { name: "Brake Calipers", image: "" },
-      { name: "Shock Absorbers", image: "" },
-      { name: "Struts", image: "" },
-      { name: "Control Arms", image: "" },
-      { name: "Sway Bars", image: "" },
-      { name: "Bushings", image: "" }
+      { name: "Brake Pads", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/aci52ydwir7ayj5pz49f.jpg" },
+      { name: "Brake Rotors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/zrlymnjtrdl0bwbfdnjo.jpg" },
+      { name: "Brake Calipers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/zzfxkidkc1cws4uqyk61.jpg" },
+      { name: "Shock Absorbers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/acffscpoe1qhpxkjtjfc.jpg" },
+      { name: "Struts", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/ymlpr13xvhohlzqu8t1m.jpg" },
+      { name: "Control Arms", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/e6i4rfabswlqnrnvdwyy.jpg" },
+      { name: "Sway Bars", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/xskhlns0dolnabaltwpl.png" },
+      { name: "Bushings", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/irmfmuv40edljwoynkn2.jpg" }
     ]
   },
   {
     name: "Electrical Components",
     parts: [
-      { name: "Alternators", image: "" },
-      { name: "Starters", image: "" },
-      { name: "Batteries", image: "" },
-      { name: "Ignition Coils", image: "" },
-      { name: "Sensors", image: "" },
-      { name: "Wiring Harnesses", image: "" },
-      { name: "Relays", image: "" }
+      { name: "Alternators", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863249/revline/parts/flrmtvks6eqqpteaqcqc.jpg" },
+      { name: "Starters", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863249/revline/parts/gqmvknoactdhrkoizsfl.jpg" },
+      { name: "Batteries", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863249/revline/parts/ry9pwyy1fmgwkhmhegbu.jpg" },
+      { name: "Ignition Coils", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863250/revline/parts/uapoaem7pyh1qf4vflyx.jpg" },
+      { name: "Sensors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863250/revline/parts/yfmecfyfgg4wzcdivjx0.jpg" },
+      { name: "Wiring Harnesses", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863250/revline/parts/cxxpj5xzrsupflayma6r.jpg" },
+      { name: "Relays", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863250/revline/parts/hotwlfpfvjngwfm4ryey.jpg" }
     ]
   },
   {
     name: "Cooling System",
     parts: [
-      { name: "Radiators", image: "" },
-      { name: "Thermostats", image: "" },
-      { name: "Cooling Fans", image: "" },
-      { name: "Coolant Reservoirs", image: "" },
-      { name: "Hoses", image: "" }
+      { name: "Radiators", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863247/revline/parts/nnq6vfb8rjmvraok3ysp.jpg" },
+      { name: "Thermostats", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863259/revline/parts/mibhjtoonilakhhhng1u.jpg" },
+      { name: "Cooling Fans", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863247/revline/parts/su0fde1xmewafjaabn7q.jpg" },
+      { name: "Coolant Reservoirs", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863247/revline/parts/cgjdqd9srnssk2yew3nt.jpg" },
+      { name: "Hoses", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863247/revline/parts/xjwzkpwhunmvgmnbmvyy.jpg" }
     ]
   },
   {
     name: "Exhaust System",
     parts: [
-      { name: "Mufflers", image: "" },
-      { name: "Exhaust Pipes", image: "" },
-      { name: "Catalytic Converters", image: "" },
-      { name: "Headers", image: "" }
+      { name: "Mufflers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863250/revline/parts/m8vloojje6nqvkmlmodj.jpg" },
+      { name: "Exhaust Pipes", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863250/revline/parts/wly99hyyx5y9ulbqctal.jpg" },
+      { name: "Catalytic Converters", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863251/revline/parts/eyjifg6i6t8ujcif7her.jpg" },
+      { name: "Headers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863251/revline/parts/tzmzvzu3klq3uzwc3duj.jpg" }
     ]
   },
   {
     name: "Interior Components",
     parts: [
-      { name: "Dashboard Panels", image: "" },
-      { name: "Seats", image: "" },
-      { name: "Carpet", image: "" },
-      { name: "Headliners", image: "" },
-      { name: "Door Panels", image: "" }
+      { name: "Dashboard Panels", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863253/revline/parts/n1idqodbz0ccghrqcefu.jpg" },
+      { name: "Seats", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863253/revline/parts/xhv7xtp5qr5tzpwvnzif.jpg" },
+      { name: "Carpet", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863254/revline/parts/udnfrmmv8vvkhsqrcexl.jpg" },
+      { name: "Headliners", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863254/revline/parts/osbtk5j38qyxfgftlc2l.jpg" },
+      { name: "Door Panels", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863254/revline/parts/q1uncybyy4neabio9gek.jpg" }
     ]
   },
   {
     name: "Exterior Components",
     parts: [
-      { name: "Bumpers", image: "" },
-      { name: "Grilles", image: "" },
-      { name: "Fenders", image: "" },
-      { name: "Hoods", image: "" },
-      { name: "Mirrors", image: "" },
-      { name: "Headlights", image: "" },
-      { name: "Tail Lights", image: "" }
+      { name: "Bumpers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863251/revline/parts/ohf1rvkcehn9w40nqdmw.jpg" },
+      { name: "Grilles", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863251/revline/parts/hsnnhb6zrcdnnv7hc9l7.jpg" },
+      { name: "Fenders", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863252/revline/parts/hvdz8r1lcrt1th34iq1k.jpg" },
+      { name: "Hoods", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863252/revline/parts/iwadqix2jn49gqxjdpgl.jpg" },
+      { name: "Mirrors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863252/revline/parts/kc1ouadgyxrztdseingw.jpg" },
+      { name: "Headlights", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863252/revline/parts/onqxprcnlxjllkfppqtw.jpg" },
+      { name: "Tail Lights", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863252/revline/parts/youkbgzagchfwfuhuvem.jpg" }
     ]
   },
   {
     name: "Fuel System",
     parts: [
-      { name: "Fuel Pumps", image: "" },
-      { name: "Fuel Tanks", image: "" },
-      { name: "Fuel Filters", image: "" },
-      { name: "Fuel Rails", image: "" },
+      { name: "Fuel Pumps", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863252/revline/parts/rzxza97zjem4kxt2ioor.jpg" },
+      { name: "Fuel Tanks", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863253/revline/parts/nvqgbi4ttc8bkebhhdgm.jpg" },
+      { name: "Fuel Filters", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863253/revline/parts/fm1uz3bwl4cutvbwnipu.jpg" },
+      { name: "Fuel Rails", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863253/revline/parts/sc6xlpbail6bki0es3gs.jpg" },
       { name: "Fuel Lines", image: "" }
     ]
   },
   {
     name: "Air Conditioning System",
     parts: [
-      { name: "AC Compressors", image: "" },
-      { name: "Condenser", image: "" },
-      { name: "Evaporators", image: "" },
-      { name: "Expansion Valves", image: "" },
-      { name: "AC Clutches", image: "" }
+      { name: "AC Compressors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/ugamccdc5vvjpvh860sk.avif" },
+      { name: "Condenser", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863245/revline/parts/t0zu29sf4diyfn1csrfy.jpg" },
+      { name: "Evaporators", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863245/revline/parts/gzc1rbvskum1qi2f1qj4.jpg" },
+      { name: "Expansion Valves", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863245/revline/parts/z0ejcl9xnckf6rxwzvml.jpg" },
+      { name: "AC Clutches", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863245/revline/parts/jpwmwtht3gdwt2lfdngs.webp" }
     ]
   },
   {
     name: "Steering System",
     parts: [
-      { name: "Steering Wheels", image: "" },
-      { name: "Power Steering Pumps", image: "" },
-      { name: "Steering Racks", image: "" },
-      { name: "Steering Columns", image: "" },
-      { name: "Tie Rod Ends", image: "" }
+      { name: "Steering Wheels", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863256/revline/parts/efhxvbxsv1lbvnr4ttms.jpg" },
+      { name: "Power Steering Pumps", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863256/revline/parts/buchgb15tmaq1gerw1ik.jpg" },
+      { name: "Steering Racks", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863256/revline/parts/qnds6icbie8rivx7w1ay.jpg" },
+      { name: "Steering Columns", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863256/revline/parts/pmesir2rzwobziipisiw.jpg" },
+      { name: "Tie Rod Ends", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863256/revline/parts/gvsmjbxkqxdmvmuvvyfl.jpg" }
     ]
   },
   {
     name: "Body and Trim",
     parts: [
-      { name: "Spoilers", image: "" },
-      { name: "Side Skirts", image: "" },
-      { name: "Roof Racks", image: "" },
-      { name: "Window Regulators", image: "" },
-      { name: "Wiper Blades", image: "" }
+      { name: "Spoilers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863245/revline/parts/kjhnzpcw3mc87d4jhqpz.jpg" },
+      { name: "Side Skirts", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/cv0wzpj10i3omfwwjrsf.jpg" },
+      { name: "Roof Racks", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/wm0xlpez2qcvpz3wqxfm.jpg" },
+      { name: "Window Regulators", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/st6kkmurl8weksydbbew.jpg" },
+      { name: "Wiper Blades", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863246/revline/parts/rfccbkq6i1n9nlh24ex5.jpg" }
     ]
   },
   {
     name: "Wheels and Tires",
     parts: [
-      { name: "Tires", image: "" },
-      { name: "Wheel Rims", image: "" },
-      { name: "Hubcaps", image: "" },
-      { name: "Tire Pressure Monitors", image: "" }
+      { name: "Tires", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863258/revline/parts/qg1pvx2oq5z5heg2dzoh.jpg" },
+      { name: "Wheel Rims", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863259/revline/parts/q4nshagrivfv1tg2mb0k.jpg" },
+      { name: "Hubcaps", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863259/revline/parts/w5gmkt7q4vqzyqmrnvk4.jpg" },
+      { name: "Tire Pressure Monitors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863259/revline/parts/mibhjtoonilakhhhng1u.jpg" }
     ]
   },
   {
     name: "Safety and Sensors",
     parts: [
-      { name: "Airbags", image: "" },
-      { name: "ABS Sensors", image: "" },
-      { name: "Parking Sensors", image: "" },
-      { name: "Backup Cameras", image: "" },
-      { name: "Blind Spot Monitors", image: "" }
+      { name: "Airbags", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863254/revline/parts/ymqmrtgvtivlahzsnxsa.jpg" },
+      { name: "ABS Sensors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863254/revline/parts/sjv47kpnmbwaxgqoeirj.jpg" },
+      { name: "Parking Sensors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863255/revline/parts/qhaibchrlhb9mzhilchi.avif" },
+      { name: "Backup Cameras", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863255/revline/parts/aqp7fko5gmfekg8i601n.jpg" },
+      { name: "Blind Spot Monitors", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863255/revline/parts/kscidcmed1fui1tvhtss.jpg" }
     ]
   },
   {
     name: "Accessories",
     parts: [
-      { name: "Floor Mats", image: "" },
-      { name: "Seat Covers", image: "" },
-      { name: "Sunshades", image: "" },
-      { name: "Cargo Liners", image: "" },
-      { name: "Roof Boxes", image: "" }
+      { name: "Floor Mats", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/ugamccdc5vvjpvh860sk.avif" },
+      { name: "Seat Covers", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/cevrimnfwgnlu3gisr4z.jpg" },
+      { name: "Sunshades", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/u9u2iv5uhes3c378i65u.webp" },
+      { name: "Cargo Liners", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863244/revline/parts/hnqlachtgui5kht227b0.jpg" },
+      { name: "Roof Boxes", image: "https://res.cloudinary.com/drszvaldf/image/upload/v1724863245/revline/parts/nx2t0quk7vvhi2tdm08n.gif" }
     ]
   }
 ];
 
 const PartsPage = () => {
-  const [openCategory, setOpenCategory] = useState(null);
+  const [openCategory, setOpenCategory] = useState(categories[0].name);
 
   const handleToggle = (categoryName) => {
     setOpenCategory((prevCategory) =>
@@ -236,3 +236,4 @@ const PartsPage = () => {
 
 
 export default PartsPage;
+   

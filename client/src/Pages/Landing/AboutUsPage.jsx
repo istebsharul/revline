@@ -13,24 +13,23 @@ function AboutUsPage() {
         </p>
       </div>
 
-      
+
       <div className="w-full dark:bg-gray-100 pt-20">
         <div className="md:w-3/5 w-4/5 m-auto flex flex-col justify-center item-center ">
-          <div className="w-full flex md:flex-row flex-col-reverse justify-center item-center ">
-            <div className="md:w-3/5 flex flex-col justify-center items-start">
+          <div className="w-full flex md:flex-row flex-col justify-between item-center">
+            <div className="md:w-1/3 flex md:justify-center md:items-end justify-center item-center">
+              <img
+                src="https://res.cloudinary.com/drszvaldf/image/upload/v1725041332/revline/gf99ercnmmbxk4gt2mtd.png" // Add the path to your img file
+                alt="About Us img"
+                width={250} // Set your desired width
+                height={250} // Set your desired height
+              />
+            </div>
+            <div className="md:w-2/3 flex flex-col justify-center items-start">
               <h1 className="text-2xl">About Us</h1>
               <p className='text-left'>
                 At Revline Auto Parts, we are committed to setting new benchmarks in the automotive industry by offering top-quality parts and unmatched service. Our experienced team is passionate about providing reliable solutions that keep vehicles performing at their best. We prioritize customer satisfaction through clear communication, transparency, and trustworthiness. Let's drive your success together with parts you can depend on.
               </p>
-
-            </div>
-            <div className="md:w-1/2 flex md:justify-end md:items-end justify-center item-center">
-              <img
-                src="https://res.cloudinary.com/drszvaldf/img/upload/v1714427773/aiy0wuqzvoaight2cjfe.png" // Add the path to your img file
-                alt="About Us img"
-                width={400} // Set your desired width
-                height={400} // Set your desired height
-              />
             </div>
           </div>
 
@@ -40,7 +39,7 @@ function AboutUsPage() {
             <div className="md:w-1/3 flex flex-col justify-center items-center">
               <div className='flex justify-center'>
                 <img
-                  src="https://res.cloudinary.com/drszvaldf/img/upload/v1714987115/otg/esrcvhkzqr0vocttyvax.png"
+                  src="https://res.cloudinary.com/drszvaldf/image/upload/v1725046376/revline/yzucl1br6zhkbsma8k5t.png"
                   alt="Our Mission"
                   width={100}
                   height={100}
@@ -55,7 +54,7 @@ function AboutUsPage() {
             <div className="md:w-1/3 flex flex-col justify-center items-center">
               <div className='flex justify-center'>
                 <img
-                  src="https://res.cloudinary.com/drszvaldf/img/upload/v1714987115/otg/zb8lyznqkwnxnvihqt7j.png"
+                  src="https://res.cloudinary.com/drszvaldf/image/upload/v1725046376/revline/scrdya433ulwldjoxi09.png"
                   alt="Our Vision"
                   width={100}
                   height={100}
@@ -70,7 +69,7 @@ function AboutUsPage() {
             <div className="md:w-1/3 flex flex-col justify-center items-center">
               <div className='flex justify-center'>
                 <img
-                  src="https://res.cloudinary.com/drszvaldf/img/upload/v1714987115/otg/dkkaqcayhjtffwturau3.png"
+                  src="https://res.cloudinary.com/drszvaldf/image/upload/v1725046376/revline/w0kv3glrdmhfzdhlyarl.png"
                   alt="Our Values"
                   width={100}
                   height={100}
@@ -102,7 +101,7 @@ function AboutUsPage() {
       </div>
 
       {/* Trust Banner */}
-      <TrustBanner/>
+      <TrustBanner />
     </div>
   )
 }
