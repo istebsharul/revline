@@ -33,7 +33,7 @@ export const login = (email, password) => {
             const { token, user } = response.data;
             setCookie("jwt", token, 1);
             dispatch({ type: LOGIN_SUCCESS, payload: user });
-            return { isLoggedIn: true, isAdmin: user.isAdmin };  // Include admin status
+            return { isLoggedIn: true };  
         } catch (error) {
             toast.error('Login Failed: ' + error.message);
             dispatch({ type: LOGIN_FAILURE, payload: error.message });
@@ -45,16 +45,18 @@ export const login = (email, password) => {
 export const loadUser = () => async (dispatch) => {
     try {
         const { data } = await axios.get(
-            "/api/user/profile"
+            "/api/v1/auth/profile"
         );
         // console.log("data retrieved using loadUser", data);
-        toast.success('User data loaded successfully');
+        console.log('User data loaded successfully');
         dispatch({ type: LOAD_SUCCESS, payload: data.user });
     } catch (error) {
         // toast.error('Failed to load user data: ' + error.response.data.message);
+        console.log(error.data.message)
         dispatch({ type: LOAD_FAILURE, payload: error.response.data.message });
     }
 };
+
 
 export const signup = (name, email, password) => {
     return async (dispatch) => {

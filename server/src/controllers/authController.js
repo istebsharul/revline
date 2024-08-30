@@ -19,7 +19,7 @@ export const registerUser = asyncErrors(async (req, res) => {
         name,
         email,
         contactNumber,
-        password: password, // Use password instead of password
+        password, // Use password instead of password
         zipCode,
     });
 
@@ -36,10 +36,7 @@ export const registerUser = asyncErrors(async (req, res) => {
  * @param {import('express').Response} res - The response object.
  */
 export const loginUser = asyncErrors(async (req, res) => {
-    // console.log('Received Request Body:', req.body);
     const { email, password } = req.body;
-    // logger.info(req.body);
-    // logger.info(email);
 
     if (!email || !password) {
         return res.status(400).json({ success: false, message: 'Email and Password are required' });
@@ -47,7 +44,6 @@ export const loginUser = asyncErrors(async (req, res) => {
 
     const user = await User.findOne({ email }).select('+password');
 
-    logger.info(user);
     if (!user) {
         logger.warn(`Failed login attempt: User not found with email: ${email}`);
         return res.status(401).json({ success: false, message: `User not found with email: ${email}` });
@@ -60,10 +56,12 @@ export const loginUser = asyncErrors(async (req, res) => {
         return res.status(401).json({ success: false, message: `Incorrect password for email: ${email}` });
     }
 
+    // Send token and response, ensure consistency in the response structure
     sendToken(user, 200, res);
 
     logger.info(`User logged in successfully: ${email}`);
 });
+
 
 export const logoutUser = asyncErrors(async (req, res) => {
     res.cookie('token', null, {
@@ -75,6 +73,25 @@ export const logoutUser = asyncErrors(async (req, res) => {
         message: 'logged out successfully',
     });
 });
+
+export const userProfile = asyncErrors(async (req, res) => {
+    
+    console.log("User Id", req.user._id);
+
+    const user = await User.findById(req.user._id);
+
+    // If no user is found, pass an error to the error handling middleware
+    if (!user) {
+        logger.error('User not found');
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    // If user is found, log an info message
+    logger.info(`User profile retrieved for username ${user.name}`);
+
+    // If user is found, return user profile
+    res.status(200).json({ success: true, user });
+})
 
 export const forgotPassword = asyncErrors(async (req, res) => {
     const { email } = req.body;
@@ -100,16 +117,16 @@ export const forgotPassword = asyncErrors(async (req, res) => {
 
     // const resetToken = user.getResetPasswordToken(); //defined models/userModel
     // const resetToken = user.getResetPasswordToken();
-    logger.info("Reset Token ",resetToken);
-    logger.info("Hashed Reset Token ",resetPasswordToken);
+    logger.info("Reset Token ", resetToken);
+    logger.info("Hashed Reset Token ", resetPasswordToken);
 
-    await user.save({ validateBeforeSave: false }); 
+    await user.save({ validateBeforeSave: false });
 
     // Set token and expiry date in the user document
     user.resetPasswordToken = resetPasswordToken;
     user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
-    logger.info("Saving on Db",user.resetPasswordToken)
+    logger.info("Saving on Db", user.resetPasswordToken)
     await user.save();
 
     // Send the reset token via email
@@ -156,7 +173,7 @@ export const resetPassword = asyncErrors(async (req, res) => {
         .update(token)
         .digest('hex');
 
-    
+
     const user = await User.findOne({
         resetPasswordToken,
         resetPasswordExpires: { $gt: Date.now() } // Ensure the token hasn't expired

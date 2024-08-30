@@ -4,11 +4,16 @@ import TasksWidget from '../../Components/Admin/TasksWidget';
 import TicketsWidget from '../../Components/Admin/TicketsWidget';
 import ContactsWidget from '../../Components/Admin/ContactsWidget';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { useEffect } from 'react';
 
 const AdminOverviewPage = () => {
   const [isTasksOpen, setIsTasksOpen] = useState(true);
   const [isTicketsOpen, setIsTicketsOpen] = useState(true);
   const [isContactsOpen, setIsContactsOpen] = useState(true);
+
+  useEffect(()=>{
+    console.log("Hello from Overview Page");
+  })
 
   const mockTasks = []; // Add task details
   const mockTickets = []; // Add ticket details

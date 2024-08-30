@@ -2,30 +2,28 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../Actions/userActions';
-import { CgProfile } from "react-icons/cg";
-
+import { loadUser, logout } from '../../Actions/userActions';
+import { FaUserCircle } from "react-icons/fa";
 
 function Navbar() {
     const [navbar, setNavbar] = useState(false);
     const [userDropdown, setUserDropdown] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const isLoggedIn = useSelector((state)=>state.auth.isAuthenticated);
     const dropdownRef = useRef(null);
     const dispatch = useDispatch();
-    const currentUser = useSelector((state) => state.auth?.user?.user);
+    const currentUser = useSelector((state) => state.auth?.user);
     const [username, setUsername] = useState("");
 
     // Hardcoded username for testing
     // const isLoggedIn = userName !== ''; // Determine login status
 
-    const state = useSelector((state) => state.auth.user);
+    const state = useSelector((state) => state.auth?.user);
     console.log(state);
-
 
     const handleLogout = () => {
         dispatch(logout());
+        setUsername("");
         setUserDropdown(false);
-        setIsLoggedIn(false);
     };
 
     useEffect(() => {
@@ -33,7 +31,6 @@ function Navbar() {
             try {
                 if (currentUser) {
                     setUsername(currentUser.name);
-                    setIsLoggedIn(true);
                 }
             } catch (error) {
                 setUsername("");
@@ -96,10 +93,10 @@ function Navbar() {
                                 </Link>
                             </li>
                         ))}
-                        <li className="md:px-8 md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
+                        <li className="md:pl-20 md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
                             <div className="cursor-pointer " onClick={toggleUserDropdown}>
                                 {isLoggedIn ? (
-                                    <button><CgProfile className='w-7 h-7' /></button>
+                                    <button><FaUserCircle className="w-7 h-7"/></button>
                                 ) : (
                                     <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-red-600' to="/login">LOGIN</Link>
                                 )}

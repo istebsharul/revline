@@ -10,7 +10,7 @@ import LoginPage from '../Pages/User/LoginPage';
 import SignupPage from '../Pages/User/SignupPage';
 import ResetPasswordPage from '../Pages/User/ResetPasswordPage';
 import ForgotPasswordPage from '../Pages/User/ForgotPasswordPage';
-import OrderPage from '../Pages/User/OrderPage';
+import OrderPage from '../Pages/User/OrderPage'
 import PartsPage from '../Pages/Landing/PartsPage';
 import ProtectedRoute from '../Utils/ProtectedRoute';
 
@@ -27,8 +27,9 @@ const UserRoutes = () => (
     <Route path="signup" element={<SignupPage />} />
     <Route path="forgot-password" element={<ForgotPasswordPage />} />
     <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+    {/* <Route path="orders" element={<OrderPage/>}/> */}
     <Route
-      path="order"
+      path="orders"
       element={<ProtectedRoute><OrderPage /></ProtectedRoute>}
     />
     {/* Catch-all Route */}

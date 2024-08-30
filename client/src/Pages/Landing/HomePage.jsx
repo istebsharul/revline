@@ -7,6 +7,7 @@ import HeroSection from '../../Components/Auth/HeroSection'
 import WhyChooseUs from '../../Components/User/WhyChooseUs'
 import BuyingFlow from '../../Components/User/BuyingFlow'
 
+
 function HomePage() {
   return (
     <div className='w-full bg-gray-100'>

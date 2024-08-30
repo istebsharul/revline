@@ -33,11 +33,6 @@ const userSchema = new Schema(
             type: String,
             trim: true,
         },
-        role: {
-            type: String,
-            enum: ['user', 'admin'], // Define allowed roles
-            default: 'user', // Default role
-        },
         createdAt: {
             type: Date,
             default: Date.now,

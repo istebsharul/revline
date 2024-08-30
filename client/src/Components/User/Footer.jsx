@@ -38,11 +38,11 @@ function Footer() {
             <div className="my-2 lg:my-0 flex flex-col">
               <a className="font-medium text-left no-underline text-xl">Quick Links</a>
               <ul className='text-left p-2 font-light space-y-2 '>
-                <li className='hover:underline decoration-red-600'><a>Home</a></li>
-                <li className='hover:underline decoration-red-600'><a>Contact Us</a></li>
-                <li className='hover:underline decoration-red-600'><a>About Us</a></li>
-                <li className='hover:underline decoration-red-600'><a>FAQ</a></li>
-                <li className='hover:underline decoration-red-600'><a>Warranty & Returns</a></li>
+                <li className='hover:underline decoration-red-600'><a href='/'>Home</a></li>
+                <li className='hover:underline decoration-red-600'><a href='/contact'>Contact Us</a></li>
+                <li className='hover:underline decoration-red-600'><a href='/about'>About Us</a></li>
+                <li className='hover:underline decoration-red-600'><a href='/faq'>FAQ</a></li>
+                <li className='hover:underline decoration-red-600'><a href='/warranty'>Warranty & Returns</a></li>
               </ul>
             </div>
           </div>

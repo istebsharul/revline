@@ -40,7 +40,7 @@ const ContactForm = () => {
             if (Object.keys(errors).length === 0) {
                 console.log('Form data:', formData);
 
-                const response = await fetch('/api/contact', {
+                const response = await fetch('/api/v1/auth/contact', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ const ContactForm = () => {
                     <div className="md:w-full flex md:flex-row flex-col md:space-x-4 md:space-y-0 space-y-4">
                         <button
                             type="submit"
-                            className="w-full bg-red-600 hover:bg-red-700 py-2 px-4 rounded-xl"
+                            className="w-full text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-xl"
                         >
                             Send message
                         </button>

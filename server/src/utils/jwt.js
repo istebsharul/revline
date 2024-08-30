@@ -15,12 +15,8 @@ const sendToken = (user, statusCode, res) => {
         ),
         httpOnly: true,
     };
-    // res.status(statusCode).json({
-    //     success: true,
-    //     user,
-    //     token,
-    // });
 
+    user.password = undefined;
     // The res.cookie() method is used to set the cookie in the response. here we are setting the cookie name as token and we are storing the generated token . Option is the setting of the cookie
     res.status(statusCode).cookie('token', token, options).json({
         success: true,
