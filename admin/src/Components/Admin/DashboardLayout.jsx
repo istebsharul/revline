@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import AdminNavBar from './AdminNavbar';
-import { FaUsers, FaTachometerAlt, FaChartLine, FaPhone, FaBullhorn, FaFileInvoiceDollar, FaProductHunt } from 'react-icons/fa';
+import { MdShoppingCartCheckout } from "react-icons/md";
+import { BiSolidDashboard } from "react-icons/bi";
+import { FaUsers, FaTachometerAlt, FaChartLine, FaPhone, FaBullhorn, FaFileInvoiceDollar, FaProductHunt, FaFirstOrder } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 
 const DashboardLayout = () => {
@@ -26,8 +28,14 @@ const DashboardLayout = () => {
             <ul className="space-y-3">
               <li className={`border-b border-gray-400 pb-4 ${!isSidebarOpen && 'border-none'}`}>
                 <Link to="/" className="flex items-center space-x-2">
-                  <FaTachometerAlt size={isSidebarOpen ? 24 : 24} />
+                  <BiSolidDashboard size={isSidebarOpen ? 24 : 24} />
                   {isSidebarOpen && <span>Dashboard</span>}
+                </Link>
+              </li>
+              <li>
+                <Link to="/order-management" className="flex items-center space-x-2">
+                  <MdShoppingCartCheckout size={isSidebarOpen ? 24 : 24} />
+                  {isSidebarOpen && <span>Order Management</span>}
                 </Link>
               </li>
               <li>
@@ -52,18 +60,6 @@ const DashboardLayout = () => {
                 <Link to="/communication-center" className="flex items-center space-x-2">
                   <FaPhone size={isSidebarOpen ? 24 : 24} />
                   {isSidebarOpen && <span>Communication Center</span>}
-                </Link>
-              </li>
-              <li>
-                <Link to="/marketing-ads" className="flex items-center space-x-2">
-                  <FaBullhorn size={isSidebarOpen ? 24 : 24} />
-                  {isSidebarOpen && <span>Marketing & Ads</span>}
-                </Link>
-              </li>
-              <li>
-                <Link to="/payments-invoicing" className="flex items-center space-x-2">
-                  <FaFileInvoiceDollar size={isSidebarOpen ? 24 : 24} />
-                  {isSidebarOpen && <span>Payments & Invoicing</span>}
                 </Link>
               </li>
             </ul>

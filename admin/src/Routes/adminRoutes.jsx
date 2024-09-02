@@ -12,6 +12,7 @@ import ResetPasswordPage from '../Pages/AuthenticationPage/ResetPasswordPage';
 import ProtectedRoute from '../Utils/ProtectedRoute';
 import CustomerManagement from '../Pages/Admin/CustomerManagement';
 import ProductManagement from '../Pages/Admin/ProductManagement';
+import OrderManagement from '../Pages/Admin/OrderManagement';
 
 const AdminRoutes = () => (
   <Routes>
@@ -24,6 +25,7 @@ const AdminRoutes = () => (
     {/* Admin Routes */}
     <Route path="/" element={<ProtectedRoute />}>
       <Route index element={<AdminOverviewPage />} />
+      <Route path='order-management' element={<OrderManagement/>}/>
       <Route path="customer-management" element={<CustomerManagement/>} />
       <Route path="sales-management" element={<SalesManagementPage />} />
       <Route path="communication-center" element={<CommunicationCenterPage />} />

@@ -1,8 +1,7 @@
-// ProductList.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaFilter, FaFileExport } from 'react-icons/fa'; // Import icons from react-icons
-import ProductListItem from './ProductListItem'; // Import the new component
+import { FaFilter, FaFileExport, FaFileImport } from 'react-icons/fa'; // Import the FaFileImport icon
+import ProductListItem from './ProductListItem';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -29,7 +28,6 @@ const ProductList = () => {
     }, []);
 
     useEffect(() => {
-        // Filter products based on the filter input
         if (filter) {
             const lowercasedFilter = filter.toLowerCase();
             const filtered = products.filter(product => {
@@ -37,13 +35,13 @@ const ProductList = () => {
                 const make = (product.productId?.make ?? '').toString();
                 const model = (product.productId?.model ?? '').toString();
                 const carPart = (product.productId?.carPart ?? '').toString();
-                const status =(product?.status ?? '').toString();
+                const status = (product?.status ?? '').toString();
 
                 return year.toLowerCase().includes(lowercasedFilter) ||
-                       make.toLowerCase().includes(lowercasedFilter) ||
-                       model.toLowerCase().includes(lowercasedFilter) ||
-                       carPart.toLowerCase().includes(lowercasedFilter)||
-                       status.toLowerCase().includes(lowercasedFilter);
+                    make.toLowerCase().includes(lowercasedFilter) ||
+                    model.toLowerCase().includes(lowercasedFilter) ||
+                    carPart.toLowerCase().includes(lowercasedFilter) ||
+                    status.toLowerCase().includes(lowercasedFilter);
             });
 
             setFilteredProducts(filtered);
@@ -54,8 +52,6 @@ const ProductList = () => {
 
     const handleSave = async (updatedProduct) => {
         try {
-            console.log("Hello from save actions");
-            console.log(updatedProduct);
             await axios.put(`/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
             setProducts((prevProducts) =>
                 prevProducts.map((product) =>
@@ -69,14 +65,21 @@ const ProductList = () => {
     };
 
     const handleDelete = async (productId) => {
-        try {
-            await axios.delete(`/api/v1/inventory/${productId}`);
-            setProducts(products.filter(product => product._id !== productId));
-        } catch (error) {
-            console.error(error);
-            setError('Failed to delete product. Please try again.');
+        const confirmed = confirm("Are you sure you want to delete?");
+        
+        if (confirmed) {
+            try {
+                await axios.delete(`/api/v1/inventory/${productId}`);
+                setProducts(products.filter(product => product._id !== productId));
+            } catch (error) {
+                console.error(error);
+                setError('Failed to delete product. Please try again.');
+            }
+        } else {
+            console.log('Delete action canceled');
         }
     };
+    
 
     const handleExport = () => {
         const csvContent = [
@@ -109,8 +112,59 @@ const ProductList = () => {
         }
     };
 
+
+    const handleImport = async (event) => {
+        const file = event.target.files[0];
+
+        if (!file) {
+            console.error('No file selected');
+            return;
+        }
+
+        if (file.type !== 'text/csv') {
+            console.error('Invalid file type. Please upload a CSV file.');
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+            const text = e.target.result;
+            const rows = text.split('\n').slice(1); // Skipping the header row
+
+            // Handle empty rows and trim whitespace
+            const importedProducts = rows
+                .filter(row => row.trim()) // Filter out empty rows
+                .map(row => {
+                    const [year, make, model, part, variant, specification, quantity] = row.split(',').map(field => field.trim());
+                    return {
+                        productId: { year, make, model, carPart: part, variant, specification },
+                        quantity: parseInt(quantity, 10) // Ensure quantity is a number
+                    };
+                })
+                .filter(product => product.quantity >= 0); // Ensure quantity is non-negative
+
+            try {
+                console.log(importedProducts); // For debugging purposes
+                await axios.post('/api/v1/inventory/import', importedProducts, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                setProducts(prevProducts => [...prevProducts, ...importedProducts]); // Update state with new products
+            } catch (error) {
+                console.error('Failed to import products:', error);
+                setError('Failed to import products.');
+            }
+        };
+
+        reader.readAsText(file);
+    };
+
+
+
     return (
-        <div className="max-w-6xl mx-auto p-4 bg-white rounded-lg">
+        <div className="w-full mx-auto p-4 bg-white rounded-lg">
             <div className="flex items-center justify-between mb-6">
                 <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
                     <span>Product List</span>
@@ -135,6 +189,11 @@ const ProductList = () => {
                         <FaFileExport className="mr-2 h-5 w-5" />
                         Export
                     </button>
+                    <label className="flex items-center p-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 cursor-pointer">
+                        <FaFileImport className="mr-2 h-5 w-5" />
+                        Import
+                        <input type="file" className="hidden" onChange={handleImport} />
+                    </label>
                 </div>
             </div>
             <div className="bg-gray-100 p-4 rounded-t-lg">
@@ -148,7 +207,7 @@ const ProductList = () => {
                     <div>Specification</div>
                     <div>Quantity</div>
                     <div>Status</div>
-                    <div>Actions</div> {/* New column for actions */}
+                    <div>Actions</div>
                 </div>
             </div>
             {loading ? (
