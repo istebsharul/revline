@@ -9,32 +9,27 @@ import logger from '../utils/logger.js';
 // Create an order with transaction and proper error handling
 export const createOrder = asyncErrors(async (req, res) => {
     try {
-        const { customerId, items, totalAmount } = req.body;
+        const { customer, quotation, items, totalAmount } = req.body;
 
-        // Create a new order without transaction
         const newOrder = new Order({
-            customer: customerId,
+            customer,
+            quotation,
             items,
             totalAmount,
         });
 
-        const savedOrder = await newOrder.save();
+        await newOrder.save();
 
-        // Find the customer and add the order to the customer's orders array
-        const updatedCustomer = await Customer.findByIdAndUpdate(
-            customerId,
-            { $push: { orders: savedOrder._id } },
-            { new: true }
-        );
+        // Generate and store invoice
+        const invoice = await generateInvoice(newOrder._id);
+        newOrder.invoiceUrl = invoice.url;
+        await newOrder.save();
 
-        if (!updatedCustomer) {
-            throw new Error('Customer not found');
-        }
+        await sendOrderConfirmationEmail(customer.email, newOrder, invoice.url);
 
-        res.status(201).json(savedOrder);
+        res.status(201).json(newOrder);
     } catch (error) {
-        logger.error(`Failed to create order: ${error.message}`);
-        res.status(500).json({ message: 'Failed to create order', error: error.message });
+        res.status(500).json({ error: 'Failed to create order' });
     }
 });
 

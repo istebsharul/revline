@@ -7,6 +7,7 @@ import productRoutes from './routes/productRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import ivrRoutes from './routes/ivrRoutes.js';
 const app = express();
 
 app.use(cookieParser())
@@ -20,6 +21,8 @@ app.use('/api/v1/products', productRoutes);   // Base path for product-related r
 app.use('/api/v1/inventory', inventoryRoutes); // Base path for inventory-related routes
 app.use('/api/v1/customer', customerRoutes);
 app.use('/api/v1/order', orderRoutes);
+
+app.use('/api/v1/ivr',ivrRoutes);
 
 // Use the error handling middleware after all routes and other middleware
 app.use(errorHandler);

@@ -8,12 +8,17 @@ const orderSchema = new Schema({
         ref: 'Customer',
         required: true,
     },
+    quotation: {
+        type: Schema.Types.ObjectId,
+        ref: 'Quotation',
+        required: true,
+    },
     items: [
         {
             productId: {
                 type: Schema.Types.ObjectId,
                 ref: 'Product',
-                required: true
+                required: true,
             },
             quantity: {
                 type: Number,
@@ -37,25 +42,17 @@ const orderSchema = new Schema({
         enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'],
         default: 'Pending',
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
+    invoiceUrl: {
+        type: String, // URL or path to the invoice file
+        required: false,
     },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    },
-});
+}, { timestamps: true });
 
-// Middleware to update the `updatedAt` field before saving
-orderSchema.pre('save', function(next) {
+orderSchema.pre('save', function (next) {
     this.updatedAt = Date.now();
     next();
 });
 
-// Optional: Index to optimize queries on `customer` and `status`
 orderSchema.index({ customer: 1, status: 1 });
 
-const Order = mongoose.model('Order', orderSchema);
-
-export default Order;
+export default mongoose.model('Order', orderSchema);

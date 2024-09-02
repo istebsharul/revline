@@ -3,27 +3,15 @@ import { FaPhone, FaSms, FaCog, FaHistory, FaHeadphones } from 'react-icons/fa';
 
 const Sidebar = ({ setView }) => {
   return (
-    <div className="w-1/6 bg-gray-800 h-screen p-4 text-white">
-      <div className="space-y-4">
-        <button onClick={() => setView('dialpad')} className="flex items-center space-x-2">
+    <div className="w-full h-fit bg-gray-700 p-2 text-white sticky">
+      <div className="w-min h-fit flex">
+        <button onClick={() => setView('calllogs')} className="w-full rounded-lg px-4 py-2 flex items-center space-x-2 hover:bg-gray-800">
           <FaPhone />
-          <span>Dial Pad</span>
+          <span>Call</span>
         </button>
-        <button onClick={() => setView('sms')} className="flex items-center space-x-2">
+        <button onClick={() => setView('sms')} className="w-full rounded-lg p-2 flex items-center space-x-2 hover:bg-gray-800">
           <FaSms />
           <span>SMS</span>
-        </button>
-        <button onClick={() => setView('calllogs')} className="flex items-center space-x-2">
-          <FaHistory />
-          <span>Call Logs</span>
-        </button>
-        <button onClick={() => setView('callrecordings')} className="flex items-center space-x-2">
-          <FaHeadphones />
-          <span>Call Recordings</span>
-        </button>
-        <button onClick={() => setView('settings')} className="flex items-center space-x-2">
-          <FaCog />
-          <span>Settings</span>
         </button>
       </div>
     </div>

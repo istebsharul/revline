@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import OrderList from '../../Components/OrderManagement/OrderList';
 import axios from 'axios';
 
-const OrderManagement = () => {
+const SalesManagement = () => {
     const [orders, setOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [error, setError] = useState(null);
@@ -21,7 +21,6 @@ const OrderManagement = () => {
                 setLoading(false);
             }
         };
-
         getOrders();
     }, []);
 
@@ -29,7 +28,7 @@ const OrderManagement = () => {
         <div className="w-full flex flex-col justify-start items-center min-h-screen bg-gray-100">
             <header className="w-full bg-white shadow-md mb-4">
                 <div className="w-full container mx-auto py-4 px-6 flex flex-col items-start">
-                    <h1 className="text-2xl font-semibold">Order Management</h1>
+                    <h1 className="text-2xl font-semibold">Sales Management</h1>
                 </div>
             </header>
             <main className="w-full container mx-auto px-6 py-4">
@@ -51,4 +50,4 @@ const OrderManagement = () => {
     );
 };
 
-export default OrderManagement;
+export default SalesManagement;
