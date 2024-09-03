@@ -93,7 +93,7 @@ function Navbar() {
                                 </Link>
                             </li>
                         ))}
-                        <li className="md:pl-20 md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
+                        <li className="2xl:pl-60 md:pl-20 md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
                             <div className="cursor-pointer " onClick={toggleUserDropdown}>
                                 {isLoggedIn ? (
                                     <button><FaUserCircle className="w-7 h-7"/></button>

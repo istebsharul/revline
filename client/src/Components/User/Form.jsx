@@ -2,10 +2,26 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select'; // Import React Select
 import data from '../../data/data.json';
 import { TiTick } from "react-icons/ti";
+import axios from 'axios';
 
 const MultiStepForm = () => {
     const [step, setStep] = useState(1);
     const [noOfParts, setNoOfParts] = useState();
+    // const [data,setData] =  useState([]); 
+
+    // useEffect(()=>{
+    //     const fetchData = async() => {
+    //         try {
+    //             const response = await axios.get('/api/v1/inventory/list');
+    //             console.log(response.data);
+    //             setData(response);
+    //         } catch (error) {
+    //             console.error(error.message);
+    //         }
+    //     }
+
+    //     fetchData();
+    // },[])
 
     const [userData, setUserData] = useState({
         fullName: '',
@@ -206,7 +222,7 @@ const MultiStepForm = () => {
                     ))}
                 </div>
             </div>
-            <div className='bg-gradient-to-r from-white to-red-500 rounded-lg p-[0.02rem]'>
+            <div className='bg-gradient-to-r from-white to-red-500 rounded-lg 2xl:p-[0.05rem] md:p-[0.02rem]'>
                 <div className='bg-black backdrop-blur p-4 shadow-lg rounded-lg'>
                     <div>
                         <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-white">
