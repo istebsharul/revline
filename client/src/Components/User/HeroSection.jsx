@@ -1,13 +1,26 @@
 import React from 'react'
-import MultiStepForm from '../User/Form'
+import MultiStepForm from './Form'
 
 function HeroSection() {
   return (
-    <div className='relative w-full flex flex-col justify-center items-center md:pt-20 pt-0 z-10 bg-black'>
-        <div className='md:w-4/5 flex md:flex-row flex-col justify-center items-center'>
-        <div className='md:w-1/2 flex justify-center items-center md:py-20 pt-20 pb-10'>
-          <h1 className='md:w-4/5 w-1/2 md:text-left text-center font-inter text-white md:text-7xl text-4xl font-bold leading-tight pt-16'>Parts for Every Make and Model</h1>
+    <div className='relative w-full h-screen flex flex-col justify-center items-center md:pt-20 pt-0 z-10 bg-black'>
+      <div className='2xl:w-3/5 md:w-4/6 flex md:flex-row flex-col justify-center items-center'>
+        <div className='md:w-3/5 flex flex-col justify-center items-start'>
+          <h1 className='2xl:w-4/5 md:w-full w-1/2 md:text-left text-center font-inter text-white md:text-6xl text-4xl font-bold leading-tight pt-16'>
+            Parts for Every Make and Model
+          </h1>
+          <div>
+            <video
+              src="https://res.cloudinary.com/drszvaldf/video/upload/v1725348596/revline/bzn0s0itovnonddecmnx.mp4"
+              className='md:w-[35rem] w-1/2'
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          </div>
         </div>
+
         <div className='md:w-1/2 w-4/5'>
           <MultiStepForm />
         </div>

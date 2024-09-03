@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminOverviewPage from '../Pages/Admin/AdminOverviewPage';
-import SalesManagementPage from '../Pages/Admin/SalesManagementPage';
 import CommunicationCenterPage from '../Pages/Admin/CommunicationCenterPage';
 import MarketingAdsPage from '../Pages/Admin/MarketingAdsPage';
 import PaymentsInvoicing from '../Components/Admin/PaymentsInvoicing';
@@ -12,6 +11,8 @@ import ResetPasswordPage from '../Pages/AuthenticationPage/ResetPasswordPage';
 import ProtectedRoute from '../Utils/ProtectedRoute';
 import CustomerManagement from '../Pages/Admin/CustomerManagement';
 import ProductManagement from '../Pages/Admin/ProductManagement';
+import SalesManagement from '../Pages/Admin/SalesManagement';
+
 
 const AdminRoutes = () => (
   <Routes>
@@ -24,8 +25,8 @@ const AdminRoutes = () => (
     {/* Admin Routes */}
     <Route path="/" element={<ProtectedRoute />}>
       <Route index element={<AdminOverviewPage />} />
+      <Route path='sales-management' element={<SalesManagement />}/>
       <Route path="customer-management" element={<CustomerManagement/>} />
-      <Route path="sales-management" element={<SalesManagementPage />} />
       <Route path="communication-center" element={<CommunicationCenterPage />} />
       <Route path="marketing-ads" element={<MarketingAdsPage />} />
       <Route path="payments-invoicing" element={<PaymentsInvoicing />} />

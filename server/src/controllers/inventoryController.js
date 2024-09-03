@@ -2,6 +2,14 @@ import Product from '../models/productSchema.js';
 import Inventory from '../models/inventorySchema.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
+import fs, { stat } from 'fs';
+import path from 'path';
+import csv from 'csv-parser';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 // Create a new product and then add inventory details
 export const createInventoryEntry = asyncErrors(async (req, res) => {
@@ -136,4 +144,96 @@ export const deleteInventoryEntry = asyncErrors(async (req, res) => {
         logger.error(`Error deleting inventory entry and product: ${error.message}`);
         res.status(500).json({ error: error.message });
     }
+});
+
+
+const uploadsDir = path.join(__dirname, '../uploads/');
+
+export const importProducts = asyncErrors(async (req, res) => {
+    console.log(req.file);
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const products = [];
+    const inventories = [];
+    const filePath = path.join(uploadsDir, req.file.filename);
+    console.log('File Path:', filePath);
+    console.log('Filename:', req.file.filename);
+
+    // Check if the file exists
+    if (!fs.existsSync(filePath)) {
+        return res.status(400).json({ message: 'File not found' });
+    }
+
+    fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (row) => {
+            console.log('Row Data:', row); // Log each row of data
+            if (row.year && row.make && row.model && row.part && row.quantity && row.variant && row.specification) {
+                const product = new Product({
+                    year: row.year,
+                    make: row.make,
+                    model: row.model,
+                    carPart: row.part,
+                    variant: row.variant || '',
+                    specification: row.specification || '',
+                });
+
+                products.push(product);
+                
+                const quantity = parseInt(row.quantity, 10);
+                const status = quantity > 0 ? 'available' : 'out of stock';
+                const inventory = {
+                    productId: product._id, // This will be assigned after saving the product
+                    quantity,
+                    status
+                };
+
+                inventories.push(inventory);
+            } else {
+                console.warn('Skipped row due to missing fields:', row);
+            }
+        })
+        .on('end', async () => {
+            try {
+                if (products.length > 0) {
+                    // Save all products first
+                    const savedProducts = await Product.insertMany(products);
+                    console.info(`Imported ${savedProducts.length} products successfully`);
+
+                    // Now, create inventory entries with the saved product IDs
+                    for (let i = 0; i < savedProducts.length; i++) {
+                        inventories[i].productId = savedProducts[i]._id;
+                    }
+
+                    await Inventory.insertMany(inventories);
+                    console.info(`Created ${inventories.length} inventory entries successfully`);
+
+                    res.status(201).json({ message: 'Products and inventories imported successfully', products: savedProducts });
+                } else {
+                    res.status(400).json({ message: 'No valid products found in the file' });
+                }
+            } catch (error) {
+                console.error('Failed to import products and inventories:', error);
+                res.status(500).json({ message: 'Failed to import products and inventories' });
+            } finally {
+                // Ensure file is deleted after processing
+                try {
+                    fs.unlinkSync(filePath);
+                } catch (unlinkError) {
+                    console.error('Failed to delete uploaded file:', unlinkError);
+                }
+            }
+        })
+        .on('error', (error) => {
+            console.error('Error reading CSV file:', error);
+            res.status(500).json({ message: 'Error processing file' });
+            // Ensure file is deleted on error
+            try {
+                fs.unlinkSync(filePath);
+            } catch (unlinkError) {
+                console.error('Failed to delete uploaded file:', unlinkError);
+            }
+        });
 });

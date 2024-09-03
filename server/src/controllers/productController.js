@@ -49,3 +49,4 @@ export const deleteProduct = asyncErrors(async (req, res) => {
     logger.info(`Product deleted successfully: ${product._id}`);
     res.status(200).json({ message: 'Product deleted' });
 });
+ 

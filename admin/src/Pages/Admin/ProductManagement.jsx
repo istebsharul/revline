@@ -43,7 +43,7 @@ const ProductManagement = () => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center min-h-screen bg-gray-100">
+    <div className="w-full flex flex-col justify-start items-center min-h-screen bg-gray-100">
       <header className="w-full bg-white shadow-md mb-4">
         <div className="w-full container mx-auto py-4 px-6 flex flex-col items-center">
           <h1 className="w-full text-3xl font-semibold text-left text-gray-800">Inventory Management</h1>

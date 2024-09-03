@@ -3,7 +3,7 @@ import Tagline from '../../Components/User/Tagline'
 import BestBuyingExperience from '../../Components/User/BestBuyingExperience'
 import Testimonials from '../../Components/User/Testimonials'
 import MultiStepForm from '../../Components/User/Form'
-import HeroSection from '../../Components/Auth/HeroSection'
+import HeroSection from '../../Components/User/HeroSection'
 import WhyChooseUs from '../../Components/User/WhyChooseUs'
 import BuyingFlow from '../../Components/User/BuyingFlow'
 
