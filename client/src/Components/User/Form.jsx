@@ -222,7 +222,7 @@ const MultiStepForm = () => {
                     ))}
                 </div>
             </div>
-            <div className='bg-gradient-to-r from-white to-red-500 rounded-lg p-[0.02rem]'>
+            <div className='bg-gradient-to-r from-white to-red-500 rounded-lg 2xl:p-[0.05rem] md:p-[0.02rem]'>
                 <div className='bg-black backdrop-blur p-4 shadow-lg rounded-lg'>
                     <div>
                         <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-white">
