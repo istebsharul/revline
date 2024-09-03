@@ -6,7 +6,7 @@ function HeroSection() {
     <div className='relative w-full h-screen flex flex-col justify-center items-center md:pt-20 pt-0 z-10 bg-black'>
       <div className='2xl:w-3/5 md:w-4/6 flex md:flex-row flex-col justify-center items-center'>
         <div className='md:w-3/5 flex flex-col justify-center items-start'>
-          <h1 className='2xl:w-4/5 md:w-full w-1/2 md:text-left text-center font-inter text-white md:text-6xl text-4xl font-bold leading-tight pt-16'>
+          <h1 className='2xl:w-4/5 md:w-full w-1/2 md:text-left text-center font-inter text-white md:text-6xl text-4xl font-medium leading-tight pt-16'>
             Parts for Every Make and Model
           </h1>
           <div>
