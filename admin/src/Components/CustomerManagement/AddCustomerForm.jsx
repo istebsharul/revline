@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const CustomerDetailForm = ({ onSubmit, customer }) => {
+const AddCustomerForm = ({ onSubmit, customer }) => {
   const [name, setName] = useState(customer ? customer.name : '');
   const [email, setEmail] = useState(customer ? customer.email : '');
   const [phone, setPhone] = useState(customer ? customer.phone : '');
@@ -12,7 +12,7 @@ const CustomerDetailForm = ({ onSubmit, customer }) => {
     e.preventDefault();
     if (typeof onSubmit === 'function') { // Check if onSubmit is a function
       const updatedCustomer = {
-        id: customer ? customer.id : Date.now(),
+        id: customer ? customer.id : Date.now(), // Ensure unique ID
         name,
         email,
         phone,
@@ -74,4 +74,4 @@ const CustomerDetailForm = ({ onSubmit, customer }) => {
   );
 };
 
-export default CustomerDetailForm;
+export default AddCustomerForm;

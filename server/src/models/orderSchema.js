@@ -8,11 +8,6 @@ const orderSchema = new Schema({
         ref: 'Customer',
         required: true,
     },
-    quotation: {
-        type: Schema.Types.ObjectId,
-        ref: 'Quotation',
-        required: true,
-    },
     items: [
         {
             productId: {
@@ -46,6 +41,14 @@ const orderSchema = new Schema({
         type: String, // URL or path to the invoice file
         required: false,
     },
+    transactionId:{
+        type:String,
+        required:true,
+    },
+    trackingId:{
+        type: String,
+        required: false,
+    }
 }, { timestamps: true });
 
 orderSchema.pre('save', function (next) {

@@ -45,49 +45,37 @@ const ProductListItem = ({ product, index, onSave, onDelete }) => {
     return (
         <li
             key={product._id}
-            className="grid grid-cols-10 items-center p-2 bg-white hover:bg-gray-50 transition-all duration-200"
+            className="grid grid-cols-15 items-center p-2 bg-white hover:bg-gray-50 transition-all duration-200"
         >
             <span className="font-medium text-gray-500">{index + 1}.</span>
 
-            {isEditing ? (
-                <>
-                    <div className="text-sm text-gray-800">{product.productId?.year || 'N/A'}</div>
+            <div className="text-sm text-gray-800">{product.productId?.year || 'N/A'}</div>
                     <div className="text-md text-gray-800">{product.productId?.make || 'N/A'}</div>
                     <div className="text-md text-gray-800">{product.productId?.model || 'N/A'}</div>
-                    <div className="text-sm text-gray-600">{product.productId?.carPart || 'N/A'}</div>
+                    <div className="text-sm text-gray-600">{product.productId?.part || 'N/A'}</div>
                     <div className="text-sm text-gray-600">{product.productId?.variant || 'N/A'}</div>
-                    <div className="text-xs text-gray-500">{product.productId?.specification || 'N/A'}</div>
-                    <input
+                    <div className="text-xs text-gray-500">{product.productId?.transmission || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.productId?.description || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.productId?.grade || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.productId?.sku || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.productId?.price || 'N/A'}</div>
+                    {isEditing?(
+                        <input
                         type="number"
                         name="quantity"
                         value={editableProduct.quantity || ''}
                         onChange={handleInputChange}
                         className="text-sm text-gray-800 p-1 border rounded-md"
                     />
-                    {/* Status field is read-only */}
+                    ):
+                        <div className="text-sm text-gray-800">{product.quantity || '0'}</div>
+                    }
                     <div
                         className={`text-sm font-medium ${product.status === 'available' ? 'text-green-600' : 'text-red-600'}`}
                     >
                         {product.status || 'Unknown'}
                     </div>
-                </>
-            ) : (
-                <>
-                    <div className="text-sm text-gray-800">{product.productId?.year || 'N/A'}</div>
-                    <div className="text-md text-gray-800">{product.productId?.make || 'N/A'}</div>
-                    <div className="text-md text-gray-800">{product.productId?.model || 'N/A'}</div>
-                    <div className="text-sm text-gray-600">{product.productId?.carPart || 'N/A'}</div>
-                    <div className="text-sm text-gray-600">{product.productId?.variant || 'N/A'}</div>
-                    <div className="text-xs text-gray-500">{product.productId?.specification || 'N/A'}</div>
-                    <div className="text-sm text-gray-800">{product.quantity || '0'}</div>
-                    <div
-                        className={`text-sm font-medium ${product.status === 'available' ? 'text-green-600' : 'text-red-600'}`}
-                    >
-                        {product.status || 'Unknown'}
-                    </div>
-                </>
-            )}
-
+                    <div className="text-xs text-gray-500">{product.productId?.contact || 'N/A'}</div>
             <div className="flex justify-end space-x-2">
                 {isEditing ? (
                     <div className='flex'>

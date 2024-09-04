@@ -111,7 +111,7 @@ const OrderList = ({ orders, onSelectOrder }) => {
                     {filteredOrders.map((order, index) => (
                         <li key={order._id} className="grid grid-cols-5 p-4 items-center hover:bg-gray-100 text-md">
                             <div>{order._id}</div>
-                            <div>{order.customer.name}</div>
+                            <div>{order.customer?.name}</div>
                             <div>${order.totalAmount}</div>
                             <div>{order.status}</div>
                             <div className="flex items-center space-x-2">

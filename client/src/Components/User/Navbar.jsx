@@ -18,7 +18,7 @@ function Navbar() {
     // const isLoggedIn = userName !== ''; // Determine login status
 
     const state = useSelector((state) => state.auth?.user);
-    console.log(state);
+    // console.log(state);
 
     const handleLogout = () => {
         dispatch(logout());

@@ -3,17 +3,17 @@ import React,{useEffect} from 'react';
 import { Toaster } from 'react-hot-toast';
 import store from './Store/store.js';
 import AdminRoutes from './Routes/adminRoutes.jsx';
-import { loadUser } from './Actions/userActions.js';
+import { loadAdmin } from './Actions/adminActions.js';
 
 const App = () => {
 
   useEffect(() => {
-    store.dispatch(loadUser());
+    store.dispatch(loadAdmin());
   })
 
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="bottom-right" reverseOrder={false} />
       <AdminRoutes/>
     </>
   );

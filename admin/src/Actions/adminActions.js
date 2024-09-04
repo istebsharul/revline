@@ -16,7 +16,7 @@ import {
     RESET_PASSWORD_FAILURE,
     UPDATE_PROFILE_FAILURE,
     UPDATE_PROFILE_SUCCESS
-} from '../Constants/userConstants';
+} from '../Constants/adminConstants';
 
 // Function to set cookie
 const setCookie = (name, value, days) => {
@@ -29,7 +29,7 @@ const setCookie = (name, value, days) => {
 export const login = (email, password) => {
     return async (dispatch) => {
         try {
-            const response = await axios.post('/api/v1/auth/login', { email, password });
+            const response = await axios.post('/api/v1/admin-auth/login', { email, password });
             const { token, user } = response.data;
             setCookie("jwt", token, 1);
             dispatch({ type: LOGIN_SUCCESS, payload: user });
@@ -42,14 +42,14 @@ export const login = (email, password) => {
 };
 
 
-export const loadUser = () => async (dispatch) => {
+export const loadAdmin = () => async (dispatch) => {
     try {
         const { data } = await axios.get(
-            "/api/v1/auth/profile"
+            "/api/v1/admin-auth/profile"
         );
-        // console.log("data retrieved using loadUser", data);
-        console.log('User data loaded successfully');
-        dispatch({ type: LOAD_SUCCESS, payload: data.user });
+        console.log("data retrieved using loadAdmin", data);
+        console.log('Admin data loaded successfully');
+        dispatch({ type: LOAD_SUCCESS, payload: data.admin });
     } catch (error) {
         // toast.error('Failed to load user data: ' + error.response.data.message);
         // console.log(error.data.message)
@@ -64,7 +64,7 @@ export const signup = (name, email, password) => {
             console.log(name, email, password);
             // Simulate API call for signup
 
-            const endpoint = '/api/v1/auth/register';
+            const endpoint = '/api/v1/admin-auth/register';
 
             const response = await axios.post(
                 endpoint,
@@ -85,7 +85,7 @@ export const signup = (name, email, password) => {
 export const logout = () => async (dispatch) => {
     try {
         await axios.get(
-            "/api/v1/auth/logout"
+            "/api/v1/admin-auth/logout"
         );
         toast.success('Logout Successful');
         dispatch({ type: LOGOUT_SUCCESS });
@@ -100,7 +100,7 @@ export const forgotPassword = (email) => {
         try {
             const result = await toast.promise(
                 (async () => {
-                    const endpoint = '/api/v1/auth/forgot-password';
+                    const endpoint = '/api/v1/admin-auth/forgot-password';
                     const response = await axios.post(endpoint, { email });
                     console.log("Response", response);
 
@@ -132,7 +132,7 @@ export const resetPassword = (password, token) => {
             console.log("token", token);
 
             const response = await axios.put(
-                `/api/v1/auth/reset-password/${token}`,
+                `/api/v1/admin-auth/reset-password/${token}`,
                 { newPassword:password }
             );
             toast.success("Password Reset Successfully");

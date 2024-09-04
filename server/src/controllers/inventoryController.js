@@ -13,10 +13,10 @@ const __dirname = path.dirname(__filename);
 
 // Create a new product and then add inventory details
 export const createInventoryEntry = asyncErrors(async (req, res) => {
-    const { year, make, model, carPart, variant, specification, quantity } = req.body;
+    const { year, make, model, part, variant, transmission, description, grade, sku, price, contact, quantity } = req.body;
 
     // Check if all required fields are present
-    if (!year || !make || !model || !carPart || !quantity || quantity < 0) {
+    if (!year || !make || !model || !part || !variant || !transmission || !description || !grade || !sku || !price || !contact || quantity == null || quantity < 0) {
         return res.status(400).json({ message: 'All fields are required and quantity must be non-negative' });
     }
 
@@ -25,9 +25,14 @@ export const createInventoryEntry = asyncErrors(async (req, res) => {
         year,
         make,
         model,
-        carPart,
+        part,
         variant,
-        specification
+        transmission,
+        description,
+        grade,
+        sku,
+        price,
+        contact
     });
 
     try {
@@ -170,14 +175,19 @@ export const importProducts = asyncErrors(async (req, res) => {
         .pipe(csv())
         .on('data', (row) => {
             console.log('Row Data:', row); // Log each row of data
-            if (row.year && row.make && row.model && row.part && row.quantity && row.variant && row.specification) {
+            if (row.year && row.make && row.model && row.part && row.variant && row.transmission && row.description && row.grade && row.sku && row.price && row.contact && row.quantity) {
                 const product = new Product({
                     year: row.year,
                     make: row.make,
                     model: row.model,
-                    carPart: row.part,
+                    part: row.part,
                     variant: row.variant || '',
-                    specification: row.specification || '',
+                    transmission: row.transmission || '',
+                    description: row.description || '', // Assuming specification corresponds to description
+                    grade: row.grade || 'N/A', // Assuming grade might be added in the future
+                    sku: row.sku || 'N/A', // Assuming SKU might be added in the future
+                    price: row.price || 'N/A', // Assuming price might be added in the future
+                    contact: row.contact || 'N/A', // Added contact field
                 });
 
                 products.push(product);

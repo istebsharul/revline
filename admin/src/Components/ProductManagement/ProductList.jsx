@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaFilter, FaFileExport, FaFileImport } from 'react-icons/fa'; // Import the FaFileImport icon
+import { FaFilter, FaFileExport, FaFileImport } from 'react-icons/fa';
 import ProductListItem from './ProductListItem';
+import ImportProducts from './importProduct';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
@@ -13,7 +14,8 @@ const ProductList = () => {
     useEffect(() => {
         const fetchInventory = async () => {
             try {
-                const response = await axios.get('/api/v1/inventory/list'); // Update API endpoint
+                const response = await axios.get('/api/v1/inventory/list');
+                console.log(response);
                 setProducts(response.data);
                 setFilteredProducts(response.data);
                 setLoading(false);
@@ -53,8 +55,8 @@ const ProductList = () => {
     const handleSave = async (updatedProduct) => {
         try {
             await axios.put(`/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
-            setProducts((prevProducts) =>
-                prevProducts.map((product) =>
+            setProducts(prevProducts =>
+                prevProducts.map(product =>
                     product._id === updatedProduct._id ? updatedProduct : product
                 )
             );
@@ -79,21 +81,25 @@ const ProductList = () => {
             console.log('Delete action canceled');
         }
     };
-    
 
     const handleExport = () => {
         const csvContent = [
-            ['ID', 'Year', 'Make', 'Model', 'Part', 'Variant', 'Specification', 'Quantity', 'Status'],
+            ['ID', 'Year', 'Make', 'Model', 'Part', 'Variant', 'Transmission', 'Description', 'Grade', 'SKU', 'Price','Quantity','Status','Contact'],
             ...filteredProducts.map(product => [
                 product._id,
-                product.productId?.year || 'N/A',
-                product.productId?.make || 'N/A',
-                product.productId?.model || 'N/A',
-                product.productId?.carPart || 'N/A',
-                product.productId?.variant || 'N/A',
-                product.productId?.specification || 'N/A',
+                product.productId.make || 'N/A',
+                product.productId.year || 'N/A',
+                product.productId.model || 'N/A',
+                product.productId.part || 'N/A',
+                product.productId.variant || 'N/A',
+                product.productId.transmission || 'N/A',
+                product.productId.description || 'N/A',
+                product.productId.sku || 'N/A',
+                product.productId.grade || 'N/A',
+                product.productId.price || 'N/A',
                 product.quantity || 'N/A',
-                product.status || 'Unknown'
+                product.status || 'N/A',
+                product.productId.contact || 'N/A'
             ])
         ]
             .map(e => e.join(','))
@@ -112,60 +118,9 @@ const ProductList = () => {
         }
     };
 
-
-    const handleImport = async (event) => {
-        const file = event.target.files[0];
-
-        if (!file) {
-            console.error('No file selected');
-            return;
-        }
-
-        if (file.type !== 'text/csv') {
-            console.error('Invalid file type. Please upload a CSV file.');
-            return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = async (e) => {
-            const text = e.target.result;
-            const rows = text.split('\n').slice(1); // Skipping the header row
-
-            // Handle empty rows and trim whitespace
-            const importedProducts = rows
-                .filter(row => row.trim()) // Filter out empty rows
-                .map(row => {
-                    const [year, make, model, part, variant, specification, quantity] = row.split(',').map(field => field.trim());
-                    return {
-                        productId: { year, make, model, carPart: part, variant, specification },
-                        quantity: parseInt(quantity, 10) // Ensure quantity is a number
-                    };
-                })
-                .filter(product => product.quantity >= 0); // Ensure quantity is non-negative
-
-            try {
-                console.log(importedProducts); // For debugging purposes
-                await axios.post('/api/v1/inventory/import', importedProducts, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                setProducts(prevProducts => [...prevProducts, ...importedProducts]); // Update state with new products
-            } catch (error) {
-                console.error('Failed to import products:', error);
-                setError('Failed to import products.');
-            }
-        };
-
-        reader.readAsText(file);
-    };
-
-
-
     return (
         <div className="w-full mx-auto p-4 bg-white rounded-lg">
-            <div className="flex items-center justify-between mb-6">
+            <div className="w-full flex items-center justify-between mb-6">
                 <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
                     <span>Product List</span>
                     <span className='text-xs text-gray-500'>Total Products Available - {filteredProducts.length}</span>
@@ -174,7 +129,7 @@ const ProductList = () => {
                     <div className="w-full relative">
                         <input
                             type="text"
-                            placeholder="Filter by Make, Model, or Part"
+                            placeholder="Filter by any field"
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -189,24 +144,25 @@ const ProductList = () => {
                         <FaFileExport className="mr-2 h-5 w-5" />
                         Export
                     </button>
-                    <label className="flex items-center p-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 cursor-pointer">
-                        <FaFileImport className="mr-2 h-5 w-5" />
-                        Import
-                        <input type="file" className="hidden" onChange={handleImport} />
-                    </label>
+                    <ImportProducts/>
                 </div>
             </div>
-            <div className="bg-gray-100 p-4 rounded-t-lg">
-                <div className="grid grid-cols-10 text-gray-600 font-semibold">
+            <div className="bg-gray-100 p-2 rounded-t-lg">
+                <div className="grid grid-cols-15 text-gray-600 font-semibold">
                     <div>No.</div>
                     <div>Year</div>
                     <div>Make</div>
                     <div>Model</div>
                     <div>Part</div>
                     <div>Variant</div>
-                    <div>Specification</div>
-                    <div>Quantity</div>
+                    <div>Transmission</div>
+                    <div>Description</div>
+                    <div>Grade</div>
+                    <div>SKU</div>
+                    <div>Price</div>
+                    <div>Quanity</div>
                     <div>Status</div>
+                    <div>Contact</div>
                     <div>Actions</div>
                 </div>
             </div>

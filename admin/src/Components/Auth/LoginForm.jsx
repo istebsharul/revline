@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from '../../Actions/userActions';
+import { login } from '../../Actions/adminActions';
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast, { Toaster } from 'react-hot-toast';

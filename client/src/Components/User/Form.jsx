@@ -2,33 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select'; // Import React Select
 import data from '../../data/data.json';
 import { TiTick } from "react-icons/ti";
+import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 const MultiStepForm = () => {
     const [step, setStep] = useState(1);
     const [noOfParts, setNoOfParts] = useState();
-    // const [data,setData] =  useState([]); 
-
-    // useEffect(()=>{
-    //     const fetchData = async() => {
-    //         try {
-    //             const response = await axios.get('/api/v1/inventory/list');
-    //             console.log(response.data);
-    //             setData(response);
-    //         } catch (error) {
-    //             console.error(error.message);
-    //         }
-    //     }
-
-    //     fetchData();
-    // },[])
 
     const [userData, setUserData] = useState({
-        fullName: '',
+        name: '',
         email: '',
-        contactNumber: '',
+        phone: '',
         zipCode: '',
-        captcha: ''
     });
 
     const [vehicleData, setVehicleData] = useState({
@@ -158,11 +143,10 @@ const MultiStepForm = () => {
 
     const validateStep3 = () => {
         const errors = {};
-        if (!userData.fullName) errors.fullName = 'Full Name is required';
+        if (!userData.name) errors.name = 'Full Name is required';
         if (!userData.email) errors.email = 'Email is required';
-        if (!userData.contactNumber) errors.contactNumber = 'Contact Number is required';
+        if (!userData.phone) errors.phone = 'Contact Number is required';
         if (!userData.zipCode) errors.zipCode = 'Zip Code is required';
-        if (!userData.captcha) errors.captcha = 'Captcha is required';
         return errors;
     };
 
@@ -187,20 +171,70 @@ const MultiStepForm = () => {
         setStep(prevStep => prevStep - 1);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const formData = {
             vehicleData,
-            userData
+            userData,
         };
+        console.log(formData);
 
-        fetch('/api/form-submission', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+        // Destructure userData and vehicleData for cleaner code
+        const { name, email, phone, zipCode } = userData;
+        console.log([vehicleData]);
+
+        // Define the promise
+        const postRequest = axios.post('/api/v1/customer/create', {
+            name,
+            email,
+            phone,
+            address: { zipCode }, // Include address as per the schema
+            vehicleData: [vehicleData], // Corrected: Send vehicleData as an array
+        });
+
+        // Use toast.promise to handle the promise states
+        toast.promise(postRequest, {
+            loading: 'Submitting your request...',
+            success: 'Success! Your quotation request has been sent. Check your email for the details.',
+            error: 'Failed to create customer and vehicle data. Please try again.',
         })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch(error => console.error('Error:', error));
+            .then((response) => {
+                // Handle success response
+                console.log('Success:', response.data);
+
+                // Clear the form by resetting the state to initial values
+                setUserData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    zipCode: '',
+                });
+
+                setVehicleData({
+                    year: '',
+                    make: '',
+                    model: '',
+                    carPart: '',
+                    variant: '',
+                    specification: '',
+                    vin: '',
+                    message: ''
+                });
+
+                setStep(1);  // Update the step after successful submission
+            })
+            .catch((error) => {
+                // Handle errors (axios will throw for HTTP errors as well)
+                if (error.response) {
+                    console.error('Error Response:', error.response.data);
+                    toast.error(`Error: ${error.response.data.message}`);  // Show error toast with response message
+                } else if (error.request) {
+                    console.error('Error Request:', error.request);
+                    toast.error('No response from server. Please try again.');  // Show error toast for no response
+                } else {
+                    console.error('Error:', error.message);
+                    toast.error(`Error: ${error.message}`);  // Show error toast for any other errors
+                }
+            });
     };
 
     return (
@@ -327,6 +361,7 @@ const MultiStepForm = () => {
                                     <input
                                         type="text"
                                         className="w-full p-2 border rounded"
+                                        placeholder='Enter VIN'
                                         value={vehicleData.vin}
                                         onChange={e => setVehicleData({ ...vehicleData, vin: e.target.value })}
                                     />
@@ -337,6 +372,7 @@ const MultiStepForm = () => {
                                     <label className="block text-gray-200 text-sm p-1">Message</label>
                                     <textarea
                                         className="w-full p-2 border rounded"
+                                        placeholder='Enter a message'
                                         value={vehicleData.message}
                                         onChange={e => setVehicleData({ ...vehicleData, message: e.target.value })}
                                     />
@@ -357,16 +393,18 @@ const MultiStepForm = () => {
                                     <input
                                         type="text"
                                         className="w-full p-2 border rounded"
-                                        value={userData.fullName}
-                                        onChange={e => setUserData({ ...userData, fullName: e.target.value })}
+                                        placeholder='Enter Name'
+                                        value={userData.name}
+                                        onChange={e => setUserData({ ...userData, name: e.target.value })}
                                     />
-                                    {errors.fullName && <p className="text-xs text-red-600">{errors.fullName}</p>}
+                                    {errors.name && <p className="text-xs text-red-600">{errors.name}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Email* </label>
                                     <input
                                         type="email"
                                         className="w-full p-2 border rounded"
+                                        placeholder='Enter Email'
                                         value={userData.email}
                                         onChange={e => setUserData({ ...userData, email: e.target.value })}
                                     />
@@ -377,16 +415,18 @@ const MultiStepForm = () => {
                                     <input
                                         type="tel"
                                         className="w-full p-2 border rounded"
-                                        value={userData.contactNumber}
-                                        onChange={e => setUserData({ ...userData, contactNumber: e.target.value })}
+                                        placeholder='Enter Contact Number'
+                                        value={userData.phone}
+                                        onChange={e => setUserData({ ...userData, phone: e.target.value })}
                                     />
-                                    {errors.contactNumber && <p className="text-xs text-red-600">{errors.contactNumber}</p>}
+                                    {errors.phone && <p className="text-xs text-red-600">{errors.phone}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Zip Code*</label>
                                     <input
                                         type="text"
                                         className="w-full p-2 border rounded"
+                                        placeholder='Enter your ZIP Code'
                                         value={userData.zipCode}
                                         onChange={e => setUserData({ ...userData, zipCode: e.target.value })}
                                     />

@@ -1,4 +1,3 @@
-// models/customer.js
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
@@ -7,17 +6,14 @@ const { Schema } = mongoose;
 const addressSchema = new Schema({
     street: {
         type: String,
-        required: [true, 'Street address is required'],
         trim: true,
     },
     city: {
         type: String,
-        required: [true, 'City is required'],
         trim: true,
     },
     state: {
         type: String,
-        required: [true, 'State is required'],
         trim: true,
     },
     zipCode: {
@@ -27,12 +23,51 @@ const addressSchema = new Schema({
     },
     country: {
         type: String,
-        required: [true, 'Country is required'],
         trim: true,
-        default: 'USA', // Set default country if applicable
-    },
+        },
 }, { _id: false });
 
+// Vehicle Parts Subschema
+const vehiclePartSchema = new Schema({
+    year: {
+        type: String,
+        required: [true, 'Year is required'],
+        trim: true,
+    },
+    make: {
+        type: String,
+        required: [true, 'Make is required'],
+        trim: true,
+    },
+    model: {
+        type: String,
+        required: [true, 'Model is required'],
+        trim: true,
+    },
+    carPart: {
+        type: String,
+        required: [true, 'Car part is required'],
+        trim: true,
+    },
+    variant: {
+        type: String,
+        trim: true,
+    },
+    specification: {
+        type: String,
+        trim: true,
+    },
+    vin: {
+        type: String,
+        trim: true,
+    },
+    message: {
+        type: String,
+        trim: true,
+    },
+}, { _id: false }); // No separate ID for each part
+
+// Main Customer Schema
 const customerSchema = new Schema(
     {
         name: {
@@ -63,6 +98,7 @@ const customerSchema = new Schema(
             ],
         },
         address: addressSchema, // Using the address subschema
+        vehicleData: [vehiclePartSchema], // Using the vehicle parts subschema
         orders: [
             {
                 type: Schema.Types.ObjectId,

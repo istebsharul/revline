@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { resetPassword } from '../../Actions/userActions';
+import { resetPassword } from '../../Actions/adminActions';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import {useParams} from 'react-router-dom';

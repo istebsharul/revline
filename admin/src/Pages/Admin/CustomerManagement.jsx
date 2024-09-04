@@ -14,7 +14,7 @@ const CustomerManagement = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await fetch('/customerdata.json');
+        const response = await fetch('/api/v1/customer/list');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -47,14 +47,14 @@ const CustomerManagement = () => {
       <main className="w-full container mx-auto flex flex-col gap-6 px-6">
         {loading && <div className="p-4 bg-gray-100 text-gray-800">Loading...</div>}
         {error && <div className="p-4 bg-red-100 text-red-800">{error}</div>}
-        <div className='flex gap-4'>
+        <div className="flex gap-4">
           <div className="flex-shrink-0 w-full bg-white shadow-md rounded-lg p-4">
-            <CustomerList customers={filteredCustomers} />
+            <CustomerList customers={filteredCustomers} setCustomers={setCustomers} />
           </div>
         </div>
 
         {showForm && (
-          <AddCustomerForm onAddCustomer={handleAddCustomer} />
+          <AddCustomerForm onSubmit={handleAddCustomer} />
         )}
         <button
           onClick={() => setShowForm(!showForm)}

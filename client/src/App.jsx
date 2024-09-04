@@ -15,7 +15,7 @@ const App = () => {
 
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="bottom-right" reverseOrder={false} />
       <Navbar />
       <UserRoutes />
       <Footer />

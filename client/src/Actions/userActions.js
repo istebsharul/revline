@@ -52,7 +52,7 @@ export const loadUser = () => async (dispatch) => {
         dispatch({ type: LOAD_SUCCESS, payload: data.user });
     } catch (error) {
         // toast.error('Failed to load user data: ' + error.response.data.message);
-        console.log(error.data.message)
+        // console.log(error.data.message)
         dispatch({ type: LOAD_FAILURE, payload: error.response.data.message });
     }
 };

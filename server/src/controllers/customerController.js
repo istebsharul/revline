@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import Customer from '../models/customerSchema.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
+import logger from '../utils/logger.js';
+import sendMail from '../utils/sendMail.js';
 
 // Get all customers
 export const getAllCustomers = asyncErrors(async (req, res) => {
@@ -17,11 +19,62 @@ export const getCustomerById = asyncErrors(async (req, res) => {
 
 // Create a new customer
 export const createCustomer = asyncErrors(async (req, res) => {
-    const { name, email, phone, address, orders } = req.body;
-    const newCustomer = new Customer({ name, email, phone, address, orders });
-    await newCustomer.save();
-    res.status(201).json(newCustomer);
+    try {
+        const { name, email, phone, address, vehicleData } = req.body;
+
+        logger.info(req.body);
+
+        // Check if a customer with the provided email or phone already exists
+        let existingCustomer = await Customer.findOne({ $or: [{ email }, { phone }] });
+
+        if (existingCustomer) {
+            // If the customer exists, add the new vehicle data to the existing vehicleData array
+            existingCustomer.vehicleData = [...existingCustomer.vehicleData, ...vehicleData];
+
+            // Save the updated customer to the database
+            await existingCustomer.save();
+
+            // Log successful update
+            logger.info(`Customer updated successfully: ${existingCustomer._id}`);
+
+            // Send email for new product added
+            await sendMail({
+                email: existingCustomer.email,
+                subject: 'New Product Added Successfully',
+                message: `Hello ${existingCustomer.name},\n\nWe have added new products to our inventory. Check them out!\n\nBest regards,\nYour Company`,
+            });
+
+            // Send response with the updated customer
+            return res.status(200).json(existingCustomer);
+        } else {
+            // If customer does not exist, create a new customer instance
+            const newCustomer = new Customer({ name, email, phone, address, vehicleData });
+
+            // Save the new customer to the database
+            await newCustomer.save();
+
+            // Log successful creation
+            logger.info(`Customer created successfully: ${newCustomer._id}`);
+
+            // Send email for first visit
+            await sendMail({
+                email: newCustomer.email,
+                subject: 'Welcome to Our Service!',
+                message: `Hello ${newCustomer.name},\n\nWelcome to our service! We are excited to have you as a customer.\n\nBest regards,\nYour Company`,
+            });
+
+            // Send response with the created customer
+            return res.status(201).json(newCustomer);
+        }
+    } catch (error) {
+        // Log the error
+        logger.error('Error creating customer:', error);
+
+        // Send error response
+        res.status(500).json({ message: 'Failed to create customer', error: error.message });
+    }
 });
+
 
 // Update an existing customer with a transaction
 export const updateCustomer = asyncErrors(async (req, res) => {
@@ -55,7 +108,16 @@ export const updateCustomer = asyncErrors(async (req, res) => {
 
 // Delete a customer
 export const deleteCustomer = asyncErrors(async (req, res) => {
-    const customer = await Customer.findByIdAndDelete(req.params.id);
-    if (!customer) return res.status(404).json({ message: 'Customer not found' });
-    res.status(200).json({ message: 'Customer deleted successfully' });
+    try {
+        const customer = await Customer.findByIdAndDelete(req.params.id);
+        if (!customer) {
+            logger.error(`Customer not found: ${req.params.id}`);
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+        logger.info(`Customer deleted successfully: ${req.params.id}`);
+        res.status(200).json({ message: 'Customer deleted successfully' });
+    } catch (error) {
+        logger.error(`Error deleting customer: ${error.message}`);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 });
