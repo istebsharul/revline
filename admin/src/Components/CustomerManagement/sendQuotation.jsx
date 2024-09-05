@@ -7,6 +7,7 @@ const SendQuotation = ({ customer }) => {
     const [success, setSuccess] = useState('');
 
     const handleSendQuotation = async () => {
+        // console.log(customer);
         if (!customer) {
             setError('Customer details are missing.');
             return;
@@ -17,7 +18,7 @@ const SendQuotation = ({ customer }) => {
         setSuccess('');
 
         try {
-            const response = await axios.post('/api/v1/quotation/send', customer);
+            const response = await axios.post('/api/v1/quotation/send', {customerId:customer._id});
             setSuccess(response.data.message || 'Quotation sent successfully!');
         } catch (err) {
             console.error(err);

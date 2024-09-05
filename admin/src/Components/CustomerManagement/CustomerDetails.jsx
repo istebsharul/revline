@@ -3,6 +3,7 @@ import SendQuotation from './sendQuotation';
 
 const CustomerDetails = ({ customer }) => {
 
+    console.log(customer);
     const renderAddress = (address) => {
         if (!address) return null;
         return (
@@ -47,7 +48,7 @@ const CustomerDetails = ({ customer }) => {
                 ) : (
                     <li className="text-gray-500">No vehicle data</li>
                 )}
-                <SendQuotation customer={customer}/>
+                <li className='flex items-center gap-4'><SendQuotation customer={customer}/> Status: {customer?.quotations?.status}</li>
             </ul>
             
 

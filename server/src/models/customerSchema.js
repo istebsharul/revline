@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-// Address Subschema (Optional)
+// Address Subschema
 const addressSchema = new Schema({
     street: {
         type: String,
@@ -24,7 +24,7 @@ const addressSchema = new Schema({
     country: {
         type: String,
         trim: true,
-        },
+    },
 }, { _id: false });
 
 // Vehicle Parts Subschema
@@ -67,6 +67,21 @@ const vehiclePartSchema = new Schema({
     },
 }, { _id: false }); // No separate ID for each part
 
+// Quotation Subschema
+const quotationSchema = new Schema({
+    status: {
+        type: String,
+        enum: ['Pending','Accepted', 'Rejected'],
+        default: 'Pending',
+    },
+    quotationPdf: {
+        data: Buffer,
+        contentType: String,
+    },
+}, {
+    timestamps: true,
+},{_id:false});
+
 // Main Customer Schema
 const customerSchema = new Schema(
     {
@@ -105,11 +120,15 @@ const customerSchema = new Schema(
                 ref: 'Order',
             },
         ],
+        quotations: quotationSchema, // Add this line to include quotations
     },
     {
         timestamps: true, // Automatically adds createdAt and updatedAt fields
     }
 );
+
+// Adding index on email for better query performance
+customerSchema.index({ email: 1 });
 
 const Customer = mongoose.model('Customer', customerSchema);
 
