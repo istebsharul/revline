@@ -1,4 +1,5 @@
 import User from '../models/userModel.js';
+import Customer from '../models/customerSchema.js';
 import logger from '../utils/logger.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import sendToken from '../utils/jwt.js';
@@ -11,15 +12,24 @@ import crypto from 'crypto';
  * @param {import('express').Response} res - The response object.
  */
 export const registerUser = asyncErrors(async (req, res) => {
-    const { name, email, contactNumber, password, zipCode } = req.body;
+    const { name, email, phone, password } = req.body;
+
+    const customer = await Customer.findOne({ email });
+
+    if (!customer) {
+        return res.status(400).json({
+            success: false,
+            message: 'Fill up the Parts Form Before Register',
+        });
+    }
 
     // Create a new user with the provided details
     const user = await User.create({
         name,
         email,
-        contactNumber,
+        phone,
         password, // Use password instead of password
-        zipCode,
+        customer: customer._id
     });
 
     // Send token and response
@@ -28,6 +38,8 @@ export const registerUser = asyncErrors(async (req, res) => {
     // Log successful registration
     logger.info(`User registered successfully: ${email}`);
 });
+
+
 /**
  * Log in an existing user.
  * @param {import('express').Request} req - The request object.
@@ -72,7 +84,7 @@ export const logoutUser = asyncErrors(async (req, res) => {
 });
 
 export const userProfile = asyncErrors(async (req, res) => {
-    
+
     console.log("User Id", req.user._id);
 
     const user = await User.findById(req.user._id);

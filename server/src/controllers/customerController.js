@@ -10,11 +10,26 @@ export const getAllCustomers = asyncErrors(async (req, res) => {
     res.status(200).json(customers);
 });
 
-// Get a customer by ID
 export const getCustomerById = asyncErrors(async (req, res) => {
-    const customer = await Customer.findById(req.params.id);
-    if (!customer) return res.status(404).json({ message: 'Customer not found' });
-    res.status(200).json(customer);
+    try {
+        // Find the customer by ID
+        const customer = await Customer.findById(req.params.id);
+
+        // Check if customer was found
+        if (!customer) {
+            logger.warn(`Customer with ID ${req.params.id} not found`);
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+
+        // Respond with customer data
+        res.status(200).json(customer);
+    } catch (error) {
+        // Log the error
+        logger.error(`Error retrieving customer with ID ${req.params.id}: ${error.message}`);
+
+        // Respond with error message
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 // Create a new customer
@@ -57,10 +72,13 @@ export const createCustomer = asyncErrors(async (req, res) => {
             logger.info(`Customer created successfully: ${newCustomer._id}`);
 
             // Send email for first visit
+
+            const registrationLink = `https://yourcompany.com/register?email=${encodeURIComponent(newCustomer.email)}`;
+
             await sendMail({
                 email: newCustomer.email,
                 subject: 'Welcome to Our Service!',
-                message: `Hello ${newCustomer.name},\n\nWelcome to our service! We are excited to have you as a customer.\n\nBest regards,\nYour Company`,
+                message : `Hello ${newCustomer.name},\n\nWe are looking for the best parts for you. We are excited to have you as a customer. Please register yourself using the following link to receive a quotation. We will also send it to you over email also.\n\nRegister here: ${registrationLink}\n\nBest regards,\nYour Company`
             });
 
             // Send response with the created customer

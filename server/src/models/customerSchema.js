@@ -71,8 +71,8 @@ const vehiclePartSchema = new Schema({
 const quotationSchema = new Schema({
     status: {
         type: String,
-        enum: ['Pending','Accepted', 'Rejected'],
-        default: 'Pending',
+        enum: ['Not Issued','Pending','Accepted', 'Rejected'],
+        default: 'Not Issued',
     },
     quotationPdf: {
         data: Buffer,
