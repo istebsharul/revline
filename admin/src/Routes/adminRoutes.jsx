@@ -12,7 +12,8 @@ import ProtectedRoute from '../Utils/ProtectedRoute';
 import CustomerManagement from '../Pages/Admin/CustomerManagement';
 import ProductManagement from '../Pages/Admin/ProductManagement';
 import SalesManagement from '../Pages/Admin/SalesManagement';
-
+import Customers from '../Components/Customer/Customers';
+import OrderOverview from '../Components/OrderManagement/Overview/OrderOverview';
 
 const AdminRoutes = () => (
   <Routes>
@@ -25,12 +26,19 @@ const AdminRoutes = () => (
     {/* Admin Routes */}
     <Route path="/" element={<ProtectedRoute />}>
       <Route index element={<AdminOverviewPage />} />
-      <Route path='sales-management' element={<SalesManagement />}/>
-      <Route path="customer-management" element={<CustomerManagement/>} />
+      <Route path='sales-management'>
+        <Route index element={<SalesManagement />}/>
+        <Route path='overview' element={<OrderOverview />} />
+      </Route>
+      <Route path="customer-management">
+        {/* Corrected the path here to be relative */}
+        <Route index element={<Customers />} />
+        {/* <Route path='overview/:id' element={<CustomerOverview />} /> */}
+      </Route>
       <Route path="communication-center" element={<CommunicationCenterPage />} />
       <Route path="marketing-ads" element={<MarketingAdsPage />} />
       <Route path="payments-invoicing" element={<PaymentsInvoicing />} />
-      <Route path="product-management" element={<ProductManagement/>}/>
+      <Route path="product-management" element={<ProductManagement />} />
     </Route>
 
     {/* Catch-all Route for non-admin paths */}

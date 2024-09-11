@@ -1,6 +1,12 @@
 import nodeMailer from 'nodemailer';
+import logger from './logger.js';
 
 const sendMail = async (options) => {
+    logger.info(options.email);
+    logger.info(options.subject);
+    logger.info(options.message);
+    logger.info(options.pdfStream);
+    logger.info(options.filename);
     const transporter = nodeMailer.createTransport({
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,

@@ -1,5 +1,5 @@
 import User from '../models/userModel.js';
-import Customer from '../models/customerSchema.js';
+import Customer from '../models/customer.js';
 import logger from '../utils/logger.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import sendToken from '../utils/jwt.js';

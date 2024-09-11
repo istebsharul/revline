@@ -13,7 +13,7 @@ const MultiStepForm = () => {
         name: '',
         email: '',
         phone: '',
-        zipCode: '',
+        zipcode: '',
     });
 
     const [vehicleData, setVehicleData] = useState({
@@ -22,7 +22,7 @@ const MultiStepForm = () => {
         model: '',
         carPart: '',
         variant: '',
-        specification: '',
+        transmission: '',
         vin: '',
         message: ''
     });
@@ -33,7 +33,7 @@ const MultiStepForm = () => {
     const [filteredModels, setFilteredModels] = useState([]);
     const [filteredCarParts, setFilteredCarParts] = useState([]);
     const [filteredVariants, setFilteredVariants] = useState([]);
-    const [filteredSpecifications, setFilteredSpecifications] = useState([]);
+    const [filteredTransmission, setFilteredTransmission] = useState([]);
 
     // Extract unique years
     useEffect(() => {
@@ -53,7 +53,7 @@ const MultiStepForm = () => {
             setFilteredModels([]);
             setFilteredCarParts([]);
             setFilteredVariants([]);
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.year]);
 
@@ -70,7 +70,7 @@ const MultiStepForm = () => {
             setFilteredModels(models.map(model => ({ value: model, label: model })));
             setFilteredCarParts([]);
             setFilteredVariants([]);
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.make, vehicleData.year]);
 
@@ -87,7 +87,7 @@ const MultiStepForm = () => {
             setNoOfParts(carParts.length);
             setFilteredCarParts(carParts.map(part => ({ value: part, label: part })));
             setFilteredVariants([]);
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.model, vehicleData.make, vehicleData.year]);
 
@@ -104,24 +104,24 @@ const MultiStepForm = () => {
             )];
             setNoOfParts(variants.length);
             setFilteredVariants(variants.map(variant => ({ value: variant, label: variant })));
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.carPart, vehicleData.model, vehicleData.make, vehicleData.year]);
 
-    // Filter specifications based on selected variant
+    // Filter transmission based on selected variant
     useEffect(() => {
         if (vehicleData.variant) {
-            const specifications = [...new Set(data
+            const transmission = [...new Set(data
                 .filter(item =>
                     item.year === Number(vehicleData.year) &&
                     item.make === vehicleData.make &&
                     item.model === vehicleData.model &&
                     item.carPart === vehicleData.carPart &&
                     item.variant === vehicleData.variant
-                ).map(item => item.specification)
+                ).map(item => item.transmission)
             )];
-            setNoOfParts(specifications.length);
-            setFilteredSpecifications(specifications.map(spec => ({ value: spec, label: spec })));
+            setNoOfParts(transmission.length);
+            setFilteredTransmission(transmission.map(spec => ({ value: spec, label: spec })));
         }
     }, [vehicleData.variant, vehicleData.carPart, vehicleData.model, vehicleData.make, vehicleData.year]);
 
@@ -137,7 +137,7 @@ const MultiStepForm = () => {
     const validateStep2 = () => {
         const errors = {};
         if (!vehicleData.variant) errors.variant = 'Variant is required';
-        if (!vehicleData.specification) errors.specification = 'Specification is required';
+        if (!vehicleData.transmission) errors.transmission = 'Specification is required';
         return errors;
     };
 
@@ -146,7 +146,7 @@ const MultiStepForm = () => {
         if (!userData.name) errors.name = 'Full Name is required';
         if (!userData.email) errors.email = 'Email is required';
         if (!userData.phone) errors.phone = 'Contact Number is required';
-        if (!userData.zipCode) errors.zipCode = 'Zip Code is required';
+        if (!userData.zipcode) errors.zipcode = 'Zip Code is required';
         return errors;
     };
 
@@ -179,7 +179,7 @@ const MultiStepForm = () => {
         console.log(formData);
 
         // Destructure userData and vehicleData for cleaner code
-        const { name, email, phone, zipCode } = userData;
+        const { name, email, phone, zipcode } = userData;
         console.log([vehicleData]);
 
         // Define the promise
@@ -187,8 +187,8 @@ const MultiStepForm = () => {
             name,
             email,
             phone,
-            address: { zipCode }, // Include address as per the schema
-            vehicleData: [vehicleData], // Corrected: Send vehicleData as an array
+            zipcode, // Include address as per the schema
+            vehicleData: vehicleData, // Corrected: Send vehicleData as an array
         });
 
         // Use toast.promise to handle the promise states
@@ -206,7 +206,7 @@ const MultiStepForm = () => {
                     name: '',
                     email: '',
                     phone: '',
-                    zipCode: '',
+                    zipcode: '',
                 });
 
                 setVehicleData({
@@ -215,7 +215,7 @@ const MultiStepForm = () => {
                     model: '',
                     carPart: '',
                     variant: '',
-                    specification: '',
+                    transmission: '',
                     vin: '',
                     message: ''
                 });
@@ -347,13 +347,13 @@ const MultiStepForm = () => {
                                     <label className="block text-gray-200 text-sm p-1">Specification*</label>
                                     <Select
                                         className="w-full"
-                                        value={vehicleData.specification ? { value: vehicleData.specification, label: vehicleData.specification } : null}
-                                        onChange={option => setVehicleData({ ...vehicleData, specification: option.value })}
-                                        options={filteredSpecifications}
+                                        value={vehicleData.transmission ? { value: vehicleData.transmission, label: vehicleData.transmission } : null}
+                                        onChange={option => setVehicleData({ ...vehicleData, transmission: option.value })}
+                                        options={filteredTransmission}
                                         isDisabled={!vehicleData.variant}
                                         placeholder="Select Specification"
                                     />
-                                    {errors.specification && <p className="text-xs text-red-600">{errors.specification}</p>}
+                                    {errors.transmission && <p className="text-xs text-red-600">{errors.transmission}</p>}
                                 </div>
 
                                 <div >
@@ -386,7 +386,7 @@ const MultiStepForm = () => {
 
                     {step === 3 && (
                         <div>
-                            {noOfParts ? <div className='flex justify-center items-start p-1 text-red-500 text-lg font-semibold mb-1'><div>{vehicleData.year} {vehicleData.make} {vehicleData.model} {vehicleData.carPart} {vehicleData.variant} {vehicleData.specification}</div> <div className='h-min flex justify-center items-center text-md text-nowrap bg-red-600 text-white pl-2 pr-3 rounded ml-2'><TiTick className='mr-2' />In Stock</div></div> : <div></div>}
+                            {noOfParts ? <div className='flex justify-center items-start p-1 text-red-500 text-lg font-semibold mb-1'><div>{vehicleData.year} {vehicleData.make} {vehicleData.model} {vehicleData.carPart} {vehicleData.variant} {vehicleData.transmission}</div> <div className='h-min flex justify-center items-center text-md text-nowrap bg-red-600 text-white pl-2 pr-3 rounded ml-2'><TiTick className='mr-2' />In Stock</div></div> : <div></div>}
                             <div className='space-y-2'>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Full Name*</label>
@@ -427,10 +427,10 @@ const MultiStepForm = () => {
                                         type="text"
                                         className="w-full p-2 border rounded"
                                         placeholder='Enter your ZIP Code'
-                                        value={userData.zipCode}
-                                        onChange={e => setUserData({ ...userData, zipCode: e.target.value })}
+                                        value={userData.zipcode}
+                                        onChange={e => setUserData({ ...userData, zipcode: e.target.value })}
                                     />
-                                    {errors.zipCode && <p className="text-xs text-red-600">{errors.zipCode}</p>}
+                                    {errors.zipcode && <p className="text-xs text-red-600">{errors.zipcode}</p>}
                                 </div>
                             </div>
                         </div>

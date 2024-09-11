@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import SendQuotation from './sendQuotation';
+import SendQuotation from '../OrderManagement/sendQuotation';
 
 const CustomerDetails = ({ customer }) => {
 

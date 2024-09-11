@@ -11,8 +11,8 @@ const SalesManagement = () => {
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const response = await axios.get('/api/v1/order/all');
-                console.log(response);
+                const response = await axios.get('/api/v1/orders/all');
+                // console.log(response);
                 setOrders(response.data); // Ensure response.data is an array
             } catch (error) {
                 setError('Failed to fetch orders');
@@ -25,13 +25,13 @@ const SalesManagement = () => {
     }, []);
 
     return (
-        <div className="w-full flex flex-col justify-start items-center min-h-screen bg-gray-100">
-            <header className="w-full bg-white shadow-md mb-4">
-                <div className="w-full container mx-auto py-4 px-6 flex flex-col items-start">
+        <div className="w-full flex flex-col justify-start items-center bg-gray-100">
+            {/* <header className="w-full bg-white shadow-md border-b">
+                <div className="w-full mx-auto py-4 px-6 flex flex-col items-start">
                     <h1 className="text-2xl font-semibold">Sales Management</h1>
                 </div>
-            </header>
-            <main className="w-full container mx-auto px-6 py-4">
+            </header> */}
+            <main className="w-full">
                 {loading ? (
                     <div className="text-center">
                         <svg className="animate-spin h-5 w-5 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -46,6 +46,7 @@ const SalesManagement = () => {
                     <OrderList orders={orders} onSelectOrder={setSelectedOrder} />
                 )}
             </main>
+            {/* <CustomerOverview/> */}
         </div>
     );
 };

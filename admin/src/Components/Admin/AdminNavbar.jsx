@@ -26,7 +26,7 @@ const AdminNavBar = ({ toggleSidebar }) => {
   };
 
   return (
-    <div className="w-full h-16 bg-gray-800 text-white p-4 flex justify-between items-center sticky top-0 z-10">
+    <div className="w-full h-14  bg-gray-800 text-white p-4 flex justify-between items-center sticky top-0 z-10">
       {isLoggedIn &&
         <div className="flex items-center space-x-4">
         <FaBars className="text-xl cursor-pointer" onClick={toggleSidebar} />

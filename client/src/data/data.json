@@ -5,7 +5,7 @@
       "model": "Camry",
       "carPart": "Headlight",
       "variant": "LE",
-      "specification": "Standard",
+      "transmission": "Standard",
       "quantity": 10,
       "status": "available"
     },
@@ -15,7 +15,7 @@
       "model": "Civic",
       "carPart": "Brake Pad",
       "variant": "EX",
-      "specification": "High Performance",
+      "transmission": "High Performance",
       "quantity": 0,
       "status": "out of stock"
     },
@@ -25,7 +25,7 @@
       "model": "F-150",
       "carPart": "Tailgate",
       "variant": "XLT",
-      "specification": "Heavy Duty",
+      "transmission": "Heavy Duty",
       "quantity": 5,
       "status": "available"
     },
@@ -35,7 +35,7 @@
       "model": "Silverado",
       "carPart": "Tire",
       "variant": "LTZ",
-      "specification": "All-Season",
+      "transmission": "All-Season",
       "quantity": 15,
       "status": "available"
     },
@@ -45,7 +45,7 @@
       "model": "X5",
       "carPart": "Brake Rotor",
       "variant": "M Sport",
-      "specification": "Performance",
+      "transmission": "Performance",
       "quantity": 2,
       "status": "available"
     },
@@ -55,7 +55,7 @@
       "model": "Q7",
       "carPart": "Headlight",
       "variant": "Prestige",
-      "specification": "LED",
+      "transmission": "LED",
       "quantity": 8,
       "status": "available"
     },
@@ -65,7 +65,7 @@
       "model": "GLE",
       "carPart": "Battery",
       "variant": "AMG",
-      "specification": "Long Life",
+      "transmission": "Long Life",
       "quantity": 3,
       "status": "available"
     },
@@ -75,7 +75,7 @@
       "model": "Rogue",
       "carPart": "Alternator",
       "variant": "SV",
-      "specification": "OEM",
+      "transmission": "OEM",
       "quantity": 12,
       "status": "available"
     },
@@ -85,7 +85,7 @@
       "model": "Outback",
       "carPart": "Radiator",
       "variant": "Limited",
-      "specification": "High Capacity",
+      "transmission": "High Capacity",
       "quantity": 6,
       "status": "available"
     },
@@ -95,7 +95,7 @@
       "model": "Elantra",
       "carPart": "Fuel Pump",
       "variant": "SEL",
-      "specification": "Direct Injection",
+      "transmission": "Direct Injection",
       "quantity": 4,
       "status": "available"
     },
@@ -105,7 +105,7 @@
       "model": "Sportage",
       "carPart": "Air Filter",
       "variant": "EX",
-      "specification": "Premium",
+      "transmission": "Premium",
       "quantity": 20,
       "status": "available"
     },
@@ -115,7 +115,7 @@
       "model": "Golf",
       "carPart": "Starter Motor",
       "variant": "GTI",
-      "specification": "Performance",
+      "transmission": "Performance",
       "quantity": 7,
       "status": "available"
     },
@@ -125,7 +125,7 @@
       "model": "CX-5",
       "carPart": "Transmission Filter",
       "variant": "Grand Touring",
-      "specification": "Standard",
+      "transmission": "Standard",
       "quantity": 5,
       "status": "available"
     },
@@ -135,7 +135,7 @@
       "model": "F-PACE",
       "carPart": "Exhaust System",
       "variant": "S",
-      "specification": "Performance",
+      "transmission": "Performance",
       "quantity": 3,
       "status": "available"
     },
@@ -145,7 +145,7 @@
       "model": "Macan",
       "carPart": "Suspension Kit",
       "variant": "Turbo",
-      "specification": "Sport",
+      "transmission": "Sport",
       "quantity": 1,
       "status": "out of stock"
     },
@@ -155,7 +155,7 @@
       "model": "Range Rover",
       "carPart": "Windshield",
       "variant": "Autobiography",
-      "specification": "Heated",
+      "transmission": "Heated",
       "quantity": 2,
       "status": "available"
     }

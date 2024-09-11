@@ -1,25 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { FaFilter, FaFileExport, FaTrashAlt, FaInfoCircle } from 'react-icons/fa'; // Import icons
+import { FaFilter, FaFileExport } from 'react-icons/fa'; // Import necessary icons
+import axios from 'axios'; // Import axios for API calls
+import OrderListItem from './OrderListItem'; // Import the new OrderListItem component
 
-const OrderList = ({ orders, onSelectOrder }) => {
+const OrderList = ({ orders }) => {
     const [filteredOrders, setFilteredOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [filter, setFilter] = useState('');
-    const [selectedOrder, setSelectedOrder] = useState(null);
 
     useEffect(() => {
-        setFilteredOrders(
-            filter ? orders.filter(order => {
+        // Filter orders based on orderId, customer name, phone, email, or status
+        let filtered = filter
+            ? orders.filter(order => {
                 const lowercasedFilter = filter.toLowerCase();
                 const customerName = (order.customer?.name ?? '').toLowerCase();
                 const status = (order.status ?? '').toLowerCase();
-                return customerName.includes(lowercasedFilter) || status.includes(lowercasedFilter);
-            }) : orders
-        );
+                const email = (order.customer?.email ?? '').toLowerCase();
+                const phone = (order.customer?.phone ?? '').toLowerCase();
+                const orderId = (order._id ?? '').toLowerCase();
+    
+                return customerName.includes(lowercasedFilter) ||
+                    status.includes(lowercasedFilter) ||
+                    email.includes(lowercasedFilter) ||
+                    phone.includes(lowercasedFilter) ||
+                    orderId.includes(lowercasedFilter);
+            })
+            : orders;
+    
+        // Reverse the order list
+        filtered = filtered.slice().reverse();
+    
+        setFilteredOrders(filtered);
     }, [filter, orders]);
+    
 
+    // Function to handle deletion of an order
     const handleDelete = async (orderId) => {
+        const confirmed = window.confirm('Are you sure you want to delete this order? You won’t be able to get it back.');
+        if (!confirmed) {
+            return;
+        }
+
         try {
             await axios.delete(`/api/v1/orders/${orderId}`);
             setFilteredOrders(filteredOrders.filter(order => order._id !== orderId));
@@ -29,14 +51,18 @@ const OrderList = ({ orders, onSelectOrder }) => {
         }
     };
 
+    // Function to handle exporting the order list to CSV
     const handleExport = () => {
         const csvContent = [
-            ['ID', 'Customer', 'Total Amount', 'Status'],
-            ...filteredOrders.map(order => [
-                order._id,
+            ['Index', 'Order ID', 'Name', 'Date', 'Email', 'Phone', 'Quote Number'],
+            ...filteredOrders.map((order, index) => [
+                index + 1,
+                order._id || 'N/A',
                 order.customer.name || 'N/A',
-                order.totalAmount || 'N/A',
-                order.status || 'N/A',
+                order.customer.createdAt || 'N/A',
+                order.customer.email || 'N/A',
+                order.customer.phone || 'N/A',
+                order.quoteNumber || 'N/A',
             ])
         ]
             .map(e => e.join(','))
@@ -55,12 +81,8 @@ const OrderList = ({ orders, onSelectOrder }) => {
         }
     };
 
-    const handleSelectOrder = (order) => {
-        setSelectedOrder(order === selectedOrder ? null : order);
-    };
-
     return (
-        <div className="max-w-7xl mx-auto p-4 bg-white rounded-lg">
+        <div className="w-full mx-auto p-4 bg-white">
             <div className="flex items-center justify-between mb-6">
                 <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
                     <span>Order List</span>
@@ -70,7 +92,7 @@ const OrderList = ({ orders, onSelectOrder }) => {
                     <div className="w-full relative">
                         <input
                             type="text"
-                            placeholder="Filter by Customer Name or Status"
+                            placeholder="Filter by Order ID, Customer Name, Phone, Email, or Status"
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -88,12 +110,14 @@ const OrderList = ({ orders, onSelectOrder }) => {
                 </div>
             </div>
             <div className="bg-gray-100 p-4 rounded-t-lg">
-                <div className="grid grid-cols-5 text-gray-600 font-semibold">
-                    <div>No.</div>
-                    <div>Customer</div>
-                    <div>Total Amount</div>
-                    <div>Status</div>
-                    <div>Actions</div> {/* New column for actions */}
+                <div className="flex justify-between text-gray-600 font-semibold">
+                    <div className="w-2">Index</div>
+                    <div className='w-48'>Order ID</div>
+                    <div className="w-40">Name</div>
+                    <div className="w-20">Date</div>
+                    <div className="w-60">Email</div>
+                    <div className="w-20">Phone</div>
+                    <div className="w-20">Actions</div>
                 </div>
             </div>
             {loading ? (
@@ -109,46 +133,9 @@ const OrderList = ({ orders, onSelectOrder }) => {
             ) : (
                 <ul className="divide-y divide-gray-200">
                     {filteredOrders.map((order, index) => (
-                        <li key={order._id} className="grid grid-cols-5 p-4 items-center hover:bg-gray-100 text-md">
-                            <div>{order._id}</div>
-                            <div>{order.customer?.name}</div>
-                            <div>${order.totalAmount}</div>
-                            <div>{order.status}</div>
-                            <div className="flex items-center space-x-2">
-                                <button
-                                    onClick={() => handleSelectOrder(order)}
-                                    className="text-blue-600 hover:text-blue-800"
-                                    title="View Details"
-                                >
-                                    <FaInfoCircle />
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(order._id)}
-                                    className="text-red-600 hover:text-red-800"
-                                    title="Delete Order"
-                                >
-                                    <FaTrashAlt />
-                                </button>
-                            </div>
-                        </li>
+                        <OrderListItem key={order._id} order={order} index={index} handleDelete={handleDelete} />
                     ))}
                 </ul>
-            )}
-
-            {selectedOrder && (
-                <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                    <h3 className="text-xl font-semibold">Order Details</h3>
-                    <p><strong>Order ID:</strong> {selectedOrder._id}</p>
-                    <p><strong>Customer:</strong> {selectedOrder.customer.name}</p>
-                    <p><strong>Total Amount:</strong> ${selectedOrder.totalAmount}</p>
-                    <p><strong>Status:</strong> {selectedOrder.status}</p>
-                    <h4 className="text-lg font-semibold mt-2">Items</h4>
-                    <ul>
-                        {selectedOrder.items.map((item, index) => (
-                            <li key={index}>{item.name} (x{item.quantity})</li>
-                        ))}
-                    </ul>
-                </div>
             )}
         </div>
     );

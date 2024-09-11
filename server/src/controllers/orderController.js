@@ -1,124 +1,137 @@
-// src/controllers/orderController.js
-
-import mongoose from 'mongoose';
-import Order from '../models/orderSchema.js';
-import Customer from '../models/customerSchema.js';
+import Order from '../models/order.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
 
-// Create an order with transaction and proper error handling
+// Create a new order
 export const createOrder = asyncErrors(async (req, res) => {
-    try {
-        const { customer, quotation, items, totalAmount } = req.body;
-
-        const newOrder = new Order({
-            customer,
-            quotation,
-            items,
-            totalAmount,
-        });
-
-        await newOrder.save();
-
-        // Generate and store invoice
-        const invoice = await generateInvoice(newOrder._id);
-        newOrder.invoiceUrl = invoice.url;
-        await newOrder.save();
-
-        await sendOrderConfirmationEmail(customer.email, newOrder, invoice.url);
-
-        res.status(201).json(newOrder);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to create order' });
-    }
+  try {
+    const newOrder = new Order(req.body);
+    const savedOrder = await newOrder.save();
+    res.status(201).json(savedOrder);
+    logger.info('Order created successfully', { orderId: savedOrder._id });
+  } catch (error) {
+    logger.error('Error creating order', { error: error.message });
+    res.status(400).json({ message: error.message });
+  }
 });
 
 // Get all orders
-export const getOrders = asyncErrors(async (req, res) => {
-    try {
-        const orders = await Order.find().populate('customer');
-        logger.info('Fetched all orders');
-        res.status(200).json(orders);
-    } catch (error) {
-        logger.error(`Error fetching orders: ${error.message}`);
-        res.status(500).json({ message: 'Error fetching orders', error: error.message });
-    }
+export const getAllOrders = asyncErrors(async (req, res) => {
+  try {
+    const orders = await Order.find().populate('customer').populate('shipping_details.customer'); // Populate customer details if needed
+    res.json(orders);
+    logger.info('Fetched all orders');
+  } catch (error) {
+    logger.error('Error fetching orders', { error: error.message });
+    res.status(500).json({ message: error.message });
+  }
 });
 
-// Get an order by ID
+// Get a specific order by ID
 export const getOrderById = asyncErrors(async (req, res) => {
-    try {
-        const order = await Order.findById(req.params.id).populate('customer');
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-        logger.info(`Fetched order: ${order._id}`);
-        res.status(200).json(order);
-    } catch (error) {
-        logger.error(`Error fetching order: ${error.message}`);
-        res.status(500).json({ message: 'Error fetching order', error: error.message });
+  try {
+    const customerId = req.params.id;
+    console.log(customerId);
+    const orders = await Order.find({ customer: customerId }).populate('customer').populate('shipping_details.customer');
+    
+    if (orders.length === 0) {
+      return res.status(404).json({ message: 'No orders found for this customer' });
     }
+
+    res.json(orders);
+    logger.info('Fetched orders by customer ID', { customerId });
+  } catch (error) {
+    logger.error('Error fetching orders by customer ID', { customerId: req.params.customerId, error: error.message });
+    res.status(500).json({ message: error.message });
+  }
 });
 
-// Update an order
+// // Update an order by ID
 export const updateOrder = asyncErrors(async (req, res) => {
-    const session = await mongoose.startSession(); // Start a session
-    session.startTransaction(); // Start the transaction
-
-    try {
-        const { items, totalAmount, status } = req.body;
-        const order = await Order.findByIdAndUpdate(
-            req.params.id,
-            { items, totalAmount, status, updatedAt: Date.now() },
-            { new: true, session }
-        ).populate('customer');
-
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        // If all operations succeed, commit the transaction
-        await session.commitTransaction();
-        logger.info(`Order updated successfully: ${order._id}`);
-        res.status(200).json(order);
-    } catch (error) {
-        // If an error occurs, abort the transaction
-        await session.abortTransaction();
-        logger.error(`Error updating order: ${error.message}`);
-        res.status(500).json({ message: 'Error updating order', error: error.message });
-    } finally {
-        session.endSession(); // End the session
+  try {
+    logger.info('Incoming update request for order:', req.params.id, req.body);
+    logger.info(req.body);  // Add this line for debugging
+    const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    }).populate('customer');
+    
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
     }
+
+    res.json(updatedOrder);
+    logger.info('Order updated successfully', { orderId: req.params.id });
+  } catch (error) {
+    logger.error('Error updating order', { orderId: req.params.id, error: error.message });
+    res.status(400).json({ message: error.message });
+  }
 });
 
-// Delete an order
+// export const updateOrder = asyncErrors(async (req, res) => {
+//   try {
+//     const orderId = req.params.id;
+//     const { order_disposition_details } = req.body;
+
+//     logger.info('Incoming update request for order:', orderId);
+//     logger.info('Request body:', req.body);  // Add detailed logging for the request body
+
+//     // Find the order first
+//     const existingOrder = await Order.findById(orderId);
+
+//     if (!existingOrder) {
+//       return res.status(404).json({ message: 'Order not found' });
+//     }
+
+//     // Debugging existing order data
+//     logger.info('Existing order disposition details:', existingOrder.order_disposition_details);
+
+//     // Check if `agent_notes` has changed
+//     if (order_disposition_details && order_disposition_details.agent_notes) {
+//       const currentNotes = existingOrder.order_disposition_details?.agent_notes || '';
+
+//       logger.info('Current agent notes:', currentNotes);
+//       logger.info('New agent notes:', order_disposition_details.agent_notes);
+
+//       // If agent_notes has changed, add to history
+//       if (currentNotes !== order_disposition_details.agent_notes) {
+//         const historyEntry = {
+//           agent_notes: order_disposition_details.agent_notes,
+//           updated_at: new Date(),  // Capture the current time of the update
+//         };
+
+//         logger.info('Adding to disposition history:', historyEntry);
+
+//         existingOrder.disposition_history.push(historyEntry);  // Add to the disposition history
+//       }
+//     }
+
+//     // Now update the order with the new data
+//     Object.assign(existingOrder.order_disposition_details, order_disposition_details);
+
+//     // Save the updated order
+//     const updatedOrder = await existingOrder.save();
+
+//     logger.info('Order updated successfully', { orderId });
+//     res.json(updatedOrder);
+
+//   } catch (error) {
+//     logger.error('Error updating order', { orderId: req.params.id, error: error.message });
+//     res.status(400).json({ message: error.message });
+//   }
+// });
+
+// Delete an order by ID
 export const deleteOrder = asyncErrors(async (req, res) => {
-    const session = await mongoose.startSession(); // Start a session
-    session.startTransaction(); // Start the transaction
-
-    try {
-        const order = await Order.findByIdAndDelete(req.params.id).session(session);
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        // Optionally: Remove order reference from customer if needed
-        await Customer.updateMany(
-            { orders: order._id },
-            { $pull: { orders: order._id } },
-            { session }
-        );
-
-        // If all operations succeed, commit the transaction
-        await session.commitTransaction();
-        logger.info(`Order deleted successfully: ${order._id}`);
-        res.status(200).json({ message: 'Order deleted successfully' });
-    } catch (error) {
-        // If an error occurs, abort the transaction
-        await session.abortTransaction();
-        logger.error(`Error deleting order: ${error.message}`);
-        res.status(500).json({ message: 'Error deleting order', error: error.message });
-    } finally {
-        session.endSession(); // End the session
+  try {
+    const deletedOrder = await Order.findByIdAndDelete(req.params.id);
+    if (!deletedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
     }
+    res.json({ message: 'Order deleted successfully' });
+    logger.info('Order deleted successfully', { orderId: req.params.id });
+  } catch (error) {
+    logger.error('Error deleting order', { orderId: req.params.id, error: error.message });
+    res.status(500).json({ message: error.message });
+  }
 });
