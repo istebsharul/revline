@@ -1,10 +1,10 @@
 import User from '../models/userModel.js';
+import Customer from '../models/customer.js';
 import logger from '../utils/logger.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import sendToken from '../utils/jwt.js';
 import sendMail from '../utils/sendMail.js';
 import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
 
 /**
  * Register a new user.
@@ -12,15 +12,24 @@ import bcrypt from 'bcryptjs';
  * @param {import('express').Response} res - The response object.
  */
 export const registerUser = asyncErrors(async (req, res) => {
-    const { fullName, email, contactNumber, password, zipCode } = req.body;
+    const { name, email, phone, password } = req.body;
+
+    const customer = await Customer.findOne({ email });
+
+    if (!customer) {
+        return res.status(400).json({
+            success: false,
+            message: 'Fill up the Parts Form Before Register',
+        });
+    }
 
     // Create a new user with the provided details
     const user = await User.create({
-        fullName,
+        name,
         email,
-        contactNumber,
-        passwordHash: password, // Use passwordHash instead of password
-        zipCode,
+        phone,
+        password, // Use password instead of password
+        customer: customer._id
     });
 
     // Send token and response
@@ -30,24 +39,21 @@ export const registerUser = asyncErrors(async (req, res) => {
     logger.info(`User registered successfully: ${email}`);
 });
 
+
 /**
  * Log in an existing user.
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
  */
 export const loginUser = asyncErrors(async (req, res) => {
-    // console.log('Received Request Body:', req.body);
     const { email, password } = req.body;
-    // logger.info(req.body);
-    // logger.info(email);
 
     if (!email || !password) {
         return res.status(400).json({ success: false, message: 'Email and Password are required' });
     }
 
-    const user = await User.findOne({ email }).select('+passwordHash');
+    const user = await User.findOne({ email }).select('+password');
 
-    logger.info(user);
     if (!user) {
         logger.warn(`Failed login attempt: User not found with email: ${email}`);
         return res.status(401).json({ success: false, message: `User not found with email: ${email}` });
@@ -60,67 +66,100 @@ export const loginUser = asyncErrors(async (req, res) => {
         return res.status(401).json({ success: false, message: `Incorrect password for email: ${email}` });
     }
 
+    // Send token and response, ensure consistency in the response structure
     sendToken(user, 200, res);
 
     logger.info(`User logged in successfully: ${email}`);
 });
 
-
 export const logoutUser = asyncErrors(async (req, res) => {
-    // Destroy the user session
-    req.session.destroy((err) => {
-        if (err) {
-            logger.error(`Failed to logout user: ${err.message}`);
-            return res.status(500).json({ success: false, message: 'Failed to logout' });
-        }
-
-        // Send success response
-        res.status(200).json({ success: true, message: 'Logged out successfully' });
+    res.cookie('token', null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+    });
+    res.status(200).json({
+        success: true,
+        message: 'logged out successfully',
     });
 });
 
-export const forgotPassword = asyncErrors(async (req, res, next) => {
-    const user = await User.findOne({ email: req.body.email });
+export const userProfile = asyncErrors(async (req, res) => {
 
+    console.log("User Id", req.user._id);
+
+    const user = await User.findById(req.user._id);
+
+    // If no user is found, pass an error to the error handling middleware
     if (!user) {
         logger.error('User not found');
-        return next(new ErrorHandler('User not found', 404));
+        return res.status(404).json({ message: 'User not found' });
     }
 
-    const resetToken = user.getResetPasswordToken(); //defined models/userModel
+    // If user is found, log an info message
+    logger.info(`User profile retrieved for username ${user.name}`);
 
-    await user.save({ validateBeforeSave: false }); //in getResetPasswordtoken() we are changing some variables of user, those are needed to be updated in the database
+    // If user is found, return user profile
+    res.status(200).json({ success: true, user });
+})
 
-    const resetPasswordUrl = `${req.protocol}://localhost:3000/password/reset/${resetToken}`;
+export const forgotPassword = asyncErrors(async (req, res) => {
+    const { email } = req.body;
 
-    console.log(`${host}`);
+    if (!email) {
+        return res.status(400).json({ success: false, message: 'Email is required' });
+    }
 
-    const message = `Follow the url to reset your password : \n\n ${resetPasswordUrl} \n\n If u haven't requested it , ignore it `;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        logger.warn(`Failed password reset request: User not found with email: ${email}`);
+        return res.status(404).json({ success: false, message: `User not found! Please Check your email` });
+    }
+
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    const resetPasswordToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+
+    // const resetToken = user.getResetPasswordToken(); //defined models/userModel
+    // const resetToken = user.getResetPasswordToken();
+    logger.info("Reset Token ", resetToken);
+    logger.info("Hashed Reset Token ", resetPasswordToken);
+
+    await user.save({ validateBeforeSave: false });
+
+    // Set token and expiry date in the user document
+    user.resetPasswordToken = resetPasswordToken;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+    logger.info("Saving on Db", user.resetPasswordToken)
+    await user.save();
+
+    // Send the reset token via email
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+    const message = `You are receiving this email because you (or someone else) has requested to reset your password. Please make a PUT request to:\n\n${resetUrl}`;
 
     try {
-        //defined in utils/sendEmail
         await sendMail({
             email: user.email,
-            subject: `Password Recovery`,
-            message,
+            subject: 'Password Reset Request',
+            message
         });
-        logger.info(`User Email sent successfully to: ${user.email}`);
-        res.status(201).json({
-            success: true,
-            message: `mail sent to ${user.email} successfully`,
-        });
+
+        logger.info(`Password reset token sent to email: ${email}`);
+        res.status(200).json({ success: true, message: 'Password reset token sent to email' });
     } catch (error) {
-        logger.error(`Error sending email: ${error.message}`);
-        //in getResetPasswordtoken() we were changing some variables of user, those were also  updated in the database on failure/success they need to be assigned their original value and update the database
+        logger.error(`Failed to send password reset email: ${error.message}`);
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
+        await user.save();
 
-        await user.save({ validateBeforeSave: false });
-
-        return next(new ErrorHandler(error.message, 500));
+        res.status(500).json({ success: false, message: 'Failed to send password reset email' });
     }
 });
-
 
 export const resetPassword = asyncErrors(async (req, res) => {
     const { token } = req.params; // Get the reset token from the URL parameters
@@ -143,7 +182,7 @@ export const resetPassword = asyncErrors(async (req, res) => {
         .update(token)
         .digest('hex');
 
-    
+
     const user = await User.findOne({
         resetPasswordToken,
         resetPasswordExpires: { $gt: Date.now() } // Ensure the token hasn't expired
@@ -155,12 +194,13 @@ export const resetPassword = asyncErrors(async (req, res) => {
     }
 
     // Hash the new password and save it to the user's document
-    user.passwordHash = await bcrypt.hash(newPassword, 12);
+    // user.password = await bcrypt.hash(newPassword, 12);
+    user.password = newPassword;
     user.resetPasswordToken = undefined; // Clear the reset token
     user.resetPasswordExpires = undefined; // Clear the expiration time
 
     await user.save();
 
     logger.info(`Password successfully reset for user: ${user.email}`);
-    res.status(200).json({ success: true, message: 'Password has been reset successfully' });
+    res.status(200).json({ success: true, message: `Password has been reset successfully${user.password}` });
 });

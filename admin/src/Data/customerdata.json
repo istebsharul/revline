@@ -1,0 +1,63 @@
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "phone": "555-1234",
+        "location": "New York",
+        "totalSpent": 1200.00,
+        "orders": [
+            { "id": 101, "amount": 250.00 },
+            { "id": 102, "amount": 300.00 },
+            { "id": 103, "amount": 650.00 }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Jane Smith",
+        "email": "jane.smith@example.com",
+        "phone": "555-5678",
+        "location": "San Francisco",
+        "totalSpent": 950.00,
+        "orders": [
+            { "id": 104, "amount": 450.00 },
+            { "id": 105, "amount": 500.00 }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Robert Johnson",
+        "email": "robert.johnson@example.com",
+        "phone": "555-8765",
+        "location": "Los Angeles",
+        "totalSpent": 1500.00,
+        "orders": [
+            { "id": 106, "amount": 700.00 },
+            { "id": 107, "amount": 800.00 }
+        ]
+    },
+    {
+        "id": 4,
+        "name": "Emily Davis",
+        "email": "emily.davis@example.com",
+        "phone": "555-4321",
+        "location": "New York",
+        "totalSpent": 750.00,
+        "orders": [
+            { "id": 108, "amount": 250.00 },
+            { "id": 109, "amount": 500.00 }
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Michael Brown",
+        "email": "michael.brown@example.com",
+        "phone": "555-9876",
+        "location": "San Francisco",
+        "totalSpent": 1100.00,
+        "orders": [
+            { "id": 110, "amount": 600.00 },
+            { "id": 111, "amount": 500.00 }
+        ]
+    }
+]
