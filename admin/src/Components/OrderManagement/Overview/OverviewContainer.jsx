@@ -74,8 +74,8 @@ const OverviewContainer = ({ orderDetails, setOrderDetails }) => {
               Activities
             </div>
           </div>
-          <div className='w-1/3 space-x-2 flex justify-between items-center'>
-            <SendQuotation orderDetails={orderDetails}/>
+          <div className='w-1/2 space-x-2 flex justify-between items-center'>
+            {!isEditing ? <div className='w-full'><SendQuotation orderDetails={orderDetails}/></div>:<div className='w-full p-2'>Save to Send Quotation</div>}
             <div className='w-full flex justify-center items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 m-1 rounded-lg'>
               Send Invoice
             </div>
@@ -88,7 +88,7 @@ const OverviewContainer = ({ orderDetails, setOrderDetails }) => {
         {activeTab === 'overview' && (
           <>
             {/* Overview Content */}
-            <CustomerPersonalInfo customer={orderDetails.customer} isEditing={isEditing} setOrderDetails={setOrderDetails} />
+            <CustomerPersonalInfo customer={orderDetails.customer} quote_number={orderDetails?.quotations?.quote_number} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <OrderSummary orderSummary={orderDetails.order_summary} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <PricingDetails pricingDetails={orderDetails.pricing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <ShippingDetails shippingDetails={orderDetails.shipping_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />

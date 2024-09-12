@@ -46,27 +46,87 @@ export const getOrderById = asyncErrors(async (req, res) => {
   }
 });
 
-// // Update an order by ID
 export const updateOrder = asyncErrors(async (req, res) => {
+  const orderId = req.params.id;
+  const { order_disposition_details, ...otherDetails } = req.body;
+
   try {
-    logger.info('Incoming update request for order:', req.params.id, req.body);
-    logger.info(req.body);  // Add this line for debugging
-    const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    }).populate('customer');
-    
-    if (!updatedOrder) {
+    logger.info('Incoming update request for order:', orderId);
+    logger.info('Request body:', req.body);
+
+    // Find the order first
+    const existingOrder = await Order.findById(orderId).populate('customer');
+
+    if (!existingOrder) {
       return res.status(404).json({ message: 'Order not found' });
     }
 
+    console.log("Dispo details",order_disposition_details);
+
+    // Update order details with all other fields
+    // Merge otherDetails into existingOrder
+    Object.assign(existingOrder, otherDetails);
+    console.log(existingOrder);
+    console.log(otherDetails);
+
+    // Check if `agent_notes` has changed and update disposition history
+    if (order_disposition_details && order_disposition_details.agent_notes) {
+      const currentNotes = existingOrder.order_disposition_details?.agent_notes || 'Not taken Properly';
+      const newNotes = order_disposition_details.agent_notes;
+
+      console.log('Current agent notes:', currentNotes);
+      console.log('New agent notes:', newNotes);
+
+      if (currentNotes !== newNotes) {
+        const historyEntry = {
+          agent_notes: newNotes,
+          updated_at: new Date(),  // Capture the current time of the update
+        };
+
+        existingOrder.disposition_history.push(historyEntry);  // Add to the disposition history
+        console.log('Existing History',existingOrder.disposition_history);
+        console.log('Adding to disposition history:', historyEntry);
+      }
+    }
+
+    // Update order_disposition_details separately if provided
+    if (order_disposition_details) {
+      Object.assign(existingOrder.order_disposition_details, order_disposition_details);
+    }
+
+    // Save the updated order
+    const updatedOrder = await existingOrder.save();
+
+    logger.info('Order updated successfully', { orderId });
     res.json(updatedOrder);
-    logger.info('Order updated successfully', { orderId: req.params.id });
+
   } catch (error) {
-    logger.error('Error updating order', { orderId: req.params.id, error: error.message });
+    logger.error('Error updating order', { orderId, error: error.message });
     res.status(400).json({ message: error.message });
   }
 });
+
+// Update an order by ID
+// export const updateOrder = asyncErrors(async (req, res) => {
+//   try {
+//     logger.info('Incoming update request for order:', req.params.id, req.body);
+//     logger.info(req.body);  // Add this line for debugging
+//     const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, {
+//       new: true,
+//       runValidators: true,
+//     }).populate('customer');
+    
+//     if (!updatedOrder) {
+//       return res.status(404).json({ message: 'Order not found' });
+//     }
+
+//     res.json(updatedOrder);
+//     logger.info('Order updated successfully', { orderId: req.params.id });
+//   } catch (error) {
+//     logger.error('Error updating order', { orderId: req.params.id, error: error.message });
+//     res.status(400).json({ message: error.message });
+//   }
+// });
 
 // export const updateOrder = asyncErrors(async (req, res) => {
 //   try {

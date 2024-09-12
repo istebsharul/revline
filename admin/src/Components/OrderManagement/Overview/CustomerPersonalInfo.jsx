@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const CustomerPersonalInfo = ({ customer = {}, isEditing, setOrderDetails }) => {
+const CustomerPersonalInfo = ({ customer = {},quote_number, isEditing, setOrderDetails }) => {
+
+  useEffect(()=>{
+    console.log(quote_number);
+  })
   const handleChange = (e) => {
     setOrderDetails((prev) => ({
       ...prev,
@@ -104,18 +108,7 @@ const CustomerPersonalInfo = ({ customer = {}, isEditing, setOrderDetails }) => 
         </div>
         <div>
           <p>Quote Number</p>
-          {isEditing ? (
-            <input
-              type="text"
-              name="__v"
-              value={customer.__v || ''}
-              onChange={handleChange}
-              className="text-gray-600 border border-gray-300 rounded p-1"
-              placeholder="Enter Quote"
-            />
-          ) : (
-            <p className="text-gray-600">{customer.__v || '--'}</p>
-          )}
+          <p className="text-gray-600">{quote_number || '--'}</p>
         </div>
       </div>
     </div>

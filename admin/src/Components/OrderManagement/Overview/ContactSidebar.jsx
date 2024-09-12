@@ -90,7 +90,7 @@ const ContactSidebar = ({ customer, orderId }) => {
           ) : orders.length > 0 ? (
             <div className="space-y-2">
               {orders.map((order) => (
-                <div key={order._id} className={`border-b ${orderId === order._id ? 'shadow-none' : 'bg-white'} rounded-md shadow-lg last:border-b-0 p-3 space-y-1`}>
+                <div key={order._id} className={`border-b ${orderId === order._id ? 'bg-white' : 'shadow-none'} rounded-md shadow-lg last:border-b-0 p-3 space-y-1`}>
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-sm">Order ID: {order._id}</p>
                     <FaCopy 

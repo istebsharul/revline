@@ -18,6 +18,23 @@ const calculateSalesTax = (totalPrice, state) => {
   return totalPrice * taxRate;
 };
 
+// Function to generate a unique 6-digit quote number
+const generateQuoteNumber = async () => {
+  let unique = false;
+  let quoteNumber;
+
+  while (!unique) {
+    quoteNumber = Math.floor(100000 + Math.random() * 900000).toString();
+    const existingOrder = await Order.findOne({ 'quotations.quote_number': quoteNumber });
+
+    if (!existingOrder) {
+      unique = true;
+    }
+  }
+
+  return quoteNumber;
+};
+
 export const sendQuotation = asyncErrors(async (req, res) => {
   const { orderId } = req.body;
 
@@ -27,7 +44,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
 
   try {
     // Fetch the order from the database
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate('customer');
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found.' });
@@ -58,27 +75,41 @@ export const sendQuotation = asyncErrors(async (req, res) => {
       return res.status(400).json({ message: 'Order summary is missing required data.' });
     }
 
+    if(!order.shipping_details.address_line_1 || !order.shipping_details.address_line_2 || !order.shipping_details.city || !order.shipping_details.state_or_region || !order.shipping_details.country_or_region){
+      return res.status(400).json({message: 'Shipping Details is Missing'})
+    }
+
+    // Generate a unique quote number
+    const quoteNumber = await generateQuoteNumber();
+
     // Calculate sales tax
     const salesTax = calculateSalesTax(quoted_price, stateOrRegion);
 
     // Total amount after tax
     const totalAmount = quoted_price + shipping_cost + salesTax;
 
-    // Generate PDF using order details
+    const Address = order.shipping_details.address_line_1+' '+order.shipping_details.address_line_2;
+    const Address1 = order.shipping_details.city+','+order.shipping_details.state_or_region+','+order.shipping_details.country_or_region;
+    // Generate PDF using order details and quote number
     const pdfBuffer = await generatePdf({
       customer_name: customerName,
       customer_email: customerEmail,
       customer_phone: customerPhone,
+      customer_address:Address,
+      customer_address1:Address1,
       order_summary: order.order_summary,
       quoted_price,
+      quote_date: new Date().toISOString().split('T')[0],
       shipping_cost,
       salesTax,
       totalAmount,
+      quote_number:quoteNumber, // Add quote number to PDF
     }); // Assume generatePdf returns a Buffer
 
     // Create or update the quotation
     const newQuotation = {
       status: 'Pending',
+      quote_number: quoteNumber, // Add quote number here
       quotationPdf: {
         data: pdfBuffer,
         contentType: 'application/pdf',
@@ -100,11 +131,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
       pdfStream: pdfBuffer, // Pass Buffer here
     });
 
-    logger.info(customerEmail,customerName,pdfBuffer);
-
-    if (!mailSent) {
-      return res.status(500).json({ message: 'Failed to send email! Please check your email.' });
-    }
+    logger.info(customerEmail, customerName, pdfBuffer);
 
     // Send success response
     res.json({ message: 'Quotation sent and saved successfully!' });

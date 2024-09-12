@@ -19,6 +19,7 @@ const OrderDispositionHistorySchema = new mongoose.Schema({
 // Schema for storing quotations
 const QuotationSchema = new mongoose.Schema({
   status: { type: String, default: 'Pending', trim: true },
+  quote_number: {type:String, unique:true, trim:true},
   quotationPdf: {
     data: Buffer,  // To store the generated PDF buffer
     contentType: { type: String, default: 'application/pdf' }
@@ -32,7 +33,6 @@ const OrderSchema = new mongoose.Schema({
     ref: 'Customer',
     required: true,
   },
-  quote_number: { type: String, trim: true, unique: true },
   request_date: { type: Date, default: Date.now },
   assignee: { type: String, trim: true },
   order_summary: OrderSummarySchema,  // Use the defined sub-schema

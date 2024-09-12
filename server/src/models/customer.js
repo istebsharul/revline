@@ -41,10 +41,6 @@ const CustomerSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid ZIP code!`
     }
   },
-  quoteNumber: {
-    type: String,
-    trim: true,
-  },
 }, { timestamps: true });  // Add timestamps option
 
 const Customer = mongoose.model('Customer', CustomerSchema);

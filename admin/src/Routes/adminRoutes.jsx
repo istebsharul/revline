@@ -30,11 +30,7 @@ const AdminRoutes = () => (
         <Route index element={<SalesManagement />}/>
         <Route path='overview' element={<OrderOverview />} />
       </Route>
-      <Route path="customer-management">
-        {/* Corrected the path here to be relative */}
-        <Route index element={<Customers />} />
-        {/* <Route path='overview/:id' element={<CustomerOverview />} /> */}
-      </Route>
+      <Route path="customer-management" element={<Customers />} />
       <Route path="communication-center" element={<CommunicationCenterPage />} />
       <Route path="marketing-ads" element={<MarketingAdsPage />} />
       <Route path="payments-invoicing" element={<PaymentsInvoicing />} />
