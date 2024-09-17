@@ -63,6 +63,7 @@ const OrderDetails = ({ order, onBack }) => {
                 {order.quotations && (
                     <Quotation
                         orderId={order._id}
+                        paymentDetails={paymentDetails}
                         pdfBinary={order?.quotations?.quotationPdf?.data?.data}
                         orderStatus={order?.order_disposition_details?.order_status}
                         quotationsStatus={order?.quotations?.status}

@@ -4,7 +4,7 @@ import FeedbackForm from './FeedbackForm';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const Quotation = ({ orderId, orderStatus, quotationsStatus, pdfBinary, onAccept, onPayment }) => {
+const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdfBinary, onAccept, onPayment }) => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
@@ -59,20 +59,20 @@ const Quotation = ({ orderId, orderStatus, quotationsStatus, pdfBinary, onAccept
           <div className='w-full'>
             <button
               onClick={onAccept}
-              className={`w-full px-4 py-2 font-semibold rounded ${orderStatus === 'Payment Received'
+              className={`w-full px-4 py-2 font-semibold rounded ${paymentDetails?.payment_status === 'Completed'
                 ? 'bg-gray-400 text-white cursor-not-allowed'
                 : 'bg-green-500 text-white hover:bg-green-600'
                 }`}
-              disabled={orderStatus === 'Payment Received'}
+              disabled={paymentDetails?.payment_status === 'Completed'}
             >
               {orderStatus === 'Payment Received' ? 'Paid' : 'Pay'}
             </button>
           </div>
           <div className='w-full'>
             <button
-              onClick={() => setShowFeedback(true)}
-              className={`w-full px-4 py-2 font-semibold rounded ${quotationsStatus === 'Pending'? 'bg-white text-black hover:bg-red-600 hover:text-white border border-red-500' : 'bg-gray-400 text-white cursor-not-allowed '}`}
-              disabled={quotationsStatus === 'Approved'}
+              onClick={() => setShowFeedback(!showFeedback)}
+              className={`w-full px-4 py-2 font-semibold rounded border ${quotationsStatus === 'Rejected' ? 'cursor-not-allowed bg-blue-500 text-white':'text-black bg-white hover:bg-red-600 hover:text-white'}`}
+              disabled={quotationsStatus === 'Rejected'}
             >
              {quotationsStatus === 'Rejected'? 'Thanks for Feedback' : 'Not Interested'} 
             </button>

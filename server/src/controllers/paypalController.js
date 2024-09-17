@@ -63,7 +63,7 @@ export const paymentDetails = asyncErrors(async(req,res)=>{
   try {
     const {orderId} = req.body;
 
-    const details = await Payment.find({order_id:orderId});
+    const details = await Payment.findOne({order_id:orderId});
     logger.info('Payment Details fetched',details);
     res.json(details);
   } catch (error) {
