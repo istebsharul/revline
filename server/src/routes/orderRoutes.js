@@ -18,6 +18,8 @@ router.get('/all', getAllOrders);
 // Get a specific order by ID
 router.get('/:id', getOrderById);
 
+// router.get('/order/:id',getSingleOrderDetails);
+
 // Update an order by ID
 router.put('/:id', updateOrder);
 

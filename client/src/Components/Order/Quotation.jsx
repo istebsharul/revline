@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaDownload } from 'react-icons/fa';
+import FeedbackForm from './FeedbackForm';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const Quotation = ({ quotationStatus, pdfBinary, onAccept, onReject,onPayment }) => {
-  console.log(quotationStatus);
+const Quotation = ({ orderId, orderStatus, quotationsStatus, pdfBinary, onAccept, onPayment }) => {
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+
+  console.log(quotationsStatus);
+
+  const handleReject = async (message) => {
+    try {
+      // Send update request to server with dynamic values
+      await axios.put(`api/v1/service/quotation/reject/${orderId}`, {
+        quotationsStatus: 'Rejected',  // Dynamic status value
+        message: message                // Dynamic message value
+      });
+      setShowFeedback(false); // Hide the feedback form
+      toast.success("Order rejected.");
+    } catch (err) {
+      toast.error("Failed to reject order.");
+    }
+  };
 
   // Function to convert binary data to a base64 string
   const getBase64String = (binaryData) => {
@@ -11,8 +31,8 @@ const Quotation = ({ quotationStatus, pdfBinary, onAccept, onReject,onPayment })
   };
 
   return (
-    <div className="w-full p-8 bg-gray-100">
-      <h1 className="max-w-5xl mx-auto text-xl md:text-2xl font-semibold mb-3">Quotation</h1>
+    <>
+      <h1 className="max-w-5xl mx-auto text-xl md:text-xl font-semibold mb-3">Quotation</h1>
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Quotation PDF Download */}
         {pdfBinary && (
@@ -36,40 +56,38 @@ const Quotation = ({ quotationStatus, pdfBinary, onAccept, onReject,onPayment })
 
         {/* Approve and Reject Buttons */}
         <div className="w-full p-6 flex gap-2 justify-between items-center">
-          <button
-            onClick={onAccept}
-            className={`w-full px-4 py-2 font-semibold rounded ${quotationStatus === 'Accepted'
-              ? 'bg-gray-400 text-white cursor-not-allowed'
-              : 'bg-green-500 text-white hover:bg-green-600'
-              }`}
-            disabled={quotationStatus === 'Accepted'}
-          >
-            {quotationStatus === 'Accepted' ? 'Confirmed' : 'Confirm'}
-          </button>
           <div className='w-full'>
-          {quotationStatus === 'Accepted' ? (
-            <div>
-              <button
-                onClick={onPayment}
-                className="w-full px-4 py-2 text-white border bg-green-500 hover:bg-green-600 font-semibold rounded"
-              >
-                Click to Pay
-              </button>
-            </div>
-          ) : (
-            <div>
-              <button
-                onClick={onReject}
-                className="w-full px-4 py-2 bg-white text-black border border-red-500 font-semibold rounded hover:text-white hover:bg-red-600"
-              >
-                Not Interested
-              </button>
-            </div>)
-          }
+            <button
+              onClick={onAccept}
+              className={`w-full px-4 py-2 font-semibold rounded ${orderStatus === 'Payment Received'
+                ? 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-green-500 text-white hover:bg-green-600'
+                }`}
+              disabled={orderStatus === 'Payment Received'}
+            >
+              {orderStatus === 'Payment Received' ? 'Paid' : 'Pay'}
+            </button>
+          </div>
+          <div className='w-full'>
+            <button
+              onClick={() => setShowFeedback(true)}
+              className={`w-full px-4 py-2 font-semibold rounded ${quotationsStatus === 'Pending'? 'bg-white text-black hover:bg-red-600 hover:text-white border border-red-500' : 'bg-gray-400 text-white cursor-not-allowed '}`}
+              disabled={quotationsStatus === 'Approved'}
+            >
+             {quotationsStatus === 'Rejected'? 'Thanks for Feedback' : 'Not Interested'} 
+            </button>
           </div>
         </div>
+
+        {/* Conditionally render the FeedbackForm */}
+        {showFeedback && (
+          <FeedbackForm onSubmit={(message) => {
+            setFeedbackMessage(message);
+            handleReject(message);
+          }} />
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

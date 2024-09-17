@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const SendQuotation = ({ orderDetails }) => {
+const SendInvoice = ({ orderDetails }) => {
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -10,7 +10,7 @@ const SendQuotation = ({ orderDetails }) => {
         console.log(orderDetails);
     }, [orderDetails]);
 
-    const handleSendQuotation = async () => {
+    const handleSendInvoice = async () => {
         if (!orderDetails?.pricing_details?.quoted_price) {
             setError('Price is missing!');
             return;
@@ -26,16 +26,21 @@ const SendQuotation = ({ orderDetails }) => {
             return;
         }
 
+        if (!orderDetails.shipping_details.address_line_1 || !orderDetails.shipping_details.address_line_2 || !orderDetails.shipping_details.city || !orderDetails.shipping_details.state_or_region || !orderDetails.shipping_details.country_or_region) {
+            setError('Shipping details are missing required data.');
+            return;
+        }
+
         setIsSending(true);
         setError('');
         setSuccess('');
 
         try {
-            const response = await axios.post('/api/v1/service/quotation/send', { orderId: orderDetails._id });
-            setSuccess(response.data.message || 'Quotation sent successfully!');
+            const response = await axios.post('/api/v1/service/invoice/send', { orderId: orderDetails._id, paymentMode: 'Credit Card' });
+            setSuccess(response.data.message || 'Invoice sent successfully!');
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.message || 'Failed to send quotation.');
+            setError(err.response?.data?.message || 'Failed to send invoice.');
         } finally {
             setIsSending(false);
         }
@@ -46,16 +51,16 @@ const SendQuotation = ({ orderDetails }) => {
             {error && <p className="text-xs text-red-500">{error}</p>}
             {success && <p className="text-xs text-green-500">{success}</p>}
             <button
-                onClick={handleSendQuotation}
+                onClick={handleSendInvoice}
                 disabled={isSending}
                 className={`w-full px-4 py-2 m-1 rounded-lg text-black ${
                     isSending ? 'bg-gray-400' : success ? 'bg-green-500 hover:bg-green-600 text-white' : error ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-200 hover:bg-gray-300'
                 }`}
             >
-                {isSending ? 'Sending...' : 'Send Quotation'}
+                {isSending ? 'Sending...' : 'Send Invoice'}
             </button>
         </div>
     );
 };
 
-export default SendQuotation;
+export default SendInvoice;

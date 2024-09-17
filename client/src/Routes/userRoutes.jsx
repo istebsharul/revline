@@ -13,6 +13,8 @@ import ForgotPasswordPage from '../Pages/User/ForgotPasswordPage';
 import OrderPage from '../Pages/User/OrderPage'
 import PartsPage from '../Pages/Landing/PartsPage';
 import ProtectedRoute from '../Utils/ProtectedRoute';
+import PaymentSuccessfulPage from '../Pages/User/PaymentSuccessfulPage';
+import PaymentCancel from '../Pages/User/PaymentCancel';
 
 const UserRoutes = () => (
   <Routes>
@@ -32,6 +34,8 @@ const UserRoutes = () => (
       path="orders"
       element={<ProtectedRoute><OrderPage /></ProtectedRoute>}
     />
+    <Route path="return" element={<PaymentSuccessfulPage/>} />
+    <Route path="cancel" element={<PaymentCancel/>}/>
     {/* Catch-all Route */}
     <Route path="*" element={<HomePage />} />
   </Routes>

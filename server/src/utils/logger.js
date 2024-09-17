@@ -73,11 +73,11 @@ const consoleAndFileTransport = [
         level: 'info',
     }),
     new winston.transports.File({
-        filename: path.join(logDirectory, 'proctorPulseDebug.log'),
+        filename: path.join(logDirectory, 'revline.log'),
         level: 'debug',
     }),
     new winston.transports.File({
-        filename: path.join(logDirectory, 'proctorPulseError.log'),
+        filename: path.join(logDirectory, 'revline.log'),
         level: 'error',
     }),
 ];
