@@ -15,18 +15,6 @@ export const createOrder = asyncErrors(async (req, res) => {
   }
 });
 
-// Get all orders
-// export const getAllOrders = asyncErrors(async (req, res) => {
-//   try {
-//     const orders = await Order.find().populate('customer').populate('shipping_details.customer'); // Populate customer details if needed
-//     res.json(orders);
-//     logger.info('Fetched all orders');
-//   } catch (error) {
-//     logger.error('Error fetching orders', { error: error.message });
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-// Get all orders with pagination
 export const getAllOrders = asyncErrors(async (req, res) => {
   try {
     // Extract page and limit from query parameters

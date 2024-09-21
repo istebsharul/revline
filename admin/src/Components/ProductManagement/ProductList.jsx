@@ -4,39 +4,70 @@ import { FaFilter, FaFileExport, FaFileImport } from 'react-icons/fa';
 import ProductListItem from './ProductListItem';
 import ImportProducts from './importProduct';
 
-const ProductList = () => {
+const ProductList = ({ setShowForm, showForm }) => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [filter, setFilter] = useState('');
     const [filteredProducts, setFilteredProducts] = useState([]);
+    const [totalProducts, setTotalProducts] = useState('');
+    const [currentPage, setCurrentPage ] = useState('');
+    const pageSize = 30;
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(30);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const productsOnCurrentPage = currentPage < totalPages ? pageSize : totalProducts % pageSize || pageSize;
+
+
+    useEffect(() => {
+        console.log(products);
+    })
 
     useEffect(() => {
         const fetchInventory = async () => {
             try {
-                const response = await axios.get('/api/v1/inventory/list');
+                const response = await axios.get('/api/v1/inventory/list', { params: { page, limit } });
                 console.log(response);
-                setProducts(response.data);
-                setFilteredProducts(response.data);
+                setProducts(response.data.inventories);
+                setFilteredProducts(response.data.inventories);
+                setTotalPages(response.data.pagination.totalPages);
+                setTotalProducts(response.data.pagination.totalProducts);
+                setCurrentPage(response.data.pagination.currentPage);
                 setLoading(false);
             } catch (error) {
                 console.error(error);
                 setError('Failed to fetch products from inventory. Please try again later.');
+                console.log('Failed to fetch Products');
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchInventory();
-    }, []);
+    }, [page, limit]);
+
+    // Handle pagination
+    const handleNextPage = () => {
+        if (page < totalPages) {
+            setPage(page + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    };
 
     useEffect(() => {
         if (filter) {
             const lowercasedFilter = filter.toLowerCase();
             const filtered = products.filter(product => {
-                const year = (product.productId?.year ?? '').toString();
-                const make = (product.productId?.make ?? '').toString();
-                const model = (product.productId?.model ?? '').toString();
-                const carPart = (product.productId?.carPart ?? '').toString();
+                const year = (product.product?.year ?? '').toString();
+                const make = (product.product?.make ?? '').toString();
+                const model = (product.product?.model ?? '').toString();
+                const carPart = (product.product?.carPart ?? '').toString();
                 const status = (product?.status ?? '').toString();
 
                 return year.toLowerCase().includes(lowercasedFilter) ||
@@ -68,7 +99,7 @@ const ProductList = () => {
 
     const handleDelete = async (productId) => {
         const confirmed = confirm("Are you sure you want to delete?");
-        
+
         if (confirmed) {
             try {
                 await axios.delete(`/api/v1/inventory/${productId}`);
@@ -84,22 +115,22 @@ const ProductList = () => {
 
     const handleExport = () => {
         const csvContent = [
-            ['ID', 'Year', 'Make', 'Model', 'Part', 'Variant', 'Transmission', 'Description', 'Grade', 'SKU', 'Price','Quantity','Status','Contact'],
+            ['ID', 'Year', 'Make', 'Model', 'Part', 'Variant', 'Transmission', 'Description', 'Grade', 'SKU', 'Price', 'Quantity', 'Status', 'Contact'],
             ...filteredProducts.map(product => [
                 product._id,
-                product.productId.make || 'N/A',
-                product.productId.year || 'N/A',
-                product.productId.model || 'N/A',
-                product.productId.part || 'N/A',
-                product.productId.variant || 'N/A',
-                product.productId.transmission || 'N/A',
-                product.productId.description || 'N/A',
-                product.productId.sku || 'N/A',
-                product.productId.grade || 'N/A',
-                product.productId.price || 'N/A',
+                product.product.make || 'N/A',
+                product.product.year || 'N/A',
+                product.product.model || 'N/A',
+                product.product.part || 'N/A',
+                product.product.variant || 'N/A',
+                product.product.transmission || 'N/A',
+                product.product.description || 'N/A',
+                product.product.sku || 'N/A',
+                product.product.grade || 'N/A',
+                product.product.price || 'N/A',
                 product.quantity || 'N/A',
                 product.status || 'N/A',
-                product.productId.contact || 'N/A'
+                product.product.contact || 'N/A'
             ])
         ]
             .map(e => e.join(','))
@@ -119,13 +150,19 @@ const ProductList = () => {
     };
 
     return (
-        <div className="w-full mx-auto p-4 bg-white rounded-lg">
+        <div className="w-full mx-auto bg-white rounded-lg">
             <div className="w-full flex items-center justify-between mb-6">
                 <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
                     <span>Product List</span>
-                    <span className='text-xs text-gray-500'>Total Products Available - {filteredProducts.length}</span>
+                    <span className='text-xs text-gray-500'>Total Products Available -  {productsOnCurrentPage} of {totalProducts}</span>
                 </h2>
                 <div className="w-full flex justify-evenly items-center space-x-4">
+                    <button
+                        onClick={() => setShowForm(!showForm)}
+                        className="w-1/2 bg-blue-500 text-white p-2 rounded"
+                    >
+                        {showForm ? 'Cancel' : '+ New Product'}
+                    </button>
                     <div className="w-full relative">
                         <input
                             type="text"
@@ -144,7 +181,7 @@ const ProductList = () => {
                         <FaFileExport className="mr-2 h-5 w-5" />
                         Export
                     </button>
-                    <ImportProducts/>
+                    <ImportProducts />
                 </div>
             </div>
             <div className="bg-gray-100 p-2 rounded-t-lg">
@@ -189,6 +226,27 @@ const ProductList = () => {
                     ))}
                 </ul>
             )}
+            <div className="flex flex-col justify-center items-center gap-4 mt-4">
+                <span className="text-gray-700">
+                    Page {page} of {totalPages}
+                </span>
+                <div className='w-full flex justify-center items-center gap-2'>
+                    <button
+                        onClick={handlePrevPage}
+                        disabled={page === 1}
+                        className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                    >
+                        Previous
+                    </button>
+
+                    <button
+                        onClick={handleNextPage}
+                        disabled={page === totalPages}
+                        className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                    >
+                        Next
+                    </button></div>
+            </div>
         </div>
     );
 };

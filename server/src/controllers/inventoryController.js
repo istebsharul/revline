@@ -43,7 +43,7 @@ export const createInventoryEntry = asyncErrors(async (req, res) => {
         // Create and save the inventory entry
         const status = quantity > 0 ? 'available' : 'out of stock';
         const inventory = new Inventory({
-            productId: product._id,
+            product: product._id,
             quantity,
             status
         });
@@ -59,9 +59,9 @@ export const createInventoryEntry = asyncErrors(async (req, res) => {
 });
 
 // Get all inventory entries
-export const getAllInventoryEntries = asyncErrors(async (req, res) => {
+export const getAllInventoryEntrie = asyncErrors(async (req, res) => {
     try {
-        const inventoryEntries = await Inventory.find().populate('productId');
+        const inventoryEntries = await Inventory.find().populate('product');
         logger.info('Fetched all inventory entries');
         res.status(200).json(inventoryEntries);
     } catch (error) {
@@ -70,10 +70,48 @@ export const getAllInventoryEntries = asyncErrors(async (req, res) => {
     }
 });
 
+export const getAllInventoryEntries = asyncErrors(async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Validate page and limit
+        if (page < 1 || limit < 1) {
+            return res.status(400).json({ message: 'Page and limit must be greater than zero' });
+        }
+
+        const skip = (page - 1) * limit;
+
+        // Fetch inventory entries
+        const inventories = await Inventory.find()
+            .skip(skip)
+            .limit(limit)
+            .populate('product');
+
+        const totalProducts = await Inventory.countDocuments();
+
+        res.json({
+            inventories,
+            pagination: {
+                totalProducts,
+                totalPages: Math.ceil(totalProducts / limit),
+                currentPage: page,
+                pageSize: limit,
+            },
+        });
+
+        logger.info('Fetched products successfully');
+    } catch (error) {
+        logger.error('Error fetching products', { error: error.message });
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 // Get a single inventory entry by ID
 export const getInventoryEntryById = asyncErrors(async (req, res) => {
     try {
-        const inventoryEntry = await Inventory.findById(req.params.id).populate('productId');
+        const inventoryEntry = await Inventory.findById(req.params.id).populate('product');
         if (!inventoryEntry) {
             logger.warn(`Inventory entry not found: ${req.params.id}`);
             return res.status(404).json({ message: 'Inventory entry not found' });
@@ -133,7 +171,7 @@ export const deleteInventoryEntry = asyncErrors(async (req, res) => {
         }
 
         // Find and delete the associated product
-        const productId = inventoryEntry.productId; // Assuming productId is a reference to the Product schema
+        const productId = inventoryEntry.product; // Assuming productId is a reference to the Product schema
         const product = await Product.findByIdAndDelete(productId);
 
         if (!product) {
@@ -195,7 +233,7 @@ export const importProducts = asyncErrors(async (req, res) => {
                 const quantity = parseInt(row.quantity, 10);
                 const status = quantity > 0 ? 'available' : 'out of stock';
                 const inventory = {
-                    productId: product._id, // This will be assigned after saving the product
+                    product: product._id, // This will be assigned after saving the product
                     quantity,
                     status
                 };
@@ -214,7 +252,7 @@ export const importProducts = asyncErrors(async (req, res) => {
 
                     // Now, create inventory entries with the saved product IDs
                     for (let i = 0; i < savedProducts.length; i++) {
-                        inventories[i].productId = savedProducts[i]._id;
+                        inventories[i].product = savedProducts[i]._id;
                     }
 
                     await Inventory.insertMany(inventories);

@@ -10,6 +10,18 @@ const AdminOverviewPage = () => {
   const [isTasksOpen, setIsTasksOpen] = useState(true);
   const [isTicketsOpen, setIsTicketsOpen] = useState(true);
   const [isContactsOpen, setIsContactsOpen] = useState(true);
+  const [taskCount, setTaskCount] = useState(0);
+
+  useEffect(() => {
+    // Function to get the number of tasks from localStorage
+    const getNumberOfTasks = () => {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      return tasks.length;
+    };
+
+    // Set the task count when the component mounts
+    setTaskCount(getNumberOfTasks());
+  }, []); // Empty dependency array means this useEffect runs only on mount
 
   useEffect(()=>{
     console.log("Hello from Overview Page");
@@ -34,10 +46,10 @@ const AdminOverviewPage = () => {
               className="flex justify-between items-center cursor-pointer" 
               onClick={() => setIsTasksOpen(!isTasksOpen)}
             >
-              <h2 className="flex text-lg font-semibold text-gray-700">Tasks<div>({mockTasks.length})</div></h2>
+              <h2 className="flex text-lg font-semibold text-gray-700">Tasks<div>({taskCount})</div></h2>
               {isTasksOpen ? <FiChevronUp /> : <FiChevronDown />}
             </div>
-            {isTasksOpen && <TasksWidget tasks={mockTasks} />}
+            {isTasksOpen && <TasksWidget />}
           </div>
 
           {/* Tickets Widget */}

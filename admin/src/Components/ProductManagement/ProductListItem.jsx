@@ -49,16 +49,16 @@ const ProductListItem = ({ product, index, onSave, onDelete }) => {
         >
             <span className="font-medium text-gray-500">{index + 1}.</span>
 
-            <div className="text-sm text-gray-800">{product.productId?.year || 'N/A'}</div>
-                    <div className="text-md text-gray-800">{product.productId?.make || 'N/A'}</div>
-                    <div className="text-md text-gray-800">{product.productId?.model || 'N/A'}</div>
-                    <div className="text-sm text-gray-600">{product.productId?.part || 'N/A'}</div>
-                    <div className="text-sm text-gray-600">{product.productId?.variant || 'N/A'}</div>
-                    <div className="text-xs text-gray-500">{product.productId?.transmission || 'N/A'}</div>
-                    <div className="text-xs text-gray-500">{product.productId?.description || 'N/A'}</div>
-                    <div className="text-xs text-gray-500">{product.productId?.grade || 'N/A'}</div>
-                    <div className="text-xs text-gray-500">{product.productId?.sku || 'N/A'}</div>
-                    <div className="text-xs text-gray-500">{product.productId?.price || 'N/A'}</div>
+            <div className="text-sm text-gray-800">{product.product?.year || 'N/A'}</div>
+                    <div className="text-md text-gray-800">{product.product?.make || 'N/A'}</div>
+                    <div className="text-md text-gray-800">{product.product?.model || 'N/A'}</div>
+                    <div className="text-sm text-gray-600">{product.product?.part || 'N/A'}</div>
+                    <div className="text-sm text-gray-600">{product.product?.variant || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.product?.transmission || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.product?.description || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.product?.grade || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.product?.sku || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.product?.price || 'N/A'}</div>
                     {isEditing?(
                         <input
                         type="number"
@@ -75,7 +75,7 @@ const ProductListItem = ({ product, index, onSave, onDelete }) => {
                     >
                         {product.status || 'Unknown'}
                     </div>
-                    <div className="text-xs text-gray-500">{product.productId?.contact || 'N/A'}</div>
+                    <div className="text-xs text-gray-500">{product.product?.contact || 'N/A'}</div>
             <div className="flex justify-end space-x-2">
                 {isEditing ? (
                     <div className='flex'>
