@@ -83,7 +83,7 @@ const generateInvoiceNumber = async () => {
 
 // Controller function to send an invoice
 export const sendInvoice = asyncErrors(async (req, res) => {
-  const { orderId, paymentMode } = req.body;
+  const { orderId,transactionId, paymentMode } = req.body;
 
   if (!orderId) {
     return res.status(400).json({ message: 'Order ID is required.' });
@@ -151,7 +151,7 @@ export const sendInvoice = asyncErrors(async (req, res) => {
       totalAmount,
       invoice_number: invoiceNumber,
       payment_mode: paymentMode, // Payment mode from the request
-      transaction_id: order.billing_details.transaction_id, // Assuming this field exists in billing_details
+      transaction_id: transactionId, // Assuming this field exists in billing_details
     });
 
     // Create a new invoice

@@ -11,10 +11,14 @@ import { FaEdit } from 'react-icons/fa';
 import SendQuotation from '../sendQuotation';
 import SendInvoice from '../SendInvoice';
 import QuotationDetails from './QuotationDetails';
+import InvoiceDetails from './InvoiceDetails';
+import PaymentDetails from './PaymentDetails';
 
 const OverviewContainer = ({ orderDetails, setOrderDetails }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('overview'); // State to manage active tab
+
+  console.log(orderDetails);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -92,6 +96,8 @@ const OverviewContainer = ({ orderDetails, setOrderDetails }) => {
             <ShippingDetails shippingDetails={orderDetails.shipping_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <BillingDetails billingDetails={orderDetails.billing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <QuotationDetails quotationDetails={orderDetails.quotations} />
+            <InvoiceDetails invoiceDetails={orderDetails.invoices} />
+            <PaymentDetails paymentDetails={orderDetails.payment_details} />
             <OrderDispositionDetails orderDispositionDetails={orderDetails.order_disposition_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
           </>
         )}

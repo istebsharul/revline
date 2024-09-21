@@ -29,7 +29,7 @@ const OrderList = ({ orders }) => {
             : orders;
     
         // Reverse the order list
-        filtered = filtered.slice().reverse();
+        // filtered = filtered.slice().reverse();
     
         setFilteredOrders(filtered);
     }, [filter, orders]);
@@ -54,12 +54,11 @@ const OrderList = ({ orders }) => {
     // Function to handle exporting the order list to CSV
     const handleExport = () => {
         const csvContent = [
-            ['Index', 'Order ID', 'Name', 'Date', 'Email', 'Phone', 'Quote Number'],
+            ['Index', 'Order ID', 'Name','Email', 'Phone', 'Quote Number'],
             ...filteredOrders.map((order, index) => [
                 index + 1,
                 order._id || 'N/A',
                 order.customer.name || 'N/A',
-                order.customer.createdAt || 'N/A',
                 order.customer.email || 'N/A',
                 order.customer.phone || 'N/A',
                 order.quoteNumber || 'N/A',

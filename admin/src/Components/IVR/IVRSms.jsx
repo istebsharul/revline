@@ -12,7 +12,7 @@ const IVRSms = () => {
   const handleSendSms = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/v1/ivr/send-sms', {
+      const res = await axios.post('/api/v1/twilio/sms-send', {
         to: recipient,
         message: message,
       });
@@ -27,7 +27,7 @@ const IVRSms = () => {
   const fetchSmsLogs = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('/api/v1/ivr/sms-logs');
+      const res = await axios.get('/api/v1/twilio/sms-logs');
       setLogs(res.data);
     } catch (error) {
       setError('Failed to fetch SMS logs');

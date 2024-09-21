@@ -5,36 +5,7 @@ import ProductList from '../../Components/ProductManagement/ProductList';
 import AddProductForm from '../../Components/ProductManagement/AddProduct';
 
 const ProductManagement = () => {
-  const [products, setProducts] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false); // State to toggle form visibility
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('/api/v1/products/list');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setProducts(data);
-        setFilteredProducts(data);
-      } catch (error) {
-        setError('Failed to fetch products');
-        console.error('Failed to fetch products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
-
-  const handleProductSelect = (product) => {
-    setSelectedProduct(product);
-  };
 
   const handleAddProduct = (newProduct) => {
     setProducts([...products, newProduct]);
@@ -59,15 +30,11 @@ const ProductManagement = () => {
         {showForm ? 'Cancel' : 'Add New Product'}
       </button>
       <main className="w-full p-4 flex flex-col">
-        {loading && <div className="p-4 bg-gray-100 text-gray-800">Loading...</div>}
-        {error && <div className="p-4 bg-red-100 text-red-800">{error}</div>}
         <div className='w-full flex gap-4'>
           <div className="bg-white shadow-md rounded-lg p-2 flex-1">
-            <ProductList products={filteredProducts} onSelectProduct={handleProductSelect} />
+            <ProductList />
           </div>
         </div>
-
-
       </main>
     </div>
   );

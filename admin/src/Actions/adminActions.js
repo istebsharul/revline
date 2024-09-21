@@ -47,7 +47,7 @@ export const loadAdmin = () => async (dispatch) => {
         const { data } = await axios.get(
             "/api/v1/admin-auth/profile"
         );
-        console.log("data retrieved using loadAdmin", data);
+        // console.log("data retrieved using loadAdmin", data);
         console.log('Admin data loaded successfully');
         dispatch({ type: LOAD_SUCCESS, payload: data.admin });
     } catch (error) {

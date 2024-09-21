@@ -99,6 +99,9 @@ export const createPayment = async (orderId) => {
     payment.token = approvalUrl.match(/token=([A-Z0-9_-]+)/)?.[1];
     await payment.save();
 
+    await Order.findByIdAndUpdate(orderId, { payment_details: payment._id });
+    await Order.findByIdAndUpdate(orderId, { 'quotations.status': 'Accepted' });
+
     logger.info('Payment created or updated successfully:', { paymentId, approvalUrl });
     return { approvalUrl, paymentId };
 

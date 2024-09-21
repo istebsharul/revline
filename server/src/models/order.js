@@ -101,7 +101,8 @@ const OrderSchema = new mongoose.Schema({
   },
   disposition_history: { type: [OrderDispositionHistorySchema], default: [] },
   quotations: { type: QuotationSchema },  // New field for quotations
-  invoices: {type: InvoiceSchema}
+  invoices: {type: InvoiceSchema},
+  payment_details: {type:mongoose.Schema.Types.ObjectId, ref: 'Payment'}
 });
 
 const Order = mongoose.model('Order', OrderSchema);

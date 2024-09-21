@@ -31,12 +31,17 @@ const SendInvoice = ({ orderDetails }) => {
             return;
         }
 
+        if(!orderDetails.payment_details.transaction_id){
+            setError('Transaction Id is Missing!');
+            return;
+        }
+
         setIsSending(true);
         setError('');
         setSuccess('');
 
         try {
-            const response = await axios.post('/api/v1/service/invoice/send', { orderId: orderDetails._id, paymentMode: 'Credit Card' });
+            const response = await axios.post('/api/v1/service/invoice/send', { orderId: orderDetails._id, transactionId:orderDetails.payment_details.transaction_id, paymentMode: orderDetails.payment_details.payment_method });
             setSuccess(response.data.message || 'Invoice sent successfully!');
         } catch (err) {
             console.error(err);

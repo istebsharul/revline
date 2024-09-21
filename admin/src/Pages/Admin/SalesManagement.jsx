@@ -8,12 +8,23 @@ const SalesManagement = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // Pagination state
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(10);
+    const [totalPages, setTotalPages] = useState(1);
+
     useEffect(() => {
         const getOrders = async () => {
             try {
-                const response = await axios.get('/api/v1/orders/all');
-                // console.log(response);
-                setOrders(response.data); // Ensure response.data is an array
+                const response = await axios.get('/api/v1/orders/all', {
+                    params: {
+                        page,
+                        limit
+                    }
+                });
+                setOrders(response.data.orders); // Update to use the response structure
+                console.log(response.data);
+                setTotalPages(response.data.pagination.totalPages);
             } catch (error) {
                 setError('Failed to fetch orders');
                 console.error('Failed to fetch orders:', error);
@@ -22,15 +33,23 @@ const SalesManagement = () => {
             }
         };
         getOrders();
-    }, []);
+    }, [page, limit]);
+
+    // Handle pagination
+    const handleNextPage = () => {
+        if (page < totalPages) {
+            setPage(page + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    };
 
     return (
         <div className="w-full flex flex-col justify-start items-center bg-gray-100">
-            {/* <header className="w-full bg-white shadow-md border-b">
-                <div className="w-full mx-auto py-4 px-6 flex flex-col items-start">
-                    <h1 className="text-2xl font-semibold">Sales Management</h1>
-                </div>
-            </header> */}
             <main className="w-full">
                 {loading ? (
                     <div className="text-center">
@@ -43,10 +62,32 @@ const SalesManagement = () => {
                 ) : error ? (
                     <div className="text-red-600 text-center">{error}</div>
                 ) : (
-                    <OrderList orders={orders} onSelectOrder={setSelectedOrder} />
+                    <>
+                        <OrderList orders={orders} onSelectOrder={setSelectedOrder} />
+                        <div className="flex flex-col justify-center items-center gap-4 mt-4">
+                        <span className="text-gray-700">
+                                Page {page} of {totalPages}
+                            </span>
+                            <div className='w-full flex justify-center items-center gap-2'>
+                                <button
+                                onClick={handlePrevPage}
+                                disabled={page === 1}
+                                className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                            >
+                                Previous
+                            </button>
+                            
+                            <button
+                                onClick={handleNextPage}
+                                disabled={page === totalPages}
+                                className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                            >
+                                Next
+                            </button></div>
+                        </div>
+                    </>
                 )}
             </main>
-            {/* <CustomerOverview/> */}
         </div>
     );
 };

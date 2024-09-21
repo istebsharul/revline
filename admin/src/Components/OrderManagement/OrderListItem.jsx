@@ -8,7 +8,7 @@ const OrderListItem = ({ order, index, handleDelete }) => {
             <div className="w-2 pl-5">{index+1}</div>
             <div className="w-48">{order._id}</div> {/* Display index */}
             <div className="w-40">{order.customer?.name}</div> {/* Display customer name */}
-            <div className="w-20">{new Date(order.customer?.createdAt).toLocaleDateString() || 'N/A'}</div> {/* Display created date */}
+            <div className="w-20">{new Date(order?.request_date).toLocaleDateString() || 'N/A'}</div> {/* Display created date */}
             <div className="w-60">{order.customer?.email || 'N/A'}</div> {/* Display email with truncation */}
             <div className="w-20">{order.customer?.phone || 'N/A'}</div> {/* Display phone */}
             <div className="w-20 flex space-x-2">

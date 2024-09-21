@@ -81,7 +81,7 @@ const ContactSidebar = ({ customer, orderId }) => {
         </div>
 
         {/* Orders Section */}
-        <div className="mt-4">
+        <div className="mt-4 h-min max-h-80 overflow-y-auto">
           <h1 className="font-semibold text-md py-2 px-1">Orders</h1>
           {loading ? (
             <p className="text-sm text-gray-500">Loading orders...</p>
@@ -89,13 +89,13 @@ const ContactSidebar = ({ customer, orderId }) => {
             <p className="text-sm text-red-500">Error fetching orders: {error}</p>
           ) : orders.length > 0 ? (
             <div className="space-y-2">
-              {orders.map((order) => (
+              {orders.slice().reverse().map((order) => (  // Reverse the orders array here
                 <div key={order._id} className={`border-b ${orderId === order._id ? 'bg-white' : 'shadow-none'} rounded-md shadow-lg last:border-b-0 p-3 space-y-1`}>
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-sm">Order ID: {order._id}</p>
-                    <FaCopy 
+                    <FaCopy
                       className="text-gray-500 cursor-pointer"
-                      onClick={() => copyToClipboard(order._id)} 
+                      onClick={() => copyToClipboard(order._id)}
                     />
                   </div>
                   <p className="text-sm">Date: {formatDate(order.request_date)}</p>
@@ -106,7 +106,9 @@ const ContactSidebar = ({ customer, orderId }) => {
           ) : (
             <p className="text-sm text-gray-500">No orders found.</p>
           )}
+
         </div>
+
         {/* Conversion Date Section */}
         <div className="mt-4">
           <h1 className="font-semibold text-md p-1">First Conversion Date</h1>

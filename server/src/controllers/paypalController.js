@@ -61,10 +61,12 @@ export const cancelPayment = asyncErrors(async (req, res) => {
 
 export const paymentDetails = asyncErrors(async(req,res)=>{
   try {
+    console.log("Hello from Payment Details");
     const {orderId} = req.body;
-
+    console.log('Trying to fetch payment details for orderId :',orderId);
     const details = await Payment.findOne({order_id:orderId});
     logger.info('Payment Details fetched',details);
+    console.log(details);
     res.json(details);
   } catch (error) {
     logger.error('Error fetching payment details',error);

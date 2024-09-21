@@ -62,7 +62,7 @@ const OrderPage = () => {
               <h2 className="text-2xl font-bold mb-4">Orders List</h2>
               {orders.length > 0 ? (
                 <ul>
-                  {orders.map((order) => (
+                  {orders.slice().reverse().map((order) => (
                     <li key={order._id} className="mb-4 p-4 bg-gray-50 border rounded-md cursor-pointer" onClick={() => handleOrderClick(order)}>
                       <h3 className="text-lg font-semibold">Order ID: {order._id}</h3>
                       <p><strong>Order Status:</strong> {order.order_disposition_details?.order_status}</p>
