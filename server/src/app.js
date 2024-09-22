@@ -11,6 +11,7 @@ import ivrRoutes from './routes/ivrRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import paypalRoutes from './routes/paymentRoutes.js';
 import customerSupportRoutes from './routes/customerSupportRoutes.js';
+import ticketRoutes from './routes/ticketRoutes.js';
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/v1/ivr',ivrRoutes);
 app.use('/api/v1/twilio',customerSupportRoutes);
 app.use('/api/v1/service', serviceRoutes);
 app.use('/api/v1/paypal', paypalRoutes);
+app.use('/api/v1/tickets',ticketRoutes)
 // Use the error handling middleware after all routes and other middleware
 app.use(errorHandler);
 

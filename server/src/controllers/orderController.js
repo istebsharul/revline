@@ -69,7 +69,8 @@ export const getOrderById = asyncErrors(async (req, res) => {
 
     const orders = await Order.find({ customer: customerId })
                               .populate('customer')
-                              .populate('shipping_details.customer');
+                              .populate('shipping_details.customer')
+                              .populate('payment_details');
     
     if (orders.length === 0) {
       logger.warn('No orders found for this customer', { customerId });

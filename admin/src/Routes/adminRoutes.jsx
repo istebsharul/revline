@@ -26,7 +26,7 @@ const AdminRoutes = () => (
     <Route path="/" element={<ProtectedRoute />}>
       <Route index element={<AdminOverviewPage />} />
       <Route path='sales-management'>
-        <Route index element={<SalesManagement />}/>
+        <Route index element={<SalesManagement />} />
         <Route path='overview' element={<OrderOverview />} />
       </Route>
       <Route path="customer-management" element={<CustomerManagement />} />
