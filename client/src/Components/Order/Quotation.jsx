@@ -8,23 +8,19 @@ const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdf
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
-  console.log(quotationsStatus);
-
   const handleReject = async (message) => {
     try {
-      // Send update request to server with dynamic values
       await axios.put(`api/v1/service/quotation/reject/${orderId}`, {
-        quotationsStatus: 'Rejected',  // Dynamic status value
-        message: message                // Dynamic message value
+        quotationsStatus: 'Rejected',
+        message: message
       });
-      setShowFeedback(false); // Hide the feedback form
+      setShowFeedback(false);
       toast.success("Order rejected.");
     } catch (err) {
       toast.error("Failed to reject order.");
     }
   };
 
-  // Function to convert binary data to a base64 string
   const getBase64String = (binaryData) => {
     const binaryString = String.fromCharCode(...new Uint8Array(binaryData));
     return window.btoa(binaryString);
@@ -32,31 +28,31 @@ const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdf
 
   return (
     <>
-      <h1 className="max-w-5xl mx-auto text-xl md:text-xl font-semibold mb-3">Quotation</h1>
-      <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="max-w-5xl mx-auto bg-gray-100 rounded-lg overflow-hidden">
+        <h1 className="max-w-5xl mx-auto border-b text-xl md:text-xl font-semibold text-left px-6 py-2">Quotation</h1>
         {/* Quotation PDF Download */}
         {pdfBinary && (
-          <div className="flex flex-col p-6 border-b border-gray-200">
-            <div className="flex items-center">
+          <div className="flex flex-col p-4 md:p-6 border-b border-gray-200">
+            <div className="flex flex-col md:flex-row items-center">
               <a
                 href={`data:application/pdf;base64,${getBase64String(pdfBinary)}`}
                 download="quotation.pdf"
-                className="flex text-black font-semibold rounded-lg p-3 bg-gray-200 hover:bg-gray-300"
+                className="flex items-center justify-center text-black font-semibold rounded-lg p-3 bg-gray-200 hover:bg-gray-300 w-full md:w-auto"
               >
                 Download PDF
-                <FaDownload className="m-1" />
+                <FaDownload className="ml-2" />
               </a>
-              <h2 className="text-xl font-semibold text-gray-800 p-3">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 p-3 text-center md:text-left">
                 Click to Download and View the Quotation.
               </h2>
             </div>
-            <p className="p-2 mt-4 font-medium">Click Confirm to Pay and Place Order.</p>
+            <p className="p-2 mt-4 font-medium text-center md:text-left">Click Confirm to Pay and Place Order.</p>
           </div>
         )}
 
         {/* Approve and Reject Buttons */}
-        <div className="w-full p-6 flex gap-2 justify-between items-center">
-          <div className='w-full'>
+        <div className="w-full p-4 md:p-6 flex flex-col md:flex-row gap-2 justify-between items-center">
+          <div className="w-full">
             <button
               onClick={onAccept}
               className={`w-full px-4 py-2 font-semibold rounded ${paymentDetails?.payment_status === 'Completed'
@@ -68,23 +64,27 @@ const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdf
               {orderStatus === 'Payment Received' ? 'Paid' : 'Pay'}
             </button>
           </div>
-          <div className='w-full'>
+          <div className="w-full">
             <button
               onClick={() => setShowFeedback(!showFeedback)}
-              className={`w-full px-4 py-2 font-semibold rounded border ${quotationsStatus === 'Rejected' ? 'cursor-not-allowed bg-blue-500 text-white':'text-black bg-white hover:bg-red-600 hover:text-white'}`}
+              className={`w-full px-4 py-2 font-semibold rounded border ${quotationsStatus === 'Rejected' ? 'cursor-not-allowed bg-blue-500 text-white' : 'text-black bg-white hover:bg-red-600 hover:text-white'}`}
               disabled={quotationsStatus === 'Rejected'}
             >
-             {quotationsStatus === 'Rejected'? 'Thanks for Feedback' : 'Not Interested'} 
+              {quotationsStatus === 'Rejected' ? 'Thanks for Feedback' : 'Cancel'}
             </button>
           </div>
         </div>
 
         {/* Conditionally render the FeedbackForm */}
         {showFeedback && (
-          <FeedbackForm onSubmit={(message) => {
-            setFeedbackMessage(message);
-            handleReject(message);
-          }} />
+          <div className="p-4">
+            <FeedbackForm
+              onSubmit={(message) => {
+                setFeedbackMessage(message);
+                handleReject(message);
+              }}
+            />
+          </div>
         )}
       </div>
     </>

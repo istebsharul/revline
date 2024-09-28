@@ -7,7 +7,7 @@ const ticketSchema = new mongoose.Schema({
     priority: { type: String, enum: ['Low', 'Medium', 'High'], default: 'Low' },
     category: String,
     status: { type: String, enum: ['Open', 'Closed', 'Pending'], default: 'Open' },
-    orderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' }, // Changed to orderId
+    orderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', unique:true}, // Changed to orderId
     createdAt: { type: Date, default: Date.now },
 });
 

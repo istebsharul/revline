@@ -5,7 +5,7 @@ import { TiTick } from "react-icons/ti";
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
-const MultiStepForm = () => {
+const MultiStepForm1 = () => {
     const [step, setStep] = useState(1);
     const [noOfParts, setNoOfParts] = useState();
 
@@ -238,7 +238,7 @@ const MultiStepForm = () => {
     };
 
     return (
-        <div className="w-full max-w-md mx-auto md:mt-10 p-2 rounded-lg">
+        <div  className="w-full max-w-md mx-auto md:mt-10 p-2 rounded-lg">
             <div className='flex justify-center items-center p-2 m-2'>
                 <div className="w-4/5 flex items-center justify-center">
                     {[1, 2, 3].map((item, index) => (
@@ -459,4 +459,4 @@ const MultiStepForm = () => {
     );
 };
 
-export default MultiStepForm;
+export default MultiStepForm1;

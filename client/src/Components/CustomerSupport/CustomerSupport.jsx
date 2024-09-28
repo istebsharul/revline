@@ -22,7 +22,7 @@ const CustomerSupport = ({orderId}) => {
         className="mt-4 px-4 py-2 text-xs text-white bg-blue-500 rounded hover:bg-blue-600"
         onClick={handleRaiseComplaint}
       >
-        Raise a Complaint
+        {showForm? 'Cancel':'Raise a Complaint'}
       </button>
       <TicketDetails orderId={orderId}/>
       {/* Show TicketForm when the button is clicked */}

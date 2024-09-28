@@ -6,6 +6,7 @@ import fs, { stat } from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
 import { fileURLToPath } from 'url';
+import Part from '../models/parts.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -127,8 +128,10 @@ export const getInventoryEntryById = asyncErrors(async (req, res) => {
 // Update an inventory entry
 export const updateInventoryEntry = asyncErrors(async (req, res) => {
     try {
-        const { productId, quantity } = req.body;
-
+        console.log(req.body.product?._id);
+        const { quantity } = req.body;
+        const productId = req.body.product?._id;
+        console.log(productId, quantity);
         // Validate quantity
         if (quantity < 0) {
             return res.status(400).json({ message: 'Quantity must be a non-negative number' });
@@ -229,7 +232,7 @@ export const importProducts = asyncErrors(async (req, res) => {
                 });
 
                 products.push(product);
-                
+
                 const quantity = parseInt(row.quantity, 10);
                 const status = quantity > 0 ? 'available' : 'out of stock';
                 const inventory = {
@@ -278,6 +281,67 @@ export const importProducts = asyncErrors(async (req, res) => {
             console.error('Error reading CSV file:', error);
             res.status(500).json({ message: 'Error processing file' });
             // Ensure file is deleted on error
+            try {
+                fs.unlinkSync(filePath);
+            } catch (unlinkError) {
+                console.error('Failed to delete uploaded file:', unlinkError);
+            }
+        });
+});
+
+export const importParts =(async (req, res) => {
+    console.log(req.file);
+    if (!req.file) {
+        return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const parts = [];
+    const filePath = path.join(uploadsDir, req.file.filename);
+    console.log('File Path:', filePath);
+
+    // Check if the file exists
+    if (!fs.existsSync(filePath)) {
+        return res.status(400).json({ message: 'File not found' });
+    }
+
+    fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (row) => {
+            console.log('Row Data:', row); // Log each row of data
+            if (row.part_name && row.shipping_cost && row.size) {
+                const part = new Part({
+                    part_name: row.part_name,
+                    shipping_cost: parseFloat(row.shipping_cost),
+                    size: row.size
+                });
+                parts.push(part);
+            } else {
+                console.warn('Skipped row due to missing fields:', row);
+            }
+        })
+        .on('end', async () => {
+            try {
+                if (parts.length > 0) {
+                    const savedParts = await Part.insertMany(parts);
+                    console.info(`Imported ${savedParts.length} parts successfully`);
+                    res.status(201).json({ message: 'Parts imported successfully', parts: savedParts });
+                } else {
+                    res.status(400).json({ message: 'No valid parts found in the file' });
+                }
+            } catch (error) {
+                console.error('Failed to import parts:', error);
+                res.status(500).json({ message: 'Failed to import parts' });
+            } finally {
+                try {
+                    fs.unlinkSync(filePath);
+                } catch (unlinkError) {
+                    console.error('Failed to delete uploaded file:', unlinkError);
+                }
+            }
+        })
+        .on('error', (error) => {
+            console.error('Error reading CSV file:', error);
+            res.status(500).json({ message: 'Error processing file' });
             try {
                 fs.unlinkSync(filePath);
             } catch (unlinkError) {

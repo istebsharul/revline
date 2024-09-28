@@ -5,64 +5,64 @@ import Order from '../../models/order.js';
 import logger from '../../utils/logger.js';
 
 // Function to calculate sales tax based on location and total price
-const calculateSalesTax = (totalPrice, state) => {
-  const taxRates = {
-    'AL': 0.04,    // Alabama
-    'AK': 0,       // Alaska
-    'AZ': 0.056,   // Arizona
-    'AR': 0.065,   // Arkansas
-    'CA': 0.0725,  // California
-    'CO': 0.029,   // Colorado
-    'CT': 0.0635,  // Connecticut
-    'DE': 0,       // Delaware
-    'FL': 0.06,    // Florida
-    'GA': 0.04,    // Georgia
-    'HI': 0.04,    // Hawaii
-    'ID': 0.06,    // Idaho
-    'IL': 0.0625,  // Illinois
-    'IN': 0.07,    // Indiana
-    'IA': 0.06,    // Iowa
-    'KS': 0.065,   // Kansas
-    'KY': 0.06,    // Kentucky
-    'LA': 0.0445,  // Louisiana
-    'ME': 0.055,   // Maine
-    'MD': 0.06,    // Maryland
-    'MA': 0.0625,  // Massachusetts
-    'MI': 0.06,    // Michigan
-    'MN': 0.0688,  // Minnesota
-    'MS': 0.07,    // Mississippi
-    'MO': 0.0423,  // Missouri
-    'MT': 0,       // Montana
-    'NE': 0.055,   // Nebraska
-    'NV': 0.0685,  // Nevada
-    'NH': 0,       // New Hampshire
-    'NJ': 0.06625, // New Jersey
-    'NM': 0.05125, // New Mexico
-    'NY': 0.04,    // New York
-    'NC': 0.0475,  // North Carolina
-    'ND': 0.05,    // North Dakota
-    'OH': 0.0575,  // Ohio
-    'OK': 0.045,   // Oklahoma
-    'OR': 0,       // Oregon
-    'PA': 0.06,    // Pennsylvania
-    'RI': 0.07,    // Rhode Island
-    'SC': 0.06,    // South Carolina
-    'SD': 0.045,   // South Dakota
-    'TN': 0.07,    // Tennessee
-    'TX': 0.0625,  // Texas
-    'UT': 0.0485,  // Utah
-    'VT': 0.06,    // Vermont
-    'VA': 0.053,   // Virginia
-    'WA': 0.065,   // Washington
-    'WV': 0.06,    // West Virginia
-    'WI': 0.05,    // Wisconsin
-    'WY': 0.04,    // Wyoming
-  };
+// const calculateSalesTax = (totalPrice, state) => {
+//   const taxRates = {
+//     'AL': 0.04,    // Alabama
+//     'AK': 0,       // Alaska
+//     'AZ': 0.056,   // Arizona
+//     'AR': 0.065,   // Arkansas
+//     'CA': 0.0725,  // California
+//     'CO': 0.029,   // Colorado
+//     'CT': 0.0635,  // Connecticut
+//     'DE': 0,       // Delaware
+//     'FL': 0.06,    // Florida
+//     'GA': 0.04,    // Georgia
+//     'HI': 0.04,    // Hawaii
+//     'ID': 0.06,    // Idaho
+//     'IL': 0.0625,  // Illinois
+//     'IN': 0.07,    // Indiana
+//     'IA': 0.06,    // Iowa
+//     'KS': 0.065,   // Kansas
+//     'KY': 0.06,    // Kentucky
+//     'LA': 0.0445,  // Louisiana
+//     'ME': 0.055,   // Maine
+//     'MD': 0.06,    // Maryland
+//     'MA': 0.0625,  // Massachusetts
+//     'MI': 0.06,    // Michigan
+//     'MN': 0.0688,  // Minnesota
+//     'MS': 0.07,    // Mississippi
+//     'MO': 0.0423,  // Missouri
+//     'MT': 0,       // Montana
+//     'NE': 0.055,   // Nebraska
+//     'NV': 0.0685,  // Nevada
+//     'NH': 0,       // New Hampshire
+//     'NJ': 0.06625, // New Jersey
+//     'NM': 0.05125, // New Mexico
+//     'NY': 0.04,    // New York
+//     'NC': 0.0475,  // North Carolina
+//     'ND': 0.05,    // North Dakota
+//     'OH': 0.0575,  // Ohio
+//     'OK': 0.045,   // Oklahoma
+//     'OR': 0,       // Oregon
+//     'PA': 0.06,    // Pennsylvania
+//     'RI': 0.07,    // Rhode Island
+//     'SC': 0.06,    // South Carolina
+//     'SD': 0.045,   // South Dakota
+//     'TN': 0.07,    // Tennessee
+//     'TX': 0.0625,  // Texas
+//     'UT': 0.0485,  // Utah
+//     'VT': 0.06,    // Vermont
+//     'VA': 0.053,   // Virginia
+//     'WA': 0.065,   // Washington
+//     'WV': 0.06,    // West Virginia
+//     'WI': 0.05,    // Wisconsin
+//     'WY': 0.04,    // Wyoming
+//   };
 
 
-  const taxRate = taxRates[state] || 0; // Default to 0 if state not found
-  return totalPrice * taxRate;
-};
+//   const taxRate = taxRates[state] || 0; // Default to 0 if state not found
+//   return totalPrice * taxRate;
+// };
 
 // Function to generate a unique 6-digit quote number
 const generateQuoteNumber = async () => {
@@ -70,7 +70,7 @@ const generateQuoteNumber = async () => {
   let quoteNumber;
 
   while (!unique) {
-    quoteNumber = Math.floor(100000 + Math.random() * 900000).toString();
+    quoteNumber = Math.floor(100000 + Math.random() * 999999).toString();
     const existingOrder = await Order.findOne({ 'quotations.quote_number': quoteNumber });
 
     if (!existingOrder) {
@@ -78,7 +78,7 @@ const generateQuoteNumber = async () => {
     }
   }
 
-  return quoteNumber;
+  return 'RN'+quoteNumber;
 };
 
 export const sendQuotation = asyncErrors(async (req, res) => {
@@ -100,7 +100,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
     const customerName = order.shipping_details?.customer_name ?? order.customer.name;
     const customerEmail = order.shipping_details?.customer_email ?? order.customer.email;
     const customerPhone = order.shipping_details?.customer_phone ?? order.customer.phone;
-    const stateOrRegion = order.shipping_details?.state_or_region ?? '';
+    // const stateOrRegion = order.shipping_details?.state_or_region ?? '';
 
     const { quoted_price, shipping_cost } = order.pricing_details || {};
 
@@ -125,10 +125,10 @@ export const sendQuotation = asyncErrors(async (req, res) => {
     const quoteNumber = await generateQuoteNumber();
 
     // Calculate sales tax
-    const salesTax = calculateSalesTax(quoted_price, stateOrRegion);
+    // const salesTax = calculateSalesTax(quoted_price, stateOrRegion);
 
     // Total amount after tax
-    const totalAmount = quoted_price + shipping_cost + salesTax;
+    // const totalAmount = quoted_price + shipping_cost + salesTax;
 
     const Address = order.shipping_details.address_line_1 + ' ' + order.shipping_details.address_line_2;
     const Address1 = order.shipping_details.city + ',' + order.shipping_details.state_or_region + ',' + order.shipping_details.country_or_region;
@@ -143,8 +143,6 @@ export const sendQuotation = asyncErrors(async (req, res) => {
       quoted_price,
       quote_date: new Date().toISOString().split('T')[0],
       shipping_cost,
-      salesTax,
-      totalAmount,
       quote_number: quoteNumber, // Add quote number to PDF
     }); // Assume generatePdf returns a Buffer
 
@@ -160,6 +158,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
 
     // Set the new quotation (overwrite if it exists)
     order.quotations = newQuotation;
+    order.order_disposition_details.order_status = 'Awaiting Payment';
 
     // Save the updated order document
     await order.save();

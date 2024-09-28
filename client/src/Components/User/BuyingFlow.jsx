@@ -1,8 +1,8 @@
 import React from 'react';
-import { FaSearch, FaClipboardList, FaLink, FaCheckCircle } from 'react-icons/fa';
+import { FaSearch, FaClipboardList, FaFileInvoiceDollar, FaCheckCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
-const BuyingFlow = () => {
+const BuyingFlow = React.forwardRef((props,ref) => {
     const steps = [
         {
             icon: <FaSearch className="text-5xl text-black mb-4" />,
@@ -15,13 +15,13 @@ const BuyingFlow = () => {
             description: 'Provide necessary details like vehicle model, year, and variant to ensure compatibility.',
         },
         {
-            icon: <FaLink className="text-5xl text-black mb-4" />,
-            title: 'Receive Payment Link',
-            description: 'Once your details are verified, you will receive a secure payment link.',
+            icon: <FaFileInvoiceDollar className="text-5xl text-black mb-4" />,
+            title: 'Receive Quotation',
+            description: 'Once your details are verified, you will receive a quotation, click pay to make payments',
         },
         {
             icon: <FaCheckCircle className="text-5xl text-black mb-4" />,
-            title: 'Confirm Order',
+            title: 'Order Placed',
             description: 'After payment, your order is confirmed, and the part will be shipped to your address.',
         },
     ];
@@ -33,7 +33,7 @@ const BuyingFlow = () => {
     };
 
     return (
-        <div className="md:pb-40 pb-20 bg-gray-100">
+        <div className="md:pb-40 pb-20 bg-gray-100" ref={ref}>
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className='md:text-5xl text-4xl font-inter tracking-tight text-center py-20'>
                     FLOW OF <span className='text-red-600'>BUYING</span> PARTS
@@ -62,6 +62,6 @@ const BuyingFlow = () => {
             </div>
         </div>
     );
-};
+});
 
 export default BuyingFlow;

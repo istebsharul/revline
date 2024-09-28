@@ -48,6 +48,34 @@ const CustomerList = ({ customers, setCustomers,setShowForm, showForm }) => {
             alert('Failed to delete customer. Please try again.');
         }
     };
+    
+    const handleExport = () => {
+        const csvContent = [
+            ['Name','Email','Phone','Zipcode'],
+            ...filteredCustomers.map(customer =>[
+                customer.name || 'N/A',
+                customer.email || 'N/A',
+                customer.phone || 'N/A',
+                customer.zipcode || 'N/A'
+            ])
+        ]
+
+        .map(e=>e.join(','))
+        .join('\n');
+
+        const blob = new Blob([csvContent],{type: 'text/csv;charset=utf-8;'});
+        const link = document.createElement('a');
+
+        if(link.download !== undefined){
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'customers.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
 
     return (
         <div className="w-full mx-auto bg-white rounded-lg">
@@ -64,7 +92,7 @@ const CustomerList = ({ customers, setCustomers,setShowForm, showForm }) => {
                         {showForm ? 'Cancel' : '+ New Customer'}
                     </button>
                     <FilterInput filter={filter} setFilter={setFilter} />
-                    <ExportButton filteredCustomers={filteredCustomers} />
+                    <ExportButton handleExport={handleExport} />
                 </div>
             </div>
             <div className='grid grid-cols-5 bg-gray-200 p-2 rounded-t-lg'>

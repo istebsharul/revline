@@ -1,115 +1,89 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { FaFilter, FaFileExport, FaFileImport } from 'react-icons/fa';
+import { FaFilter, FaFileExport } from 'react-icons/fa';
 import ProductListItem from './ProductListItem';
 import ImportProducts from './importProduct';
+import toast from 'react-hot-toast';
+import ImportParts from './ImportParts';
+
+const fetchInventory = async ({ queryKey }) => {
+    const [_key, { page, limit }] = queryKey; // Destructuring queryKey to get page and limit
+    const { data } = await axios.get('/api/v1/inventory/list', { params: { page, limit } });
+    return data;
+};
 
 const ProductList = ({ setShowForm, showForm }) => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
     const [filter, setFilter] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [totalProducts, setTotalProducts] = useState('');
-    const [currentPage, setCurrentPage ] = useState('');
-    const pageSize = 30;
     const [page, setPage] = useState(1);
-    const [limit, setLimit] = useState(30);
-    const [totalPages, setTotalPages] = useState(1);
+    const limit = 30;
+    const queryClient = useQueryClient();
+    // React Query to fetch products with stale time of 1 week (7 days)
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['inventory', { page, limit }],
+        queryFn: fetchInventory,
+        staleTime: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
+        keepPreviousData: true, // Keeps previous data while fetching new data
+    });
 
-    const productsOnCurrentPage = currentPage < totalPages ? pageSize : totalProducts % pageSize || pageSize;
-
-
-    useEffect(() => {
-        console.log(products);
-    })
-
-    useEffect(() => {
-        const fetchInventory = async () => {
-            try {
-                const response = await axios.get('/api/v1/inventory/list', { params: { page, limit } });
-                console.log(response);
-                setProducts(response.data.inventories);
-                setFilteredProducts(response.data.inventories);
-                setTotalPages(response.data.pagination.totalPages);
-                setTotalProducts(response.data.pagination.totalProducts);
-                setCurrentPage(response.data.pagination.currentPage);
-                setLoading(false);
-            } catch (error) {
-                console.error(error);
-                setError('Failed to fetch products from inventory. Please try again later.');
-                console.log('Failed to fetch Products');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchInventory();
-    }, [page, limit]);
+    const products = data?.inventories || [];
+    const totalPages = data?.pagination?.totalPages || 1;
+    const totalProducts = data?.pagination?.totalProducts || 0;
+    const currentPage = data?.pagination?.currentPage || 1;
 
     // Handle pagination
     const handleNextPage = () => {
-        if (page < totalPages) {
-            setPage(page + 1);
-        }
+        if (page < totalPages) setPage(page + 1);
     };
 
     const handlePrevPage = () => {
-        if (page > 1) {
-            setPage(page - 1);
-        }
+        if (page > 1) setPage(page - 1);
     };
 
-    useEffect(() => {
-        if (filter) {
+    // Filtering logic
+    const filteredProducts = filter
+        ? products.filter(product => {
             const lowercasedFilter = filter.toLowerCase();
-            const filtered = products.filter(product => {
-                const year = (product.product?.year ?? '').toString();
-                const make = (product.product?.make ?? '').toString();
-                const model = (product.product?.model ?? '').toString();
-                const carPart = (product.product?.carPart ?? '').toString();
-                const status = (product?.status ?? '').toString();
+            const year = (product.product?.year ?? '').toString();
+            const make = (product.product?.make ?? '').toString();
+            const model = (product.product?.model ?? '').toString();
+            const carPart = (product.product?.carPart ?? '').toString();
+            const status = (product?.status ?? '').toString();
 
-                return year.toLowerCase().includes(lowercasedFilter) ||
-                    make.toLowerCase().includes(lowercasedFilter) ||
-                    model.toLowerCase().includes(lowercasedFilter) ||
-                    carPart.toLowerCase().includes(lowercasedFilter) ||
-                    status.toLowerCase().includes(lowercasedFilter);
-            });
+            return year.toLowerCase().includes(lowercasedFilter) ||
+                make.toLowerCase().includes(lowercasedFilter) ||
+                model.toLowerCase().includes(lowercasedFilter) ||
+                carPart.toLowerCase().includes(lowercasedFilter) ||
+                status.toLowerCase().includes(lowercasedFilter);
+        })
+        : products;
 
-            setFilteredProducts(filtered);
-        } else {
-            setFilteredProducts(products);
-        }
-    }, [filter, products]);
-
+    // Save and Delete handlers
     const handleSave = async (updatedProduct) => {
         try {
-            await axios.put(`/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
-            setProducts(prevProducts =>
-                prevProducts.map(product =>
-                    product._id === updatedProduct._id ? updatedProduct : product
-                )
-            );
+            const res = await axios.put(`/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
+            // Invalidate the 'inventory' query to trigger a refetch
+            queryClient.invalidateQueries(['inventory']);
+            toast.success('Successfully Updated');
+            console.log("Successfully updated");
         } catch (error) {
-            console.error(error);
-            setError('Failed to save product details.');
+            toast.error('Error updating! Please try again later');
+            console.error('Failed to save product:', error);
         }
     };
 
     const handleDelete = async (productId) => {
         const confirmed = confirm("Are you sure you want to delete?");
-
         if (confirmed) {
             try {
                 await axios.delete(`/api/v1/inventory/${productId}`);
-                setProducts(products.filter(product => product._id !== productId));
+                queryClient.invalidateQueries(['inventory']);
+                toast.success("Deleted Successfully");
+                // Refetch or update the product list using react-query methods
             } catch (error) {
-                console.error(error);
-                setError('Failed to delete product. Please try again.');
+                toast.error('Deletion Failed');
+                console.error('Failed to delete product:', error);
             }
-        } else {
-            console.log('Delete action canceled');
         }
     };
 
@@ -154,9 +128,10 @@ const ProductList = ({ setShowForm, showForm }) => {
             <div className="w-full flex items-center justify-between mb-6">
                 <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
                     <span>Product List</span>
-                    <span className='text-xs text-gray-500'>Total Products Available -  {productsOnCurrentPage} of {totalProducts}</span>
+                    <span className='text-xs text-gray-500'>Total Products Available - {products.length} of {totalProducts}</span>
                 </h2>
                 <div className="w-full flex justify-evenly items-center space-x-4">
+                    <ImportParts/>
                     <button
                         onClick={() => setShowForm(!showForm)}
                         className="w-1/2 bg-blue-500 text-white p-2 rounded"
@@ -184,35 +159,12 @@ const ProductList = ({ setShowForm, showForm }) => {
                     <ImportProducts />
                 </div>
             </div>
-            <div className="bg-gray-100 p-2 rounded-t-lg">
-                <div className="grid grid-cols-15 text-gray-600 font-semibold">
-                    <div>No.</div>
-                    <div>Year</div>
-                    <div>Make</div>
-                    <div>Model</div>
-                    <div>Part</div>
-                    <div>Variant</div>
-                    <div>Transmission</div>
-                    <div>Description</div>
-                    <div>Grade</div>
-                    <div>SKU</div>
-                    <div>Price</div>
-                    <div>Quanity</div>
-                    <div>Status</div>
-                    <div>Contact</div>
-                    <div>Actions</div>
-                </div>
-            </div>
-            {loading ? (
+            {isLoading ? (
                 <div className="text-center">
-                    <svg className="animate-spin h-5 w-5 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                    </svg>
                     <p className="text-indigo-500 mt-2">Loading products...</p>
                 </div>
             ) : error ? (
-                <div className="text-red-600 text-center">{error}</div>
+                <div className="text-red-600 text-center">Failed to fetch products. Please try again later.</div>
             ) : (
                 <ul className="divide-y divide-gray-200">
                     {filteredProducts.map((product, index) => (
@@ -245,7 +197,8 @@ const ProductList = ({ setShowForm, showForm }) => {
                         className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
                     >
                         Next
-                    </button></div>
+                    </button>
+                </div>
             </div>
         </div>
     );

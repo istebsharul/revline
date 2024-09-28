@@ -34,10 +34,10 @@ const TicketDetails = ({ orderId }) => {
   return (
     <div className="w-full rounded-md">
       {!showDetails ? (
-        <div className='text-gray-500 text-sm'>
+        <div className='text-gray-500 text-xs py-2'>
           If you have raised any complaint.
           <button
-            className="mx-1 hover:underline text-gray-900"
+            className="mx-1 hover:underline text-sm text-gray-900"
             onClick={handleShowDetails}
           >
             click here 

@@ -55,7 +55,7 @@ export const makeCall = async (req, res) => {
 
   try {
     const call = await twilioClient.calls.create({
-      url: `https://fe05-115-187-57-65.ngrok-free.app/api/v1/twilio/voice`, // URL to TwiML voice instructions
+      url: `https://9ae2-115-187-57-104.ngrok-free.app/api/v1/twilio/voice`, // URL to TwiML voice instructions
       to: phoneNumber,
       from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number
     });

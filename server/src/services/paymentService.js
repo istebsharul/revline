@@ -49,7 +49,7 @@ export const createPayment = async (orderId) => {
       payment = new Payment({
         order_id: orderId,
         payment_status: 'Pending',
-        amount: '10.00',
+        amount: order.pricing_details.quoted_price,
         currency: 'USD',
         payment_method: 'paypal',
       });
@@ -141,9 +141,11 @@ export const executePayment = async (paymentId, payerId) => {
       return { status: 'success', message: 'Payment already completed' };
     }
 
+    
     payment.payment_status = 'Completed';
     payment.transaction_id = transactionId || payment.transaction_id;
     payment.payer_id = payerIdFromResponse || payment.payer_id;
+    // payment.payment_method = paymentMethod || payment.payment_method; // If available
     await payment.save();
 
     // Update the order status to 'Payment Received'

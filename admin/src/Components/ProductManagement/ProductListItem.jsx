@@ -30,6 +30,7 @@ const ProductListItem = ({ product, index, onSave, onDelete }) => {
     };
 
     const handleSave = () => {
+        console.log(editableProduct);
         onSave(editableProduct);
         setIsEditing(false);
     };

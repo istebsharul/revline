@@ -45,14 +45,12 @@ const FeedbackForm = ({ onSubmit }) => {
         <option value='need_time'>Need More Time to Decide</option>
         <option value='incomplete_quotation'>Quotation Is Incomplete</option>
         <option value='different_product'>Found a Different Product</option>
-        <option value='not_interested'>Not Interested</option>
+        <option value='not_interested'>Others</option>
       </select>
 
       {/* Conditionally render the explanation input field */}
       {selectedReason === 'not_interested' && (
         <div className='w-full flex flex-col justify-around items-center pb-4'>
-          <p className='font-bold mb-2'>Please Tell Us Why?</p>
-
           {/* Input field for explanation */}
           <input
             placeholder='Enter details here'

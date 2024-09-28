@@ -6,7 +6,8 @@ const OrderListItem = ({ order, index, handleDelete }) => {
     return (
         <li className="flex p-2 justify-between items-center hover:bg-gray-100 text-md">
             <div className="w-2 pl-5">{index+1}</div>
-            <div className="w-48">{order._id}</div> {/* Display index */}
+            <div className="w-20">{order._id.slice(-6)}</div> {/* Display index */}
+            <div className='w-20'>{order.quotations?.quote_number || 'N/A'}</div>
             <div className="w-40">{order.customer?.name}</div> {/* Display customer name */}
             <div className="w-20">{new Date(order?.request_date).toLocaleDateString() || 'N/A'}</div> {/* Display created date */}
             <div className="w-60">{order.customer?.email || 'N/A'}</div> {/* Display email with truncation */}

@@ -60,7 +60,7 @@ const TicketsList = ({ tickets, loading }) => {
 
       {showForm && <TicketForm onClose={() => setShowForm(false)} />}
 
-      <div className="flex items-start justify-center h-60 overflow-y-auto">
+      <div className="flex items-start justify-center h-40 max-h-xl overflow-y-auto">
         {loading ? (
           <p className="text-gray-600">Loading...</p>
         ) : filteredTickets.length > 0 ? (
@@ -75,7 +75,7 @@ const TicketsList = ({ tickets, loading }) => {
             ))}
           </div>
         ) : (
-          <div className='w-full flex flex-col justify-center items-center'>
+          <div className='w-full h-full flex flex-col justify-center items-center'>
             <img
               src="https://res.cloudinary.com/drszvaldf/image/upload/v1724698037/revline/xc5wem6cvlzbg0hvr2gk.png"
               alt="All caught up"

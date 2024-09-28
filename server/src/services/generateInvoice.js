@@ -14,7 +14,6 @@ const generateInvoice = ({
   order_summary,
   quoted_price,
   shipping_cost,
-  salesTax,
   totalAmount,
 }) => {
   return new Promise((resolve, reject) => {
@@ -44,7 +43,7 @@ const generateInvoice = ({
       `${customer_address}\n${customer_address1}\n${customer_phone}\n${customer_email}`,
       { align: 'left' }
     );
-    doc.moveUp(4.5); 
+    doc.moveUp(4.5);
     doc.fontSize(12).font('Helvetica-Bold').text(`Invoice No : ${invoice_number}`, { align: 'right' });
     doc.moveDown(0.5);
     doc.text(`Transaction ID : ${transaction_id}`, { align: 'right' });
@@ -68,7 +67,7 @@ const generateInvoice = ({
     doc.text('TOTAL', doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, headerY, { width: otherColumnsWidth, align: 'right' });
 
     doc.moveDown(0.5);
-    doc.moveTo(doc.page.margins.left, doc.y).lineTo(doc.page.width - doc.page.margins.right, doc.y).stroke(); 
+    doc.moveTo(doc.page.margins.left, doc.y).lineTo(doc.page.width - doc.page.margins.right, doc.y).stroke();
     doc.moveDown(1);
 
     const summaryY = doc.y;
@@ -78,35 +77,38 @@ const generateInvoice = ({
       doc.fontSize(12).font('Helvetica');
       doc.text(order_summary.part_name, doc.page.margins.left, summaryY, { width: descriptionWidth, align: 'left' });
       doc.text(order_summary.quantity || 1, doc.page.margins.left + descriptionWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
-      doc.text(`$${(order_summary.price || quoted_price).toFixed(2)}`, doc.page.margins.left + descriptionWidth + otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
-      doc.text(`$${((order_summary.price || quoted_price) * (order_summary.quantity || 1)).toFixed(2)}`, doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'right' });
+      doc.text(`$${(quoted_price-shipping_cost).toFixed(2)}`, doc.page.margins.left + descriptionWidth + otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
+      doc.text(`$${((quoted_price-shipping_cost) * (order_summary.quantity || 1)).toFixed(2)}`, doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'right' });
     } else {
       doc.text('No order summary provided.', doc.page.margins.left);
     }
     doc.moveDown(1);
     doc.moveTo(doc.page.margins.left, doc.y).lineTo(doc.page.width - doc.page.margins.right, doc.y).stroke();
     doc.moveDown(1);
-
+    
     // Subtotals and Totals
     const totalX = doc.page.width - doc.page.margins.right - 100;
     const subtotalY = doc.y;
     doc.fontSize(12).font('Helvetica');
-    doc.text(`Sub-total: $${quoted_price.toFixed(2)}`, totalX - 80, subtotalY);
-    doc.text(`$${quoted_price.toFixed(2)}`, totalX, subtotalY, { align: 'right' });
+
+    // Calculate parts price
+    const partsPrice = quoted_price - shipping_cost;
+
+    doc.text(`Parts Price:`, totalX - 80, subtotalY);
+    doc.text(`$${partsPrice.toFixed(2)}`, totalX, subtotalY, { align: 'right' });
     doc.moveDown(0.2);
-    doc.text(`Shipping: $${shipping_cost.toFixed(2)}`, totalX - 80, subtotalY + 20);
+    doc.text(`Shipping:`, totalX - 80, subtotalY + 20);
     doc.text(`$${shipping_cost.toFixed(2)}`, totalX, subtotalY + 20, { align: 'right' });
     doc.moveDown(0.2);
-    doc.text(`Sales Tax: $${salesTax.toFixed(2)}`, totalX - 80, subtotalY + 40);
-    doc.text(`$${salesTax.toFixed(2)}`, totalX, subtotalY + 40, { align: 'right' });
-    doc.moveDown(0.5);
 
+    doc.moveDown(0.5);
     const lineWidth = availableWidth * 0.4;
     const startX = doc.page.width - doc.page.margins.right - lineWidth;
     doc.moveTo(startX, doc.y).lineTo(doc.page.width - doc.page.margins.right, doc.y).stroke();
     doc.fontSize(12).font('Helvetica-Bold').text('TOTAL:', totalX - 80, subtotalY + 70);
-    doc.text(`$${totalAmount.toFixed(2)}`, totalX, subtotalY + 70, { align: 'right' });
+    doc.text(`$${quoted_price.toFixed(2)}`, totalX, subtotalY + 70, { align: 'right' });
     doc.moveDown(1.5);
+
 
     // Footer - Payment and Contact Information
     doc.rect(doc.page.margins.left, doc.y, availableWidth, 60).fill('#e4dbd7');

@@ -44,7 +44,7 @@ function TicketsWidget() {
     };
 
     return (
-        <div className="w-full h-fit p-4 rounded-lg">
+        <div className="w-full h-fit p-2 rounded-lg">
             <div
                 className="flex justify-between items-center cursor-pointer"
                 onClick={() => setIsTicketsOpen(!isTicketsOpen)}

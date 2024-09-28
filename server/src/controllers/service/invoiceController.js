@@ -131,7 +131,7 @@ export const sendInvoice = asyncErrors(async (req, res) => {
 
     // Total amount after tax (assuming you have a calculateSalesTax function like before)
     const salesTax = calculateSalesTax(quoted_price, stateOrRegion);
-    const totalAmount = quoted_price + shipping_cost + salesTax;
+    const totalAmount = quoted_price;
 
     const address = `${order.shipping_details.address_line_1} ${order.shipping_details.address_line_2}`;
     const address1 = `${order.shipping_details.city}, ${order.shipping_details.state_or_region}, ${order.shipping_details.country_or_region}`;
@@ -147,7 +147,6 @@ export const sendInvoice = asyncErrors(async (req, res) => {
       quoted_price,
       invoice_date: new Date().toISOString().split('T')[0],
       shipping_cost,
-      salesTax,
       totalAmount,
       invoice_number: invoiceNumber,
       payment_mode: paymentMode, // Payment mode from the request
@@ -170,6 +169,7 @@ export const sendInvoice = asyncErrors(async (req, res) => {
 
     // Add the invoice to the order's invoices field
     order.invoices = newInvoice;
+    order.order_disposition_details.order_status = 'Order Processing';
 
     // Save the updated order document
     await order.save();

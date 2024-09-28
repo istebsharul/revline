@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import OverviewStats from '../../Components/Admin/OverviewStats';
+import DashboardOverview from '../../Components/Dashboard/OverviewStats';
 import TasksWidget from '../../Components/Dashboard/TasksWidget';
 import TicketsWidget from '../../Components/Dashboard/TicketsWidget';
 import ContactsWidget from '../../Components/Admin/ContactsWidget';
@@ -34,11 +34,11 @@ const AdminOverviewPage = () => {
     <div className="w-full flex">
       <div className="w-full flex p-8 bg-gray-100 space-x-4">
         <div className="w-1/3 flex-shrink-1">
-          <OverviewStats />
+          <DashboardOverview />
         </div>
-        <div className="w-2/3 h-fit grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <div className="w-2/3 h-fit grid grid-cols-1 lg:grid-cols-1">
           {/* Tasks Widget */}
-          <div className="w-full h-fit p-4 rounded-lg">
+          <div className="w-full h-fit p-2 rounded-lg">
             <div 
               className="flex justify-between items-center cursor-pointer" 
               onClick={() => setIsTasksOpen(!isTasksOpen)}
@@ -53,7 +53,7 @@ const AdminOverviewPage = () => {
           <TicketsWidget/>
 
           {/* Contacts Widget */}
-          <div className="w-full h-fit p-4 rounded-lg">
+          <div className="w-full h-fit p-2 rounded-lg">
             <div 
               className="flex justify-between items-center cursor-pointer" 
               onClick={() => setIsContactsOpen(!isContactsOpen)}

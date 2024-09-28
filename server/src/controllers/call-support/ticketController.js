@@ -49,6 +49,7 @@ export const getAllTickets = async (req, res) => {
       totalPages: Math.ceil(totalTickets / limit), // Calculate total pages
       currentPage: Number(page),
     });
+    logger.info('All tickets fetched');
   } catch (error) {
     logger.error('Error fetching tickets:', error);
     res.status(500).json({ message: 'Error fetching tickets', error });

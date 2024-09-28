@@ -62,7 +62,7 @@ const FAQItems = () => {
                 <h1 className='mb-5'>Still got questions?</h1>
                 <a 
                 href="/contact"
-                className='flex justify-center items-center px-4 py-2 rounded-3xl bg-gradient-to-r from-red-800 to-red-400 text-black transition duration-300 ease-in-out hover:from-red-900 hover:to-red-500'>
+                className='flex justify-center items-center px-4 py-2 rounded-3xl bg-gradient-to-r from-red-800 to-red-400 text-white transition duration-300 ease-in-out hover:from-red-900 hover:to-red-500'>
                     Contact Us
                     <FaChevronRight />
                 </a>

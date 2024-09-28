@@ -52,7 +52,7 @@ const OrderSchema = new mongoose.Schema({
   order_summary: OrderSummarySchema,  // Use the defined sub-schema
   pricing_details: {
     cost_price: { type: Number },
-    shipping_type: { type: String, trim: true },
+    shipping_size: { type: String, trim: true },
     shipping_cost: { type: Number, trim: true },
     shipping_speed: { type: String, trim: true },
     quoted_price: { type: Number, trim: true },

@@ -27,7 +27,7 @@ const TasksWidget = () => {
 
   const handleAddTask = () => {
     if (newTask) {
-      setTasks([...tasks, { text: newTask, completed: false }]);
+      setTasks([...tasks, { text: newTask, completed: false, createdAt: new Date().toISOString() }]);
       setNewTask('');
       setIsAdding(false);
     }
@@ -156,7 +156,7 @@ const TasksWidget = () => {
 
             </div>
           </div>
-          <ul>
+          <ul className='h-40 overflow-y-auto'>
             {tasks.map((task, index) => (
               <li key={index} className={`flex justify-between items-center py-2 ${task.completed ? 'line-through text-gray-400' : ''}`}>
                 {showCheckboxes && (

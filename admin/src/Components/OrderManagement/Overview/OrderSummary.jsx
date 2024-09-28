@@ -1,13 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
+import axios from 'axios';
 
 const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
-  const handleChange = (e) => {
+  const [parts, setParts] = useState([]);
+
+  // Fetch parts from the API
+  useEffect(() => {
+    const fetchParts = async () => {
+      try {
+        const response = await axios.get(`/api/v1/form/parts`);
+        setParts(response.data);
+        console.log("Hello", response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchParts();
+  }, []);
+
+  const handleChange = (selectedOption, actionMeta) => {
+    const part = parts.find(part => part.part_name === selectedOption.value);
+    console.log(part);
+    console.log(selectedOption);
     setOrderDetails((prev) => ({
       ...prev,
       order_summary: {
         ...prev.order_summary,
-        [e.target.name]: e.target.value,
+        [actionMeta.name]: selectedOption.value,
       },
+      pricing_details:{
+        ...prev.pricing_details,
+        shipping_size:part.size,
+        shipping_cost:part.shipping_cost,
+      }
     }));
   };
 
@@ -17,18 +43,7 @@ const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
       <div className="grid grid-cols-4 gap-4">
         <div>
           <p className="font-medium text-gray-500">Part Code:</p>
-          {isEditing ? (
-            <input
-              type="text"
-              name="part_code"
-              value={orderSummary.part_code || ''}
-              onChange={handleChange}
-              className="text-gray-800 border border-gray-300 rounded p-1"
-              placeholder="Enter part code"
-            />
-          ) : (
-            <p className="text-gray-800">{orderSummary.part_code || '--'}</p>
-          )}
+          <p className="text-gray-800">{orderSummary.part_code || '--'}</p>
         </div>
         <div>
           <p className="font-medium text-gray-500">Year:</p>
@@ -37,7 +52,7 @@ const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
               type="text"
               name="year"
               value={orderSummary.year || ''}
-              onChange={handleChange}
+              onChange={(e) => handleChange({ value: e.target.value }, { name: 'year' })}
               className="text-gray-800 border border-gray-300 rounded p-1"
               placeholder="Enter year"
             />
@@ -52,7 +67,7 @@ const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
               type="text"
               name="make"
               value={orderSummary.make || ''}
-              onChange={handleChange}
+              onChange={(e) => handleChange({ value: e.target.value }, { name: 'make' })}
               className="text-gray-800 border border-gray-300 rounded p-1"
               placeholder="Enter make"
             />
@@ -67,7 +82,7 @@ const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
               type="text"
               name="model"
               value={orderSummary.model || ''}
-              onChange={handleChange}
+              onChange={(e) => handleChange({ value: e.target.value }, { name: 'model' })}
               className="text-gray-800 border border-gray-300 rounded p-1"
               placeholder="Enter model"
             />
@@ -78,14 +93,17 @@ const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
         <div>
           <p className="font-medium text-gray-500">Part Name:</p>
           {isEditing ? (
-            <input
-              type="text"
+            <Select
               name="part_name"
-              value={orderSummary.part_name || ''}
+              value={parts.find(part => part.part_name === orderSummary.part_name) ?
+                { value: orderSummary.part_name, label: orderSummary.part_name }
+                : null}  // Correctly assign the selected value
               onChange={handleChange}
-              className="text-gray-800 border border-gray-300 rounded p-1"
-              placeholder="Enter part name"
+              options={parts.map(part => ({ value: part.part_name, label: part.part_name }))}
+              placeholder="Select part name"
+              className="text-gray-800"
             />
+
           ) : (
             <p className="text-gray-800">{orderSummary.part_name || '--'}</p>
           )}
@@ -97,7 +115,7 @@ const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
               type="text"
               name="variant"
               value={orderSummary.variant || ''}
-              onChange={handleChange}
+              onChange={(e) => handleChange({ value: e.target.value }, { name: 'variant' })}
               className="text-gray-800 border border-gray-300 rounded p-1"
               placeholder="Enter variant"
             />
@@ -112,7 +130,7 @@ const OrderSummary = ({ orderSummary = {}, isEditing, setOrderDetails }) => {
               type="text"
               name="transmission"
               value={orderSummary.transmission || ''}
-              onChange={handleChange}
+              onChange={(e) => handleChange({ value: e.target.value }, { name: 'transmission' })}
               className="text-gray-800 border border-gray-300 rounded p-1"
               placeholder="Enter transmission"
             />
