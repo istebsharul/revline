@@ -2,7 +2,7 @@ import React from 'react';
 import { FaDownload } from 'react-icons/fa';
 
 const InvoiceDetails = ({ invoiceDetails = {} }) => {
-  console.log(invoiceDetails);
+  // console.log(invoiceDetails);
   const pdfBinary = invoiceDetails?.invoicePdf?.data?.data;
 
   const getBase64String = (binaryData) => {

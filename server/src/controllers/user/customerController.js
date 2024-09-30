@@ -79,40 +79,55 @@ export const createCustomer = asyncErrors(async (req, res) => {
         // Check if a customer with the provided email or phone number already exists
         let existingCustomer = await Customer.findOne({ $or: [{ email }, { phone }] });
 
-        let part = await Part.findOne({part_name:vehicleData.part});
+        let part = await Part.findOne({ part_name: vehicleData.part });
+
+        // Create the order object
+        const newOrder = new Order({
+            order_summary: {
+                year: vehicleData.year,
+                make: vehicleData.make,
+                model: vehicleData.model,
+                part_name: vehicleData.part,
+                variant: vehicleData.variant,
+                transmission: vehicleData.transmission,
+            },
+            pricing_details: {
+                shipping_size: part.size,
+                shipping_cost: part.shipping_cost
+            },
+            shipping_details: {
+                customer: existingCustomer ? existingCustomer._id : 'N/A',
+            },
+            order_disposition_details: {
+                agent_notes: vehicleData.message,
+                // Set order status if required
+            },
+        });
+
+        // Save the new order
+        const savedOrder = await newOrder.save();
+
+        // Prepare order info object after order is saved
+        const orderInfo = {
+            orderId: savedOrder._id, // Set the order ID from the saved order
+            requestDate: savedOrder.request_date,
+            part: vehicleData.part
+        };
 
         if (existingCustomer) {
-            // Customer exists, create a new order for this customer
+            // Customer exists, update orderInfo for this customer
             logger.info("Welcome Back!", existingCustomer);
 
-            const newOrder = new Order({
-                customer: existingCustomer._id,
-                order_summary: {
-                    year: vehicleData.year,
-                    make: vehicleData.make,
-                    model: vehicleData.model,
-                    part_name: vehicleData.part,
-                    variant: vehicleData.variant,
-                    transmission: vehicleData.transmission,
-                },
-                pricing_details:{
-                    shipping_size: part.size,
-                    shipping_cost: part.shipping_cost
-                },
-                shipping_details: {
-                    customer: existingCustomer._id || 'N/A',
-                },
-                order_disposition_details: {
-                    agent_notes: vehicleData.message,
-                    // Set order status if required
-                },
-            });
+            // Update the orderInfo array with the new order details
+            existingCustomer.orderInfo.push(orderInfo);
+            await existingCustomer.save(); // Save changes to the customer
 
-            // Save the new order
-            const savedOrder = await newOrder.save();
+            newOrder.customer = existingCustomer._id;
 
-            // Log successful creation
-            logger.info(`New Order created successfully for Customer ID: ${existingCustomer._id}, Order ID: ${savedOrder._id}`);
+            await newOrder.save();
+
+            // Log successful order update
+            logger.info(`Order info updated for Customer ID: ${existingCustomer._id}`);
 
             // Send email for new product added
             await sendMail({
@@ -125,40 +140,25 @@ export const createCustomer = asyncErrors(async (req, res) => {
             return res.status(200).json({ customer: existingCustomer, order: savedOrder });
         } else {
             // If customer does not exist, create a new customer instance
-            const newCustomer = new Customer({ name, email, phone, zipcode });
+            const newCustomer = new Customer({ 
+                name, 
+                email, 
+                phone, 
+                zipcode, 
+                orderInfo: [orderInfo] // Initialize orderInfo with the new order
+            });
 
             // Save the new customer to the database
             await newCustomer.save();
 
-            // Create a new order for the newly created customer based on vehicleData
-            const newOrder = new Order({
-                customer: newCustomer._id,
-                order_summary: {
-                    year: vehicleData.year,
-                    make: vehicleData.make,
-                    model: vehicleData.model,
-                    part_name: vehicleData.part,
-                    variant: vehicleData.variant,
-                    transmission: vehicleData.transmission,
-                },
-                pricing_details:{
-                    shipping_size: part.size,
-                    shipping_cost: part.shipping_cost
-                },
-                shipping_details: {
-                    customer: newCustomer._id || 'N/A',
-                },
-                order_disposition_details: {
-                    agent_notes: vehicleData.message,
-                    // Set order status if required
-                },
-            });
+            // Update the new order's customer field to reference the new customer ID
+            newOrder.customer = newCustomer._id; // Set the customer reference
 
-            // Save the new order
-            const savedOrder = await newOrder.save();
+            // Save the updated new order
+            await newOrder.save(); 
 
             // Log successful creation
-            logger.info(`Customer and Order created successfully: ${newCustomer._id}, Order ID: ${savedOrder._id}`);
+            logger.info(`Customer and Order created successfully: ${newCustomer._id}, Order ID: ${newOrder._id}`);
 
             // Send email for first visit
             const registrationLink = `https://yourcompany.com/signup?email=${encodeURIComponent(newCustomer.email)}&name=${encodeURIComponent(name)}`;
@@ -180,6 +180,119 @@ export const createCustomer = asyncErrors(async (req, res) => {
         res.status(500).json({ message: 'Failed to create customer and order', error: error.message });
     }
 });
+
+
+// export const createCustomer = asyncErrors(async (req, res) => {
+//     try {
+//         const { name, email, phone, zipcode, vehicleData } = req.body; // vehicleData is a single object
+
+//         logger.info(req.body);
+//         logger.info(email, phone);
+
+//         // Check if a customer with the provided email or phone number already exists
+//         let existingCustomer = await Customer.findOne({ $or: [{ email }, { phone }] });
+
+//         let part = await Part.findOne({part_name:vehicleData.part});
+
+//         if (existingCustomer) {
+//             // Customer exists, create a new order for this customer
+//             logger.info("Welcome Back!", existingCustomer);
+
+//             const newOrder = new Order({
+//                 customer: existingCustomer._id,
+//                 order_summary: {
+//                     year: vehicleData.year,
+//                     make: vehicleData.make,
+//                     model: vehicleData.model,
+//                     part_name: vehicleData.part,
+//                     variant: vehicleData.variant,
+//                     transmission: vehicleData.transmission,
+//                 },
+//                 pricing_details:{
+//                     shipping_size: part.size,
+//                     shipping_cost: part.shipping_cost
+//                 },
+//                 shipping_details: {
+//                     customer: existingCustomer._id || 'N/A',
+//                 },
+//                 order_disposition_details: {
+//                     agent_notes: vehicleData.message,
+//                     // Set order status if required
+//                 },
+//             });
+
+//             // Save the new order
+//             const savedOrder = await newOrder.save();
+
+//             // Log successful creation
+//             logger.info(`New Order created successfully for Customer ID: ${existingCustomer._id}, Order ID: ${savedOrder._id}`);
+
+//             // Send email for new product added
+//             await sendMail({
+//                 email: existingCustomer.email,
+//                 subject: 'New Product Added Successfully',
+//                 message: `Hello ${existingCustomer.name},\n\nWe have added new products to your inventory. Check them out!\n\nBest regards,\nYour Company`,
+//             });
+
+//             // Send response with the updated customer and new order
+//             return res.status(200).json({ customer: existingCustomer, order: savedOrder });
+//         } else {
+//             // If customer does not exist, create a new customer instance
+//             const newCustomer = new Customer({ name, email, phone, zipcode });
+
+//             // Save the new customer to the database
+//             await newCustomer.save();
+
+//             // Create a new order for the newly created customer based on vehicleData
+//             const newOrder = new Order({
+//                 customer: newCustomer._id,
+//                 order_summary: {
+//                     year: vehicleData.year,
+//                     make: vehicleData.make,
+//                     model: vehicleData.model,
+//                     part_name: vehicleData.part,
+//                     variant: vehicleData.variant,
+//                     transmission: vehicleData.transmission,
+//                 },
+//                 pricing_details:{
+//                     shipping_size: part.size,
+//                     shipping_cost: part.shipping_cost
+//                 },
+//                 shipping_details: {
+//                     customer: newCustomer._id || 'N/A',
+//                 },
+//                 order_disposition_details: {
+//                     agent_notes: vehicleData.message,
+//                     // Set order status if required
+//                 },
+//             });
+
+//             // Save the new order
+//             const savedOrder = await newOrder.save();
+
+//             // Log successful creation
+//             logger.info(`Customer and Order created successfully: ${newCustomer._id}, Order ID: ${savedOrder._id}`);
+
+//             // Send email for first visit
+//             const registrationLink = `https://yourcompany.com/signup?email=${encodeURIComponent(newCustomer.email)}&name=${encodeURIComponent(name)}`;
+
+//             await sendMail({
+//                 email: newCustomer.email,
+//                 subject: 'Welcome to Our Service!',
+//                 message: `Hello ${newCustomer.name},\n\nWe are looking for the best parts for you. We are excited to have you as a customer. Please register yourself using the following link to receive a quotation. We will also send it to you over email.\n\nRegister here: ${registrationLink}\n\nBest regards,\nYour Company`,
+//             });
+
+//             // Send response with the created customer and order
+//             return res.status(201).json({ customer: newCustomer, order: savedOrder });
+//         }
+//     } catch (error) {
+//         // Log the error
+//         logger.error('Error creating customer and order:', error);
+
+//         // Send error response
+//         res.status(500).json({ message: 'Failed to create customer and order', error: error.message });
+//     }
+// });
 
 
 // Update an existing customer's quotation status

@@ -27,7 +27,7 @@ const SalesManagement = () => {
 
     const orders = data?.orders || [];
     const totalPages = data?.pagination?.totalPages || 1;
-
+    // console.log(orders);
     // Handle pagination
     const handleNextPage = () => {
         if (page < totalPages) setPage(page + 1);

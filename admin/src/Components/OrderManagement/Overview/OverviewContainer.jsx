@@ -14,11 +14,11 @@ import QuotationDetails from './QuotationDetails';
 import InvoiceDetails from './InvoiceDetails';
 import PaymentDetails from './PaymentDetails';
 
-const OverviewContainer = ({ orderDetails, setOrderDetails }) => {
+const OverviewContainer = ({ order }) => {
+  // console.log(order);
+  const[orderDetails,setOrderDetails] = useState(order);
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('overview'); // State to manage active tab
-
-  console.log(orderDetails);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -36,7 +36,6 @@ const OverviewContainer = ({ orderDetails, setOrderDetails }) => {
         },
       });
       setIsEditing(false);
-      console.log(orderDetails);
       console.log('Updated Successfully!');
     } catch (err) {
       console.error('Failed to update order details:', err);
@@ -91,8 +90,7 @@ const OverviewContainer = ({ orderDetails, setOrderDetails }) => {
           <>
             {/* Overview Content */}
             <CustomerPersonalInfo customer={orderDetails.customer} quote_number={orderDetails?.quotations?.quote_number} isEditing={isEditing} setOrderDetails={setOrderDetails} />
-            <OrderSummary orderSummary={orderDetails.order_summary} isEditing={isEditing} setOrderDetails={setOrderDetails} />
-            <PricingDetails pricingDetails={orderDetails.pricing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
+            <OrderSummary orderSummary={orderDetails.order_summary} pricingDetails={orderDetails.pricing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <ShippingDetails shippingDetails={orderDetails.shipping_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <BillingDetails billingDetails={orderDetails.billing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <QuotationDetails quotationDetails={orderDetails.quotations} />
