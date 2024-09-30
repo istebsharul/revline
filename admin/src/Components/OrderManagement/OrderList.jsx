@@ -19,17 +19,19 @@ const OrderList = ({ orders }) => {
                 const email = (order.customer?.email ?? '').toLowerCase();
                 const phone = (order.customer?.phone ?? '').toLowerCase();
                 const orderId = (order._id ?? '').toLowerCase();
+                const quoteNumber = (order.quotations?.quote_number ?? '').toLowerCase();
     
                 return customerName.includes(lowercasedFilter) ||
                     status.includes(lowercasedFilter) ||
                     email.includes(lowercasedFilter) ||
                     phone.includes(lowercasedFilter) ||
-                    orderId.includes(lowercasedFilter);
+                    orderId.includes(lowercasedFilter)||
+                    quoteNumber.includes(lowercasedFilter);
             })
             : orders;
     
         // Reverse the order list
-        filtered = filtered.slice().reverse();
+        // filtered = filtered.slice().reverse();
     
         setFilteredOrders(filtered);
     }, [filter, orders]);
@@ -54,15 +56,15 @@ const OrderList = ({ orders }) => {
     // Function to handle exporting the order list to CSV
     const handleExport = () => {
         const csvContent = [
-            ['Index', 'Order ID', 'Name', 'Date', 'Email', 'Phone', 'Quote Number'],
+            ['Index', 'Order ID','Quote No', 'Name','Email', 'Phone', 'Quote Number'],
             ...filteredOrders.map((order, index) => [
                 index + 1,
-                order._id || 'N/A',
-                order.customer.name || 'N/A',
-                order.customer.createdAt || 'N/A',
-                order.customer.email || 'N/A',
-                order.customer.phone || 'N/A',
-                order.quoteNumber || 'N/A',
+                order?._id.slice(-6) || 'N/A',
+                order?.quotations?.quote_number || 'N/A',
+                order?.customer?.name || 'N/A',
+                order?.customer?.email || 'N/A',
+                order?.customer?.phone || 'N/A',
+                order?.quoteNumber || 'N/A',
             ])
         ]
             .map(e => e.join(','))
@@ -112,7 +114,8 @@ const OrderList = ({ orders }) => {
             <div className="bg-gray-100 p-4 rounded-t-lg">
                 <div className="flex justify-between text-gray-600 font-semibold">
                     <div className="w-2">Index</div>
-                    <div className='w-48'>Order ID</div>
+                    <div className='w-20'>Order ID</div>
+                    <div className='w-20'>Quote No.</div>
                     <div className="w-40">Name</div>
                     <div className="w-20">Date</div>
                     <div className="w-60">Email</div>

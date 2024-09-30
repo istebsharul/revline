@@ -15,33 +15,72 @@ export const createOrder = asyncErrors(async (req, res) => {
   }
 });
 
-// Get all orders
 export const getAllOrders = asyncErrors(async (req, res) => {
   try {
-    const orders = await Order.find().populate('customer').populate('shipping_details.customer'); // Populate customer details if needed
-    res.json(orders);
-    logger.info('Fetched all orders');
+    // Extract page and limit from query parameters
+    const page = parseInt(req.query.page) || 1;  // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit) || 10;  // Default to 10 items per page if not provided
+
+    // Validate page and limit
+    if (page < 1 || limit < 1) {
+      return res.status(400).json({ message: 'Page and limit must be greater than 0' });
+    }
+
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch orders with pagination
+    const orders = await Order.find()
+      .sort({ request_date: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate('customer')
+      .populate('shipping_details.customer')
+      .populate('payment_details');
+
+    // Get the total number of orders for pagination info
+    const totalOrders = await Order.countDocuments();
+
+    // Send response with orders and pagination info
+    res.json({
+      orders,
+      pagination: {
+        totalOrders,
+        totalPages: Math.ceil(totalOrders / limit),
+        currentPage: page,
+        pageSize: limit
+      }
+    });
+
+    logger.info('Fetched orders with pagination');
   } catch (error) {
     logger.error('Error fetching orders', { error: error.message });
     res.status(500).json({ message: error.message });
   }
 });
 
-// Get a specific order by ID
+
+
 export const getOrderById = asyncErrors(async (req, res) => {
+  const customerId = req.params.id;
+  
   try {
-    const customerId = req.params.id;
-    console.log(customerId);
-    const orders = await Order.find({ customer: customerId }).populate('customer').populate('shipping_details.customer');
+    logger.info('Fetching orders by customer ID', { customerId });
+
+    const orders = await Order.find({ customer: customerId })
+                              .populate('customer')
+                              .populate('shipping_details.customer')
+                              .populate('payment_details');
     
     if (orders.length === 0) {
+      logger.warn('No orders found for this customer', { customerId });
       return res.status(404).json({ message: 'No orders found for this customer' });
     }
 
     res.json(orders);
-    logger.info('Fetched orders by customer ID', { customerId });
+    logger.info('Fetched orders successfully', { customerId, orderCount: orders.length });
   } catch (error) {
-    logger.error('Error fetching orders by customer ID', { customerId: req.params.customerId, error: error.message });
+    logger.error('Error fetching orders by customer ID', { customerId, error: error.message });
     res.status(500).json({ message: error.message });
   }
 });

@@ -5,12 +5,7 @@ import DashboardLayout from '../Components/Admin/DashboardLayout'; // Import you
 
 const ProtectedRoute = () => {
 
-    useEffect(() => {
-        console.log("Hello from ProtectedRoute");
-    }, []);
-
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    console.log(isAuthenticated);
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;

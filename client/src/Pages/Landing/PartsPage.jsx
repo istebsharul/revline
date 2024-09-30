@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import Banner from '../../Components/User/Banner';
+import {useNavigate} from 'react-router-dom';
 
 const categories = [
   {
@@ -172,6 +173,7 @@ const categories = [
 
 const PartsPage = () => {
   const [openCategory, setOpenCategory] = useState(categories[0].name);
+  const navigate = useNavigate();
 
   const handleToggle = (categoryName) => {
     setOpenCategory((prevCategory) =>
@@ -179,22 +181,26 @@ const PartsPage = () => {
     );
   };
 
+  const handlePartClick = () => {
+    navigate('/#form')
+  }
+
   return (
     <div className="w-full flex flex-col justify-center items-center md:pt-10 pt-16">
       <div className="relative">
         <Banner />
-        <p className="absolute text-4xl inset-0 flex justify-center items-center text-white font-inter">
+        <p className="absolute text-2xl md:text-4xl inset-0 flex justify-center items-center text-white font-inter">
           All Parts
         </p>
       </div>
-      <div className="w-full py-20 flex flex-col justify-center items-center">
+      <div className="w-full py-10 md:py-20 flex flex-col justify-center items-center">
         {categories.map((category) => (
-          <div key={category.name} className="w-3/5 my-4">
+          <div key={category.name} className="w-full md:w-3/5 my-4 px-4 md:px-0">
             <div
-              className="flex items-center justify-between cursor-pointer px-8 py-4 bg-gray-50 rounded-lg hover:bg-gray-200"
+              className="flex items-center justify-between cursor-pointer px-4 md:px-8 py-3 md:py-4 bg-gray-50 rounded-lg hover:bg-gray-200"
               onClick={() => handleToggle(category.name)}
             >
-              <h2 className="text-2xl text-red-600 font-medium">{category.name}</h2>
+              <h2 className="text-xl md:text-2xl text-red-600 font-medium">{category.name}</h2>
               {openCategory === category.name ? (
                 <FaChevronUp className="text-gray-600 transition-transform duration-300" />
               ) : (
@@ -202,27 +208,27 @@ const PartsPage = () => {
               )}
             </div>
             <div
-              className={`transition-max-height duration-500 ease-in-out overflow-hidden ${openCategory === category.name ? 'max-h-screen' : 'max-h-0'
-                }`}
+              className={`transition-max-height duration-500 ease-in-out overflow-hidden ${openCategory === category.name ? 'max-h-screen' : 'max-h-0'}`}
             >
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
                 {category.parts.map((part) => (
                   <div
+                    onClick={handlePartClick}
                     key={part.name}
-                    className="border p-4 rounded bg-white flex flex-col items-center"
+                    className="border p-2 md:p-4 rounded bg-white flex flex-col items-center hover:bg-gray-100 hover:shadow-lg cursor-pointer"
                   >
                     {part.image ? (
                       <img
                         src={part.image}
                         alt={part.name}
-                        className="w-full h-32 object-cover mb-2 rounded"
+                        className="w-full h-24 md:h-32 object-cover mb-2 rounded"
                       />
                     ) : (
-                      <div className="w-full h-32 bg-gray-200 mb-2 rounded flex items-center justify-center">
+                      <div className="w-full h-24 md:h-32 bg-gray-200 mb-2 rounded flex items-center justify-center">
                         <span className="text-gray-600">No Image Available</span>
                       </div>
                     )}
-                    <h3 className="text-lg font-medium mt-2">{part.name}</h3>
+                    <h3 className="text-sm md:text-lg font-medium mt-2">{part.name}</h3>
                   </div>
                 ))}
               </div>
@@ -231,9 +237,9 @@ const PartsPage = () => {
         ))}
       </div>
     </div>
+
   );
 };
 
 
 export default PartsPage;
-   

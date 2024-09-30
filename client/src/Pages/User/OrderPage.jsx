@@ -1,91 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Quotation from '../../Components/Order/Quotation';
-import Banner from '../../Components/User/Banner';
-import Order from '../../Components/Order/Order';
 import { useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
+import Banner from '../../Components/User/Banner';
+import OrderDetails from '../../Components/Order/OrderDetails';
+import { IoMdRefresh } from "react-icons/io";
 
 const OrderPage = () => {
-  const [quotationData, setQuotationData] = useState(null);
+  const [orders, setOrders] = useState([]); // State for orders list
+  const [selectedOrder, setSelectedOrder] = useState(null); // State for selected order details
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const customerId = useSelector((state) => state?.auth?.user?.customer);
+  const customerId = useSelector((state) => state?.auth?.user?.customer); // Fetching customer ID from state
 
-  useEffect(() => {
+  // Function to fetch orders from the API
+  const fetchOrders = async (ignoreCache = false) => {
     if (!customerId) {
       setLoading(false);
       return;
     }
 
-    const fetchQuotationData = async () => {
-      try {
-        const response = await axios.get(`/api/v1/customer/${customerId}`);
-        setQuotationData(response.data);
-      } catch (err) {
-        setError(err.message || "Failed to fetch quotation data."); // Store error message
-      } finally {
-        setLoading(false);
-      }
-    };
+    try {
+      setLoading(true);
+      // Fetch orders for the customer
+      const response = await axios.get(`/api/v1/orders/${customerId}`);
+      setOrders(response.data);
 
-    fetchQuotationData();
+      // Update local storage after fetching
+      localStorage.setItem('orders', JSON.stringify(response.data));
+    } catch (err) {
+      setError(err.message || "Failed to fetch orders.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // UseEffect to initially load the orders from localStorage or API
+  useEffect(() => {
+    const storedOrders = localStorage.getItem('orders');
+
+    if (storedOrders && !error) {
+      setOrders(JSON.parse(storedOrders)); // Load orders from local storage
+      setLoading(false);
+    } else {
+      fetchOrders(); // Fetch from API if no local storage
+    }
   }, [customerId]);
 
-  const handleAccept = async () => {
-    try {
-      setLoading(true);
-      await axios.put(`/api/v1/customer/${customerId}`, {
-        quotationStatus: 'Accepted',
-      });
-
-      setQuotationData((prevData) => ({
-        ...prevData,
-        quotations: {
-          ...prevData.quotations,
-          status: 'Accepted',
-        },
-      }));
-      toast.success("Updated! You will receive a payment link. Make payment to confirm your order.");
-    } catch (err) {
-      setError(err.message || "Failed to accept quotation."); // Store error message
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  // Handle order selection to show details
+  const handleOrderClick = (order) => {
+    setSelectedOrder(order);
   };
 
-  const handleReject = async () => {
-    const confirm = window.confirm("Are you sure you don't want to move forward?\nContact us for any doubt.");
-
-    if (!confirm) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await axios.put(`/api/v1/customer/${customerId}`, {
-        quotationStatus: 'Rejected',
-      });
-
-      setQuotationData((prevData) => ({
-        ...prevData,
-        quotations: {
-          ...prevData.quotations,
-          status: 'Rejected',
-        },
-      }));
-      toast.success("Quotation rejected successfully.");
-    } catch (err) {
-      setError(err.message || "Failed to reject quotation."); // Store error message
-    } finally {
-      setLoading(false);
-    }
+  // Handle going back to the order list
+  const handleBackToList = () => {
+    setSelectedOrder(null);
   };
-
-  const handlePayment = async () =>{
-    console.log('Payment')
-  }
 
   return (
     <div className='w-full flex flex-col justify-center items-center bg-gray-100 md:pt-10 pt-16'>
@@ -102,18 +71,40 @@ const OrderPage = () => {
         <p className='pt-14 h-80'>Error: {error}</p>
       ) : (
         <>
-          {/* Render Quotation and Order only if there is no error */}
-          {quotationData?.quotations && (
-            <>
-              <Quotation
-                pdfBinary={quotationData.quotations.quotationPdf ? quotationData.quotations.quotationPdf.data.data : null}
-                quotationStatus={quotationData.quotations.status}
-                onAccept={handleAccept}
-                onReject={handleReject}
-                onPay={handlePayment}
-              />
-              <Order />
-            </>
+          {selectedOrder ? (
+            <OrderDetails order={selectedOrder} onBack={handleBackToList} /> // Show selected order details
+          ) : (
+            <div className="p-4 bg-white shadow-md rounded-md w-11/12 max-w-4xl mt-8">
+              {/* Manual Refresh Button */}
+              <div className="w-full border-b flex justify-start items-center mb-4">
+                <h2 className="text-2xl font-bold p-2">Orders List</h2>
+                  <IoMdRefresh
+                    className='text-gray-500 hover:text-red-500 cursor-pointer mx-2'
+                    onClick={() => fetchOrders(true)}
+                    size={20}
+                  />
+              </div>
+
+              {orders.length > 0 ? (
+                <ul>
+                  {orders.slice().reverse().map((order) => (
+                    <li
+                      key={order._id}
+                      className="mb-4 p-4 bg-gray-100 rounded-xl hover:shadow-md cursor-pointer text-gray-800"
+                      onClick={() => handleOrderClick(order)}
+                    >
+                      <h3 className="text-md md:text-lg font-semibold">Order ID: {order._id.slice(-6)}</h3>
+                      <p><strong>Order Status:</strong> {order.order_disposition_details?.order_status}</p>
+                      <p><strong>Request Date:</strong> {new Date(order.request_date).toLocaleDateString()}</p>
+                      <p><strong>Part Name:</strong> {order.order_summary?.part_name}</p>
+                      <p><strong>Make/Model/Year:</strong> {`${order.order_summary?.make} / ${order.order_summary?.model} / ${order.order_summary?.year}`}</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No orders found.</p>
+              )}
+            </div>
           )}
         </>
       )}

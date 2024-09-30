@@ -4,7 +4,7 @@ import FilterInput from './FilterInput';
 import ExportButton from './ExportButton';
 import CustomerItem from './CustomerItem';
 
-const CustomerList = ({ customers, setCustomers }) => {
+const CustomerList = ({ customers, setCustomers,setShowForm, showForm }) => {
     const [filter, setFilter] = useState('');
     const [filteredCustomers, setFilteredCustomers] = useState(customers);
 
@@ -32,14 +32,14 @@ const CustomerList = ({ customers, setCustomers }) => {
     const handleDelete = async (customerId) => {
         // Show confirmation dialog
         const isConfirmed = window.confirm("Are you sure you want to delete this customer? This action cannot be undone.");
-    
+
         // If the user does not confirm, exit the function
         if (!isConfirmed) return;
-    
+
         try {
             // Perform the delete request
             await axios.delete(`/api/v1/customer/${customerId}`);
-            
+
             // Update the customers and filteredCustomers state
             setCustomers(customers.filter(customer => customer._id !== customerId));
             setFilteredCustomers(filteredCustomers.filter(customer => customer._id !== customerId));
@@ -48,17 +48,51 @@ const CustomerList = ({ customers, setCustomers }) => {
             alert('Failed to delete customer. Please try again.');
         }
     };
+    
+    const handleExport = () => {
+        const csvContent = [
+            ['Name','Email','Phone','Zipcode'],
+            ...filteredCustomers.map(customer =>[
+                customer.name || 'N/A',
+                customer.email || 'N/A',
+                customer.phone || 'N/A',
+                customer.zipcode || 'N/A'
+            ])
+        ]
+
+        .map(e=>e.join(','))
+        .join('\n');
+
+        const blob = new Blob([csvContent],{type: 'text/csv;charset=utf-8;'});
+        const link = document.createElement('a');
+
+        if(link.download !== undefined){
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'customers.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
 
     return (
-        <div className="w-full mx-auto p-4 bg-white rounded-lg">
+        <div className="w-full mx-auto bg-white rounded-lg">
             <div className="w-full flex items-center justify-between mb-6">
                 <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
                     <span>Customer List</span>
                     <span className='text-xs text-gray-500'>Total Customers - {filteredCustomers.length}</span>
                 </h2>
                 <div className="w-full flex justify-evenly items-center space-x-4">
+                    <button
+                        onClick={() => setShowForm(!showForm)}
+                        className="w-1/2 bg-blue-500 text-white p-2 rounded"
+                    >
+                        {showForm ? 'Cancel' : '+ New Customer'}
+                    </button>
                     <FilterInput filter={filter} setFilter={setFilter} />
-                    <ExportButton filteredCustomers={filteredCustomers} />
+                    <ExportButton handleExport={handleExport} />
                 </div>
             </div>
             <div className='grid grid-cols-5 bg-gray-200 p-2 rounded-t-lg'>

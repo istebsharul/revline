@@ -1,75 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaDownload } from 'react-icons/fa';
+import FeedbackForm from './FeedbackForm';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const Quotation = ({ quotationStatus, pdfBinary, onAccept, onReject,onPayment }) => {
-  console.log(quotationStatus);
+const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdfBinary, onAccept, onPayment }) => {
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
 
-  // Function to convert binary data to a base64 string
+  const handleReject = async (message) => {
+    try {
+      await axios.put(`api/v1/service/quotation/reject/${orderId}`, {
+        quotationsStatus: 'Rejected',
+        message: message
+      });
+      setShowFeedback(false);
+      toast.success("Order rejected.");
+    } catch (err) {
+      toast.error("Failed to reject order.");
+    }
+  };
+
   const getBase64String = (binaryData) => {
     const binaryString = String.fromCharCode(...new Uint8Array(binaryData));
     return window.btoa(binaryString);
   };
 
   return (
-    <div className="w-full p-8 bg-gray-100">
-      <h1 className="max-w-5xl mx-auto text-xl md:text-2xl font-semibold mb-3">Quotation</h1>
-      <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <>
+        <div className="max-w-5xl mx-auto bg-gray-100 rounded-lg overflow-hidden">
+        <h1 className="max-w-5xl mx-auto border-b text-xl md:text-xl font-semibold text-left px-6 py-2">Quotation</h1>
         {/* Quotation PDF Download */}
         {pdfBinary && (
-          <div className="flex flex-col p-6 border-b border-gray-200">
-            <div className="flex items-center">
+          <div className="flex flex-col p-4 md:p-6 border-b border-gray-200">
+            <div className="flex flex-col md:flex-row items-center">
               <a
                 href={`data:application/pdf;base64,${getBase64String(pdfBinary)}`}
                 download="quotation.pdf"
-                className="flex text-black font-semibold rounded-lg p-3 bg-gray-200 hover:bg-gray-300"
+                className="flex items-center justify-center text-black font-semibold rounded-lg p-3 bg-gray-200 hover:bg-gray-300 w-full md:w-auto"
               >
                 Download PDF
-                <FaDownload className="m-1" />
+                <FaDownload className="ml-2" />
               </a>
-              <h2 className="text-xl font-semibold text-gray-800 p-3">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 p-3 text-center md:text-left">
                 Click to Download and View the Quotation.
               </h2>
             </div>
-            <p className="p-2 mt-4 font-medium">Click Confirm to Pay and Place Order.</p>
+            <p className="p-2 mt-4 font-medium text-center md:text-left">Click Confirm to Pay and Place Order.</p>
           </div>
         )}
 
         {/* Approve and Reject Buttons */}
-        <div className="w-full p-6 flex gap-2 justify-between items-center">
-          <button
-            onClick={onAccept}
-            className={`w-full px-4 py-2 font-semibold rounded ${quotationStatus === 'Accepted'
-              ? 'bg-gray-400 text-white cursor-not-allowed'
-              : 'bg-green-500 text-white hover:bg-green-600'
-              }`}
-            disabled={quotationStatus === 'Accepted'}
-          >
-            {quotationStatus === 'Accepted' ? 'Confirmed' : 'Confirm'}
-          </button>
-          <div className='w-full'>
-          {quotationStatus === 'Accepted' ? (
-            <div>
-              <button
-                onClick={onPayment}
-                className="w-full px-4 py-2 text-white border bg-green-500 hover:bg-green-600 font-semibold rounded"
-              >
-                Click to Pay
-              </button>
-            </div>
-          ) : (
-            <div>
-              <button
-                onClick={onReject}
-                className="w-full px-4 py-2 bg-white text-black border border-red-500 font-semibold rounded hover:text-white hover:bg-red-600"
-              >
-                Not Interested
-              </button>
-            </div>)
-          }
+        <div className="w-full p-4 md:p-6 flex flex-col md:flex-row gap-2 justify-between items-center">
+          <div className="w-full">
+            <button
+              onClick={onAccept}
+              className={`w-full px-4 py-2 font-semibold rounded ${paymentDetails?.payment_status === 'Completed'
+                ? 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-green-500 text-white hover:bg-green-600'
+                }`}
+              disabled={paymentDetails?.payment_status === 'Completed'}
+            >
+              {orderStatus === 'Payment Received' ? 'Paid' : 'Pay'}
+            </button>
+          </div>
+          <div className="w-full">
+            <button
+              onClick={() => setShowFeedback(!showFeedback)}
+              className={`w-full px-4 py-2 font-semibold rounded border ${quotationsStatus === 'Rejected' ? 'cursor-not-allowed bg-blue-500 text-white' : 'text-black bg-white hover:bg-red-600 hover:text-white'}`}
+              disabled={quotationsStatus === 'Rejected'}
+            >
+              {quotationsStatus === 'Rejected' ? 'Thanks for Feedback' : 'Cancel'}
+            </button>
           </div>
         </div>
+
+        {/* Conditionally render the FeedbackForm */}
+        {showFeedback && (
+          <div className="p-4">
+            <FeedbackForm
+              onSubmit={(message) => {
+                setFeedbackMessage(message);
+                handleReject(message);
+              }}
+            />
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 };
 

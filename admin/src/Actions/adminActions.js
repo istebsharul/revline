@@ -35,8 +35,8 @@ export const login = (email, password) => {
             dispatch({ type: LOGIN_SUCCESS, payload: user });
             return { isLoggedIn: true };  
         } catch (error) {
-            toast.error('Login Failed: ' + error.message);
-            dispatch({ type: LOGIN_FAILURE, payload: error.message });
+            toast.error('Login Failed: ' + error.response.data.message);
+            dispatch({ type: LOGIN_FAILURE, payload: error.response.data.message });
         }
     };
 };
@@ -47,7 +47,7 @@ export const loadAdmin = () => async (dispatch) => {
         const { data } = await axios.get(
             "/api/v1/admin-auth/profile"
         );
-        console.log("data retrieved using loadAdmin", data);
+        // console.log("data retrieved using loadAdmin", data);
         console.log('Admin data loaded successfully');
         dispatch({ type: LOAD_SUCCESS, payload: data.admin });
     } catch (error) {
@@ -141,30 +141,6 @@ export const resetPassword = (password, token) => {
             toast.error(error.message);
             console.log(error);
             dispatch({ type: RESET_PASSWORD_FAILURE, payload: error.message });
-        }
-    }
-};
-
-export const updateProfile = (formData) => {
-    return async (dispatch) => {
-        try {
-            const response = await toast.promise(
-                axios.put("/api/user/profile/update", {
-                    name: formData.name,
-                    email: formData.email,
-                    organisation: formData.organisation,
-                    imageUrl: formData.imageUrl
-                }),
-                {
-                    loading: 'Updating profile...',
-                    success: 'Profile Updated Successfully',
-                    error: 'Error updating profile',
-                }
-            );
-
-            dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: response.data });
-        } catch (error) {
-            dispatch({ type: UPDATE_PROFILE_FAILURE, payload: error.message });
         }
     }
 };

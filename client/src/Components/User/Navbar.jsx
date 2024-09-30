@@ -8,7 +8,7 @@ import { FaUserCircle } from "react-icons/fa";
 function Navbar() {
     const [navbar, setNavbar] = useState(false);
     const [userDropdown, setUserDropdown] = useState(false);
-    const isLoggedIn = useSelector((state)=>state.auth.isAuthenticated);
+    const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
     const dropdownRef = useRef(null);
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.auth?.user);
@@ -93,34 +93,61 @@ function Navbar() {
                                 </Link>
                             </li>
                         ))}
-                        <li className="2xl:pl-60 md:pl-20 md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
-                            <div className="cursor-pointer " onClick={toggleUserDropdown}>
-                                {isLoggedIn ? (
-                                    <button><FaUserCircle className="w-7 h-7"/></button>
-                                ) : (
-                                    <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-red-600' to="/login">LOGIN</Link>
-                                )}
-                            </div>
-                            {isLoggedIn && userDropdown && (
-                                <div className="absolute right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
-                                    <div
-                                        className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                                    >
-                                        {username}
-                                    </div>
-                                    <Link to="/orders" className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
-                                        Orders
-                                    </Link>
-                                    <div
-                                        className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                                        onClick={handleLogout}
-                                    >
-                                        Logout
-                                    </div>
-                                </div>
-                            )}
-                        </li>
                     </ul>
+                    <div className="w-full md:hidden md:py-0 py-3 relative decoration-none flex justify-center items-center" ref={dropdownRef}>
+                        <div className="cursor-pointer " onClick={toggleUserDropdown}>
+                            {isLoggedIn ? (
+                                <button><FaUserCircle className="w-7 h-7" /></button>
+                            ) : (
+                                <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-red-600' to="/login">LOGIN</Link>
+                            )}
+                        </div>
+                        {isLoggedIn && userDropdown && (
+                            <div className="absolute right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
+                                <div
+                                    className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                >
+                                    {username}
+                                </div>
+                                <Link to="/orders" className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
+                                    Orders
+                                </Link>
+                                <div
+                                    className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className="hidden md:block md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
+                    <div className="cursor-pointer " onClick={toggleUserDropdown}>
+                        {isLoggedIn ? (
+                            <button><FaUserCircle className="w-7 h-7" /></button>
+                        ) : (
+                            <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-red-600' to="/login">LOGIN</Link>
+                        )}
+                    </div>
+                    {isLoggedIn && userDropdown && (
+                        <div className="absolute right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
+                            <div
+                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                            >
+                                {username}
+                            </div>
+                            <Link to="/orders" className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
+                                Orders
+                            </Link>
+                            <div
+                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </nav>

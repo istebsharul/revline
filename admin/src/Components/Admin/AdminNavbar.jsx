@@ -11,10 +11,6 @@ const AdminNavBar = ({ toggleSidebar }) => {
   const isLoggedIn = useSelector((state)=> state.auth?.admin);
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    console.log(isLoggedIn);
-  })
-
   const handleLogout = () => {
     // Add your logout logic here
     if(!isLoggedIn){

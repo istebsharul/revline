@@ -14,29 +14,42 @@ import crypto from 'crypto';
 export const registerUser = asyncErrors(async (req, res) => {
     const { name, email, phone, password } = req.body;
 
-    const customer = await Customer.findOne({ email });
+    try {
+        // Log attempt to register a user
+        logger.info('Attempting to register user', { email });
 
-    if (!customer) {
-        return res.status(400).json({
+        const customer = await Customer.findOne({ email });
+
+        if (!customer) {
+            logger.warn('Registration failed: Customer not found', { email });
+            return res.status(400).json({
+                success: false,
+                message: 'Fill up the Parts Form Before Register',
+            });
+        }
+
+        // Create a new user with the provided details
+        const user = await User.create({
+            name,
+            email,
+            phone,
+            password, // Ensure you handle password securely
+            customer: customer._id
+        });
+
+        // Send token and response
+        sendToken(user, 201, res);
+
+        // Log successful registration
+        logger.info('User registered successfully', { email, userId: user._id });
+    } catch (error) {
+        // Log any error that occurs during registration
+        logger.error('Error registering user', { email, error: error.message });
+        res.status(500).json({
             success: false,
-            message: 'Fill up the Parts Form Before Register',
+            message: error.message,
         });
     }
-
-    // Create a new user with the provided details
-    const user = await User.create({
-        name,
-        email,
-        phone,
-        password, // Use password instead of password
-        customer: customer._id
-    });
-
-    // Send token and response
-    sendToken(user, 201, res);
-
-    // Log successful registration
-    logger.info(`User registered successfully: ${email}`);
 });
 
 

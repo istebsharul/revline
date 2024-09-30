@@ -19,13 +19,27 @@ const OrderDispositionHistorySchema = new mongoose.Schema({
 // Schema for storing quotations
 const QuotationSchema = new mongoose.Schema({
   status: { type: String, default: 'Pending', trim: true },
-  quote_number: {type:String, unique:true, trim:true},
+  quote_number: {type:String, unique:true, trim:true,sparse: true},
   quotationPdf: {
     data: Buffer,  // To store the generated PDF buffer
     contentType: { type: String, default: 'application/pdf' }
   },
+  message: {type:String,trim:true},
   created_at: { type: Date, default: Date.now }
 });
+
+const InvoiceSchema = new mongoose.Schema({
+  status: {type: String, default: 'Pending', trim: true},
+  invoice_number: {type: String, unique: true, trim: true,sparse:true},
+  invoicePdf:{
+    data:Buffer,
+    contentType:{type: String, default: 'application/pdf'}
+  },
+  transaction_id: { type: String, trim: true },
+  payment_mode: { type: String, trim: true }, 
+  total_amount: { type: Number, required: true },
+  created_at: { type: Date, default: Date.now }
+})
 
 const OrderSchema = new mongoose.Schema({
   customer: {
@@ -38,7 +52,7 @@ const OrderSchema = new mongoose.Schema({
   order_summary: OrderSummarySchema,  // Use the defined sub-schema
   pricing_details: {
     cost_price: { type: Number },
-    shipping_type: { type: String, trim: true },
+    shipping_size: { type: String, trim: true },
     shipping_cost: { type: Number, trim: true },
     shipping_speed: { type: String, trim: true },
     quoted_price: { type: Number, trim: true },
@@ -83,10 +97,12 @@ const OrderSchema = new mongoose.Schema({
   order_disposition_details: {
     specific_request_for_warehouse_team: { type: String, trim: true },
     agent_notes: { type: String, trim: true },
-    order_status: { type: String, trim: true },
+    order_status: { type: String, trim: true, default:'Pending Approval' },
   },
   disposition_history: { type: [OrderDispositionHistorySchema], default: [] },
-  quotations: { type: QuotationSchema }  // New field for quotations
+  quotations: { type: QuotationSchema },  // New field for quotations
+  invoices: {type: InvoiceSchema},
+  payment_details: {type:mongoose.Schema.Types.ObjectId, ref: 'Payment'}
 });
 
 const Order = mongoose.model('Order', OrderSchema);

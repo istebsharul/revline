@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react';
 const PricingDetails = ({ pricingDetails = {}, isEditing, setOrderDetails }) => {
   const [localPricingDetails, setLocalPricingDetails] = useState(pricingDetails);
 
-  useEffect(() => {
-    // Recalculate Gross Profit whenever Cost Price or Quoted Price changes
-    const calculateGrossProfit = () => {
-      const costPrice = parseFloat(localPricingDetails.cost_price) || 0;
-      const quotedPrice = parseFloat(localPricingDetails.quoted_price) || 0;
-      return (quotedPrice - costPrice).toFixed(2); // Calculate and format to two decimal places
-    };
+  // Function to calculate gross profit
+  const calculateGrossProfit = () => {
+    const costPrice = (localPricingDetails.cost_price) || 0;
+    const quotedPrice = (localPricingDetails.quoted_price) || 0;
+    const shippingCost = (localPricingDetails.shipping_cost) || 0;
+    console.log(costPrice,quotedPrice,shippingCost);
+    return (quotedPrice - costPrice - shippingCost).toFixed(2); // Calculate and format to two decimal places
+  };
 
+  useEffect(() => {
     if (isEditing) {
       setOrderDetails((prev) => ({
         ...prev,
@@ -20,24 +22,34 @@ const PricingDetails = ({ pricingDetails = {}, isEditing, setOrderDetails }) => 
         },
       }));
     }
-  }, [localPricingDetails.cost_price, localPricingDetails.quoted_price, isEditing, setOrderDetails]);
+  }, [localPricingDetails, isEditing, setOrderDetails]); // Now depends on localPricingDetails for real-time updates
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setLocalPricingDetails((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (name !== 'gross_profit' && isEditing) {
-      setOrderDetails((prev) => ({
+    setLocalPricingDetails((prev) => {
+      const updatedPricingDetails = {
         ...prev,
-        pricing_details: {
-          ...prev.pricing_details,
-          [name]: value,
-        },
-      }));
-    }
+        [name]: value,
+      };
+
+      // Calculate gross profit after updating localPricingDetails
+      if (name !== 'gross_profit') {
+        const grossProfit = calculateGrossProfit(); // Calculate gross profit
+        updatedPricingDetails.gross_profit = grossProfit; // Update gross profit
+
+        // Update order details as well
+        setOrderDetails((prev) => ({
+          ...prev,
+          pricing_details: {
+            ...prev.pricing_details,
+            [name]: value,
+            gross_profit: grossProfit,
+          },
+        }));
+      }
+
+      return updatedPricingDetails; // Return updated state
+    });
   };
 
   return (
@@ -45,22 +57,22 @@ const PricingDetails = ({ pricingDetails = {}, isEditing, setOrderDetails }) => 
       <h3 className="text-lg font-semibold mb-4">Pricing Details</h3>
       <div className="grid grid-cols-4 gap-4">
         <div>
-          <p>Shipping Type:</p>
+          <p>Shipping Size:</p>
           {isEditing ? (
             <select
-              name="shipping_type"
-              value={localPricingDetails.shipping_type || ''}
+              name="shipping_size"
+              value={localPricingDetails.shipping_size || ''}
               onChange={handleChange}
               className="text-gray-600 border border-gray-300 rounded p-1"
             >
-              <option value="">Select Shipping Type</option>
+              <option value="">Select Shipping Size</option>
               <option value="Small, Light Parts">Small, Light Parts</option>
               <option value="Medium Parts">Medium Parts</option>
               <option value="Large, Heavy Parts">Large, Heavy Parts</option>
               <option value="Very Large Parts">Very Large Parts</option>
             </select>
           ) : (
-            <p className="text-gray-600">{localPricingDetails.shipping_type || '--'}</p>
+            <p className="text-gray-600">{localPricingDetails.shipping_size || '--'}</p>
           )}
         </div>
         <div>
@@ -142,7 +154,7 @@ const PricingDetails = ({ pricingDetails = {}, isEditing, setOrderDetails }) => 
         </div>
         <div>
           <p>Gross Profit:</p>
-          <p className="text-gray-600">{localPricingDetails.gross_profit || '--'}</p>
+          <p className={`text-gray-600 ${localPricingDetails.gross_profit > 0 ? 'text-green-600': 'text-red-600'}`}>{localPricingDetails.gross_profit || '--'}</p>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signup } from '../../Actions/userActions'
-import { useNavigate } from "react-router-dom";
+import { signup } from '../../Actions/userActions';
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
 
@@ -15,27 +15,40 @@ function Signup() {
     const dispatch = useDispatch();
     const error = useSelector((state) => state.error);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams(); // To get URL parameters
+
+    useEffect(() => {
+        const paramName = searchParams.get('name');
+        const paramEmail = searchParams.get('email');
+
+        if (paramName) {
+            setName(paramName);
+        }
+        if (paramEmail) {
+            setEmail(paramEmail);
+        }
+    }, [searchParams]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!name) {
-            toast.error("Name is required!")
-            return
+            toast.error("Name is required!");
+            return;
         }
         if (!email) {
-            toast.error("Email is required!")
-            return
+            toast.error("Email is required!");
+            return;
         }
         if (!password) {
-            toast.error("Password can't be empty!")
-            return
+            toast.error("Password can't be empty!");
+            return;
         }
         if (password !== confirmPassword) {
             alert("Passwords do not match");
             return;
         }
         try {
-            const result = await dispatch(signup(name, email, password));
+            const result = dispatch(signup(name, email, password));
             if (result && result.success) {
                 toast.success("Signup successful!");
             } else {
@@ -45,7 +58,7 @@ function Signup() {
             toast.error("An error occurred during signup.");
             console.error("Signup error:", error);
         }
-        navigate('/')
+        navigate('/');
         setName("");
         setEmail("");
         setPassword("");
@@ -73,7 +86,7 @@ function Signup() {
                             Create Your Account!
                         </h1>
                         <h3 className="p-1 text-gray-600 text-xs">
-                            Join us today by creating your account.
+                            Register yourself to track your order details.
                         </h3>
                     </div>
                     <input

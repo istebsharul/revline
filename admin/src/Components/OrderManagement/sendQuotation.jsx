@@ -26,17 +26,12 @@ const SendQuotation = ({ orderDetails }) => {
             return;
         }
 
-        if (!orderDetails.shipping_details.address_line_1 || !orderDetails.shipping_details.address_line_2 || !orderDetails.shipping_details.city || !orderDetails.shipping_details.state_or_region || !orderDetails.shipping_details.country_or_region) {
-            setError('Shipping details are missing required data.');
-            return;
-        }
-
         setIsSending(true);
         setError('');
         setSuccess('');
 
         try {
-            const response = await axios.post('/api/v1/quotation/send', { orderId: orderDetails._id });
+            const response = await axios.post('/api/v1/service/quotation/send', { orderId: orderDetails._id });
             setSuccess(response.data.message || 'Quotation sent successfully!');
         } catch (err) {
             console.error(err);

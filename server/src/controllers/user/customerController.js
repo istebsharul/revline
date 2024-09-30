@@ -4,12 +4,48 @@ import Order from '../../models/order.js';
 import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import logger from '../../utils/logger.js';
 import sendMail from '../../utils/sendMail.js';
+import Part from '../../models/parts.js';
 
 // Get all customers
 export const getAllCustomers = asyncErrors(async (req, res) => {
-    const customers = await Customer.find();
-    res.status(200).json(customers);
+    try {
+        // Extract page and limit from query parameters
+        const page = parseInt(req.query.page) || 1;  // Default to page 1 if not provided
+        const limit = parseInt(req.query.limit) || 10;  // Default to 10 items per page if not provided
+
+        // Validate page and limit
+        if (page < 1 || limit < 1) {
+            return res.status(400).json({ message: 'Page and limit must be greater than 0' });
+        }
+
+        // Calculate the number of documents to skip
+        const skip = (page - 1) * limit;
+
+        // Fetch customers with pagination
+        const customers = await Customer.find()
+            .skip(skip)
+            .limit(limit);
+
+        // Get the total number of customers for pagination info
+        const totalCustomers = await Customer.countDocuments();
+
+        // Send response with customers and pagination info
+        res.json({
+            customers,
+            pagination: {
+                totalCustomers,
+                totalPages: Math.ceil(totalCustomers / limit),
+                currentPage: page,
+                pageSize: limit
+            }
+        });
+        logger.info('Customer fetched using pagination');
+    } catch (error) {
+        logger.error('Error fetching customer',error);
+        res.status(500).json({ message: error.message });
+    }
 });
+
 
 export const getCustomerById = asyncErrors(async (req, res) => {
     try {
@@ -43,6 +79,8 @@ export const createCustomer = asyncErrors(async (req, res) => {
         // Check if a customer with the provided email or phone number already exists
         let existingCustomer = await Customer.findOne({ $or: [{ email }, { phone }] });
 
+        let part = await Part.findOne({part_name:vehicleData.part});
+
         if (existingCustomer) {
             // Customer exists, create a new order for this customer
             logger.info("Welcome Back!", existingCustomer);
@@ -53,9 +91,13 @@ export const createCustomer = asyncErrors(async (req, res) => {
                     year: vehicleData.year,
                     make: vehicleData.make,
                     model: vehicleData.model,
-                    part_name: vehicleData.carPart,
+                    part_name: vehicleData.part,
                     variant: vehicleData.variant,
                     transmission: vehicleData.transmission,
+                },
+                pricing_details:{
+                    shipping_size: part.size,
+                    shipping_cost: part.shipping_cost
                 },
                 shipping_details: {
                     customer: existingCustomer._id || 'N/A',
@@ -95,9 +137,13 @@ export const createCustomer = asyncErrors(async (req, res) => {
                     year: vehicleData.year,
                     make: vehicleData.make,
                     model: vehicleData.model,
-                    part_name: vehicleData.carPart,
+                    part_name: vehicleData.part,
                     variant: vehicleData.variant,
                     transmission: vehicleData.transmission,
+                },
+                pricing_details:{
+                    shipping_size: part.size,
+                    shipping_cost: part.shipping_cost
                 },
                 shipping_details: {
                     customer: newCustomer._id || 'N/A',
@@ -115,7 +161,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             logger.info(`Customer and Order created successfully: ${newCustomer._id}, Order ID: ${savedOrder._id}`);
 
             // Send email for first visit
-            const registrationLink = `https://yourcompany.com/register?email=${encodeURIComponent(newCustomer.email)}`;
+            const registrationLink = `https://yourcompany.com/signup?email=${encodeURIComponent(newCustomer.email)}&name=${encodeURIComponent(name)}`;
 
             await sendMail({
                 email: newCustomer.email,
