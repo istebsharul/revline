@@ -57,7 +57,7 @@ function TicketsWidget() {
                     ) : error ? (
                         <p>Error fetching tickets.</p>
                     ) : (
-                        <TicketsList tickets={tickets} />
+                        <TicketsList initialTickets={tickets} />
                     )}
 
                     {/* Pagination Controls */}

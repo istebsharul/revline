@@ -2,23 +2,27 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
 import { MdContentCopy } from "react-icons/md";
-
+import { toast } from 'react-hot-toast'; // Import toast
 
 const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [status, setStatus] = useState(ticket.status);
 
   const handleEdit = async () => {
+    // Only proceed if the status has changed
     if (status !== ticket.status) {
       try {
-        const updatedData = { ...ticket, status };
+        const updatedData = { ...ticket, status }; // Update status in the data being sent
         const response = await axios.patch(`/api/v1/tickets/ticket/${ticket._id}`, updatedData);
-        onEditSuccess(response.data);
-        setIsEditing(false);
+        onEditSuccess(response.data); // Notify the parent component of the update
+        setIsEditing(false); // Exit editing mode
+        toast.success('Ticket updated successfully!'); // Success notification
       } catch (error) {
-        console.error('Error updating ticket:', error);
+        console.error('Error editing ticket:', error);
+        toast.error('Failed to update ticket. Please try again.'); // Error notification
       }
     } else {
+      // If no change, just exit editing mode
       setIsEditing(false);
     }
   };
@@ -26,20 +30,26 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
   const handleResolve = async () => {
     try {
       await axios.patch(`/api/v1/tickets/ticket/${ticket._id}`, { status: 'Closed' });
-      onEditSuccess({ ...ticket, status: 'Closed' });
+      onEditSuccess({ ...ticket, status: 'Closed' }); // Update the ticket status in parent
+      toast.success('Ticket resolved successfully!'); // Success notification
     } catch (error) {
       console.error('Error resolving ticket:', error);
+      toast.error('Failed to resolve ticket. Please try again.'); // Error notification
     }
   };
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this ticket?')) {
-      try {
-        await axios.delete(`/api/v1/tickets/ticket/${ticket._id}`);
-        onDeleteSuccess(ticket._id);
-      } catch (error) {
-        console.error('Error deleting ticket:', error);
-      }
+    const confirm = window.confirm('Are you sure you want to delete?');
+    if (!confirm) {
+      return;
+    }
+    try {
+      await axios.delete(`/api/v1/tickets/ticket/${ticket._id}`);
+      onDeleteSuccess(ticket._id); // Notify the parent component of the deletion
+      toast.success('Ticket deleted successfully!'); // Success notification
+    } catch (error) {
+      console.error('Error deleting ticket:', error);
+      toast.error('Failed to delete ticket. Please try again.'); // Error notification
     }
   };
 
@@ -47,10 +57,11 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
     const orderId = ticket.orderId.slice(-6); // Get the last 6 characters of the Order ID
     navigator.clipboard.writeText(orderId)
       .then(() => {
-        alert('Order ID copied to clipboard!'); // Optional: Feedback for the user
+        toast.success('Order ID copied to clipboard!'); // Success notification
       })
       .catch((error) => {
         console.error('Error copying to clipboard:', error);
+        toast.error('Failed to copy Order ID. Please try again.'); // Error notification
       });
   };
 
