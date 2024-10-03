@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import VehicleInfoForm from './VehicleInfoForm';
 import VariantTransmissionForm from './VariantTransmissionForm';
 import UserInfoForm from './UserInfoForm';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
+import { debounce } from 'lodash';
+
 
 const MultiStepForm = () => {
     const [step, setStep] = useState(1);
@@ -143,6 +145,8 @@ const MultiStepForm = () => {
             });
     };
 
+    const debouncedHandleSubmit = useCallback(debounce(handleSubmit, 1000), [userData, vehicleData]);
+
     return (
         <div className="w-full max-w-md mx-auto md:mt-10 rounded-lg">
             <div className='flex justify-center items-center p-2 m-2'>
@@ -214,7 +218,7 @@ const MultiStepForm = () => {
                             </button>
                         )}
                         {step === 3 && (
-                            <button onClick={handleSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+                            <button onClick={debouncedHandleSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
                                 Submit
                             </button>
                         )}

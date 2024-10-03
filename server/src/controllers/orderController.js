@@ -15,32 +15,31 @@ export const createOrder = asyncErrors(async (req, res) => {
     }
 });
 
+// Get all order with min info 
 export const getAllOrders = asyncErrors(async (req, res) => {
     try {
-        // Extract page and limit from query parameters
-        const page = parseInt(req.query.page) || 1;  // Default to page 1 if not provided
-        const limit = parseInt(req.query.limit) || 10;  // Default to 10 items per page if not provided
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
 
-        // Validate page and limit
         if (page < 1 || limit < 1) {
             return res.status(400).json({ message: 'Page and limit must be greater than 0' });
         }
 
-        // Calculate the number of documents to skip
         const skip = (page - 1) * limit;
 
-        // Fetch orders with pagination
+        // Fetch orders with only _id, customer details, and quote_number
         const orders = await Order.find()
             .sort({ request_date: -1 })
             .skip(skip)
             .limit(limit)
-            .populate('customer')
+            .populate('customer', 'name email phone') // Populate only customer details you want (name, email, phone)
+            .select('_id customer quotations.quote_number request_date'); // Select only the fields you need
 
         // Get the total number of orders for pagination info
         const totalOrders = await Order.countDocuments();
 
-        // Send response with orders and pagination info
-        res.json({
+        // Prepare the response object
+        const response = {
             orders,
             pagination: {
                 totalOrders,
@@ -48,7 +47,14 @@ export const getAllOrders = asyncErrors(async (req, res) => {
                 currentPage: page,
                 pageSize: limit
             }
-        });
+        };
+
+        // Calculate and log the response size
+        const responseSize = Buffer.byteLength(JSON.stringify(response), 'utf8');
+        console.log(`Response size: ${responseSize} bytes`);
+
+        // Send the response
+        res.json(response);
 
         logger.info('Fetched orders with pagination');
     } catch (error) {
@@ -76,9 +82,16 @@ export const getOrderById = asyncErrors(async (req, res) => {
             return res.status(404).json({ message: 'No Orders found for this customer' });
         }
 
+        // Calculate and log the response size
+        const responseSize = Buffer.byteLength(JSON.stringify(order), 'utf8');
+
+        console.log(`Order size for Id: ${responseSize} bytes`);
+
+
         // Send order data if found
         res.json(order);
         logger.info(`Order fetched successfully for OrderId ${orderId}`);
+
     } catch (error) {
         // Log error and send a 500 response
         logger.error('Error fetching order using OrderId', { error: error.message });
@@ -86,31 +99,62 @@ export const getOrderById = asyncErrors(async (req, res) => {
     }
 });
 
-
-
+// Get Order using customer Id
 export const getOrderByCustomerId = asyncErrors(async (req, res) => {
-  const customerId = req.params.id;
+    const customerId = req.params.id;
 
-  try {
-    logger.info('Fetching orders by customer ID', { customerId });
+    try {
+        logger.info('Fetching orders by customer ID', { customerId });
 
-    const orders = await Order.find({ customer: customerId })
-                              .populate('customer')
-                              .populate('shipping_details.customer')
-                              .populate('payment_details');
+        const orders = await Order.find({ customer: customerId })
+            .select('_id order_disposition_details.order_status request_date order_summary');
 
-    if (orders.length === 0) {
-      logger.warn('No orders found for this customer', { customerId });
-      return res.status(404).json({ message: 'No orders found for this customer' });
+        if (orders.length === 0) {
+            logger.warn('No orders found for this customer', { customerId });
+            return res.status(404).json({ message: 'No orders found for this customer' });
+        }
+
+        // Calculate and log the response size
+        const responseSize = Buffer.byteLength(JSON.stringify(orders), 'utf8');
+        console.log(`Order size for Id: ${responseSize} bytes`);
+
+        res.json(orders);
+        logger.info('Fetched orders successfully', { customerId, orderCount: orders.length });
+    } catch (error) {
+        logger.error('Error fetching orders by customer ID', { customerId, error: error.message });
+        res.status(500).json({ message: error.message });
     }
-
-    res.json(orders);
-    logger.info('Fetched orders successfully', { customerId, orderCount: orders.length });
-  } catch (error) {
-    logger.error('Error fetching orders by customer ID', { customerId, error: error.message });
-    res.status(500).json({ message: error.message });
-  }
 });
+
+
+// export const getOrderByCustomerId = asyncErrors(async (req, res) => {
+//     const customerId = req.params.id;
+
+//     try {
+//         logger.info('Fetching orders by customer ID', { customerId });
+
+//         const orders = await Order.find({ customer: customerId })
+//             .populate('customer')
+//             .populate('shipping_details.customer')
+//             .populate('payment_details');
+
+//         if (orders.length === 0) {
+//             logger.warn('No orders found for this customer', { customerId });
+//             return res.status(404).json({ message: 'No orders found for this customer' });
+//         }
+
+//         // Calculate and log the response size
+//         const responseSize = Buffer.byteLength(JSON.stringify(orders), 'utf8');
+
+//         console.log(`Order size for Id: ${responseSize} bytes`);
+
+//         res.json(orders);
+//         logger.info('Fetched orders successfully', { customerId, orderCount: orders.length });
+//     } catch (error) {
+//         logger.error('Error fetching orders by customer ID', { customerId, error: error.message });
+//         res.status(500).json({ message: error.message });
+//     }
+// });
 
 export const updateOrder = asyncErrors(async (req, res) => {
     const orderId = req.params.id;

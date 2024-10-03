@@ -4,7 +4,7 @@ import FeedbackForm from './FeedbackForm';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdfBinary, onAccept, onPayment }) => {
+const PaymentSection = ({ orderId, paymentDetails, orderStatus, quotationsStatus, onAccept }) => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
 
@@ -21,37 +21,13 @@ const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdf
     }
   };
 
-  const getBase64String = (binaryData) => {
-    const binaryString = String.fromCharCode(...new Uint8Array(binaryData));
-    return window.btoa(binaryString);
-  };
 
   return (
     <>
-        <div className="max-w-5xl mx-auto bg-gray-100 rounded-lg overflow-hidden">
-        <h1 className="max-w-5xl mx-auto border-b text-xl md:text-xl font-semibold text-left px-6 py-2">Quotation</h1>
-        {/* Quotation PDF Download */}
-        {pdfBinary && (
-          <div className="flex flex-col p-4 md:p-6 border-b border-gray-200">
-            <div className="flex flex-col md:flex-row items-center">
-              <a
-                href={`data:application/pdf;base64,${getBase64String(pdfBinary)}`}
-                download="quotation.pdf"
-                className="flex items-center justify-center text-black font-semibold rounded-lg p-3 bg-gray-200 hover:bg-gray-300 w-full md:w-auto"
-              >
-                Download PDF
-                <FaDownload className="ml-2" />
-              </a>
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800 p-3 text-center md:text-left">
-                Click to Download and View the Quotation.
-              </h2>
-            </div>
-            <p className="p-2 mt-4 font-medium text-center md:text-left">Click Confirm to Pay and Place Order.</p>
-          </div>
-        )}
-
+      <div className="max-w-5xl mx-auto bg-gray-100 rounded-lg overflow-hidden">
+        {/* <h1>Click on t</h1> */}
         {/* Approve and Reject Buttons */}
-        <div className="w-full p-4 md:p-6 flex flex-col md:flex-row gap-2 justify-between items-center">
+        <div className="w-full p-2 md:p-2 flex flex-col md:flex-row gap-2 justify-between items-center">
           <div className="w-full">
             <button
               onClick={onAccept}
@@ -61,7 +37,7 @@ const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdf
                 }`}
               disabled={paymentDetails?.payment_status === 'Completed'}
             >
-              {orderStatus === 'Payment Received' ? 'Paid' : 'Pay'}
+              {paymentDetails.payment_status === 'Completed' ? 'Paid' : 'Pay'}
             </button>
           </div>
           <div className="w-full">
@@ -70,7 +46,7 @@ const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdf
               className={`w-full px-4 py-2 font-semibold rounded border ${quotationsStatus === 'Rejected' ? 'cursor-not-allowed bg-blue-500 text-white' : 'text-black bg-white hover:bg-red-600 hover:text-white'}`}
               disabled={quotationsStatus === 'Rejected'}
             >
-              {quotationsStatus === 'Rejected' ? 'Thanks for Feedback' : 'Cancel'}
+              {quotationsStatus === 'Rejected' ? 'Thanks for Feedback' : `${showFeedback? "Don't Cancel":"Cancel"}`}
             </button>
           </div>
         </div>
@@ -91,4 +67,4 @@ const Quotation = ({ orderId, paymentDetails, orderStatus, quotationsStatus, pdf
   );
 };
 
-export default Quotation;
+export default PaymentSection;

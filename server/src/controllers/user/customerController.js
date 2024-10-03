@@ -41,7 +41,7 @@ export const getAllCustomers = asyncErrors(async (req, res) => {
         });
         logger.info('Customer fetched using pagination');
     } catch (error) {
-        logger.error('Error fetching customer',error);
+        logger.error('Error fetching customer', error);
         res.status(500).json({ message: error.message });
     }
 });
@@ -136,15 +136,22 @@ export const createCustomer = asyncErrors(async (req, res) => {
                 message: `Hello ${existingCustomer.name},\n\nWe have added new products to your inventory. Check them out!\n\nBest regards,\nYour Company`,
             });
 
+            // Calculate and log the response size
+            const customerResponseSize = Buffer.byteLength(JSON.stringify(existingCustomer), 'utf8');
+            console.log(`Existing Customer size for Id: ${customerResponseSize} bytes`);
+
+            // Calculate and log the response size
+            const responseSize = Buffer.byteLength(JSON.stringify(savedOrder), 'utf8');
+            console.log(`Saved Order size for Id: ${responseSize} bytes`);
             // Send response with the updated customer and new order
             return res.status(200).json({ customer: existingCustomer, order: savedOrder });
         } else {
             // If customer does not exist, create a new customer instance
-            const newCustomer = new Customer({ 
-                name, 
-                email, 
-                phone, 
-                zipcode, 
+            const newCustomer = new Customer({
+                name,
+                email,
+                phone,
+                zipcode,
                 orderInfo: [orderInfo] // Initialize orderInfo with the new order
             });
 
@@ -155,7 +162,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             newOrder.customer = newCustomer._id; // Set the customer reference
 
             // Save the updated new order
-            await newOrder.save(); 
+            await newOrder.save();
 
             // Log successful creation
             logger.info(`Customer and Order created successfully: ${newCustomer._id}, Order ID: ${newOrder._id}`);
@@ -168,6 +175,14 @@ export const createCustomer = asyncErrors(async (req, res) => {
                 subject: 'Welcome to Our Service!',
                 message: `Hello ${newCustomer.name},\n\nWe are looking for the best parts for you. We are excited to have you as a customer. Please register yourself using the following link to receive a quotation. We will also send it to you over email.\n\nRegister here: ${registrationLink}\n\nBest regards,\nYour Company`,
             });
+
+            // Calculate and log the response size
+            const customerResponseSize = Buffer.byteLength(JSON.stringify(newCustomer), 'utf8');
+            console.log(`New Customer size for Id: ${customerResponseSize} bytes`);
+
+            // Calculate and log the response size
+            const responseSize = Buffer.byteLength(JSON.stringify(savedOrder), 'utf8');
+            console.log(`Saved Order size for Id: ${responseSize} bytes`);
 
             // Send response with the created customer and order
             return res.status(201).json({ customer: newCustomer, order: savedOrder });

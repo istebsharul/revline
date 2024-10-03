@@ -40,7 +40,7 @@ const TicketDetails = ({ orderId }) => {
             className="mx-1 hover:underline text-sm text-gray-900"
             onClick={handleShowDetails}
           >
-            click here 
+            click here
           </button>
           to see update
         </div>

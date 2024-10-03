@@ -7,7 +7,7 @@ const TicketForm = ({ order_id }) => {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('Low');
   const [category, setCategory] = useState('');
-  const [orderId, setOrderId] = useState(order_id);
+  const [orderId, setOrderId] = useState(order_id.slice(-6));
 
   const handleSubmit = async (e) => {
     e.preventDefault();

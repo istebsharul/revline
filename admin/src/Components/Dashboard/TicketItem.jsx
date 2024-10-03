@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
+import { MdContentCopy } from "react-icons/md";
+
 
 const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [status, setStatus] = useState(ticket.status);
 
   const handleEdit = async () => {
-    // Only proceed if the status has changed
     if (status !== ticket.status) {
       try {
-        const updatedData = { ...ticket, status }; // Update status in the data being sent
+        const updatedData = { ...ticket, status };
         const response = await axios.patch(`/api/v1/tickets/ticket/${ticket._id}`, updatedData);
-        onEditSuccess(response.data); // Notify the parent component of the update
-        setIsEditing(false); // Exit editing mode
+        onEditSuccess(response.data);
+        setIsEditing(false);
       } catch (error) {
-        console.error('Error editing ticket:', error);
+        console.error('Error updating ticket:', error);
       }
     } else {
-      // If no change, just exit editing mode
       setIsEditing(false);
     }
   };
@@ -26,71 +26,118 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
   const handleResolve = async () => {
     try {
       await axios.patch(`/api/v1/tickets/ticket/${ticket._id}`, { status: 'Closed' });
-      onEditSuccess({ ...ticket, status: 'Closed' }); // Update the ticket status in parent
+      onEditSuccess({ ...ticket, status: 'Closed' });
     } catch (error) {
       console.error('Error resolving ticket:', error);
     }
   };
 
   const handleDelete = async () => {
-    const confirm = window.confirm('Are you sure you want to delete?');
-    if (!confirm) {
-      return;
-    }
-    try {
-      await axios.delete(`/api/v1/tickets/ticket/${ticket._id}`);
-      onDeleteSuccess(ticket._id); // Notify the parent component of the deletion
-    } catch (error) {
-      console.error('Error deleting ticket:', error);
+    if (window.confirm('Are you sure you want to delete this ticket?')) {
+      try {
+        await axios.delete(`/api/v1/tickets/ticket/${ticket._id}`);
+        onDeleteSuccess(ticket._id);
+      } catch (error) {
+        console.error('Error deleting ticket:', error);
+      }
     }
   };
 
+  const handleCopyToClipboard = () => {
+    const orderId = ticket.orderId.slice(-6); // Get the last 6 characters of the Order ID
+    navigator.clipboard.writeText(orderId)
+      .then(() => {
+        alert('Order ID copied to clipboard!'); // Optional: Feedback for the user
+      })
+      .catch((error) => {
+        console.error('Error copying to clipboard:', error);
+      });
+  };
+
   return (
-    <div className="border-b p-2 flex justify-between items-center">
-      <div className='w-full h-fit flex flex-col justify-start text-sm'>
-        <div className='grid grid-cols-3'>
-          <h3 className="w-1/5 font-bold">#{ticket.ticketNumber}</h3>
-          <p className="w-1/5 text-gray-800 text-nowrap"><span className='font-bold'>Order Id:</span> {ticket.orderId}</p>
-          {isEditing ? (
-            <div className='w-1/5'>
+    <div className="py-3 px-4 border rounded-lg shadow-md bg-white flex flex-col space-y-1 mb-1">
+      {/* Ticket Info Section */}
+      <div className="flex justify-between items-start gap-4">
+        {/* Ticket Details */}
+        <div className="w-3/5 flex">
+          <h3 className="w-20 font-bold text-lg">#{ticket.ticketNumber}</h3>
+          <p className='w-40 flex items-center'>
+            <span className="text-sm font-semibold">Order ID:</span>
+            <span className="ml-1">{ticket?.orderId}</span>
+            <button onClick={handleCopyToClipboard} className="ml-2 text-gray-600 hover:text-gray-800">
+              <MdContentCopy />
+            </button>
+          </p>
+          <p className='w-80 text-nowrap'><span className="text-sm font-semibold">Subject:</span> {ticket.subject}</p>
+        </div>
+
+        {/* Status and Action Buttons */}
+        <div className="w-2/5 flex justify-end items-center space-x-4">
+          <div className="w-1/3 flex justify-start items-center">
+            <span className="font-semibold">Status:</span>
+            {isEditing ? (
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="border p-1 rounded"
+                className="border p-1 rounded-md ml-2"
               >
                 <option value="Open">Open</option>
-                <option value="Closed">Closed</option>
                 <option value="Pending">Pending</option>
+                <option value="Closed">Closed</option>
               </select>
-            </div>
-          ) : (
-            <p className="w-1/5 text-gray-700 text-nowrap"><span className='font-bold'>Status:</span> {status}</p>
-          )}
-        </div>
-        <div className='grid grid-cols-3'>
-          <p className='w-15'><span className='font-bold'>Subject:</span> {ticket.subject}</p>
-          <p className='w-15'><span className='font-bold'>Description:</span> {ticket.description}</p>
+            ) : (
+              <p className={`ml-2 font-semibold ${status === 'Closed' ? 'text-green-600' : 'text-yellow-600'}`}>
+                {status}
+              </p>
+            )}
+          </div>
+
+          <div>
+            {isEditing ? (
+              <div className='w-full space-x-4'>
+                <button
+                  onClick={handleEdit}
+                  className="text-blue-500 hover:text-blue-700 transition duration-150"
+                  disabled={status === ticket.status}
+                >
+                  <FaCheck /> {/* Save icon */}
+                </button>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="text-gray-500 hover:text-red-500 transition duration-150"
+                >
+                  <FaTimes /> {/* Cancel icon */}
+                </button>
+              </div>
+            ) : (
+              <div className='w-full space-x-4'>
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="text-yellow-500 hover:text-yellow-700 transition duration-150"
+                >
+                  <FaEdit /> {/* Edit icon */}
+                </button>
+                <button
+                  onClick={handleResolve}
+                  className="text-green-500 hover:text-green-700 transition duration-150"
+                >
+                  Resolve
+                </button>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleDelete}
+            className="text-red-500 hover:text-red-700 transition duration-150"
+          >
+            <FaTrash /> {/* Delete icon */}
+          </button>
         </div>
       </div>
-      <div className="w-1/5 flex space-x-2">
-        {isEditing ? (
-          <div className='flex gap-2'>
-            <button className='text-gray-400 hover:text-red-500 hover:underline'>cancel</button>
-            <button onClick={handleEdit} className="text-blue-500" disabled={status === ticket.status}>
-              Save
-            </button>
-          </div>
-        ) : (
-          <button onClick={() => setIsEditing(true)}>
-            Edit
-          </button>
-        )}
-        <button onClick={handleResolve} className="text-green-500">
-          Resolve
-        </button>
-        <button onClick={handleDelete} className="text-red-500">
-          <FaTrash />
-        </button>
+
+      {/* Description Section */}
+      <div className="text-sm">
+        <p><span className="font-semibold">Description:</span> {ticket.description}</p>
       </div>
     </div>
   );
