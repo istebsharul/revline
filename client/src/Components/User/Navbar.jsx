@@ -84,7 +84,7 @@ function Navbar() {
                 </div>
                 <div className={`transparent text-black flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'}`}>
                     <ul className="text-black text-sm md:h-fit flex md:flex-row flex-col items-center justify-center md:flex relative">
-                        {['/Home', '/Parts', '/About', '/Warranty', '/FAQ', '/Contact'].map((path, index) => (
+                        {['/Home', '/Parts', '/About', '/Warranty', '/FAQ','/Shipping', '/Contact'].map((path, index) => (
                             <li key={index} className="hover:text-red-600 pb-3 text-[1rem] py-2 md:px-6 text-center transform transition-transform hover:translate-y-1">
                                 <Link to={path.toLowerCase()} onClick={() => setNavbar(false)}>
                                     <div>
