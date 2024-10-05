@@ -131,7 +131,7 @@ function Navbar() {
                         )}
                     </div>
                     {isLoggedIn && userDropdown && (
-                        <div className="absolute right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
+                        <div className="absolute top-2 right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
                             <div
                                 className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
                             >
