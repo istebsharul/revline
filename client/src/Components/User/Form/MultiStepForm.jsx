@@ -88,7 +88,8 @@ const MultiStepForm = () => {
 
         // Destructure userData and vehicleData for cleaner code
         const { name, email, phone, zipcode } = userData;
-        console.log([vehicleData]);
+        // console.log([vehicleData]);
+        console.log(email);
 
         // Define the promise
         const postRequest = axios.post('/api/v1/customer/create', {
