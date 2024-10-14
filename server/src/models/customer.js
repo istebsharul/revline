@@ -1,5 +1,24 @@
 import mongoose from "mongoose";  // Corrected import statement
 
+const OrderInfoSchema = new mongoose.Schema({
+  orderId: { 
+    type: String,  // Use ObjectId for order references
+    trim: true,  // Assuming there's an Order model to reference
+  },
+  requestDate: { 
+    type: Date, 
+    trim: true
+  },
+  part: { 
+    type: String,
+    trim:true 
+  },
+  quoteNumber:{
+    type:String,
+    trim: true
+  }
+}, { _id: false });  // Prevent creation of _id for each order info object
+
 const CustomerSchema = new mongoose.Schema({
   name: { 
     type: String, 
@@ -41,6 +60,7 @@ const CustomerSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid ZIP code!`
     }
   },
+  orderInfo: [OrderInfoSchema],
 }, { timestamps: true });  // Add timestamps option
 
 const Customer = mongoose.model('Customer', CustomerSchema);

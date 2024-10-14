@@ -45,7 +45,7 @@ const OrderSchema = new mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Customer',
-    required: true,
+    // required: true,
   },
   request_date: { type: Date, default: Date.now },
   assignee: { type: String, trim: true },
@@ -54,7 +54,7 @@ const OrderSchema = new mongoose.Schema({
     cost_price: { type: Number },
     shipping_size: { type: String, trim: true },
     shipping_cost: { type: Number, trim: true },
-    shipping_speed: { type: String, trim: true },
+    shipping_speed: { type: String, trim: true, default:'Standard' },
     quoted_price: { type: Number, trim: true },
     surcharge: { type: Number, trim: true },
     gross_profit: { type: Number, trim: true },

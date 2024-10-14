@@ -6,9 +6,6 @@ const SendQuotation = ({ orderDetails }) => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    useEffect(() => {
-        console.log(orderDetails);
-    }, [orderDetails]);
 
     const handleSendQuotation = async () => {
         if (!orderDetails?.pricing_details?.quoted_price) {

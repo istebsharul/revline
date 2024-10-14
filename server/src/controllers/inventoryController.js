@@ -52,6 +52,10 @@ export const createInventoryEntry = asyncErrors(async (req, res) => {
         await inventory.save();
         logger.info(`Inventory entry created for product: ${product._id}`);
 
+        // Calculate and log the response size
+        const responseSize = Buffer.byteLength(JSON.stringify(inventory), 'utf8');
+        console.log(`Inventory size: ${responseSize} bytes`);
+
         res.status(201).json({ product, inventory });
     } catch (error) {
         logger.error(`Error creating product and inventory entry: ${error.message}`);

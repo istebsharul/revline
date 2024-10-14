@@ -1,38 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import TicketsList from '../Dashboard/TicketsList';
 
+const fetchTickets = async ({ queryKey }) => {
+    const [, { page, limit }] = queryKey;
+    const response = await axios.get(`/api/v1/tickets/ticket`, {
+        params: {
+            page,
+            limit
+        }
+    });
+    return response.data;
+};
+
 function TicketsWidget() {
     const [isTicketsOpen, setIsTicketsOpen] = useState(true);
-    const [tickets, setTickets] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1); // Track the current page
-    const [totalPages, setTotalPages] = useState(1);   // Total pages for pagination
     const ticketsPerPage = 30;                         // Set max tickets per page
 
-    useEffect(() => {
-        const fetchTickets = async () => {
-            setLoading(true);
-            try {
-                const response = await axios.get(`/api/v1/tickets/ticket`, {
-                    params: {
-                        page: currentPage,
-                        limit: ticketsPerPage
-                    }
-                });
-                setTickets(response.data.tickets);
-                setTotalPages(response.data.totalPages);
-            } catch (error) {
-                console.error('Error fetching tickets:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    // React Query to fetch tickets with stale time of 1 hour
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['tickets', { page: currentPage, limit: ticketsPerPage }],
+        queryFn: fetchTickets,
+        staleTime: 3600000, // 1 hour in milliseconds
+        keepPreviousData: true, // Keeps previous data while fetching new data
+    });
 
-        fetchTickets();
-    }, [currentPage]); // Fetch tickets when currentPage changes
-
+    const tickets = data?.tickets || [];
+    const totalPages = data?.totalPages || 1;
     const openTicketsCount = tickets.filter(ticket => ticket.status !== 'Closed').length;
 
     const goToPreviousPage = () => {
@@ -55,7 +52,14 @@ function TicketsWidget() {
 
             {isTicketsOpen && (
                 <>
-                    <TicketsList tickets={tickets} loading={loading} />
+                    {isLoading ? (
+                        <p>Loading tickets...</p>
+                    ) : error ? (
+                        <p>Error fetching tickets.</p>
+                    ) : (
+                        <TicketsList initialTickets={tickets} />
+                    )}
+
                     {/* Pagination Controls */}
                     <div className="flex justify-center items-center text-sm space-x-4 mt-2">
                         <button
@@ -74,7 +78,6 @@ function TicketsWidget() {
                             Next
                         </button>
                     </div>
-
                 </>
             )}
         </div>

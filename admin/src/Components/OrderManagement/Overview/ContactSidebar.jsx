@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FaPhone, FaEnvelope, FaTasks, FaVideo, FaRegCalendarAlt, FaCopy } from 'react-icons/fa'; // Import FaCopy
-import axios from 'axios';
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 
-const ContactSidebar = ({ customer, orderId }) => {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+const ContactSidebar = ({ customer, order_id}) => {
+  const [orders, setOrders] = useState(customer?.orderInfo);
+  const [loading, setLoading] = useState(false);  // Assuming orders are already passed in customer
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -27,24 +26,6 @@ const ContactSidebar = ({ customer, orderId }) => {
     ? formatDate(customer.createdAt)
     : 'No Date Available';
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      if (customer?._id) {
-        try {
-          const response = await axios.get(`/api/v1/orders/${customer._id}`);
-          console.log(response.data);
-          setOrders(response.data);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchOrders();
-  }, [customer]);
-
   // Function to copy order ID to clipboard
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -53,6 +34,7 @@ const ContactSidebar = ({ customer, orderId }) => {
       console.error('Failed to copy: ', err);
     });
   };
+
 
   return (
     <div className="w-1/4 h-screen-minus-14 p-2 rounded-md bg-white shadow-md flex flex-col">
@@ -87,19 +69,21 @@ const ContactSidebar = ({ customer, orderId }) => {
             <p className="text-sm text-gray-500">Loading orders...</p>
           ) : error ? (
             <p className="text-sm text-red-500">Error fetching orders: {error}</p>
-          ) : orders.length > 0 ? (
-            <div className="space-y-2">
+          ) : orders && orders.length > 0 ? (
+            <div className="space-y-2 my-2">
               {orders.slice().reverse().map((order) => (  // Reverse the orders array here
-                <div key={order._id} className={`border-b ${orderId === order._id ? 'bg-white' : 'shadow-none'} rounded-md shadow-lg last:border-b-0 p-3 space-y-1`}>
+                <div key={order.orderId} 
+                  onClick={()=>{navigate(`/sales-management/overview/${order.orderId}`)}}
+                  className={`border-b ${order_id === order.orderId ? 'bg-white' : 'shadow-none cursor-pointer'} hover:bg-white hover:shadow-md rounded-md shadow-lg last:border-b-0 p-3 space-y-1`}>
                   <div className="flex items-center justify-between">
-                    <p className="font-semibold text-sm">Order ID: {order._id}</p>
+                    <p className="font-semibold text-sm">Order ID: {order.orderId.slice(-6)}</p>
                     <FaCopy
                       className="text-gray-500 cursor-pointer"
-                      onClick={() => copyToClipboard(order._id)}
+                      onClick={() => copyToClipboard(order.orderId.slice(-6))}
                     />
                   </div>
-                  <p className="text-sm">Date: {formatDate(order.request_date)}</p>
-                  <p className="text-sm">Parts: {order.order_summary.part_name}</p>
+                  <p className="text-sm">Date: {formatDate(order.requestDate)}</p>
+                  <p className="text-sm">Parts: {order.part}</p>
                 </div>
               ))}
             </div>

@@ -3,7 +3,8 @@ import TicketItem from './TicketItem';
 import TicketForm from './TicketForm';
 import { FaPlus } from 'react-icons/fa';
 
-const TicketsList = ({ tickets, loading }) => {
+const TicketsList = ({ initialTickets, loading }) => {
+  const [tickets,setTickets] = useState(initialTickets);
   const [showForm, setShowForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -58,7 +59,7 @@ const TicketsList = ({ tickets, loading }) => {
         </button>
       </div>
 
-      {showForm && <TicketForm onClose={() => setShowForm(false)} />}
+      {showForm && <TicketForm setShowForm={setShowForm} />}
 
       <div className="flex items-start justify-center h-40 max-h-xl overflow-y-auto">
         {loading ? (

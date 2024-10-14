@@ -117,7 +117,7 @@ const OrderList = ({ orders }) => {
                     <div className='w-20'>Order ID</div>
                     <div className='w-20'>Quote No.</div>
                     <div className="w-40">Name</div>
-                    <div className="w-20">Date</div>
+                    <div className="w-40">Date</div>
                     <div className="w-60">Email</div>
                     <div className="w-20">Phone</div>
                     <div className="w-20">Actions</div>

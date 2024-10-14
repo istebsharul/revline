@@ -10,7 +10,7 @@ const CustomerSupport = ({orderId}) => {
   };
 
   return (
-    <div className="flex flex-col items-start p-4 mt-4 bg-gray-50 border-t">
+    <div className="flex flex-col items-start p-6 bg-gray-50 border-t">
       <h3 className="text-sm font-medium mb-2">Need Help? Contact Customer Support</h3>
       <p className="text-xs text-gray-500">If you have any issues or need assistance with your order, feel free to reach out to our customer support team:</p>
       <p className="text-xs text-gray-500"><strong>Email:</strong> support@revlineautoparts.com</p>

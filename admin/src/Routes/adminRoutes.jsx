@@ -27,7 +27,7 @@ const AdminRoutes = () => (
       <Route index element={<AdminOverviewPage />} />
       <Route path='sales-management'>
         <Route index element={<SalesManagement />} />
-        <Route path='overview' element={<OrderOverview />} />
+        <Route path='overview/:orderId' element={<OrderOverview />} />
       </Route>
       <Route path="customer-management" element={<CustomerManagement />} />
       <Route path="communication-center" element={<CommunicationCenterPage />} />

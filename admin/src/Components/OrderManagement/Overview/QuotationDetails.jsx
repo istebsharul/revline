@@ -2,7 +2,7 @@ import React from 'react';
 import {FaDownload} from 'react-icons/fa';
 
 const QuotationDetails = ({ quotationDetails = {} }) => {
-    console.log(quotationDetails);
+    // console.log(quotationDetails);
     const pdfBinary = quotationDetails?.quotationPdf?.data?.data;
 
     const getBase64String = (binaryData) => {

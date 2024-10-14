@@ -21,7 +21,7 @@ function CustomerManagement() {
     const { data, error, isLoading } = useQuery({
         queryKey: ['customers', { page, limit }],
         queryFn: fetchCustomers,
-        staleTime: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
+        staleTime: 24 * 60 * 60 * 1000, // 1 week in milliseconds
         keepPreviousData: true, // Keeps previous data while fetching new data
     });
 

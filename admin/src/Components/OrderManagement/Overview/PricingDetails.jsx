@@ -31,7 +31,6 @@ const PricingDetails = ({ pricingDetails = {}, isEditing, setOrderDetails }) => 
         ...prev,
         [name]: value,
       };
-
       // Calculate gross profit after updating localPricingDetails
       if (name !== 'gross_profit') {
         const grossProfit = calculateGrossProfit(); // Calculate gross profit
@@ -53,7 +52,7 @@ const PricingDetails = ({ pricingDetails = {}, isEditing, setOrderDetails }) => 
   };
 
   return (
-    <div className="p-4 bg-white shadow rounded-md">
+    <div className="p-4 bg-white shadow rounded-md mt-2">
       <h3 className="text-lg font-semibold mb-4">Pricing Details</h3>
       <div className="grid grid-cols-4 gap-4">
         <div>

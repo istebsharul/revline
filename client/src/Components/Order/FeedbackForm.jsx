@@ -24,14 +24,14 @@ const FeedbackForm = ({ onSubmit }) => {
   };
 
   return (
-    <div className='w-full flex flex-col justify-around items-center pb-4'>
-      <p className='font-bold mb-2'>Please tell us why?</p>
+    <div className='w-full flex flex-col justify-around items-center pb-2'>
+      <p className='text-xl font-medium mb-4'>Please tell us why?</p>
 
       {/* Dropdown for reasons */}
       <select
         value={selectedReason}
         onChange={handleReasonChange}
-        className='w-1/2 border-b border-black focus:outline-none p-1 mb-4'
+        className='w-1/2 focus:outline-none px-4 py-2 mb-4 rounded-md border'
       >
         <option value='' disabled>
           Select a reason

@@ -2,9 +2,6 @@ import React, { useEffect } from 'react';
 
 const CustomerPersonalInfo = ({ customer = {},quote_number, isEditing, setOrderDetails }) => {
 
-  useEffect(()=>{
-    console.log(quote_number);
-  })
   const handleChange = (e) => {
     setOrderDetails((prev) => ({
       ...prev,
