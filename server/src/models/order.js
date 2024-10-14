@@ -62,8 +62,7 @@ const OrderSchema = new mongoose.Schema({
   shipping_details: {
     customer: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Customer',
-      required: true
+      ref: 'Customer'
     },
     customer_name: { type: String, trim: true },
     customer_email: { type: String, trim: true },
