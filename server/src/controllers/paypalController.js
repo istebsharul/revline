@@ -14,6 +14,7 @@ const router = express.Router();
 // Route to create a PayPal payment
 export const createPayment = asyncErrors(async (req, res) => {
   try {
+    console.log("Payment request for OrderId: ",req.body.orderId);
     logger.info('Create Payment Request:', req.body);
     const { orderId } = req.body;
 
