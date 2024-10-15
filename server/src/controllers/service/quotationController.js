@@ -3,6 +3,7 @@ import sendMail from '../../utils/sendMail.js';
 import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import Order from '../../models/order.js';
 import logger from '../../utils/logger.js';
+import Customer from '../../models/customer.js';
 
 // Function to calculate sales tax based on location and total price
 // const calculateSalesTax = (totalPrice, state) => {
@@ -78,7 +79,7 @@ const generateQuoteNumber = async () => {
     }
   }
 
-  return 'RN'+quoteNumber;
+  return 'RL'+quoteNumber;
 };
 
 export const sendQuotation = asyncErrors(async (req, res) => {

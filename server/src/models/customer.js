@@ -7,6 +7,7 @@ const OrderInfoSchema = new mongoose.Schema({
   },
   requestDate: { 
     type: Date, 
+    default: Date.now,
     trim: true
   },
   part: { 
