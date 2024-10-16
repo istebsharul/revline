@@ -105,6 +105,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             newCustomer = new Customer({ name, email, phone, zipcode, orderInfo: [orderInfo] });
             await newCustomer.save();
             newOrder.customer = newCustomer._id;
+            newOrder.shipping_details.customer = newCustomer._id;
             await newOrder.save();
         }
 
