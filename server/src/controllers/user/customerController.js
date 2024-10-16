@@ -5,6 +5,7 @@ import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import logger from '../../utils/logger.js';
 import sendMail from '../../utils/sendMail.js';
 import Part from '../../models/parts.js';
+import emailQueue from '../../queue/emailQueue.js';
 
 // Get all customers
 export const getAllCustomers = asyncErrors(async (req, res) => {
@@ -72,17 +73,16 @@ export const getCustomerById = asyncErrors(async (req, res) => {
 export const createCustomer = asyncErrors(async (req, res) => {
     try {
         const { name, email, phone, zipcode, vehicleData } = req.body;
-        logger.info(email);
 
         // Run queries in parallel
-        let [existingCustomer, part] = await Promise.all([
+        const [existingCustomer, part] = await Promise.all([
             Customer.findOne({ $or: [{ email }, { phone }] }),
             Part.findOne({ part_name: vehicleData.part })
         ]);
 
         // Create order
         const newOrder = new Order({
-            order_summary: { ...vehicleData,part_name:vehicleData.part },
+            order_summary: { ...vehicleData, part_name: vehicleData.part },
             pricing_details: { shipping_size: part.size, shipping_cost: part.shipping_cost },
             shipping_details: { customer: existingCustomer ? existingCustomer._id : null },
             order_disposition_details: { agent_notes: vehicleData.message }
@@ -107,24 +107,20 @@ export const createCustomer = asyncErrors(async (req, res) => {
             await newOrder.save();
         }
 
-        // Send email for first visit
+        // Add email to queue
         const registrationLink = `https://yourcompany.com/signup?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
-
-
-        // Send emails asynchronously
-        sendMail({ 
-            email, 
-            subject: `Order Confirmation`, 
-            message: `Please register yourself by clicking the link attached to this mail. You will receive quotation over email and you can check that in order section after successful registration. ${registrationLink}\n\nBest regards,\n Revline Autoparts`, 
+        await emailQueue.add({
+            email,
+            subject: 'Order Confirmation',
+            message: `Please register yourself by clicking the link. ${registrationLink}\n\nBest regards,\nRevline Autoparts`
         });
 
-        return res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
+        res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
     } catch (error) {
-        logger.error('Error:', error);
-        return res.status(500).json({ message: 'Failed to create customer and order', error: error.message });
+        console.error('Error:', error);
+        res.status(500).json({ message: 'Failed to create customer and order', error: error.message });
     }
 });
-
 
 export const updateCustomer = asyncErrors(async (req, res) => {
     try {
@@ -163,4 +159,4 @@ export const deleteCustomer = asyncErrors(async (req, res) => {
         logger.error(`Error deleting customer: ${error.message}`);
         res.status(500).json({ message: 'Internal server error' });
     }
-});
+}); 

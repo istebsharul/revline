@@ -37,7 +37,7 @@ const PaymentSection = ({ orderId, paymentDetails, orderStatus, quotationsStatus
                 }`}
               disabled={paymentDetails?.payment_status === 'Completed'}
             >
-              {paymentDetails.payment_status === 'Completed' ? 'Paid' : 'Pay'}
+              {paymentDetails?.payment_status === 'Completed' ? 'Paid' : 'Pay'}
             </button>
           </div>
           <div className="w-full">
