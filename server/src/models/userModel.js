@@ -20,7 +20,7 @@ const userSchema = new Schema(
             validate: [validator.isEmail, 'Please enter a valid email'],
             trim: true,
         },
-        contactNumber: {
+        phone: {
             type: String,
             trim: true
         },
@@ -29,10 +29,7 @@ const userSchema = new Schema(
             required: [true, 'Please enter your password'],
             select: false, // Exclude from query results by default
         },
-        zipCode: {
-            type: String,
-            trim: true,
-        },
+        customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: false, },
         createdAt: {
             type: Date,
             default: Date.now,
@@ -45,7 +42,7 @@ const userSchema = new Schema(
         resetPasswordExpires: Date,
     },
     {
-        timestamps:true
+        timestamps: true
     }
 );
 
@@ -63,9 +60,9 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.comparePassword = async function (password) {
     console.log("Compare Password Hitttt");
     const newPass = await bcrypt.compare(password, this.password);
-    console.log("From Login",password);
-    console.log("From DB",this.password);
-    return newPass ;
+    console.log("From Login", password);
+    console.log("From DB", this.password);
+    return newPass;
 };
 
 // Method to generate a JWT token

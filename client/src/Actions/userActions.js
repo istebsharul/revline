@@ -35,7 +35,8 @@ export const login = (email, password) => {
             dispatch({ type: LOGIN_SUCCESS, payload: user });
             return { isLoggedIn: true };  
         } catch (error) {
-            toast.error('Login Failed: ' + error.message);
+            toast.error('Login Failed: ' + error.response.data.message);
+            console.error(error);
             dispatch({ type: LOGIN_FAILURE, payload: error.message });
         }
     };
@@ -48,11 +49,11 @@ export const loadUser = () => async (dispatch) => {
             "/api/v1/auth/profile"
         );
         // console.log("data retrieved using loadUser", data);
-        console.log('User data loaded successfully');
+        console.log('User data loaded successfully',data);
         dispatch({ type: LOAD_SUCCESS, payload: data.user });
     } catch (error) {
         // toast.error('Failed to load user data: ' + error.response.data.message);
-        console.log(error.data.message)
+        // console.log(error.data.message)
         dispatch({ type: LOAD_FAILURE, payload: error.response.data.message });
     }
 };
@@ -75,7 +76,8 @@ export const signup = (name, email, password) => {
             dispatch({ type: SIGNUP_SUCCESS, payload: response.data });
             return { success: true, data: response.data };
         } catch (error) {
-            // toast.error('Signup Failed: ' + error.message);
+            toast.error('Signup Failed: ' + error.response.data.message);
+            // console.error(error);
             dispatch({ type: SIGNUP_FAILURE, payload: error.message.data });
             return { success: false, message: error.message };
         }

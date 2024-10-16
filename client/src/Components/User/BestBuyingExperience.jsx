@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaArrowUp } from 'react-icons/fa';
 import CountUp from 'react-countup';
-import ScrollTrigger from 'react-scroll-trigger';
 import { motion, useAnimation } from 'framer-motion';
 
-function BestBuyingExperience() {
+function BestBuyingExperience({ handleScroll }) {
     const [counterOn, setCounterOn] = useState(false);
     const controls = useAnimation();
+    const sectionRef = useRef(null);
+
+    useEffect(() => {
+        const handleScrollEvent = () => {
+            const rect = sectionRef.current.getBoundingClientRect();
+            if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                controls.start({ opacity: 1, y: 0 });
+                setCounterOn(true); // Start counting up when the element is in view
+            } else {
+                controls.start({ opacity: 0, y: 50 });
+                setCounterOn(false); // Stop counting up when the element exits
+            }
+        };
+
+        window.addEventListener('scroll', handleScrollEvent);
+        return () => {
+            window.removeEventListener('scroll', handleScrollEvent);
+        };
+    }, [controls]);
 
     return (
-        <div className='w-full flex flex-col justify-center items-center md:my-40 my-10'>
+        <div className='w-full flex flex-col justify-center items-center md:my-40 my-10' ref={sectionRef}>
             <div className='text-center md:py-10 py-5'>
                 <motion.h1
                     className='text-5xl font-inter tracking-tight'
@@ -29,17 +47,7 @@ function BestBuyingExperience() {
                 </motion.p>
             </div>
 
-            <ScrollTrigger
-                className="flex justify-center"
-                onEnter={() => {
-                    controls.start({ opacity: 1, y: 0 });
-                    setCounterOn(true); // Start counting up when the element is in view
-                }}
-                onExit={() => {
-                    controls.start({ opacity: 0, y: 50 });
-                    setCounterOn(false); // Stop counting up when the element exits
-                }}
-            >
+            <div className='flex justify-center'>
                 <div className='md:w-3/5 w-5/6 flex md:flex-row flex-col md:space-x-3 md:space-y-0 space-y-3'>
                     <motion.div
                         className='relative md:w-1/2 hover:shadow-2xl rounded-xl'
@@ -83,7 +91,7 @@ function BestBuyingExperience() {
                                 <h1 className='text-white font-Medium font-inter md:text-5xl text-2xl tracking-tight'>
                                     Understand<br />the process
                                 </h1>
-                                <a className='w-[3rem] h-[3rem] mx-9 bg-white rounded-full flex justify-center items-center'>
+                                <a onClick={handleScroll} className='w-[3rem] h-[3rem] mx-9 bg-white hover:bg-white/90 rounded-full flex justify-center items-center'>
                                     <FaArrowUp className='text-2xl rotate-45 text-red-600' />
                                 </a>
                             </div>
@@ -115,7 +123,7 @@ function BestBuyingExperience() {
                         </motion.div>
                     </motion.div>
                 </div>
-            </ScrollTrigger>
+            </div>
         </div>
     );
 }

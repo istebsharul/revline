@@ -6,7 +6,7 @@ import {
     createCustomer,
     updateCustomer,
     deleteCustomer,
-} from '../controllers/customerController.js';
+} from '../controllers/user/customerController.js';
 
 const router = Router();
 

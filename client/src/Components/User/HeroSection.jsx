@@ -1,15 +1,15 @@
-import React from 'react'
-import MultiStepForm from './Form'
+import React, { forwardRef } from 'react'
+import MultiStepForm from './Form/MultiStepForm';
 
-function HeroSection() {
+const HeroSection = forwardRef((props, ref) => {
   return (
-    <div className='relative w-full h-screen flex flex-col justify-center items-center md:pt-20 pt-0 z-10 bg-black'>
+    <div ref={ref} id={props.id} className='relative w-full md:h-screen flex flex-col justify-center items-center md:pt-20 pt-40 z-10 bg-black'>
       <div className='2xl:w-3/5 md:w-4/6 flex md:flex-row flex-col justify-center items-center'>
-        <div className='md:w-3/5 flex flex-col justify-center items-start'>
-          <h1 className='2xl:w-4/5 md:w-full w-1/2 md:text-left text-center font-inter text-white md:text-6xl text-4xl font-bold leading-tight pt-16'>
+        <div className='md:w-3/5 flex flex-col justify-center md:items-start items-center'>
+          <h1 className='2xl:w-4/5 md:w-full w-1/2 md:text-left text-center font-inter text-white md:text-6xl text-4xl font-medium leading-tight pt-16'>
             Parts for Every Make and Model
           </h1>
-          <div>
+          <div className='flex justify-center items-center'>
             <video
               src="https://res.cloudinary.com/drszvaldf/video/upload/v1725348596/revline/bzn0s0itovnonddecmnx.mp4"
               className='md:w-[35rem] w-1/2'
@@ -21,8 +21,10 @@ function HeroSection() {
           </div>
         </div>
 
-        <div className='md:w-1/2 w-4/5'>
-          <MultiStepForm />
+        <div className='md:w-1/2 w-full flex justify-end'>
+          <div className='w-4/5'>
+            <MultiStepForm />
+          </div>
         </div>
       </div>
       <div className='w-4/6 h-fit relative bg-red-400 md:my-10 my-5 flex'>
@@ -48,6 +50,6 @@ function HeroSection() {
       </div>
     </div>
   )
-}
+});
 
-export default HeroSection
+export default HeroSection;

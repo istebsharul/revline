@@ -1,28 +1,37 @@
 import express from 'express';
 import {
-    createOrder,
-    getOrders,
-    getOrderById,
-    updateOrder,
-    deleteOrder
-} from '../controllers/orderController.js';
+  createOrder,
+  getAllOrders,
+  getOrderById,
+  updateOrder,
+  deleteOrder,
+  getOrderByCustomerId
+} from '../controllers/orderController.js';  // Adjust the import path as per your directory structure
+import { getOrderByIdUser } from '../controllers/user/userOrderController.js';
 
 const router = express.Router();
 
-// Route to create a new order
+// Create a new order
 router.post('/create', createOrder);
 
-// Route to get all orders
-router.get('/all', getOrders);
+// Get all orders
+router.get('/all', getAllOrders);
 
-// Route to get a specific order by ID
+// Get a specific order by ID
 router.get('/:id', getOrderById);
 
-// Route to update an order by ID
+// Get order by Order Id User
+router.get('/user/:id',getOrderByIdUser);
+
+// Get order by Customer Id
+router.get('/customer/:id',getOrderByCustomerId)
+
+// router.get('/order/:id',getSingleOrderDetails);
+
+// Update an order by ID
 router.put('/:id', updateOrder);
 
-// Route to delete an order by ID
+// Delete an order by ID
 router.delete('/:id', deleteOrder);
-
 
 export default router;

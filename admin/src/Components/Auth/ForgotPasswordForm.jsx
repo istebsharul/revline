@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { forgotPassword } from '../../Actions/userActions';
+import { forgotPassword } from '../../Actions/adminActions';
 import toast from "react-hot-toast";
 
 function ForgotPassword() {

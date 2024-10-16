@@ -1,70 +1,104 @@
-// src/pages/CustomerManagement.js
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 import CustomerList from '../../Components/CustomerManagement/CustomerList';
 import AddCustomerForm from '../../Components/CustomerManagement/AddCustomerForm';
+import toast from 'react-hot-toast';
 
-const CustomerManagement = () => {
-  const [customers, setCustomers] = useState([]);
-  const [filteredCustomers, setFilteredCustomers] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false); // State to toggle form visibility
-
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await fetch('/customerdata.json');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setCustomers(data);
-        setFilteredCustomers(data);
-      } catch (error) {
-        setError('Failed to fetch customers');
-        console.error('Failed to fetch customers:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCustomers();
-  }, []);
-
-  const handleAddCustomer = (newCustomer) => {
-    setCustomers([...customers, newCustomer]);
-    setFilteredCustomers([...customers, newCustomer]);
-    setShowForm(false); // Hide the form after adding
-  };
-
-  return (
-    <div className="w-full flex flex-col min-h-screen bg-gray-100">
-      <header className="w-full bg-white shadow-md mb-4">
-        <div className="w-full container mx-auto py-4 px-6 flex flex-col items-center">
-          <h1 className="w-full text-3xl font-semibold text-left text-gray-800">Customer Management</h1>
-        </div>
-      </header>
-      <main className="w-full container mx-auto flex flex-col gap-6 px-6">
-        {loading && <div className="p-4 bg-gray-100 text-gray-800">Loading...</div>}
-        {error && <div className="p-4 bg-red-100 text-red-800">{error}</div>}
-        <div className='flex gap-4'>
-          <div className="flex-shrink-0 w-full bg-white shadow-md rounded-lg p-4">
-            <CustomerList customers={filteredCustomers} />
-          </div>
-        </div>
-
-        {showForm && (
-          <AddCustomerForm onAddCustomer={handleAddCustomer} />
-        )}
-        <button
-          onClick={() => setShowForm(!showForm)}
-          className="w-1/6 bg-blue-500 text-white p-2 rounded mb-4"
-        >
-          {showForm ? 'Cancel' : 'Add New Customer'}
-        </button>
-      </main>
-    </div>
-  );
+const fetchCustomers = async ({ queryKey }) => {
+    const [_key, { page, limit }] = queryKey;
+    const { data } = await axios.get('/api/v1/customer/list', { params: { page, limit } });
+    return data;
 };
+
+function CustomerManagement() {
+    const [showForm, setShowForm] = useState(false);
+    const [page, setPage] = useState(1);
+    const limit = 10;
+    const queryClient = useQueryClient();
+
+    // React Query to fetch customers with stale time of 1 week (7 days)
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['customers', { page, limit }],
+        queryFn: fetchCustomers,
+        staleTime: 24 * 60 * 60 * 1000, // 1 week in milliseconds
+        keepPreviousData: true, // Keeps previous data while fetching new data
+    });
+
+    const customers = data?.customers || [];
+    const totalPages = data?.pagination?.totalPages || 1;
+
+    // Handle pagination
+    const handleNextPage = () => {
+        if (page < totalPages) setPage(page + 1);
+    };
+
+    const handlePrevPage = () => {
+        if (page > 1) setPage(page - 1);
+    };
+
+    // Handle adding a customer
+    const handleAddCustomer = async (newCustomer) => {
+        try {
+            // Add the new customer to the server
+            const res = await axios.post('/api/v1/customer/add', newCustomer);
+            // Optionally, you can update the local cache with the new customer
+            queryClient.setQueryData(['customers', { page, limit }], (oldData) => ({
+                ...oldData,
+                customers: [...oldData.customers, res.data],
+            }));
+            setShowForm(false); // Hide the form after adding
+            toast.success('Customer added successfully!');
+        } catch (error) {
+            console.error('Error adding customer:', error);
+            toast.error('Failed to add customer.');
+        }
+    };
+
+    return ( 
+        <div>
+            <main className="w-full mx-auto flex flex-col">
+                {isLoading && <div className="p-4 bg-gray-100 text-gray-800">Loading...</div>}
+                {error && <div className="p-4 bg-red-100 text-red-800">{error.message}</div>}
+                {showForm && (
+                    <AddCustomerForm onSubmit={handleAddCustomer} />
+                )}
+                <div className="flex gap-4">
+                    <div className="flex-shrink-0 w-full bg-white shadow-md rounded-lg p-4">
+                        <CustomerList 
+                            setShowForm={setShowForm} 
+                            showForm={showForm} 
+                            customers={customers} 
+                        />
+                    </div>
+                </div>
+
+                {/* Pagination Controls */}
+                <div className="flex flex-col justify-center items-center gap-4 mt-4">
+                    <span className="text-gray-700">
+                        Page {page} of {totalPages}
+                    </span>
+                    <div className='w-full flex justify-center items-center gap-2'>
+                        <button
+                            onClick={handlePrevPage}
+                            disabled={page === 1}
+                            className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                        >
+                            Previous
+                        </button>
+                        
+                        <button
+                            onClick={handleNextPage}
+                            disabled={page === totalPages}
+                            className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    );
+}
 
 export default CustomerManagement;

@@ -1,10 +1,10 @@
 import User from '../models/userModel.js';
+import Customer from '../models/customer.js';
 import logger from '../utils/logger.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import sendToken from '../utils/jwt.js';
 import sendMail from '../utils/sendMail.js';
 import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
 
 /**
  * Register a new user.
@@ -12,23 +12,46 @@ import bcrypt from 'bcryptjs';
  * @param {import('express').Response} res - The response object.
  */
 export const registerUser = asyncErrors(async (req, res) => {
-    const { name, email, contactNumber, password, zipCode } = req.body;
+    const { name, email, phone, password } = req.body;
 
-    // Create a new user with the provided details
-    const user = await User.create({
-        name,
-        email,
-        contactNumber,
-        password, // Use password instead of password
-        zipCode,
-    });
+    try {
+        // Log attempt to register a user
+        logger.info('Attempting to register user', { email });
 
-    // Send token and response
-    sendToken(user, 201, res);
+        const customer = await Customer.findOne({ email });
 
-    // Log successful registration
-    logger.info(`User registered successfully: ${email}`);
+        if (!customer) {
+            logger.warn('Registration failed: Customer not found', { email });
+            return res.status(400).json({
+                success: false,
+                message: 'Fill up the Parts Form Before Register',
+            });
+        }
+
+        // Create a new user with the provided details
+        const user = await User.create({
+            name,
+            email,
+            phone,
+            password, // Ensure you handle password securely
+            customer: customer._id
+        });
+
+        // Send token and response
+        sendToken(user, 201, res);
+
+        // Log successful registration
+        logger.info('User registered successfully', { email, userId: user._id });
+    } catch (error) {
+        // Log any error that occurs during registration
+        logger.error('Error registering user', { email, error: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
 });
+
 
 /**
  * Log in an existing user.
@@ -62,7 +85,6 @@ export const loginUser = asyncErrors(async (req, res) => {
     logger.info(`User logged in successfully: ${email}`);
 });
 
-
 export const logoutUser = asyncErrors(async (req, res) => {
     res.cookie('token', null, {
         expires: new Date(Date.now()),
@@ -75,7 +97,7 @@ export const logoutUser = asyncErrors(async (req, res) => {
 });
 
 export const userProfile = asyncErrors(async (req, res) => {
-    
+
     console.log("User Id", req.user._id);
 
     const user = await User.findById(req.user._id);
@@ -130,7 +152,7 @@ export const forgotPassword = asyncErrors(async (req, res) => {
     await user.save();
 
     // Send the reset token via email
-    const resetUrl = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`;
+    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
     const message = `You are receiving this email because you (or someone else) has requested to reset your password. Please make a PUT request to:\n\n${resetUrl}`;
 
     try {

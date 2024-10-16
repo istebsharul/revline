@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const isLoggedIn = useSelector((state)=>state.auth.user);
+  const isLoggedIn = useSelector((state)=>state.auth.admin);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

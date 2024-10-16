@@ -2,33 +2,20 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select'; // Import React Select
 import data from '../../data/data.json';
 import { TiTick } from "react-icons/ti";
+import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
-const MultiStepForm = () => {
+// Checking Client Update
+
+const MultiStepForm1 = () => {
     const [step, setStep] = useState(1);
     const [noOfParts, setNoOfParts] = useState();
-    // const [data,setData] =  useState([]); 
-
-    // useEffect(()=>{
-    //     const fetchData = async() => {
-    //         try {
-    //             const response = await axios.get('/api/v1/inventory/list');
-    //             console.log(response.data);
-    //             setData(response);
-    //         } catch (error) {
-    //             console.error(error.message);
-    //         }
-    //     }
-
-    //     fetchData();
-    // },[])
 
     const [userData, setUserData] = useState({
-        fullName: '',
+        name: '',
         email: '',
-        contactNumber: '',
-        zipCode: '',
-        captcha: ''
+        phone: '',
+        zipcode: '',
     });
 
     const [vehicleData, setVehicleData] = useState({
@@ -37,7 +24,7 @@ const MultiStepForm = () => {
         model: '',
         carPart: '',
         variant: '',
-        specification: '',
+        transmission: '',
         vin: '',
         message: ''
     });
@@ -48,7 +35,7 @@ const MultiStepForm = () => {
     const [filteredModels, setFilteredModels] = useState([]);
     const [filteredCarParts, setFilteredCarParts] = useState([]);
     const [filteredVariants, setFilteredVariants] = useState([]);
-    const [filteredSpecifications, setFilteredSpecifications] = useState([]);
+    const [filteredTransmission, setFilteredTransmission] = useState([]);
 
     // Extract unique years
     useEffect(() => {
@@ -68,7 +55,7 @@ const MultiStepForm = () => {
             setFilteredModels([]);
             setFilteredCarParts([]);
             setFilteredVariants([]);
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.year]);
 
@@ -85,7 +72,7 @@ const MultiStepForm = () => {
             setFilteredModels(models.map(model => ({ value: model, label: model })));
             setFilteredCarParts([]);
             setFilteredVariants([]);
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.make, vehicleData.year]);
 
@@ -102,7 +89,7 @@ const MultiStepForm = () => {
             setNoOfParts(carParts.length);
             setFilteredCarParts(carParts.map(part => ({ value: part, label: part })));
             setFilteredVariants([]);
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.model, vehicleData.make, vehicleData.year]);
 
@@ -119,24 +106,24 @@ const MultiStepForm = () => {
             )];
             setNoOfParts(variants.length);
             setFilteredVariants(variants.map(variant => ({ value: variant, label: variant })));
-            setFilteredSpecifications([]);
+            setFilteredTransmission([]);
         }
     }, [vehicleData.carPart, vehicleData.model, vehicleData.make, vehicleData.year]);
 
-    // Filter specifications based on selected variant
+    // Filter transmission based on selected variant
     useEffect(() => {
         if (vehicleData.variant) {
-            const specifications = [...new Set(data
+            const transmission = [...new Set(data
                 .filter(item =>
                     item.year === Number(vehicleData.year) &&
                     item.make === vehicleData.make &&
                     item.model === vehicleData.model &&
                     item.carPart === vehicleData.carPart &&
                     item.variant === vehicleData.variant
-                ).map(item => item.specification)
+                ).map(item => item.transmission)
             )];
-            setNoOfParts(specifications.length);
-            setFilteredSpecifications(specifications.map(spec => ({ value: spec, label: spec })));
+            setNoOfParts(transmission.length);
+            setFilteredTransmission(transmission.map(spec => ({ value: spec, label: spec })));
         }
     }, [vehicleData.variant, vehicleData.carPart, vehicleData.model, vehicleData.make, vehicleData.year]);
 
@@ -152,17 +139,16 @@ const MultiStepForm = () => {
     const validateStep2 = () => {
         const errors = {};
         if (!vehicleData.variant) errors.variant = 'Variant is required';
-        if (!vehicleData.specification) errors.specification = 'Specification is required';
+        if (!vehicleData.transmission) errors.transmission = 'Specification is required';
         return errors;
     };
 
     const validateStep3 = () => {
         const errors = {};
-        if (!userData.fullName) errors.fullName = 'Full Name is required';
+        if (!userData.name) errors.name = 'Full Name is required';
         if (!userData.email) errors.email = 'Email is required';
-        if (!userData.contactNumber) errors.contactNumber = 'Contact Number is required';
-        if (!userData.zipCode) errors.zipCode = 'Zip Code is required';
-        if (!userData.captcha) errors.captcha = 'Captcha is required';
+        if (!userData.phone) errors.phone = 'Contact Number is required';
+        if (!userData.zipcode) errors.zipcode = 'Zip Code is required';
         return errors;
     };
 
@@ -187,24 +173,74 @@ const MultiStepForm = () => {
         setStep(prevStep => prevStep - 1);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const formData = {
             vehicleData,
-            userData
+            userData,
         };
+        console.log(formData);
 
-        fetch('/api/form-submission', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
+        // Destructure userData and vehicleData for cleaner code
+        const { name, email, phone, zipcode } = userData;
+        console.log([vehicleData]);
+
+        // Define the promise
+        const postRequest = axios.post('/api/v1/customer/create', {
+            name,
+            email,
+            phone,
+            zipcode, // Include address as per the schema
+            vehicleData: vehicleData, // Corrected: Send vehicleData as an array
+        });
+
+        // Use toast.promise to handle the promise states
+        toast.promise(postRequest, {
+            loading: 'Submitting your request...',
+            success: 'Success! Your quotation request has been sent. Check your email for the details.',
+            error: 'Failed to create customer and vehicle data. Please try again.',
         })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch(error => console.error('Error:', error));
+            .then((response) => {
+                // Handle success response
+                console.log('Success:', response.data);
+
+                // Clear the form by resetting the state to initial values
+                setUserData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    zipcode: '',
+                });
+
+                setVehicleData({
+                    year: '',
+                    make: '',
+                    model: '',
+                    carPart: '',
+                    variant: '',
+                    transmission: '',
+                    vin: '',
+                    message: ''
+                });
+
+                setStep(1);  // Update the step after successful submission
+            })
+            .catch((error) => {
+                // Handle errors (axios will throw for HTTP errors as well)
+                if (error.response) {
+                    console.error('Error Response:', error.response.data);
+                    toast.error(`Error: ${error.response.data.message}`);  // Show error toast with response message
+                } else if (error.request) {
+                    console.error('Error Request:', error.request);
+                    toast.error('No response from server. Please try again.');  // Show error toast for no response
+                } else {
+                    console.error('Error:', error.message);
+                    toast.error(`Error: ${error.message}`);  // Show error toast for any other errors
+                }
+            });
     };
 
     return (
-        <div className="w-full max-w-md mx-auto md:mt-10 p-2 rounded-lg">
+        <div  className="w-full max-w-md mx-auto md:mt-10 p-2 rounded-lg">
             <div className='flex justify-center items-center p-2 m-2'>
                 <div className="w-4/5 flex items-center justify-center">
                     {[1, 2, 3].map((item, index) => (
@@ -313,13 +349,13 @@ const MultiStepForm = () => {
                                     <label className="block text-gray-200 text-sm p-1">Specification*</label>
                                     <Select
                                         className="w-full"
-                                        value={vehicleData.specification ? { value: vehicleData.specification, label: vehicleData.specification } : null}
-                                        onChange={option => setVehicleData({ ...vehicleData, specification: option.value })}
-                                        options={filteredSpecifications}
+                                        value={vehicleData.transmission ? { value: vehicleData.transmission, label: vehicleData.transmission } : null}
+                                        onChange={option => setVehicleData({ ...vehicleData, transmission: option.value })}
+                                        options={filteredTransmission}
                                         isDisabled={!vehicleData.variant}
                                         placeholder="Select Specification"
                                     />
-                                    {errors.specification && <p className="text-xs text-red-600">{errors.specification}</p>}
+                                    {errors.transmission && <p className="text-xs text-red-600">{errors.transmission}</p>}
                                 </div>
 
                                 <div >
@@ -327,6 +363,7 @@ const MultiStepForm = () => {
                                     <input
                                         type="text"
                                         className="w-full p-2 border rounded"
+                                        placeholder='Enter VIN'
                                         value={vehicleData.vin}
                                         onChange={e => setVehicleData({ ...vehicleData, vin: e.target.value })}
                                     />
@@ -337,6 +374,7 @@ const MultiStepForm = () => {
                                     <label className="block text-gray-200 text-sm p-1">Message</label>
                                     <textarea
                                         className="w-full p-2 border rounded"
+                                        placeholder='Enter a message'
                                         value={vehicleData.message}
                                         onChange={e => setVehicleData({ ...vehicleData, message: e.target.value })}
                                     />
@@ -350,23 +388,25 @@ const MultiStepForm = () => {
 
                     {step === 3 && (
                         <div>
-                            {noOfParts ? <div className='flex justify-center items-start p-1 text-red-500 text-lg font-semibold mb-1'><div>{vehicleData.year} {vehicleData.make} {vehicleData.model} {vehicleData.carPart} {vehicleData.variant} {vehicleData.specification}</div> <div className='h-min flex justify-center items-center text-md text-nowrap bg-red-600 text-white pl-2 pr-3 rounded ml-2'><TiTick className='mr-2' />In Stock</div></div> : <div></div>}
+                            {noOfParts ? <div className='flex justify-center items-start p-1 text-red-500 text-lg font-semibold mb-1'><div>{vehicleData.year} {vehicleData.make} {vehicleData.model} {vehicleData.carPart} {vehicleData.variant} {vehicleData.transmission}</div> <div className='h-min flex justify-center items-center text-md text-nowrap bg-red-600 text-white pl-2 pr-3 rounded ml-2'><TiTick className='mr-2' />In Stock</div></div> : <div></div>}
                             <div className='space-y-2'>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Full Name*</label>
                                     <input
                                         type="text"
                                         className="w-full p-2 border rounded"
-                                        value={userData.fullName}
-                                        onChange={e => setUserData({ ...userData, fullName: e.target.value })}
+                                        placeholder='Enter Name'
+                                        value={userData.name}
+                                        onChange={e => setUserData({ ...userData, name: e.target.value })}
                                     />
-                                    {errors.fullName && <p className="text-xs text-red-600">{errors.fullName}</p>}
+                                    {errors.name && <p className="text-xs text-red-600">{errors.name}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Email* </label>
                                     <input
                                         type="email"
                                         className="w-full p-2 border rounded"
+                                        placeholder='Enter Email'
                                         value={userData.email}
                                         onChange={e => setUserData({ ...userData, email: e.target.value })}
                                     />
@@ -377,20 +417,22 @@ const MultiStepForm = () => {
                                     <input
                                         type="tel"
                                         className="w-full p-2 border rounded"
-                                        value={userData.contactNumber}
-                                        onChange={e => setUserData({ ...userData, contactNumber: e.target.value })}
+                                        placeholder='Enter Contact Number'
+                                        value={userData.phone}
+                                        onChange={e => setUserData({ ...userData, phone: e.target.value })}
                                     />
-                                    {errors.contactNumber && <p className="text-xs text-red-600">{errors.contactNumber}</p>}
+                                    {errors.phone && <p className="text-xs text-red-600">{errors.phone}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Zip Code*</label>
                                     <input
                                         type="text"
                                         className="w-full p-2 border rounded"
-                                        value={userData.zipCode}
-                                        onChange={e => setUserData({ ...userData, zipCode: e.target.value })}
+                                        placeholder='Enter your ZIP Code'
+                                        value={userData.zipcode}
+                                        onChange={e => setUserData({ ...userData, zipcode: e.target.value })}
                                     />
-                                    {errors.zipCode && <p className="text-xs text-red-600">{errors.zipCode}</p>}
+                                    {errors.zipcode && <p className="text-xs text-red-600">{errors.zipcode}</p>}
                                 </div>
                             </div>
                         </div>
@@ -419,4 +461,4 @@ const MultiStepForm = () => {
     );
 };
 
-export default MultiStepForm;
+export default MultiStepForm1;

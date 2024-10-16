@@ -1,99 +1,110 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { FaFilter, FaFileExport, FaFileImport } from 'react-icons/fa'; // Import the FaFileImport icon
+import { FaFilter, FaFileExport } from 'react-icons/fa';
 import ProductListItem from './ProductListItem';
+import ImportProducts from './importProduct';
+import toast from 'react-hot-toast';
+import ImportParts from './ImportParts';
 
-const ProductList = () => {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+const fetchInventory = async ({ queryKey }) => {
+    const [_key, { page, limit }] = queryKey; // Destructuring queryKey to get page and limit
+    const { data } = await axios.get('/api/v1/inventory/list', { params: { page, limit } });
+    return data;
+};
+
+const ProductList = ({ setShowForm, showForm }) => {
     const [filter, setFilter] = useState('');
-    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [page, setPage] = useState(1);
+    const limit = 30;
+    const queryClient = useQueryClient();
+    // React Query to fetch products with stale time of 1 week (7 days)
+    const { data, error, isLoading } = useQuery({
+        queryKey: ['inventory', { page, limit }],
+        queryFn: fetchInventory,
+        staleTime: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
+        keepPreviousData: true, // Keeps previous data while fetching new data
+    });
 
-    useEffect(() => {
-        const fetchInventory = async () => {
-            try {
-                const response = await axios.get('/api/v1/inventory/list'); // Update API endpoint
-                setProducts(response.data);
-                setFilteredProducts(response.data);
-                setLoading(false);
-            } catch (error) {
-                console.error(error);
-                setError('Failed to fetch products from inventory. Please try again later.');
-                setLoading(false);
-            }
-        };
+    const products = data?.inventories || [];
+    const totalPages = data?.pagination?.totalPages || 1;
+    const totalProducts = data?.pagination?.totalProducts || 0;
+    const currentPage = data?.pagination?.currentPage || 1;
 
-        fetchInventory();
-    }, []);
+    // Handle pagination
+    const handleNextPage = () => {
+        if (page < totalPages) setPage(page + 1);
+    };
 
-    useEffect(() => {
-        if (filter) {
+    const handlePrevPage = () => {
+        if (page > 1) setPage(page - 1);
+    };
+
+    // Filtering logic
+    const filteredProducts = filter
+        ? products.filter(product => {
             const lowercasedFilter = filter.toLowerCase();
-            const filtered = products.filter(product => {
-                const year = (product.productId?.year ?? '').toString();
-                const make = (product.productId?.make ?? '').toString();
-                const model = (product.productId?.model ?? '').toString();
-                const carPart = (product.productId?.carPart ?? '').toString();
-                const status = (product?.status ?? '').toString();
+            const year = (product.product?.year ?? '').toString();
+            const make = (product.product?.make ?? '').toString();
+            const model = (product.product?.model ?? '').toString();
+            const carPart = (product.product?.carPart ?? '').toString();
+            const status = (product?.status ?? '').toString();
 
-                return year.toLowerCase().includes(lowercasedFilter) ||
-                    make.toLowerCase().includes(lowercasedFilter) ||
-                    model.toLowerCase().includes(lowercasedFilter) ||
-                    carPart.toLowerCase().includes(lowercasedFilter) ||
-                    status.toLowerCase().includes(lowercasedFilter);
-            });
+            return year.toLowerCase().includes(lowercasedFilter) ||
+                make.toLowerCase().includes(lowercasedFilter) ||
+                model.toLowerCase().includes(lowercasedFilter) ||
+                carPart.toLowerCase().includes(lowercasedFilter) ||
+                status.toLowerCase().includes(lowercasedFilter);
+        })
+        : products;
 
-            setFilteredProducts(filtered);
-        } else {
-            setFilteredProducts(products);
-        }
-    }, [filter, products]);
-
+    // Save and Delete handlers
     const handleSave = async (updatedProduct) => {
         try {
-            await axios.put(`/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
-            setProducts((prevProducts) =>
-                prevProducts.map((product) =>
-                    product._id === updatedProduct._id ? updatedProduct : product
-                )
-            );
+            const res = await axios.put(`/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
+            // Invalidate the 'inventory' query to trigger a refetch
+            queryClient.invalidateQueries(['inventory']);
+            toast.success('Successfully Updated');
+            console.log("Successfully updated");
         } catch (error) {
-            console.error(error);
-            setError('Failed to save product details.');
+            toast.error('Error updating! Please try again later');
+            console.error('Failed to save product:', error);
         }
     };
 
     const handleDelete = async (productId) => {
         const confirmed = confirm("Are you sure you want to delete?");
-        
         if (confirmed) {
             try {
                 await axios.delete(`/api/v1/inventory/${productId}`);
-                setProducts(products.filter(product => product._id !== productId));
+                queryClient.invalidateQueries(['inventory']);
+                toast.success("Deleted Successfully");
+                // Refetch or update the product list using react-query methods
             } catch (error) {
-                console.error(error);
-                setError('Failed to delete product. Please try again.');
+                toast.error('Deletion Failed');
+                console.error('Failed to delete product:', error);
             }
-        } else {
-            console.log('Delete action canceled');
         }
     };
-    
 
     const handleExport = () => {
         const csvContent = [
-            ['ID', 'Year', 'Make', 'Model', 'Part', 'Variant', 'Specification', 'Quantity', 'Status'],
+            ['ID', 'Year', 'Make', 'Model', 'Part', 'Variant', 'Transmission', 'Description', 'Grade', 'SKU', 'Price', 'Quantity', 'Status', 'Contact'],
             ...filteredProducts.map(product => [
                 product._id,
-                product.productId?.year || 'N/A',
-                product.productId?.make || 'N/A',
-                product.productId?.model || 'N/A',
-                product.productId?.carPart || 'N/A',
-                product.productId?.variant || 'N/A',
-                product.productId?.specification || 'N/A',
+                product.product.make || 'N/A',
+                product.product.year || 'N/A',
+                product.product.model || 'N/A',
+                product.product.part || 'N/A',
+                product.product.variant || 'N/A',
+                product.product.transmission || 'N/A',
+                product.product.description || 'N/A',
+                product.product.sku || 'N/A',
+                product.product.grade || 'N/A',
+                product.product.price || 'N/A',
                 product.quantity || 'N/A',
-                product.status || 'Unknown'
+                product.status || 'N/A',
+                product.product.contact || 'N/A'
             ])
         ]
             .map(e => e.join(','))
@@ -112,69 +123,25 @@ const ProductList = () => {
         }
     };
 
-
-    const handleImport = async (event) => {
-        const file = event.target.files[0];
-
-        if (!file) {
-            console.error('No file selected');
-            return;
-        }
-
-        if (file.type !== 'text/csv') {
-            console.error('Invalid file type. Please upload a CSV file.');
-            return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = async (e) => {
-            const text = e.target.result;
-            const rows = text.split('\n').slice(1); // Skipping the header row
-
-            // Handle empty rows and trim whitespace
-            const importedProducts = rows
-                .filter(row => row.trim()) // Filter out empty rows
-                .map(row => {
-                    const [year, make, model, part, variant, specification, quantity] = row.split(',').map(field => field.trim());
-                    return {
-                        productId: { year, make, model, carPart: part, variant, specification },
-                        quantity: parseInt(quantity, 10) // Ensure quantity is a number
-                    };
-                })
-                .filter(product => product.quantity >= 0); // Ensure quantity is non-negative
-
-            try {
-                console.log(importedProducts); // For debugging purposes
-                await axios.post('/api/v1/inventory/import', importedProducts, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                setProducts(prevProducts => [...prevProducts, ...importedProducts]); // Update state with new products
-            } catch (error) {
-                console.error('Failed to import products:', error);
-                setError('Failed to import products.');
-            }
-        };
-
-        reader.readAsText(file);
-    };
-
-
-
     return (
-        <div className="w-full mx-auto p-4 bg-white rounded-lg">
-            <div className="flex items-center justify-between mb-6">
+        <div className="w-full mx-auto bg-white rounded-lg">
+            <div className="w-full flex items-center justify-between mb-6">
                 <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
                     <span>Product List</span>
-                    <span className='text-xs text-gray-500'>Total Products Available - {filteredProducts.length}</span>
+                    <span className='text-xs text-gray-500'>Total Products Available - {products.length} of {totalProducts}</span>
                 </h2>
                 <div className="w-full flex justify-evenly items-center space-x-4">
+                    <ImportParts/>
+                    <button
+                        onClick={() => setShowForm(!showForm)}
+                        className="w-1/2 bg-blue-500 text-white p-2 rounded"
+                    >
+                        {showForm ? 'Cancel' : '+ New Product'}
+                    </button>
                     <div className="w-full relative">
                         <input
                             type="text"
-                            placeholder="Filter by Make, Model, or Part"
+                            placeholder="Filter by any field"
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
@@ -189,37 +156,15 @@ const ProductList = () => {
                         <FaFileExport className="mr-2 h-5 w-5" />
                         Export
                     </button>
-                    <label className="flex items-center p-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 cursor-pointer">
-                        <FaFileImport className="mr-2 h-5 w-5" />
-                        Import
-                        <input type="file" className="hidden" onChange={handleImport} />
-                    </label>
+                    <ImportProducts />
                 </div>
             </div>
-            <div className="bg-gray-100 p-4 rounded-t-lg">
-                <div className="grid grid-cols-10 text-gray-600 font-semibold">
-                    <div>No.</div>
-                    <div>Year</div>
-                    <div>Make</div>
-                    <div>Model</div>
-                    <div>Part</div>
-                    <div>Variant</div>
-                    <div>Specification</div>
-                    <div>Quantity</div>
-                    <div>Status</div>
-                    <div>Actions</div>
-                </div>
-            </div>
-            {loading ? (
+            {isLoading ? (
                 <div className="text-center">
-                    <svg className="animate-spin h-5 w-5 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                    </svg>
                     <p className="text-indigo-500 mt-2">Loading products...</p>
                 </div>
             ) : error ? (
-                <div className="text-red-600 text-center">{error}</div>
+                <div className="text-red-600 text-center">Failed to fetch products. Please try again later.</div>
             ) : (
                 <ul className="divide-y divide-gray-200">
                     {filteredProducts.map((product, index) => (
@@ -233,6 +178,28 @@ const ProductList = () => {
                     ))}
                 </ul>
             )}
+            <div className="flex flex-col justify-center items-center gap-4 mt-4">
+                <span className="text-gray-700">
+                    Page {page} of {totalPages}
+                </span>
+                <div className='w-full flex justify-center items-center gap-2'>
+                    <button
+                        onClick={handlePrevPage}
+                        disabled={page === 1}
+                        className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                    >
+                        Previous
+                    </button>
+
+                    <button
+                        onClick={handleNextPage}
+                        disabled={page === totalPages}
+                        className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                    >
+                        Next
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };

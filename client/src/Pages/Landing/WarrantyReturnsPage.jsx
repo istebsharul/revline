@@ -1,6 +1,6 @@
-import React from 'react'
-import Banner from '../../Components/User/Banner'
-import TrustBanner from '../../Components/User/TrustBanner'
+import React from 'react';
+import Banner from '../../Components/User/Banner';
+import TrustBanner from '../../Components/User/TrustBanner';
 
 function WarrantyReturnsPage() {
   return (
@@ -12,70 +12,100 @@ function WarrantyReturnsPage() {
         </p>
       </div>
       <div className="p-6 max-w-4xl mx-auto font-sans">
-        <h1 className="text-red-600 text-left text-2xl font-bold mb-8">Warranty and Return Policy</h1>
-        <p className="text-left mb-12">
+        <h1 className="text-red-600 text-left text-2xl font-bold mb-4">Warranty and Return Policy</h1>
+        <p className="text-left mb-8">
           At Revline Auto Parts, we are committed to providing you with high-quality auto parts and exceptional customer service.
           Our Warranty and Return Policy is designed to ensure your complete satisfaction with every purchase.
         </p>
 
         <section className="mb-12">
-          <h2 className="text-red-600 text-xl font-semibold mb-4">Warranty Policy</h2>
-
-          <h3 className="text-lg font-medium mb-2">Warranty Coverage</h3>
+          <h2 className="text-red-600 text-xl font-semibold mb-4">Standard Warranty</h2>
           <p className="mb-4">
-            All products sold by Revline Auto Parts are covered by a 12-month limited warranty from the date of purchase.
-            This warranty covers defects in materials and workmanship under normal use and service.
-            The warranty is applicable only to the original purchaser and is non-transferable.
+            We offer a 30-day warranty on all automotive parts, effective from the date of delivery. This warranty ensures that the part you receive is free from material defects and workmanship issues.
           </p>
+          <ul className="list-disc list-inside mb-4">
+            <li>If you receive a defective, damaged, or incorrect part, we will provide a replacement. If a replacement is unavailable, we will issue a full refund.</li>
+            <li>Warranty Coverage: This warranty applies solely to the purchased part and does not cover any additional costs.</li>
+          </ul>
 
-          <h3 className="text-lg font-medium mb-2">Warranty Exclusions</h3>
-          <p className="mb-4">
-            The warranty does not cover damages resulting from improper installation, misuse, neglect, accidents, or modifications.
-            Wear and tear parts, such as brake pads, filters, and wiper blades, are not covered under this warranty.
-            The warranty is void if the product is used for racing, off-road, or commercial purposes unless explicitly stated.
-          </p>
+          <h3 className="text-lg font-medium mb-2">Warranty Limitations</h3>
+          <ul className="list-disc list-inside mb-4">
+            <li>Installation and Labor Costs: Expenses related to the removal, installation, or reinstallation of the part.</li>
+            <li>Additional Expenses: Costs for towing, vehicle rental, or other consequential damages.</li>
+            <li>Associated Parts: Any components not purchased from Revline Auto Parts.</li>
+            <li>Wear and Tear Items: Normal wear parts such as hoses, belts, filters, and sensors.</li>
+          </ul>
 
-          <h3 className="text-lg font-medium mb-2">Warranty Claim Process</h3>
-          <p className="mb-4">
-            To initiate a warranty claim, please contact our customer service team with your order number, product details,
-            and a description of the issue. We may request photos or additional information to assess the claim.
-            If the claim is approved, we will provide a replacement part or issue a store credit at our discretion.
-          </p>
+          <h3 className="text-lg font-medium mb-2">Warranty Void Conditions</h3>
+          <ul className="list-disc list-inside mb-4">
+            <li>Improper Installation: The part fails due to incorrect or improper installation.</li>
+            <li>Misuse or Abuse: Damage results from accidents, negligence, racing, or unauthorized modifications.</li>
+            <li>Lack of Maintenance: Failure due to inadequate lubrication, cooling, or failure to follow manufacturer specifications.</li>
+            <li>Unauthorized Repairs: Repairs performed by individuals or facilities not authorized by Revline Auto Parts.</li>
+          </ul>
         </section>
 
         <section className="mb-12">
           <h2 className="text-red-600 text-xl font-semibold mb-4">Return Policy</h2>
+          <ol className="list-decimal list-inside mb-4">
+            <li>Contact Us: Reach out to our customer service team within the warranty period to initiate a return.</li>
+            <li>Obtain RMA: We'll provide a Return Merchandise Authorization (RMA) form via email.</li>
+            <li>Return Shipping: The customer is responsible for securely packaging the part and covering return shipping costs.</li>
+            <li>Return Address: Send the part to the address specified in the RMA.</li>
+            <li>Inspection and Processing: Upon receiving the returned part, we'll inspect it to confirm it meets our return conditions, and then process a replacement or refund based on your preference and availability.</li>
+          </ol>
+        </section>
 
-          <h3 className="text-lg font-medium mb-2">Return Eligibility</h3>
-          <p className="mb-4">
-            You may return unused and unopened products within 30 days of the delivery date for a full refund, excluding shipping costs.
-            Returns must be in the original packaging and in resellable condition.
-            Electrical and electronic parts are not eligible for return if the packaging has been opened.
-          </p>
+        <section className="mb-12">
+          <h2 className="text-red-600 text-xl font-semibold mb-4">Specific Part Warranties and Conditions</h2>
+          <h3 className="text-lg font-medium mb-2">Engines</h3>
+          <ul className="list-disc list-inside mb-4">
+            <li>Coverage Includes: Engine block, cylinder heads, pistons, crankshafts, camshafts, and valves.</li>
+            <li>Exclusions: Accessories attached to the engine (e.g., hoses, wiring harnesses, sensors, manifolds, turbos) are not covered.</li>
+            <li>Installation Requirements: Use new fluids, filters, seals, and gaskets. Fluids must meet manufacturer specifications.</li>
+          </ul>
 
-          <h3 className="text-lg font-medium mb-2">Return Process</h3>
-          <p className="mb-4">
-            To initiate a return, contact our customer service team with your order number and the reason for the return.
-            We will provide you with a Return Merchandise Authorization (RMA) number and return instructions.
-            Returns without an RMA number will not be accepted.
-          </p>
+          <h3 className="text-lg font-medium mb-2">Transmissions</h3>
+          <ul className="list-disc list-inside mb-4">
+            <li>Coverage Includes: Internal components and manufacturing defects.</li>
+            <li>Exclusions: External components like cooling systems, electrical parts, and ignition systems.</li>
+            <li>Installation Requirements: Use recommended transmission fluids and follow manufacturer installation guidelines.</li>
+          </ul>
 
-          <h3 className="text-lg font-medium mb-2">Refunds</h3>
-          <p className="mb-4">
-            Once we receive and inspect the returned item, a refund will be processed to your original payment method within 7-10 business days.
-            Shipping charges are non-refundable unless the return is due to an error on our part.
-          </p>
+          {/* Additional sections for other parts such as Cylinder Heads, Carburetors, Struts, etc. */}
+        </section>
 
-          <h3 className="text-lg font-medium mb-2">Return Shipping</h3>
-          <p className="mb-4">
-            The customer is responsible for return shipping costs unless the return is due to a defective product or an error in the order.
-            We recommend using a trackable shipping method and purchasing shipping insurance for high-value items.
-          </p>
+        <section className="mb-12">
+          <h2 className="text-red-600 text-xl font-semibold mb-4">Additional Important Information</h2>
+          <ul className="list-disc list-inside mb-4">
+            <li>OEM Parts Interchangeability: Parts may fit multiple makes and models. We guarantee fitment based on the information provided at purchase.</li>
+            <li>Appearance: While we aim to provide clean and presentable parts, cosmetic conditions are not covered under warranty.</li>
+            <li>Mileage Estimates: Any mileage provided is an estimate and not guaranteed due to the nature of used parts.</li>
+          </ul>
 
           <h3 className="text-lg font-medium mb-2">Restocking Fee</h3>
-          <p className="mb-4">
-            A 15% restocking fee may apply to returns that do not meet the above criteria or are returned after the 30-day window.
-          </p>
+          <ul className="list-disc list-inside mb-4">
+            <li>Non-Warranty Returns: Returns not due to defects (e.g., ordering the wrong part) may be subject to a 25% restocking fee.</li>
+            <li>Shipping Costs: Customers are responsible for all shipping charges on non-warranty returns.</li>
+          </ul>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-red-600 text-xl font-semibold mb-4">Customer Responsibilities</h2>
+          <ul className="list-disc list-inside mb-4">
+            <li>Accurate Information: Provide correct vehicle details to ensure proper part compatibility.</li>
+            <li>Inspection Upon Delivery: Inspect parts immediately upon receipt. Report any issues within 4 days.</li>
+            <li>Proper Installation: Have parts installed by a certified professional following manufacturer guidelines.</li>
+          </ul>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-red-600 text-xl font-semibold mb-4">Liability Disclaimer</h2>
+          <ul className="list-disc list-inside mb-4">
+            <li>Revline Auto Parts is not responsible for parts lost or damaged after delivery to the provided address.</li>
+            <li>We are not responsible for failures due to customer misuse, improper installation, or neglect.</li>
+            <li>We are not liable for incidental or consequential damages arising from the use of our parts.</li>
+          </ul>
         </section>
       </div>
       <TrustBanner/>
@@ -83,4 +113,4 @@ function WarrantyReturnsPage() {
   )
 }
 
-export default WarrantyReturnsPage
+export default WarrantyReturnsPage;

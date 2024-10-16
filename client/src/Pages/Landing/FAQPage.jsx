@@ -13,11 +13,11 @@ function FAQPage() {
         </p>
       </div>
 
-      <div className='md:p-20 p-5'>
-        <h1 className='md:text-4xl text-2xl text-red-600 font-medium font-inter'>
+      <div className='md:p-20 p-5 flex flex-col justify-center items-center'>
+        <h1 className='w-full md:text-4xl text-2xl text-red-600 text-justify font-medium font-inter '>
           HAVING QUESTIONS?
         </h1>
-        <p className='md:text-2xl  tracking-wider text-center'>FREQUENTLY ASKED QUESTION</p>
+        <p className='md:text-2xl tracking-wide text-center'>FREQUENTLY ASKED QUESTION</p>
       </div>
 
       <FAQItems />

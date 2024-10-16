@@ -9,10 +9,10 @@ import {
     FORGOT_PASSWORD_FAILURE,
     LOAD_FAILURE,
     LOAD_SUCCESS,
-} from '../Constants/userConstants';
+} from '../Constants/adminConstants';
 
 const initialState = {
-    user: null,
+    admin: null,
     isAuthenticated: false,
     error: null,
     message: null,
@@ -25,7 +25,7 @@ const authReducer = (state = initialState, action) => {
         case LOGIN_SUCCESS:
             return {
                 ...state,
-                user: action.payload,
+                admin: action.payload,
                 isAuthenticated: true,
                 error: null,
                 message: null,
@@ -36,7 +36,7 @@ const authReducer = (state = initialState, action) => {
         case FORGOT_PASSWORD_FAILURE:
             return {
                 ...state,
-                user: null,
+                admin: null,
                 isAuthenticated: false,
                 error: action.payload,
                 message: null,
@@ -44,7 +44,7 @@ const authReducer = (state = initialState, action) => {
         case LOGOUT_SUCCESS:
             return {
                 ...state,
-                user: null,
+                admin: null,
                 isAuthenticated: false,
                 error: null,
                 message: 'Successfully logged out',
@@ -52,7 +52,7 @@ const authReducer = (state = initialState, action) => {
         case LOGOUT_FAILURE:
             return {
                 ...state,
-                user: null,
+                admin: null,
                 isAuthenticated: false,
                 error: action.payload,
                 message: null,

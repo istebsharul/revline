@@ -2,18 +2,19 @@ import React from 'react';
 import { FaBars, FaSearch, FaPhone, FaCog, FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../Actions/userActions';
+import { logout } from '../../Actions/adminActions';
 import toast from 'react-hot-toast';
+import { useEffect } from 'react';
 
 const AdminNavBar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state)=> state.auth?.user);
+  const isLoggedIn = useSelector((state)=> state.auth?.admin);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     // Add your logout logic here
     if(!isLoggedIn){
-      toast.error('User Already logged out!');
+      toast.error('Admin Already logged out!');
       return;
     };
     navigate('/login');
@@ -21,7 +22,7 @@ const AdminNavBar = ({ toggleSidebar }) => {
   };
 
   return (
-    <div className="w-full h-16 bg-gray-800 text-white p-4 flex justify-between items-center sticky top-0 z-10">
+    <div className="w-full h-14  bg-gray-800 text-white p-4 flex justify-between items-center sticky top-0 z-10">
       {isLoggedIn &&
         <div className="flex items-center space-x-4">
         <FaBars className="text-xl cursor-pointer" onClick={toggleSidebar} />
