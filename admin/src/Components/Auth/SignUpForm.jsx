@@ -34,18 +34,15 @@ function Signup() {
       alert("Passwords do not match");
       return;
     }
-    try {
-      const result = await dispatch(signup(name, email, password));
-      if (result && result.success) {
-        toast.success("Signup successful!");
-        navigate('/')
-      } else {
-        toast.error(result.message || "Signup failed.");
+    dispatch(signup(name, email, password))
+    .then((result)=>{
+      if(result && result.success){
+        navigate('/');
       }
-    } catch (error) {
-      toast.error("An error occurred during signup.");
-      console.error("Signup error:", error);
-    }
+    })
+    .catch((error)=>{
+      console.error("SignUp Error: ",error);
+    })
     setName("");
     setEmail("");
     setPassword("");
