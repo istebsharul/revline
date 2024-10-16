@@ -99,6 +99,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
         if (existingCustomer) {
             existingCustomer.orderInfo.push(orderInfo);
             newOrder.customer = existingCustomer._id;
+            newOrder.shipping_details.customer = existingCustomer._id;
             await Promise.all([existingCustomer.save(), newOrder.save()]);
         } else {
             newCustomer = new Customer({ name, email, phone, zipcode, orderInfo: [orderInfo] });
