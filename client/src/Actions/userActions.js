@@ -32,6 +32,7 @@ export const login = (email, password) => {
             const response = await axios.post('/api/v1/auth/login', { email, password });
             const { token, user } = response.data;
             setCookie("jwt", token, 1);
+            toast.success("Login Successful!")
             dispatch({ type: LOGIN_SUCCESS, payload: user });
             return { isLoggedIn: true };  
         } catch (error) {
@@ -71,9 +72,9 @@ export const signup = (name, email, password) => {
                 endpoint,
                 { name, email, password }
             );
-            console.log("Response", response);
-            // toast.success('User Created Successfully');
-            dispatch({ type: SIGNUP_SUCCESS, payload: response.data });
+            console.log("Response", response.data);
+            toast.success('SignUp Successful');
+            dispatch({ type: SIGNUP_SUCCESS, payload: response.data.user });
             return { success: true, data: response.data };
         } catch (error) {
             toast.error('Signup Failed: ' + error.response.data.message);
