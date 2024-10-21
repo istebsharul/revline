@@ -4,7 +4,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
     return (
         <div className='space-y-2'>
             <div >
-                <label className="block text-gray-200 text-sm p-1">Full Name*</label>
+                <label className="block text-gray-800 text-sm p-1">Full Name*</label>
                 <input
                     type="text"
                     className="w-full p-2 border rounded"
@@ -15,7 +15,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 {errors.name && <p className="text-xs text-red-600">{errors.name}</p>}
             </div>
             <div >
-                <label className="block text-gray-200 text-sm p-1">Email* </label>
+                <label className="block text-gray-800 text-sm p-1">Email* </label>
                 <input
                     type="email"
                     className="w-full p-2 border rounded"
@@ -26,7 +26,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 {errors.email && <p className="text-xs text-red-600">{errors.email}</p>}
             </div>
             <div >
-                <label className="block text-gray-200 text-sm p-1">Contact Number*</label>
+                <label className="block text-gray-800 text-sm p-1">Contact Number*</label>
                 <input
                     type="tel"
                     className="w-full p-2 border rounded"
@@ -37,7 +37,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 {errors.phone && <p className="text-xs text-red-600">{errors.phone}</p>}
             </div>
             <div >
-                <label className="block text-gray-200 text-sm p-1">Zip Code*</label>
+                <label className="block text-gray-800 text-sm p-1">Zip Code*</label>
                 <input
                     type="text"
                     className="w-full p-2 border rounded"
