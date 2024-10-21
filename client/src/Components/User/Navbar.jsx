@@ -63,13 +63,13 @@ function Navbar() {
     };
 
     return (
-        <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 bg-red-400">
-            <div className="w-full md:h-14 lg:w-4/6 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-4">
+        <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 bg-red-400 shadow-lg">
+            <div className="w-full md:h-14 lg:w-4/6 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-1">
                 {/* LOGO */}
                 <div className='flex md:flex-col items-center justify-between md:block'>
-                    <div className="w-[9rem]">
+                    <div className="w-[9rem] p-1">
                         <Link to="/">
-                            <img src="https://res.cloudinary.com/drszvaldf/image/upload/v1724180173/revline/kn373iik4j6x2txiqs0p.png" alt="Logo" width={200} height={100} />
+                            <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1729154384/revlineautoparts/Logo/murh0xodziul4oj5jalu.jpg" alt="Logo" width={200} height={100} />
                         </Link>
                     </div>
                     {/* HAMBURGER BUTTON FOR MOBILE */}

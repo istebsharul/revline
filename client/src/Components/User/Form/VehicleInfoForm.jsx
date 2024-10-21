@@ -75,7 +75,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
         <div>
             <div className='space-y-2'>
                 <div>
-                    <label className="block text-gray-200 text-sm p-1">Year*</label>
+                    <label className="block text-gray-800 text-sm p-1">Year*</label>
                     <Select
                         className="w-full"
                         value={vehicleData.year ? { value: vehicleData.year, label: vehicleData.year } : null}
@@ -87,7 +87,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                 </div>
 
                 <div>
-                    <label className="block text-gray-200 text-sm p-1">Make*</label>
+                    <label className="block text-gray-800 text-sm p-1">Make*</label>
                     <Select
                         className="w-full"
                         value={vehicleData.make ? { value: vehicleData.make, label: vehicleData.make } : null}
@@ -100,7 +100,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                 </div>
 
                 <div>
-                    <label className="block text-gray-200 text-sm p-1">Model*</label>
+                    <label className="block text-gray-800 text-sm p-1">Model*</label>
                     <Select
                         className="w-full"
                         value={vehicleData.model ? { value: vehicleData.model, label: vehicleData.model } : null}
@@ -113,7 +113,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-gray-200 text-sm p-1">Part*</label>
+                    <label className="block text-gray-800 text-sm p-1">Part*</label>
                     <Select
                         className="w-full"
                         value={vehicleData.part ? { value: vehicleData.part, label: vehicleData.part } : null}

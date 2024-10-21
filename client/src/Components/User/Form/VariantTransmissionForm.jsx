@@ -23,7 +23,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
     return (
         <div className='space-y-2'>
             <div>
-                <label className="block text-gray-200 text-sm p-1">Transmission*</label>
+                <label className="block text-gray-800 text-sm p-1">Transmission*</label>
                 <Select
                     className="w-full"
                     value={vehicleData.transmission ? { value: vehicleData.transmission, label: vehicleData.transmission } : null}
@@ -34,7 +34,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
                 {errors.transmission && <p className="text-xs text-red-600">{errors.transmission}</p>}
             </div>
             <div>
-                <label className="block text-gray-200 text-sm p-1">Variant*</label>
+                <label className="block text-gray-800 text-sm p-1">Variant*</label>
                 <Select
                     className="w-full"
                     value={vehicleData.variant ? { value: vehicleData.variant, label: vehicleData.variant } : null}
@@ -45,7 +45,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
                 {errors.variant && <p className="text-xs text-red-600">{errors.variant}</p>}
             </div>
             <div >
-                <label className="block text-gray-100 text-xs flex justify-between"><p>Vehicle Information Number (VIN)</p>  <p>*Optional</p></label>
+                <label className="block text-gray-800 text-xs flex justify-between"><p>Vehicle Information Number (VIN)</p>  <p>*Optional</p></label>
                 <input
                     type="text"
                     className="w-full p-2 border rounded"
@@ -56,7 +56,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
                 {errors.vin && <p className="text-xs text-red-600">{errors.vin}</p>}
             </div>
             <div className="mb-6">
-                <label className="block text-gray-200 text-sm p-1">Message</label>
+                <label className="block text-gray-800 text-sm p-1">Message</label>
                 <textarea
                     className="w-full p-2 border rounded"
                     placeholder='Enter a message'

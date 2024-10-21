@@ -167,11 +167,10 @@ const MultiStepForm = () => {
                     ))}
                 </div>
             </div>
-            <div className='bg-gradient-to-r from-white to-red-500 rounded-lg 2xl:p-[0.05rem] md:p-[0.02rem]'>
-                <div className='bg-black p-4 rounded-lg'>
+            <div className='bg-white p-4 rounded-lg shadow-lg border-black'>
                     <div className=''>
                         <div>
-                            <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-white">
+                            <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-black">
                                 {step === 1 ? "Let's find your part!" :
                                     step === 2 ? 'You are just 1 step away!' :
                                         "You're just a click away!"}
@@ -209,7 +208,7 @@ const MultiStepForm = () => {
 
                     <div className="flex justify-between py-4 space-x-2">
                         {step > 1 && (
-                            <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-red-600 font-bold py-2 px-4 rounded-lg">
+                            <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-red-600 font-bold py-2 px-4 rounded-lg border">
                                 Back
                             </button>
                         )}
@@ -225,7 +224,9 @@ const MultiStepForm = () => {
                         )}
                     </div>
                 </div>
-            </div>
+            {/* <div className='bg-gradient-to-r from-white to-red-500 rounded-lg 2xl:p-[0.05rem] md:p-[0.02rem]'>
+                
+            </div> */}
         </div>
     );
 };

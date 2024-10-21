@@ -1,55 +1,96 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef } from 'react';
 import MultiStepForm from './Form/MultiStepForm';
+
+// Dynamically import 15 images
+import brand1 from '../../Assets/Company/audi.webp';
+import brand2 from '../../Assets/Company/bentley.png';
+import brand3 from '../../Assets/Company/bmw.png';
+import brand4 from '../../Assets/Company/chevrolet.png';
+import brand5 from '../../Assets/Company/ford.png';
+import brand6 from '../../Assets/Company/honda.webp';
+import brand7 from '../../Assets/Company/hyundai.png';
+import brand8 from '../../Assets/Company/jaguar.png';
+import brand9 from '../../Assets/Company/jeep.png';
+import brand10 from '../../Assets/Company/kia.png';
+import brand11 from '../../Assets/Company/lamborghini.png';
+import brand12 from '../../Assets/Company/mclaren.png';
+import brand13 from '../../Assets/Company/mercedes.png';
+import brand14 from '../../Assets/Company/mitsubishi.png';
+import brand15 from '../../Assets/Company/toyota.png';
+
+import car from '../../Assets/web/carImage.png';
+
+// Array of brand images
+const brandImages = [
+  { src: brand1, alt: 'Brand 1' },
+  { src: brand2, alt: 'Brand 2' },
+  { src: brand3, alt: 'Brand 3' },
+  { src: brand4, alt: 'Brand 4' },
+  { src: brand5, alt: 'Brand 5' },
+  { src: brand6, alt: 'Brand 6' },
+  { src: brand7, alt: 'Brand 7' },
+  { src: brand8, alt: 'Brand 8' },
+  { src: brand9, alt: 'Brand 9' },
+  { src: brand10, alt: 'Brand 10' },
+  { src: brand11, alt: 'Brand 11' },
+  { src: brand12, alt: 'Brand 12' },
+  { src: brand13, alt: 'Brand 13' },
+  { src: brand14, alt: 'Brand 14' },
+  { src: brand15, alt: 'Brand 15' }
+];
 
 const HeroSection = forwardRef((props, ref) => {
   return (
-    <div ref={ref} id={props.id} className='relative w-full md:h-screen flex flex-col justify-center items-center md:pt-20 pt-40 z-10 bg-black'>
+    <div ref={ref} id={props.id} className='relative w-full md:h-screen flex flex-col justify-center items-center md:pt-20 pt-20 z-10 bg-gray-100'>
       <div className='2xl:w-3/5 md:w-4/6 flex md:flex-row flex-col justify-center items-center'>
-        <div className='md:w-3/5 flex flex-col justify-center md:items-start items-center'>
-          <h1 className='2xl:w-4/5 md:w-full w-1/2 md:text-left text-center font-inter text-white md:text-6xl text-4xl font-medium leading-tight pt-16'>
+        <div className='md:w-1/2 flex flex-col justify-center md:items-start items-center'>
+          <h1 className='2xl:w-4/5 md:w-full w-4/5 md:text-left text-center font-palatino text-black md:text-6xl text-4xl font-medium leading-tight md:pt-16 md:p-0 p-4'>
             Parts for Every Make and Model
           </h1>
           <div className='flex justify-center items-center'>
-            <video
+            {/* <video
               src="https://res.cloudinary.com/drszvaldf/video/upload/v1725348596/revline/bzn0s0itovnonddecmnx.mp4"
               className='md:w-[35rem] w-1/2'
               autoPlay
               loop
               muted
               playsInline
+            /> */}
+            <img
+              src={car}
+              className='md:w-[30rem] w-1/2'
             />
           </div>
         </div>
 
-        <div className='md:w-1/2 w-full flex justify-end'>
+        <div className='md:w-1/2 w-full flex md:justify-end justify-center'>
           <div className='w-4/5'>
             <MultiStepForm />
           </div>
         </div>
       </div>
-      <div className='w-4/6 h-fit relative bg-red-400 md:my-10 my-5 flex'>
-        <div className='absolute w-1/6 h-full bg-gradient-to-r from-black to white/50'></div>
-        <div className="overflow-hidden whitespace-nowrap bg-white p-2">
-          <div className="inline-block animate-marquee">
-            <span className="mx-8 text-lg font-bold">Brand 1</span>
-            <span className="mx-8 text-lg font-bold">Brand 2</span>
-            <span className="mx-8 text-lg font-bold">Brand 3</span>
-            <span className="mx-8 text-lg font-bold">Brand 4</span>
-            <span className="mx-8 text-lg font-bold">Brand 5</span>
-          </div>
-          <div className="inline-block animate-marquee">
-            <span className="mx-8 text-lg font-bold">Brand 1</span>
-            <span className="mx-8 text-lg font-bold">Brand 2</span>
-            <span className="mx-8 text-lg font-bold">Brand 3</span>
-            <span className="mx-8 text-lg font-bold">Brand 4</span>
-            <span className="mx-8 text-lg font-bold">Brand 5</span>
-          </div>
 
+      <div className='2xl:w-4/6 md:w-4/5 w-5/6 h-fit relative bg-white md:my-10 my-5 flex shadow-xl rounded-full'>
+      <div className='absolute left-0 md:w-1/5 w-1/4 h-full bg-gradient-to-r from-black to white rounded-l-full z-10'></div>
+        <div className="w-full overflow-hidden whitespace-nowrap bg-white p-2 rounded-full">
+          <div className="inline-block animate-marquee flex justify-between items-center space-x-4">
+            {/* Duplicate logos to create an infinite loop effect */}
+            {brandImages.map((brand, index) => (
+              <span key={index} className="text-lg font-bold flex-shrink-0">
+                <img src={brand.src} alt={brand.alt} className="h-10 w-auto" />
+              </span>
+            ))}
+            {brandImages.map((brand, index) => (
+              <span key={`duplicate-${index}`} className="text-lg font-bold flex-shrink-0">
+                <img src={brand.src} alt={brand.alt} className="h-10 w-auto" />
+              </span>
+            ))}
+          </div>
         </div>
-        <div className='absolute right-0 w-1/6 h-full bg-gradient-to-l from-black to white'></div>
+        <div className='absolute right-0 md:w-1/5 w-1/4 h-full bg-gradient-to-l from-black to white rounded-r-full'></div>
       </div>
     </div>
-  )
+  );
 });
 
 export default HeroSection;
