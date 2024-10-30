@@ -4,6 +4,8 @@ import { Toaster } from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminRoutes from './Routes/adminRoutes.jsx';
 import { loadAdmin } from './Actions/adminActions.js';
+import { CallProvider } from './Contexts/CallContext.jsx';
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -23,8 +25,10 @@ const App = () => {
 
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
-      <AdminRoutes />
+      <CallProvider>
+        <Toaster position="top-center" reverseOrder={false} />
+        <AdminRoutes />
+      </CallProvider>
     </>
   );
 };
