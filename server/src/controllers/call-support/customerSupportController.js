@@ -57,6 +57,99 @@ export const makeCall = async (req, res) => {
   }
 
   try {
+
+    const call = await twilioClient.calls.create({
+      url: `https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/voice`, // URL to TwiML voice instructions
+      to: phoneNumber,
+      from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number,
+      statusCallback: `https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/callback`,
+      statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
+    });
+
+    logger.info(`Call started successfully, SID: ${call.sid}`);
+    res.send({ message: 'Call started', callSid: call.sid }); // Send callSid in response
+  } catch (error) {
+    logger.error(`Error starting the call: ${error.message}`);
+    res.status(500).json({ error: 'Failed to start call' });
+  }
+};
+
+export const endCall = async (req, res) => {
+  const { callSid } = req.body;
+
+  if (!callSid) {
+    logger.warn("Call SID is missing in the request");
+    return res.status(400).send('Call SID is required');
+  }
+
+  try {
+    await twilioClient.calls(callSid).update({ status: 'completed' });
+    logger.info(`Call with SID ${callSid} has been ended.`);
+    res.send(`Call with SID ${callSid} has been ended.`);
+    // Disconnect the Socket.IO instance after ending the call
+    // if (io) {
+    //   io.close(); // Close all connections and clean up
+    //   console.log("Socket.io server closed after call end.");
+    //   io = null; // Reset the socket instance
+    // }
+  } catch (error) {
+    logger.error(`Error ending the call: ${error.message}`);
+    res.status(500).json({ error: 'Failed to end the call' });
+  }
+};
+
+export const holdCall = async (req, res) => {
+  const { callSid } = req.body;
+  logger.info(callSid);
+  try {
+    const call = await twilioClient.calls(callSid).update({
+      url: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/wait-music',
+      method: 'POST'
+    });
+
+    res.status(200).json({ message: 'Call placed on hold', callStatus: call.status });
+  } catch (error) {
+    console.error('Error holding call:', error);
+    res.status(500).json({ message: 'Failed to place call on hold', error: error.message });
+  }
+};
+
+export const resumeCall = async (req, res) => {
+  const { callSid } = req.body;
+  logger.info(callSid);
+  try {
+    const call = await twilioClient.calls(callSid).update({
+      url: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/resume-connection',
+      method: 'POST'
+    });
+
+    res.status(200).json({ message: 'Call resumed', callStatus: call.status });
+  } catch (error) {
+    console.error('Error resuming call:', error);
+    res.status(500).json({ message: 'Failed to resume call', error: error.message });
+  }
+};
+
+export const holdMusicTwiml = (req, res) => {
+  const twiml = new twilio.twiml.VoiceResponse();
+  twiml.play('https://api.twilio.com/cowbell.mp3');  // URL to hold music
+
+  res.type('text/xml');
+  res.send(twiml.toString());
+};
+
+export const originalTwiml = (req, res) => {
+  const twiml = new twilio.twiml.VoiceResponse();
+  twiml.say('Resuming the call.');  // Add actual TwiML flow as needed
+  twiml.dial().client('web-user');
+
+  res.type('text/xml');
+  res.send(twiml.toString());
+};
+
+export const voiceResponse = (req, res) => {
+  logger.info("Generating TwiML voice response");
+  try {
     // Initialize Socket.io if it hasn't been initialized yet
     if (!io) {
       io = new SocketIOServer(server, {
@@ -83,43 +176,6 @@ export const makeCall = async (req, res) => {
       });
     }
 
-    const call = await twilioClient.calls.create({
-      url: `https://0668-115-187-57-96.ngrok-free.app/api/v1/twilio/voice`, // URL to TwiML voice instructions
-      to: phoneNumber,
-      from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number,
-      statusCallback: `https://0668-115-187-57-96.ngrok-free.app/api/v1/twilio/callback`,
-      statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
-    });
-    
-    logger.info(`Call started successfully, SID: ${call.sid}`);
-    res.send({ message: 'Call started', callSid: call.sid }); // Send callSid in response
-  } catch (error) {
-    logger.error(`Error starting the call: ${error.message}`);
-    res.status(500).json({ error: 'Failed to start call' });
-  }
-};
-
-export const endCall = async (req, res) => {
-  const { callSid } = req.body;
-
-  if (!callSid) {
-    logger.warn("Call SID is missing in the request");
-    return res.status(400).send('Call SID is required');
-  }
-
-  try {
-    await twilioClient.calls(callSid).update({ status: 'completed' });
-    logger.info(`Call with SID ${callSid} has been ended.`);
-    res.send(`Call with SID ${callSid} has been ended.`);
-  } catch (error) {
-    logger.error(`Error ending the call: ${error.message}`);
-    res.status(500).json({ error: 'Failed to end the call' });
-  }
-};
-
-export const voiceResponse = (req, res) => {
-  logger.info("Generating TwiML voice response");
-  try {
     const twiml = new twilio.twiml.VoiceResponse();
     twiml.say('You are connected to the web support agent.');
     twiml.dial().client('web-user');
@@ -137,11 +193,11 @@ export const fallBackVoice = (req, res) => {
   logger.warn('Primary TwiML failed. Fallback URL used.');
   sendTwimlResponse(res, 'Sorry! There is a network issue. Please contact us via Email or SMS.');
 };
-// Assuming you have access to the io instance
+
 export const callBackVoice = async (req, res) => {
   const { MessageStatus, CallStatus, CallSid, Duration, To, From } = req.body;
   const status = MessageStatus || CallStatus;
-  
+
   if (status) {
     try {
       logger.info(`Received call status update: ${status}, Call SID: ${CallSid}, To: ${To}, From: ${From} ${Duration}`);
@@ -152,8 +208,14 @@ export const callBackVoice = async (req, res) => {
         CallSid,
         To,
         From,
-        Duration,
+        Duration
       });
+
+      // if (status === 'completed' || status === 'no-answer') {
+      //   io.close();
+      //   console.log("IO closed since status", status);
+      //   io = null;
+      // }
 
       // Handle the status as before...
     } catch (error) {

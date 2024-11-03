@@ -10,7 +10,11 @@ import {
   callBackVoice,
   sendSms,
   receiveSms,
-  getSmsLogs
+  getSmsLogs,
+  holdCall,
+  resumeCall,
+  holdMusicTwiml,
+  originalTwiml
 } from '../controllers/call-support/customerSupportController.js';
 
 const router = express.Router();
@@ -25,6 +29,12 @@ router.get('/call-logs', getCallLogs);
 
 // TwiML voice instructions
 router.post('/voice', voiceResponse);
+
+router.post('/hold-call', holdCall);
+router.post('/resume-call',resumeCall);
+
+router.post('/wait-music',holdMusicTwiml);
+router.post('/resume-connection',originalTwiml)
 
 // Twiml Fallback 
 router.post('/fallback',fallBackVoice);
