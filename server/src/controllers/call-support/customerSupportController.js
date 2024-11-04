@@ -76,14 +76,14 @@ export const makeCall = async (req, res) => {
 
 export const endCall = async (req, res) => {
   const { callSid } = req.body;
-
-  if (!callSid) {
+  if (!callSid || callSid=== '') {
     logger.warn("Call SID is missing in the request");
     return res.status(400).send('Call SID is required');
   }
 
   try {
     await twilioClient.calls(callSid).update({ status: 'completed' });
+    isAgentAvailable = true;
     logger.info(`Call with SID ${callSid} has been ended.`);
     res.send(`Call with SID ${callSid} has been ended.`);
     // Disconnect the Socket.IO instance after ending the call
@@ -100,7 +100,12 @@ export const endCall = async (req, res) => {
 
 export const holdCall = async (req, res) => {
   const { callSid } = req.body;
-  logger.info(callSid);
+  console.log("Call Sid",callSid);
+  if(callSid === ''){
+    logger.info("No call Sid found",callSid);
+    return;
+  }
+  logger.info("Call sid to hold",callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
       url: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/wait-music',
@@ -116,7 +121,11 @@ export const holdCall = async (req, res) => {
 
 export const resumeCall = async (req, res) => {
   const { callSid } = req.body;
-  logger.info(callSid);
+  if(callSid === ''){
+    logger.info("No call Sid found");
+    return;
+  }
+  logger.info("Call sid to resume",callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
       url: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/resume-connection',
@@ -132,7 +141,7 @@ export const resumeCall = async (req, res) => {
 
 export const holdMusicTwiml = (req, res) => {
   const twiml = new twilio.twiml.VoiceResponse();
-  twiml.play('https://api.twilio.com/cowbell.mp3');  // URL to hold music
+  twiml.play('http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3');  // URL to hold music
 
   res.type('text/xml');
   res.send(twiml.toString());
@@ -146,6 +155,8 @@ export const originalTwiml = (req, res) => {
   res.type('text/xml');
   res.send(twiml.toString());
 };
+
+let isAgentAvailable = true;
 
 export const voiceResponse = (req, res) => {
   logger.info("Generating TwiML voice response");
@@ -176,17 +187,154 @@ export const voiceResponse = (req, res) => {
       });
     }
 
+    // Create a new TwiML Voice Response
     const twiml = new twilio.twiml.VoiceResponse();
-    twiml.say('You are connected to the web support agent.');
-    twiml.dial().client('web-user');
 
+    if (isAgentAvailable) {
+      // Agent is available, connect the call directly
+      isAgentAvailable = false; // Mark agent as busy
+      twiml.say("Connecting you to an agent.");
+      twiml.dial().client('web-user'); // Replace with your agent's identifier
+    } else {
+      // Agent is busy, place the call in the queue
+      twiml.say("All agents are currently busy. Please wait while we connect or call after sometime.");
+      twiml.enqueue('support-queue', {
+        waitUrl: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/wait-music'
+      });
+    }
+
+    // Respond with the TwiML instructions
     res.type('text/xml');
     res.send(twiml.toString());
-    logger.info("TwiML voice response sent successfully");
+    logger.info("TwiML voice response sent successfully, caller added to queue");
   } catch (error) {
     logger.error(`Error generating TwiML response: ${error.message}`);
     res.status(500).json({ error: 'Failed to generate voice response' });
   }
+};
+
+export const handleDequeue = (req, res) => {
+  logger.info("Trying to connect waiter in queue");
+  const twiml = new twilio.twiml.VoiceResponse();
+  twiml.dial({
+    url: 'http://localhost:3000/api/v1/twilio/about-to-connect'
+  }, 'support-queue');
+
+  res.type('text/xml');
+  res.send(twiml.toString());
+  logger.info("Tried Connecting to waiter in queue");
+}
+
+// Function to fetch queue details
+async function getQueueDetails(queueName) {
+  try {
+    // List all queues to find the specific one
+    const queues = await twilioClient.queues.list();
+
+    // Find the queue SID for the given queue name
+    const queue = queues.find(q => q.friendlyName === queueName);
+    if (queue) {
+      console.log(`Queue SID: ${queue.sid}`);
+      return queue.sid; // Return the SID of the queue
+    } else {
+      console.log('Queue not found');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching queue details:', error);
+  }
+}
+
+// Function to fetch queue status by SID
+async function fetchQueueStatus(queueSid) {
+  try {
+    const members = await twilioClient.queues(queueSid)
+      .members.list({ limit: 10 });
+    // console.log(`Queue SID: ${queue.sid}`);
+    // console.log(`Current Queue Size: ${queue.currentSize}`);
+    // console.log(`Max Queue Size: ${queue.maxSize}`);
+    // console.log(`Average Wait Time: ${queue.avgWaitTime}`);
+    // console.log(`Waiting Call Count: ${queue.calls.length}`); 
+    // members.forEach((m) => console.log(m.callSid));
+    console.log(`Total members in the queue ${members.length}`, members);
+  } catch (error) {
+    console.error('Error fetching queue status:', error);
+  }
+}
+
+export const queueStatus = async (req, res) => {
+  try {
+    const queueSid = await getQueueDetails('support-queue');
+    if (queueSid) {
+      // Call fetchQueueStatus and capture the result
+      const queueInfo = await fetchQueueStatus(queueSid);
+
+      // io.emit('queue-status-update', {
+      //   queueInfo
+      // })
+
+      // Send the response with the queue information
+      res.status(200).json(queueInfo);
+
+      // Log the queue status
+      logger.info('Queue Status', queueInfo);
+    } else {
+      res.status(404).send('Queue not found.');
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Internal Server Error');
+  }
+}
+
+// export const voiceResponse = (req, res) => {
+//   logger.info("Generating TwiML voice response");
+//   try {
+//     // Initialize Socket.io if it hasn't been initialized yet
+//     if (!io) {
+//       io = new SocketIOServer(server, {
+//         cors: {
+//           origin: '*',
+//           methods: ['GET', 'POST'],
+//         },
+//       });
+
+//       // Handle Socket.io connections
+//       io.on('connection', (socket) => {
+//         console.log('A user connected:', socket.id);
+
+//         // Handle custom events from clients
+//         socket.on('message', (data) => {
+//           console.log('Message received:', data);
+//           socket.emit('messageResponse', `Server received: ${data}`);
+//         });
+
+//         // Handle disconnection
+//         socket.on('disconnect', () => {
+//           console.log('User disconnected:', socket.id);
+//         });
+//       });
+//     }
+
+//     const twiml = new twilio.twiml.VoiceResponse();
+//     twiml.say('You are connected to the web support agent.');
+//     twiml.dial().client('web-user');
+
+//     res.type('text/xml');
+//     res.send(twiml.toString());
+//     logger.info("TwiML voice response sent successfully");
+//   } catch (error) {
+//     logger.error(`Error generating TwiML response: ${error.message}`);
+//     res.status(500).json({ error: 'Failed to generate voice response' });
+//   }
+// };
+
+export const aboutToConnect = (req, res) => {
+  const twiml = new twilio.twiml.VoiceResponse();
+  twiml.say('You will now be connected to an agent.');
+
+  res.type('text/xml');
+  res.send(twiml.toString());
 };
 
 export const fallBackVoice = (req, res) => {
@@ -211,11 +359,12 @@ export const callBackVoice = async (req, res) => {
         Duration
       });
 
-      // if (status === 'completed' || status === 'no-answer') {
+      if (status === 'completed' || status === 'no-answer' || status === 'busy') {
+          isAgentAvailable = true;
       //   io.close();
       //   console.log("IO closed since status", status);
       //   io = null;
-      // }
+      }
 
       // Handle the status as before...
     } catch (error) {

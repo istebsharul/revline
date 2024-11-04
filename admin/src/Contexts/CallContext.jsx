@@ -23,6 +23,7 @@ export const CallProvider = ({ children }) => {
 	const isOutgoingRef = useRef(false);
 	const isCallOngoing = useRef(false);
 	const [showCallPopup, setShowCallPopup] = useState(false);
+	const [queueStatus, setQueueStatus] = useState([]);
 
 	useEffect(() => {
 		// Listen for call status updates
@@ -47,7 +48,27 @@ export const CallProvider = ({ children }) => {
 			console.log("socket off....");
 		};
 	}, []);
-
+	
+	
+	useEffect(()=>{
+		// socket.on('queue-status-update',(data)=>{
+		// 	console.log(data);
+		// })
+		// return(()=>{
+		// 	socket.off('queue-status-update');
+		// 	console.log("Queue Status socket off...");
+		// })
+		const fetchQueueStatus = async() =>{
+			try {
+				const response = await axios.post('http://localhost:3000/api/v1/twilio/queue-status');
+				setQueueStatus(response.data);
+				console.log("Queuee.........................",response);
+			} catch (error) {
+				console.error(error.message); 
+			}
+		}
+		fetchQueueStatus();
+	},[]);
 
 	useEffect(() => {
 		const loadTwilioSdk = () => {
@@ -111,11 +132,6 @@ export const CallProvider = ({ children }) => {
 					console.log('The Call was rejected');
 				})
 
-				if (callStatus === 'in-progress') {
-					connection.mute();
-					return;
-				}
-
 				if (isCallOngoing.current) {
 					// connection.reject();
 					setWaitingConnection(connection);
@@ -156,20 +172,14 @@ export const CallProvider = ({ children }) => {
 		}
 	};
 
-	const handleWaitingConnection = async (number) => {
-		if (outgoingConnection || incomingConnection) {
-			handleEndCall(); // End the current call before connecting to the waiting one
+	const handleWaitingConnection = async () => {
+		try {
+			const res = await axios.post('http://localhost:3000/api/v1/twilio/handle-deqeue');
+			console.log('Connecting to an agent',res);
+		} catch (error) {
+			console.error(error);
 		}
-
-		setTimeout(() => {
-			// Set the waiting connection as the active incoming connection
-			setIncomingConnection(waitingConn);
-			setWaitingConnection(null); // Clear the waiting connection
-			setShowCallPopup(true); // Show call popup for new incoming call
-			// isCallOngoing.current = true;
-		}, 500); // Small delay to ensure end process is complete
 	}
-
 
 	const handleMakeCall = async (number) => {
 		const isPhoneNumberValid = phoneNumber && /^[0-9]{10,}$/.test(phoneNumber);
@@ -245,14 +255,22 @@ export const CallProvider = ({ children }) => {
 	};
 
 	const muteCall = async () => {
+		const activeCallSid = isOutgoingRef.current ? callSid : incomingCallSid;
+		console.log(activeCallSid);
+		if(activeCallSid === ''){
+			console.log("Call not found!");
+			return;
+		}
 		try {
 			const response = await axios.post('http://localhost:3000/api/v1/twilio/hold-call', {
-				callSid,
+				callSid:activeCallSid,
 			});
 
 			if (response.status === 200) {
 				console.log('Mute successful:', response.data.message);
 				setIsMuted(true);
+				isCallOngoing.current = false;
+				console.log("Call Ongoing Status",isCallOngoing.current)
 			} else {
 				console.error('Failed to mute call');
 			}
@@ -262,14 +280,17 @@ export const CallProvider = ({ children }) => {
 	};
 
 	const resumeCall = async () => {
+		const activeCallSid = isOutgoingRef.current ? callSid: incomingCallSid;
+		console.log(activeCallSid);
 		try {
 			const response = await axios.post('http://localhost:3000/api/v1/twilio/resume-call', {
-				callSid,
+				callSid:activeCallSid,
 			});
 
 			if (response.status === 200) {
 				console.log('Resume successful:', response.data.message);
 				setIsMuted(false);
+				console.log(isCallOngoing.current);
 			} else {
 				console.error('Failed to resume call');
 			}
@@ -295,7 +316,8 @@ export const CallProvider = ({ children }) => {
 			muteCall,
 			resumeCall,
 			waitingConnection,
-			handleWaitingConnection
+			handleWaitingConnection,
+			queueStatus
 		}}>
 			{children}
 		</CallContext.Provider>

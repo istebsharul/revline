@@ -14,7 +14,10 @@ import {
   holdCall,
   resumeCall,
   holdMusicTwiml,
-  originalTwiml
+  originalTwiml,
+  aboutToConnect,
+  queueStatus,
+  handleDequeue
 } from '../controllers/call-support/customerSupportController.js';
 
 const router = express.Router();
@@ -35,6 +38,11 @@ router.post('/resume-call',resumeCall);
 
 router.post('/wait-music',holdMusicTwiml);
 router.post('/resume-connection',originalTwiml)
+
+router.post('/about-to-connect',aboutToConnect);
+
+router.post('/queue-status', queueStatus);
+router.post('/handle-deqeue', handleDequeue);
 
 // Twiml Fallback 
 router.post('/fallback',fallBackVoice);
