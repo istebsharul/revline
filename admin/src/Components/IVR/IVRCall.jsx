@@ -21,7 +21,8 @@ const IVRCall = () => {
     muteCall,
     resumeCall,
     waitingConnection,
-    handleWaitingConnection
+    handleWaitingConnection,
+    queueStatus
   } = useCallContext();
 
   const handleNumberChange = (phoneNumber) => {
@@ -34,6 +35,10 @@ const IVRCall = () => {
       <div>
         {deviceStatus}
       </div>
+      {/* <div>
+        <button className='bg-blue-400 p-2 rounded-lg text-white' onClick={handleWaitingConnection}>Connect</button>
+        Queue Status: {queueStatus}
+      </div> */}
       <DialPad
         phoneNumber={phoneNumber}
         handleNumberClick={(digit) => setPhoneNumber((prev) => prev + digit)}
