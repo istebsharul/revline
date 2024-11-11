@@ -29,7 +29,7 @@ const OrderListItem = ({ order, index, handleDelete }) => {
                 </button>
                 <button
                     onClick={() => handleDelete(order._id)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-[#f6251a] hover:text-red-800"
                     title="Delete Order"
                 >
                     <FaTrashAlt />

@@ -139,7 +139,7 @@ const TasksWidget = () => {
                   />
                   <button
                     onClick={handleDeleteTasks}
-                    className="text-red-600 cursor-pointer ml-2 border border-red-500 hover:bg-red-500 hover:text-white py-1 px-4 rounded-lg"
+                    className="text-[#f6251a] cursor-pointer ml-2 border border-red-500 hover:bg-red-500 hover:text-white py-1 px-4 rounded-lg"
                   >Confirm Delete</button>
                 </div>
               )}
@@ -149,7 +149,7 @@ const TasksWidget = () => {
               >
                 {showCheckboxes ? 'Cancel' :
                   <FaTrashAlt
-                    className="text-red-600 mr-2"
+                    className="text-[#f6251a] mr-2"
                     size={20}
                   />}
               </div>

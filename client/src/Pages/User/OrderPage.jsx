@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Banner from '../../Components/User/Banner';
 import { IoMdRefresh } from "react-icons/io";
+import toast from 'react-hot-toast';
 
 const OrderPage = () => {
   const [orders, setOrders] = useState([]); // State for orders list
@@ -23,6 +24,7 @@ const OrderPage = () => {
       setLoading(true);
       // Fetch orders for the customer
       const response = await axios.get(`/api/v1/orders/customer/${customerId}`);
+      console.log(response.data);
       setOrders(response.data);
 
       // Update local storage after fetching
@@ -48,6 +50,13 @@ const OrderPage = () => {
 
   // Handle order selection to show details
   const handleOrderClick = (id) => {
+    const order = orders.find((order)=> order._id ===id);
+    console.log(order);
+    if(order?.order_disposition_details?.order_status === 'Pending Approval'){
+      toast.error('Quotation is not ready, We will inform you via email once ready.');
+      console.log("jejeisvbslvn");
+      return;
+    }
     navigate(`details/${id}`);
   };
 
@@ -97,7 +106,7 @@ const OrderPage = () => {
                     {/* Right section: Status and Date */}
                     <div className="flex flex-col items-end justify-between">
                       <p className="text-gray-600 mt-1"><strong>Order Date:</strong> {new Date(order.request_date).toLocaleDateString()}</p>
-                      <p className={`mt-2 font-medium ${order.order_disposition_details?.order_status === 'Completed' ? 'text-green-500' : 'text-red-500'}`}>
+                      <p className={`mt-2 font-medium ${order.order_disposition_details?.order_status === 'Completed' ? 'text-green-500' : 'text-[#f6251a]'}`}>
                         <strong>Order Status:</strong> {order.order_disposition_details?.order_status}
                       </p>
                     </div>

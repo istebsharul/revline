@@ -71,9 +71,9 @@ const ContactForm = () => {
 
     return (
         <>
-            <div className="w-full flex flex-col justify-center items-center text-red-600">
+            <div className="w-full flex flex-col justify-center items-center text-[#f6251a]">
                 <div className='flex flex-col justify-center items-center'>
-                    <h1 className="md:text-3xl text-2xl mb-4 text-center text-red-600 font-inter">Contact Us</h1>
+                    <h1 className="md:text-3xl text-2xl mb-4 text-center text-[#f6251a] font-inter">Contact Us</h1>
                 </div>
                 <form onSubmit={handleSendMessage} className="block md:w-2/5 w-4/5 space-y-6">
                     <div>
@@ -125,7 +125,7 @@ const ContactForm = () => {
                     <div className="md:w-full flex md:flex-row flex-col md:space-x-4 md:space-y-0 space-y-4">
                         <button
                             type="submit"
-                            className="w-full text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-xl"
+                            className="w-full text-white bg-[#f6251a] hover:bg-red-700 py-2 px-4 rounded-xl"
                         >
                             Send message
                         </button>

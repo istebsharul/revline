@@ -20,10 +20,6 @@ const OrderDispositionHistorySchema = new mongoose.Schema({
 const QuotationSchema = new mongoose.Schema({
   status: { type: String, default: 'Pending', trim: true },
   quote_number: {type:String, unique:true, trim:true,sparse: true},
-  quotationPdf: {
-    data: Buffer,  // To store the generated PDF buffer
-    contentType: { type: String, default: 'application/pdf' }
-  },
   message: {type:String,trim:true},
   created_at: { type: Date, default: Date.now }
 });

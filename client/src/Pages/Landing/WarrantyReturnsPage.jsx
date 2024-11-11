@@ -12,14 +12,14 @@ function WarrantyReturnsPage() {
         </p>
       </div>
       <div className="p-6 max-w-4xl mx-auto font-sans">
-        <h1 className="text-red-600 text-left text-2xl font-bold mb-4">Warranty and Return Policy</h1>
+        <h1 className="text-[#f6251a] text-left text-2xl font-bold mb-4">Warranty and Return Policy</h1>
         <p className="text-left mb-8">
           At Revline Auto Parts, we are committed to providing you with high-quality auto parts and exceptional customer service.
           Our Warranty and Return Policy is designed to ensure your complete satisfaction with every purchase.
         </p>
 
         <section className="mb-12">
-          <h2 className="text-red-600 text-xl font-semibold mb-4">Standard Warranty</h2>
+          <h2 className="text-[#f6251a] text-xl font-semibold mb-4">Standard Warranty</h2>
           <p className="mb-4">
             We offer a 30-day warranty on all automotive parts, effective from the date of delivery. This warranty ensures that the part you receive is free from material defects and workmanship issues.
           </p>
@@ -46,7 +46,7 @@ function WarrantyReturnsPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-red-600 text-xl font-semibold mb-4">Return Policy</h2>
+          <h2 className="text-[#f6251a] text-xl font-semibold mb-4">Return Policy</h2>
           <ol className="list-decimal list-inside mb-4">
             <li>Contact Us: Reach out to our customer service team within the warranty period to initiate a return.</li>
             <li>Obtain RMA: We'll provide a Return Merchandise Authorization (RMA) form via email.</li>
@@ -57,7 +57,7 @@ function WarrantyReturnsPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-red-600 text-xl font-semibold mb-4">Specific Part Warranties and Conditions</h2>
+          <h2 className="text-[#f6251a] text-xl font-semibold mb-4">Specific Part Warranties and Conditions</h2>
           <h3 className="text-lg font-medium mb-2">Engines</h3>
           <ul className="list-disc list-inside mb-4">
             <li>Coverage Includes: Engine block, cylinder heads, pistons, crankshafts, camshafts, and valves.</li>
@@ -76,7 +76,7 @@ function WarrantyReturnsPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-red-600 text-xl font-semibold mb-4">Additional Important Information</h2>
+          <h2 className="text-[#f6251a] text-xl font-semibold mb-4">Additional Important Information</h2>
           <ul className="list-disc list-inside mb-4">
             <li>OEM Parts Interchangeability: Parts may fit multiple makes and models. We guarantee fitment based on the information provided at purchase.</li>
             <li>Appearance: While we aim to provide clean and presentable parts, cosmetic conditions are not covered under warranty.</li>
@@ -91,7 +91,7 @@ function WarrantyReturnsPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-red-600 text-xl font-semibold mb-4">Customer Responsibilities</h2>
+          <h2 className="text-[#f6251a] text-xl font-semibold mb-4">Customer Responsibilities</h2>
           <ul className="list-disc list-inside mb-4">
             <li>Accurate Information: Provide correct vehicle details to ensure proper part compatibility.</li>
             <li>Inspection Upon Delivery: Inspect parts immediately upon receipt. Report any issues within 4 days.</li>
@@ -100,7 +100,7 @@ function WarrantyReturnsPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-red-600 text-xl font-semibold mb-4">Liability Disclaimer</h2>
+          <h2 className="text-[#f6251a] text-xl font-semibold mb-4">Liability Disclaimer</h2>
           <ul className="list-disc list-inside mb-4">
             <li>Revline Auto Parts is not responsible for parts lost or damaged after delivery to the provided address.</li>
             <li>We are not responsible for failures due to customer misuse, improper installation, or neglect.</li>

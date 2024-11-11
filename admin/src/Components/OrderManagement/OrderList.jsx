@@ -64,7 +64,6 @@ const OrderList = ({ orders }) => {
                 order?.customer?.name || 'N/A',
                 order?.customer?.email || 'N/A',
                 order?.customer?.phone || 'N/A',
-                order?.quoteNumber || 'N/A',
             ])
         ]
             .map(e => e.join(','))
@@ -132,7 +131,7 @@ const OrderList = ({ orders }) => {
                     <p className="text-indigo-500 mt-2">Loading orders...</p>
                 </div>
             ) : error ? (
-                <div className="text-red-600 text-center">{error}</div>
+                <div className="text-[#f6251a] text-center">{error}</div>
             ) : (
                 <ul className="divide-y divide-gray-200">
                     {filteredOrders.map((order, index) => (

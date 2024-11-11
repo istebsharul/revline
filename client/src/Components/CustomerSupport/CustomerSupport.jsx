@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TicketForm from './TicketForm';
 import TicketDetails from './TicketDetails';
 
@@ -10,7 +10,7 @@ const CustomerSupport = ({orderId}) => {
   };
 
   return (
-    <div className="flex flex-col items-start p-6 bg-gray-50 border-t">
+    <div className="flex flex-col items-start bg-white px-6 py-4 rounded-lg">
       <h3 className="text-sm font-medium mb-2">Need Help? Contact Customer Support</h3>
       <p className="text-xs text-gray-500">If you have any issues or need assistance with your order, feel free to reach out to our customer support team:</p>
       <p className="text-xs text-gray-500"><strong>Email:</strong> support@revlineautoparts.com</p>
@@ -26,9 +26,9 @@ const CustomerSupport = ({orderId}) => {
       </button>
       <TicketDetails orderId={orderId}/>
       {/* Show TicketForm when the button is clicked */}
-      {showForm && <TicketForm order_id={orderId} />}
+      {showForm && <TicketForm order_id={orderId} setShowForm={setShowForm}/>}
     </div>
   );
-};
+};``
 
 export default CustomerSupport;

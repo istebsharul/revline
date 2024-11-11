@@ -59,6 +59,7 @@ export const getAllTickets = async (req, res) => {
 
 // Get all the tickets using order Id
 export const getTicketByOId = async (req, res) => {
+  logger.info(`Fetching ticket details for Order Id: ${req.params.orderId}`);
   try {
     const tickets = await Ticket.find({ orderId: req.params.orderId });
     

@@ -12,7 +12,7 @@ const CustomerItem = ({ customer, index, handleDelete }) => {
             <div className="flex items-center space-x-2">
                 <button
                     onClick={() => handleDelete(customer._id)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-[#f6251a] hover:text-red-800"
                     title="Delete Customer"
                 >
                     <FaTrashAlt />

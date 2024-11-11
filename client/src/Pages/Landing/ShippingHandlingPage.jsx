@@ -15,11 +15,11 @@ function ShippingHandlingPage() {
 
       {/* Content Section */}
       <div className='max-w-4xl p-6'>
-        <h1 className="text-red-600 text-left text-2xl font-bold mb-4">Shipping and Handling</h1>
+        <h1 className="text-[#f6251a] text-left text-2xl font-bold mb-4">Shipping and Handling</h1>
         <p className="text-left mb-8">
         At Revline Auto Parts, we are dedicated to delivering your orders promptly and efficiently across the United States and Canada. Please review our shipping policies below:
         </p>
-        <h2 className="text-red-600 text-xl font-semibold">Shipping & Handling Policies</h2>
+        <h2 className="text-[#f6251a] text-xl font-semibold">Shipping & Handling Policies</h2>
         <div className='py-4'>
           <h2 className='text-lg font-medium'>Order Processing</h2>
           <p className=''>

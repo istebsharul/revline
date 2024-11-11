@@ -55,7 +55,7 @@ function Footer() {
           </div>
 
           <div className="md:w-1/6 h-min gap-3 flex flex-col items-center lg:items-start justify-start font-inter font-light italic text-lg mt-2 lg:mt-0">
-            <p className="text-left lg:text-left">Rev Up <span className="text-red-600">Your Ride<br />
+            <p className="text-left lg:text-left">Rev Up <span className="text-[#f6251a]">Your Ride<br />
               with the</span> Best Parts</p>
             <div className='w-full space-y-1 font-medium text-md'>
               <button 
@@ -69,7 +69,7 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className=" hover:text-red-600"
+                className=" hover:text-[#f6251a]"
               >
                 <FaInstagram />
               </a>
@@ -78,7 +78,7 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className=" hover:text-red-600"
+                className=" hover:text-[#f6251a]"
               >
                 <FaFacebook />
               </a>
@@ -87,7 +87,7 @@ function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Twitter"
-                className=" hover:text-red-600"
+                className=" hover:text-[#f6251a]"
               >
                 <FaTwitter />
               </a>

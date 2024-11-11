@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { IoMdRefresh } from "react-icons/io";
+
 
 const TicketDetails = ({ orderId }) => {
   const [tickets, setTickets] = useState([]);
@@ -11,7 +13,8 @@ const TicketDetails = ({ orderId }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`/api/v1/tickets/order/${orderId}`);
+      console.log(orderId)
+      const response = await axios.get(`http://localhost:3000/api/v1/tickets/order/${orderId}`);
       setTickets(response.data);
       console.log(response.data);
     } catch (err) {
@@ -29,7 +32,7 @@ const TicketDetails = ({ orderId }) => {
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p className='p-2 text-sm'>{error}</p>;
+  if (error) return <p className='p-2 text-sm flex gap-2'>{error} <span onClick={fetchTicketDetails} className='flex justify-center items-center gap-2 border px-2 rounded shadow hover:shadow-lg bg-gray-100'>Retry<IoMdRefresh /></span></p>;
 
   return (
     <div className="w-full rounded-md">
@@ -45,7 +48,7 @@ const TicketDetails = ({ orderId }) => {
           to see update
         </div>
       ) : tickets.length === 0 ? (
-        <p className='text-xs text-red-400'>No tickets found for this order.</p>
+        <p className='text-xs text-red-400'>No tickets found for this order.</p> 
       ) : (
         tickets.map((ticket, index) => (
           <div key={index} className="w-full grid grid-cols-4 mt-4 border p-2 text-sm rounded-md">

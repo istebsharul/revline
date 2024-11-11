@@ -18,7 +18,7 @@ import brand13 from '../../Assets/Company/mercedes.png';
 import brand14 from '../../Assets/Company/mitsubishi.png';
 import brand15 from '../../Assets/Company/toyota.png';
 
-import car from '../../Assets/web/carImage.png';
+import car from '../../Assets/web/car.png';
 
 // Array of brand images
 const brandImages = [
@@ -44,21 +44,14 @@ const HeroSection = forwardRef((props, ref) => {
     <div ref={ref} id={props.id} className='relative w-full md:h-screen flex flex-col justify-center items-center md:pt-20 pt-20 z-10 bg-gray-100'>
       <div className='2xl:w-3/5 md:w-4/6 flex md:flex-row flex-col justify-center items-center'>
         <div className='md:w-1/2 flex flex-col justify-center md:items-start items-center'>
-          <h1 className='2xl:w-4/5 md:w-full w-4/5 md:text-left text-center font-palatino text-black md:text-6xl text-4xl font-medium leading-tight md:pt-16 md:p-0 p-4'>
-            Parts for Every Make and Model
+          <h1 className='2xl:w-4/5 md:w-full w-4/5 md:text-left text-center text-black md:text-6xl text-4xl font-medium leading-tight md:pt-16 md:p-0 p-4'>
+            Parts for Every <span className=' italic'>Make</span> and <span className='italic'>Model</span>
           </h1>
-          <div className='flex justify-center items-center'>
-            {/* <video
-              src="https://res.cloudinary.com/drszvaldf/video/upload/v1725348596/revline/bzn0s0itovnonddecmnx.mp4"
-              className='md:w-[35rem] w-1/2'
-              autoPlay
-              loop
-              muted
-              playsInline
-            /> */}
+          <div className="flex justify-center items-center overflow-hidden mt-10">
             <img
               src={car}
-              className='md:w-[30rem] w-1/2'
+              alt="Car"
+              className="w-[70%] md:w-full md:animate-car-slide animate-car-slideM" // Apply the custom animation class
             />
           </div>
         </div>
@@ -71,7 +64,7 @@ const HeroSection = forwardRef((props, ref) => {
       </div>
 
       <div className='2xl:w-4/6 md:w-4/5 w-5/6 h-fit relative bg-white md:my-10 my-5 flex shadow-xl rounded-full'>
-      <div className='absolute left-0 md:w-1/5 w-1/4 h-full bg-gradient-to-r from-black to white rounded-l-full z-10'></div>
+
         <div className="w-full overflow-hidden whitespace-nowrap bg-white p-2 rounded-full">
           <div className="inline-block animate-marquee flex justify-between items-center space-x-4">
             {/* Duplicate logos to create an infinite loop effect */}
@@ -87,6 +80,7 @@ const HeroSection = forwardRef((props, ref) => {
             ))}
           </div>
         </div>
+        <div className='absolute left-0 md:w-1/5 w-1/4 h-full bg-gradient-to-r from-black to white rounded-l-full z-10'></div>
         <div className='absolute right-0 md:w-1/5 w-1/4 h-full bg-gradient-to-l from-black to white rounded-r-full'></div>
       </div>
     </div>

@@ -72,7 +72,7 @@ const ProductListItem = ({ product, index, onSave, onDelete }) => {
                         <div className="text-sm text-gray-800">{product.quantity || '0'}</div>
                     }
                     <div
-                        className={`text-sm font-medium ${product.status === 'available' ? 'text-green-600' : 'text-red-600'}`}
+                        className={`text-sm font-medium ${product.status === 'available' ? 'text-green-600' : 'text-[#f6251a]'}`}
                     >
                         {product.status || 'Unknown'}
                     </div>
@@ -101,7 +101,7 @@ const ProductListItem = ({ product, index, onSave, onDelete }) => {
                 )}
                 <button
                     onClick={() => onDelete(product._id)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-[#f6251a] hover:text-red-800"
                     title="Delete"
                 >
                     <FaTrash className="h-5 w-5" />

@@ -76,7 +76,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
 
         // Run queries in parallel
         const [existingCustomer, part] = await Promise.all([
-            Customer.findOne({ $or: [{ email }, { phone }] }),
+            Customer.findOne({email}),
             Part.findOne({ part_name: vehicleData.part })
         ]);
 
