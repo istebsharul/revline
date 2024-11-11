@@ -164,7 +164,7 @@ const ProductList = ({ setShowForm, showForm }) => {
                     <p className="text-indigo-500 mt-2">Loading products...</p>
                 </div>
             ) : error ? (
-                <div className="text-red-600 text-center">Failed to fetch products. Please try again later.</div>
+                <div className="text-[#f6251a] text-center">Failed to fetch products. Please try again later.</div>
             ) : (
                 <ul className="divide-y divide-gray-200">
                     {filteredProducts.map((product, index) => (

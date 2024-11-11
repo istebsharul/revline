@@ -1,12 +1,12 @@
 import nodeMailer from 'nodemailer';
 import logger from './logger.js';
+import Order from '../models/order.js';
 
 const sendMail = async (options) => {
     logger.info(options.email);
     logger.info(options.subject);
     logger.info(options.message);
-    logger.info(options.pdfStream);
-    logger.info(options.filename);
+    logger.info(options.htmlContent);
     const transporter = nodeMailer.createTransport({
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT,
@@ -22,13 +22,7 @@ const sendMail = async (options) => {
         to: options.email,
         subject: options.subject,
         text: options.message,
-        attachments: options.filename && options.pdfStream ? [
-            {
-                filename: options.filename,
-                content: options.pdfStream,
-                encoding: 'base64',
-            },
-        ] : [], // Only include attachments if both filename and pdfStream are provided
+        ...(options.htmlContent && { html: options.htmlContent }),
     };
 
     await transporter.sendMail(mailOptions);

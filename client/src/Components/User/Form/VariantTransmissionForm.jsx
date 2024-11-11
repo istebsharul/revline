@@ -31,7 +31,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
                     options={transmissionOptions}
                     placeholder="Select Transmission"
                 />
-                {errors.transmission && <p className="text-xs text-red-600">{errors.transmission}</p>}
+                {errors.transmission && <p className="text-xs text-[#f6251a]">{errors.transmission}</p>}
             </div>
             <div>
                 <label className="block text-gray-800 text-sm p-1">Variant*</label>
@@ -42,7 +42,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
                     options={variantOptions} // Use the static variant options
                     placeholder="Select Variant"
                 />
-                {errors.variant && <p className="text-xs text-red-600">{errors.variant}</p>}
+                {errors.variant && <p className="text-xs text-[#f6251a]">{errors.variant}</p>}
             </div>
             <div >
                 <label className="block text-gray-800 text-xs flex justify-between"><p>Vehicle Information Number (VIN)</p>  <p>*Optional</p></label>
@@ -53,7 +53,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
                     value={vehicleData.vin}
                     onChange={e => setVehicleData({ ...vehicleData, vin: e.target.value })}
                 />
-                {errors.vin && <p className="text-xs text-red-600">{errors.vin}</p>}
+                {errors.vin && <p className="text-xs text-[#f6251a]">{errors.vin}</p>}
             </div>
             <div className="mb-6">
                 <label className="block text-gray-800 text-sm p-1">Message</label>
@@ -63,7 +63,7 @@ const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) 
                     value={vehicleData.message}
                     onChange={e => setVehicleData({ ...vehicleData, message: e.target.value })}
                 />
-                {errors.message && <p className="text-xs text-red-600">{errors.message}</p>}
+                {errors.message && <p className="text-xs text-[#f6251a]">{errors.message}</p>}
             </div>
         </div>
     );

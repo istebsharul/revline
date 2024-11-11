@@ -70,11 +70,11 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
       {/* Ticket Info Section */}
       <div className="flex justify-between items-start gap-4">
         {/* Ticket Details */}
-        <div className="w-3/5 flex">
-          <h3 className="w-20 font-bold text-lg">#{ticket.ticketNumber}</h3>
-          <p className='w-40 flex items-center'>
+        <div className="w-3/5 flex justify-start items-center">
+          <h3 className="w-min font-bold text-lg pr-10">#{ticket.ticketNumber}</h3>
+          <p className='w-full flex items-center text-nowrap'>
             <span className="text-sm font-semibold">Order ID:</span>
-            <span className="ml-1">{ticket?.orderId}</span>
+            <span className="ml-1">{ticket?.orderId.slice(-6)}</span>
             <button onClick={handleCopyToClipboard} className="ml-2 text-gray-600 hover:text-gray-800">
               <MdContentCopy />
             </button>

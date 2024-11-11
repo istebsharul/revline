@@ -43,7 +43,7 @@ const PaymentSection = ({ orderId, paymentDetails, orderStatus, quotationsStatus
           <div className="w-full">
             <button
               onClick={() => setShowFeedback(!showFeedback)}
-              className={`w-full px-4 py-2 font-semibold rounded border ${quotationsStatus === 'Rejected' ? 'cursor-not-allowed bg-blue-500 text-white' : 'text-black bg-white hover:bg-red-600 hover:text-white'}`}
+              className={`w-full px-4 py-2 font-semibold rounded border ${quotationsStatus === 'Rejected' ? 'cursor-not-allowed bg-blue-500 text-white' : 'text-black bg-white hover:bg-[#f6251a] hover:text-white'}`}
               disabled={quotationsStatus === 'Rejected'}
             >
               {quotationsStatus === 'Rejected' ? 'Thanks for Feedback' : `${showFeedback? "Don't Cancel":"Cancel"}`}

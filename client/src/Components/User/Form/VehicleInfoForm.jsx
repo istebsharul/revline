@@ -83,7 +83,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         options={years}
                         placeholder="Select Year"
                     />
-                    {errors.year && <p className="text-xs text-red-600 mt-[0.2rem]">{errors.year}</p>}
+                    {errors.year && <p className="text-xs text-[#f6251a] mt-[0.2rem]">{errors.year}</p>}
                 </div>
 
                 <div>
@@ -96,7 +96,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         isDisabled={!vehicleData.year}
                         placeholder="Select Make"
                     />
-                    {errors.make && <p className="text-xs text-red-600 mt-[0.2rem]">{errors.make}</p>}
+                    {errors.make && <p className="text-xs text-[#f6251a] mt-[0.2rem]">{errors.make}</p>}
                 </div>
 
                 <div>
@@ -109,7 +109,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         isDisabled={!vehicleData.make}
                         placeholder="Select Model"
                     />
-                    {errors.model && <p className="text-xs text-red-600 mt-[0.2rem]">{errors.model}</p>}
+                    {errors.model && <p className="text-xs text-[#f6251a] mt-[0.2rem]">{errors.model}</p>}
                 </div>
 
                 <div className="mb-6">
@@ -122,7 +122,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         isDisabled={!vehicleData.model}
                         placeholder="Select Part"
                     />
-                    {errors.part && <p className="text-xs text-red-600 mt-[0.2rem]">{errors.part}</p>}
+                    {errors.part && <p className="text-xs text-[#f6251a] mt-[0.2rem]">{errors.part}</p>}
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const TicketForm = ({ order_id }) => {
+const TicketForm = ({ order_id,setShowForm }) => {
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('Low');
@@ -16,7 +16,7 @@ const TicketForm = ({ order_id }) => {
       subject,
       description,
       category,
-      orderId,
+      orderId:order_id,
     };
 
     try {

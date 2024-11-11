@@ -4,6 +4,7 @@ import OrderDetails from '../../Components/Order/OrderDetails';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Banner from '../../Components/User/Banner';
+import { IoArrowBackOutline } from "react-icons/io5";
 
 // Fetch order details with support for optional parameters like `id`
 const fetchOrderDetails = async ({ queryKey }) => {
@@ -37,15 +38,12 @@ function OrderDetailsPage() {
     if (error) return <div>Error fetching order details: {error.message}</div>;
 
     return (
-        <div className='w-full flex flex-col justify-center items-center bg-gray-100 md:pt-10 pt-16'>
-            <div className="relative">
-                <Banner />
-                <p className="absolute text-4xl inset-0 flex justify-center items-center text-white">
-                    Your Orders
-                </p>
-            </div>
+        <div className='w-full flex flex-col justify-center items-center bg-gray-100 md:pt-10 pt-10'>
             {/* Pass fetched order data to the OrderDetails component */}
-            {order && <OrderDetails order={order} onBack={handleBack} />}
+            <div className='mt-10'>
+                <div onClick={handleBack}  className='w-min flex justify-start items-center border border-gray-400 rounded-lg hover:shadow-lg hover:bg-gray-200 py-2 px-4 m-2 md:mx-4 gap-2 bg-gray-100 text-nowrap text-sm'><IoArrowBackOutline/>Go Back to Orders</div>
+                {order && <OrderDetails order={order} />}
+            </div>
         </div>
     );
 }

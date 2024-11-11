@@ -64,7 +64,7 @@ const SalesManagement = () => {
                         <p className="text-indigo-500 mt-2">Loading orders...</p>
                     </div>
                 ) : error ? (
-                    <div className="text-red-600 text-center">Failed to fetch orders. Please try again later.</div>
+                    <div className="text-[#f6251a] text-center">Failed to fetch orders. Please try again later.</div>
                 ) : (
                     <>
                         <OrderList orders={orders} onSelectOrder={setSelectedOrder} onDelete={handleDelete} />

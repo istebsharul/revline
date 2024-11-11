@@ -14,7 +14,7 @@ function FAQPage() {
       </div>
 
       <div className='md:p-20 p-5 flex flex-col justify-center items-center'>
-        <h1 className='w-full md:text-4xl text-2xl text-red-600 text-justify font-medium font-inter '>
+        <h1 className='w-full md:text-4xl text-2xl text-[#f6251a] text-justify font-medium font-inter '>
           HAVING QUESTIONS?
         </h1>
         <p className='md:text-2xl tracking-wide text-center'>FREQUENTLY ASKED QUESTION</p>

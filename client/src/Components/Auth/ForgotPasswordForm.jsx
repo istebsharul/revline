@@ -79,7 +79,7 @@ function ForgotPassword() {
             href="/login"
             className="text-black font-medium text-sm md:text-sm"
           >
-            Already have an account? <span className="text-red-600 hover:underline">Login</span>
+            Already have an account? <span className="text-[#f6251a] hover:underline">Login</span>
           </a>
         </div>
       </div>

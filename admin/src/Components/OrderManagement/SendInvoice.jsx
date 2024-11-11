@@ -55,7 +55,7 @@ const SendInvoice = ({ orderDetails }) => {
                 onClick={handleSendInvoice}
                 disabled={isSending}
                 className={`w-full px-4 py-2 m-1 rounded-lg text-black ${
-                    isSending ? 'bg-gray-400' : success ? 'bg-green-500 hover:bg-green-600 text-white' : error ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-200 hover:bg-gray-300'
+                    isSending ? 'bg-gray-400' : success ? 'bg-green-500 hover:bg-green-600 text-white' : error ? 'bg-red-500 hover:bg-[#f6251a] text-white' : 'bg-gray-200 hover:bg-gray-300'
                 }`}
             >
                 {isSending ? 'Sending...' : 'Send Invoice'}
