@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import DialPad from './Call/Dialpad';
+import DialPad from './Call/DialPad';
 import CallPopup from './Call/CallPopup';
 import CallLogs from './CallLogs';
 import { useCallContext } from '../../Contexts/CallContext';
