@@ -22,7 +22,8 @@ const IVRCall = () => {
     resumeCall,
     waitingConnection,
     handleWaitingConnection,
-    queueStatus
+    queueStatus,
+    isOutgoingRef
   } = useCallContext();
 
   const handleNumberChange = (phoneNumber) => {
@@ -53,7 +54,7 @@ const IVRCall = () => {
       {showCallPopup && (
         <CallPopup
           callStatus={callStatus}
-          type={incomingConnection ? 'incoming' : 'outgoing'}
+          type={!isOutgoingRef.current ? 'incoming' : 'outgoing'}
           onEndCall={handleEndCall}
           incomingConnection={incomingConnection}
           acceptCall={acceptCall}
