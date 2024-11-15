@@ -9,12 +9,8 @@ const emailQueue = new Queue('emailQueue', {
     redis: {
         host: redis.options.host,
         port: redis.options.port,
-        username: redis.options.username,
-        password: redis.options.password,
-        maxRetriesPerRequest: 50,  // Increase retry limit
-        retryStrategy: (times) => {
-            return Math.min(times * 50, 2000); // Set an interval for retries
-        }
+        // username: redis.options.username,
+        // password: redis.options.password
     }
 });
 
