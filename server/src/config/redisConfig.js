@@ -1,4 +1,7 @@
 import Redis from 'ioredis';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const redis = new Redis({
     host: process.env.REDIS_HOST,
@@ -6,5 +9,7 @@ const redis = new Redis({
     username: process.env.REDIS_USER,
     password: process.env.REDIS_PASSWORD
 });
+
+redis.connect(()=> console.log('Redis Connected'));
 
 export default redis;

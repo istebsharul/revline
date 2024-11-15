@@ -2,6 +2,7 @@
 import Queue from 'bull';
 import sendMail from '../utils/sendMail.js';
 import redis from '../config/redisConfig.js';
+import logger from '../utils/logger.js';
 
 // Create the email queue
 const emailQueue = new Queue('emailQueue', {
@@ -9,7 +10,11 @@ const emailQueue = new Queue('emailQueue', {
         host: redis.options.host,
         port: redis.options.port,
         username: redis.options.username,
-        password: redis.options.password 
+        password: redis.options.password,
+        maxRetriesPerRequest: 50,  // Increase retry limit
+        retryStrategy: (times) => {
+            return Math.min(times * 50, 2000); // Set an interval for retries
+        }
     }
 });
 
@@ -26,6 +31,7 @@ emailQueue.process(async (job) => {
 });
 emailQueue.on('failed', (job, err) => {
     console.error(`Job failed with error: ${err.message}`);
+    logger.error(`Job failed with error: ${err.message}`);
 });
 
 
