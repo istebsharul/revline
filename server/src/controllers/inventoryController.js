@@ -312,9 +312,9 @@ export const importParts =(async (req, res) => {
         .pipe(csv())
         .on('data', (row) => {
             console.log('Row Data:', row); // Log each row of data
-            if (row.part_name && row.shipping_cost && row.size) {
+            if (row.name && row.shipping_cost && row.size) {
                 const part = new Part({
-                    part_name: row.part_name,
+                    part_name: row.name,
                     shipping_cost: parseFloat(row.shipping_cost),
                     size: row.size
                 });

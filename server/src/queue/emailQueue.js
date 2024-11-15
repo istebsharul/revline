@@ -7,7 +7,9 @@ import redis from '../config/redisConfig.js';
 const emailQueue = new Queue('emailQueue', {
     redis: {
         host: redis.options.host,
-        port: redis.options.port
+        port: redis.options.port,
+        username: redis.options.username,
+        password: redis.options.password 
     }
 });
 
