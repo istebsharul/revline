@@ -20,7 +20,12 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors({
+    origin: ['https://revline-rlux.onrender.com','https://revline-admin.onrender.com',], // Only allow your frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],   // Allowed methods
+    credentials: true,                          // Allow cookies/auth headers
+  }));
+  
 
 app.get('/health', (req, res) => {
     res.status(200).json({

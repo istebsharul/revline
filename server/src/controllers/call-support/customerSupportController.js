@@ -219,7 +219,7 @@ export const handleDequeue = (req, res) => {
   logger.info("Trying to connect waiter in queue");
   const twiml = new twilio.twiml.VoiceResponse();
   twiml.dial({
-    url: 'http://localhost:3000/api/v1/twilio/about-to-connect'
+    url: '/api/v1/twilio/about-to-connect'
   }, 'support-queue');
 
   res.type('text/xml');

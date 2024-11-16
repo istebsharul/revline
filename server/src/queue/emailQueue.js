@@ -9,8 +9,8 @@ const emailQueue = new Queue('emailQueue', {
     redis: {
         host: redis.options.host,
         port: redis.options.port,
-        // username: redis.options.username,
-        // password: redis.options.password
+        username: redis.options.username,
+        password: redis.options.password
     }
 });
 

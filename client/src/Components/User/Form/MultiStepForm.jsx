@@ -92,7 +92,7 @@ const MultiStepForm = () => {
         console.log(email);
 
         // Define the promise
-        const postRequest = axios.post('http://localhost:3000/api/v1/customer/create', {
+        const postRequest = axios.post('/api/v1/customer/create', {
             name,
             email,
             phone,

@@ -24,7 +24,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
         // console.log(vehicleData?.year);
         const fetchMakes = async() => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/v1/form/makes/${vehicleData.year}`);
+                const response = await axios.get(`/api/v1/form/makes/${vehicleData.year}`);
                 setMakes(response.data.makes);
                 // console.log("Makes", response.data.makes);
             } catch (error) {
@@ -59,7 +59,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
     useEffect(()=>{ 
         const fetchParts = async() =>{
             try {
-                const response = await axios.get(`http://localhost:3000/api/v1/form/parts`);
+                const response = await axios.get(`/api/v1/form/parts`);
                 setParts(response.data);
                 console.log(response.data);
             } catch (error) {

@@ -14,7 +14,7 @@ const TicketDetails = ({ orderId }) => {
     setError(null);
     try {
       console.log(orderId)
-      const response = await axios.get(`http://localhost:3000/api/v1/tickets/order/${orderId}`);
+      const response = await axios.get(`/api/v1/tickets/order/${orderId}`);
       setTickets(response.data);
       console.log(response.data);
     } catch (err) {
