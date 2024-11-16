@@ -22,6 +22,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'Server is up and running!',
+        timestamp: new Date(),
+    });
+});
+
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/admin-auth',adminRoutes);
 app.use('/api/v1/inventory', inventoryRoutes); // Base path for inventory-related routes
