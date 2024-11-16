@@ -26,7 +26,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
             try {
                 const response = await axios.get(`/api/v1/form/makes/${vehicleData.year}`);
                 setMakes(response.data.makes);
-                // console.log("Makes", response.data.makes);
+                console.log("Makes", response.data.makes);
             } catch (error) {
                 console.error(error);
             }
@@ -92,7 +92,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         className="w-full"
                         value={vehicleData.make ? { value: vehicleData.make, label: vehicleData.make } : null}
                         onChange={option => setVehicleData({ ...vehicleData, make: option.value })}
-                        options={makes.map(make => ({ value: make.name, label: make.name }))}
+                        options={makes?.map(make => ({ value: make.name, label: make.name }))}
                         isDisabled={!vehicleData.year}
                         placeholder="Select Make"
                     />
@@ -118,7 +118,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         className="w-full"
                         value={vehicleData.part ? { value: vehicleData.part, label: vehicleData.part } : null}
                         onChange={option => setVehicleData({ ...vehicleData, part: option.value })}
-                        options={parts.map(part => ({value:part.part_name,label: part.part_name}))}
+                        options={parts?.map(part => ({value:part.part_name,label: part.part_name}))}
                         isDisabled={!vehicleData.model}
                         placeholder="Select Part"
                     />
