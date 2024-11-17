@@ -9,7 +9,7 @@ const TwilioForm = () => {
     const handleSendSMS = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('/api/v1/ivr/send-sms', {
+            const res = await axios.post('https://server.revlineautoparts.com/api/v1/ivr/send-sms', {
                 to: phoneNumber,
                 message: message,
             });
@@ -22,7 +22,7 @@ const TwilioForm = () => {
     const handleMakeCall = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('/api/v1/ivr/make-call', {
+            const res = await axios.post('https://server.revlineautoparts.com/api/v1/ivr/make-call', {
                 to: phoneNumber,
             });
             setResponse(res.data.message);

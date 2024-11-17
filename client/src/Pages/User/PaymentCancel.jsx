@@ -20,7 +20,7 @@ function PaymentCancel() {
     // Call backend to handle the cancellation
     const handleCancellation = async () => {
       try {
-        const response = await axios.get(`/api/v1/paypal/cancel?token=${token}`);
+        const response = await axios.get(`https://server.revlineautoparts.com/api/v1/paypal/cancel?token=${token}`);
         if (response.data.status === 'cancelled') {
           setMessage('Your payment has been successfully cancelled.');
         } else {

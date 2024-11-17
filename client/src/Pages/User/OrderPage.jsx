@@ -23,7 +23,7 @@ const OrderPage = () => {
     try {
       setLoading(true);
       // Fetch orders for the customer
-      const response = await axios.get(`/api/v1/orders/customer/${customerId}`);
+      const response = await axios.get(`https://server.revlineautoparts.com/api/v1/orders/customer/${customerId}`);
       console.log(response.data);
       setOrders(response.data);
 

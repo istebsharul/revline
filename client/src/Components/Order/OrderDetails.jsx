@@ -73,7 +73,7 @@ const OrderDetails = ({ order }) => {
   const handleAccept = async () => {
     setLoading(true);
     toast.promise(
-      axios.post('/api/v1/paypal/create-payment', { orderId: order._id }),
+      axios.post('https://server.revlineautoparts.com/api/v1/paypal/create-payment', { orderId: order._id }),
       {
         loading: 'Creating PayPal payment...',
         success: <b>Redirecting to PayPal...</b>,

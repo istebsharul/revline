@@ -14,7 +14,7 @@ const SmsLogs = () => {
     const fetchSmsLogs = async () => {
         setLoading(true);
         try {
-            const res = await axios.get('/api/v1/twilio/sms-logs');
+            const res = await axios.get('https://server.revlineautoparts.com/api/v1/twilio/sms-logs');
             setLogs(res.data);
             setError('');
             setHasFetched(true); // Mark as fetched

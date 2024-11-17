@@ -59,10 +59,10 @@ export const makeCall = async (req, res) => {
   try {
 
     const call = await twilioClient.calls.create({
-      url: `https://df0c-203-171-244-12.ngrok-free.app/api/v1/twilio/voice`, // URL to TwiML voice instructions
+      url: `https://server.revlineautoparts.com/api/v1/twilio/voice`, // URL to TwiML voice instructions
       to: phoneNumber,
       from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number,
-      statusCallback: `https://df0c-203-171-244-12.ngrok-free.app/api/v1/twilio/callback`,
+      statusCallback: `https://server.revlineautoparts.com/api/v1/twilio/callback`,
       statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
     });
 
@@ -110,7 +110,7 @@ export const holdCall = async (req, res) => {
   logger.info("Call sid to hold",callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
-      url: 'https://df0c-203-171-244-12.ngrok-free.app/api/v1/twilio/wait-music',
+      url: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music',
       method: 'POST'
     });
 
@@ -130,7 +130,7 @@ export const resumeCall = async (req, res) => {
   logger.info("Call sid to resume",callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
-      url: 'https://df0c-203-171-244-12.ngrok-free.app/api/v1/twilio/resume-connection',
+      url: 'https://server.revlineautoparts.com/api/v1/twilio/resume-connection',
       method: 'POST'
     });
 
@@ -201,7 +201,7 @@ export const voiceResponse = (req, res) => {
       // Agent is busy, place the call in the queue
       twiml.say("All agents are currently busy. Please wait while we connect or call after sometime.");
       twiml.enqueue('support-queue', {
-        waitUrl: 'https://df0c-203-171-244-12.ngrok-free.app/api/v1/twilio/wait-music'
+        waitUrl: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music'
       });
     }
 

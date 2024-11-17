@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 const fetchCustomers = async ({ queryKey }) => {
     const [_key, { page, limit }] = queryKey;
-    const { data } = await axios.get('/api/v1/customer/list', { params: { page, limit } });
+    const { data } = await axios.get('https://server.revlineautoparts.com/api/v1/customer/list', { params: { page, limit } });
     return data;
 };
 
@@ -41,7 +41,7 @@ function CustomerManagement() {
     const handleAddCustomer = async (newCustomer) => {
         try {
             // Add the new customer to the server
-            const res = await axios.post('/api/v1/customer/add', newCustomer);
+            const res = await axios.post('https://server.revlineautoparts.com/api/v1/customer/add', newCustomer);
             // Optionally, you can update the local cache with the new customer
             queryClient.setQueryData(['customers', { page, limit }], (oldData) => ({
                 ...oldData,

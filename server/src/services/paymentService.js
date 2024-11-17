@@ -73,8 +73,8 @@ export const createPayment = async (orderId) => {
         },
       ],
       redirect_urls: {
-        return_url: 'http://localhost:5174/return',
-        cancel_url: 'http://localhost:5174/cancel',
+        return_url: 'https://revlineautoparts.com/return',
+        cancel_url: 'https://revlineautoparts.com/cancel',
       },
     }, {
       headers: {

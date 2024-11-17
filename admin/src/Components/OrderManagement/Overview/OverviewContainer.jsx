@@ -30,7 +30,7 @@ const OverviewContainer = ({ order }) => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`/api/v1/orders/${orderDetails._id}`, orderDetails, {
+      await axios.put(`https://server.revlineautoparts.com/api/v1/orders/${orderDetails._id}`, orderDetails, {
         headers: {
           'Content-Type': 'application/json', // Ensures the payload is sent in JSON format
         },
