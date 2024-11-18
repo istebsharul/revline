@@ -59,10 +59,10 @@ export const makeCall = async (req, res) => {
   try {
 
     const call = await twilioClient.calls.create({
-      url: `https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/voice`, // URL to TwiML voice instructions
+      url: `https://server.revlineautoparts.com/api/v1/twilio/voice`, // URL to TwiML voice instructions
       to: phoneNumber,
       from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number,
-      statusCallback: `https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/callback`,
+      statusCallback: `https://server.revlineautoparts.com/api/v1/twilio/callback`,
       statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
     });
 
@@ -91,6 +91,8 @@ export const endCall = async (req, res) => {
     //   io.close(); // Close all connections and clean up
     //   console.log("Socket.io server closed after call end.");
     //   io = null; // Reset the socket instance
+    // }else{
+    //   console.log("No io Connection found!");
     // }
   } catch (error) {
     logger.error(`Error ending the call: ${error.message}`);
@@ -108,7 +110,7 @@ export const holdCall = async (req, res) => {
   logger.info("Call sid to hold",callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
-      url: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/wait-music',
+      url: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music',
       method: 'POST'
     });
 
@@ -128,7 +130,7 @@ export const resumeCall = async (req, res) => {
   logger.info("Call sid to resume",callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
-      url: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/resume-connection',
+      url: 'https://server.revlineautoparts.com/api/v1/twilio/resume-connection',
       method: 'POST'
     });
 
@@ -199,14 +201,14 @@ export const voiceResponse = (req, res) => {
       // Agent is busy, place the call in the queue
       twiml.say("All agents are currently busy. Please wait while we connect or call after sometime.");
       twiml.enqueue('support-queue', {
-        waitUrl: 'https://dc92-115-187-57-96.ngrok-free.app/api/v1/twilio/wait-music'
+        waitUrl: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music'
       });
     }
 
     // Respond with the TwiML instructions
     res.type('text/xml');
     res.send(twiml.toString());
-    logger.info("TwiML voice response sent successfully, caller added to queue");
+    logger.info("TwiML voice response sent successfully");
   } catch (error) {
     logger.error(`Error generating TwiML response: ${error.message}`);
     res.status(500).json({ error: 'Failed to generate voice response' });
@@ -217,7 +219,7 @@ export const handleDequeue = (req, res) => {
   logger.info("Trying to connect waiter in queue");
   const twiml = new twilio.twiml.VoiceResponse();
   twiml.dial({
-    url: 'http://localhost:3000/api/v1/twilio/about-to-connect'
+    url: '/api/v1/twilio/about-to-connect'
   }, 'support-queue');
 
   res.type('text/xml');

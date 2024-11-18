@@ -9,7 +9,7 @@ import ImportParts from './ImportParts';
 
 const fetchInventory = async ({ queryKey }) => {
     const [_key, { page, limit }] = queryKey; // Destructuring queryKey to get page and limit
-    const { data } = await axios.get('/api/v1/inventory/list', { params: { page, limit } });
+    const { data } = await axios.get('https://server.revlineautoparts.com/api/v1/inventory/list', { params: { page, limit } });
     return data;
 };
 
@@ -61,7 +61,7 @@ const ProductList = ({ setShowForm, showForm }) => {
     // Save and Delete handlers
     const handleSave = async (updatedProduct) => {
         try {
-            const res = await axios.put(`/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
+            const res = await axios.put(`https://server.revlineautoparts.com/api/v1/inventory/${updatedProduct._id}`, updatedProduct);
             // Invalidate the 'inventory' query to trigger a refetch
             queryClient.invalidateQueries(['inventory']);
             toast.success('Successfully Updated');
@@ -76,7 +76,7 @@ const ProductList = ({ setShowForm, showForm }) => {
         const confirmed = confirm("Are you sure you want to delete?");
         if (confirmed) {
             try {
-                await axios.delete(`/api/v1/inventory/${productId}`);
+                await axios.delete(`https://server.revlineautoparts.com/api/v1/inventory/${productId}`);
                 queryClient.invalidateQueries(['inventory']);
                 toast.success("Deleted Successfully");
                 // Refetch or update the product list using react-query methods

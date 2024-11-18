@@ -2,12 +2,15 @@
 import Queue from 'bull';
 import sendMail from '../utils/sendMail.js';
 import redis from '../config/redisConfig.js';
+import logger from '../utils/logger.js';
 
 // Create the email queue
 const emailQueue = new Queue('emailQueue', {
     redis: {
         host: redis.options.host,
-        port: redis.options.port
+        port: redis.options.port,
+        username: redis.options.username,
+        password: redis.options.password
     }
 });
 
@@ -24,6 +27,7 @@ emailQueue.process(async (job) => {
 });
 emailQueue.on('failed', (job, err) => {
     console.error(`Job failed with error: ${err.message}`);
+    logger.error(`Job failed with error: ${err.message}`);
 });
 
 

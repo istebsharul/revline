@@ -18,7 +18,7 @@ const ImportProducts = () => {
             setLoading(true);
 
             try {
-                await axios.post('/api/v1/inventory/import', formData, {
+                await axios.post('https://server.revlineautoparts.com/api/v1/inventory/import', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },

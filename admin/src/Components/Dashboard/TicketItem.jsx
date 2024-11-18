@@ -13,7 +13,7 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
     if (status !== ticket.status) {
       try {
         const updatedData = { ...ticket, status }; // Update status in the data being sent
-        const response = await axios.patch(`/api/v1/tickets/ticket/${ticket._id}`, updatedData);
+        const response = await axios.patch(`https://server.revlineautoparts.com/api/v1/tickets/ticket/${ticket._id}`, updatedData);
         onEditSuccess(response.data); // Notify the parent component of the update
         setIsEditing(false); // Exit editing mode
         toast.success('Ticket updated successfully!'); // Success notification
@@ -29,7 +29,7 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
 
   const handleResolve = async () => {
     try {
-      await axios.patch(`/api/v1/tickets/ticket/${ticket._id}`, { status: 'Closed' });
+      await axios.patch(`https://server.revlineautoparts.com/api/v1/tickets/ticket/${ticket._id}`, { status: 'Closed' });
       onEditSuccess({ ...ticket, status: 'Closed' }); // Update the ticket status in parent
       toast.success('Ticket resolved successfully!'); // Success notification
     } catch (error) {
@@ -44,7 +44,7 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
       return;
     }
     try {
-      await axios.delete(`/api/v1/tickets/ticket/${ticket._id}`);
+      await axios.delete(`https://server.revlineautoparts.com/api/v1/tickets/ticket/${ticket._id}`);
       onDeleteSuccess(ticket._id); // Notify the parent component of the deletion
       toast.success('Ticket deleted successfully!'); // Success notification
     } catch (error) {

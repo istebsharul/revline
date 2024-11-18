@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import MultiStepForm from './Form/MultiStepForm';
+import VideoComponent from '../User/VideoComponent';
 
 // Dynamically import 15 images
 import brand1 from '../../Assets/Company/audi.webp';
@@ -18,7 +19,7 @@ import brand13 from '../../Assets/Company/mercedes.png';
 import brand14 from '../../Assets/Company/mitsubishi.png';
 import brand15 from '../../Assets/Company/toyota.png';
 
-import car from '../../Assets/web/car.png';
+// import car from '../../Assets/web/car.png';
 
 // Array of brand images
 const brandImages = [
@@ -48,11 +49,19 @@ const HeroSection = forwardRef((props, ref) => {
             Parts for Every <span className=' italic'>Make</span> and <span className='italic'>Model</span>
           </h1>
           <div className="flex justify-center items-center overflow-hidden mt-10">
-            <img
+            {/* <img
               src={car}
               alt="Car"
               className="w-[70%] md:w-full md:animate-car-slide animate-car-slideM" // Apply the custom animation class
-            />
+            /> */}
+            {/* <video
+              src="https://res.cloudinary.com/dp3xz2kbh/video/upload/v1731663935/revlineautoparts/Assets/ebhcbutjl5vmn7kfrfd5.mp4"
+              className='md:w-[35rem] w-1/2'
+              autoPlay
+              muted
+              playsInline
+            /> */}
+            <VideoComponent/>
           </div>
         </div>
 

@@ -20,7 +20,20 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors({
+    origin: ['https://revlineautoparts.com','https://admin.revlineautoparts.com',], // Only allow your frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],   // Allowed methods
+    credentials: true,                          // Allow cookies/auth headers
+  }));
+  
+
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'Server is up and running!',
+        timestamp: new Date(),
+    });
+});
 
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/admin-auth',adminRoutes);

@@ -9,7 +9,7 @@ import { IoArrowBackOutline } from "react-icons/io5";
 // Fetch order details with support for optional parameters like `id`
 const fetchOrderDetails = async ({ queryKey }) => {
     const [_key, { id }] = queryKey; // Extract 'id' from queryKey object
-    const { data } = await axios.get(`/api/v1/orders/user/${id}`);
+    const { data } = await axios.get(`https://server.revlineautoparts.com/api/v1/orders/user/${id}`);
     return data;
 };
 

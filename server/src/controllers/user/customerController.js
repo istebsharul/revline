@@ -74,56 +74,67 @@ export const createCustomer = asyncErrors(async (req, res) => {
     try {
         const { name, email, phone, zipcode, vehicleData } = req.body;
 
+        logger.info(`Received request to create customer: ${email}`);
+
         // Run queries in parallel
         const [existingCustomer, part] = await Promise.all([
-            Customer.findOne({email}),
-            Part.findOne({ part_name: vehicleData.part })
+            Customer.findOne({ email }),
+            Part.findOne({ part_name: vehicleData.part }),
         ]);
+        logger.info(`Query results: existingCustomer=${!!existingCustomer}, part=${!!part}`);
+
+        if (!part) {
+            logger.warn(`Part not found: ${vehicleData.part}`);
+            return res.status(404).json({ message: 'Part not found' });
+        }
 
         // Create order
         const newOrder = new Order({
             order_summary: { ...vehicleData, part_name: vehicleData.part },
             pricing_details: { shipping_size: part.size, shipping_cost: part.shipping_cost },
             shipping_details: { customer: existingCustomer ? existingCustomer._id : null },
-            order_disposition_details: { agent_notes: vehicleData.message }
+            order_disposition_details: { agent_notes: vehicleData.message },
         });
 
         let newCustomer;
         const orderInfo = {
             orderId: newOrder._id,
-            requestDate: new Date(),  // Capture current date and time
+            requestDate: new Date(),
             part: vehicleData.part,
         };
 
-        // Update existing customer or create a new one
         if (existingCustomer) {
             existingCustomer.orderInfo.push(orderInfo);
             newOrder.customer = existingCustomer._id;
             newOrder.shipping_details.customer = existingCustomer._id;
             await Promise.all([existingCustomer.save(), newOrder.save()]);
+            logger.info(`Updated existing customer: ${existingCustomer.email}`);
         } else {
             newCustomer = new Customer({ name, email, phone, zipcode, orderInfo: [orderInfo] });
             await newCustomer.save();
             newOrder.customer = newCustomer._id;
             newOrder.shipping_details.customer = newCustomer._id;
             await newOrder.save();
+            logger.info(`Created new customer: ${email}`);
         }
 
         // Add email to queue
         const registrationLink = `https://yourcompany.com/signup?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
-        await emailQueue.add({
-            email,
-            subject: 'Order Confirmation',
-            message: `Please register yourself by clicking the link. ${registrationLink}\n\nBest regards,\nRevline Autoparts`
-        });
+        // const res  = await emailQueue.add({
+        //     email,
+        //     subject: 'Order Confirmation',
+        //     message: `Please register yourself by clicking the link. ${registrationLink}\n\nBest regards,\nRevline Autoparts`,
+        // });
+
+        await sendMail({email,subject:"Order Confirmation"})
+        logger.info(`Email queued for: ${email}`,res);
 
         res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
     } catch (error) {
-        console.error('Error:', error);
+        logger.error(`Error creating customer and order: ${error.message}`);
         res.status(500).json({ message: 'Failed to create customer and order', error: error.message });
     }
 });
-
 export const updateCustomer = asyncErrors(async (req, res) => {
     try {
         const { quotationStatus } = req.body; // Expecting "Accepted" or "Rejected" status from the request body

@@ -21,7 +21,7 @@ function PaymentSuccessfulPage() {
     // Call backend to complete the payment
     const executePayment = async () => {
       try {
-        const response = await axios.get(`/api/v1/paypal/return?paymentId=${paymentId}&PayerID=${payerId}`);
+        const response = await axios.get(`https://server.revlineautoparts.com/api/v1/paypal/return?paymentId=${paymentId}&PayerID=${payerId}`);
         if (response.data.status === 'success') {
           setMessage('Payment successful! Thank you for your purchase.');
         } else {

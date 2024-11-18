@@ -20,7 +20,7 @@ const TicketForm = ({ order_id,setShowForm }) => {
     };
 
     try {
-      const response = await axios.post('/api/v1/tickets/ticket', ticketData);
+      const response = await axios.post('https://server.revlineautoparts.com/api/v1/tickets/ticket', ticketData);
       console.log('Ticket created:', response.data);
 
       // Reset form fields

@@ -45,7 +45,7 @@ const OrderList = ({ orders }) => {
         }
 
         try {
-            await axios.delete(`/api/v1/orders/${orderId}`);
+            await axios.delete(`https://server.revlineautoparts.com/api/v1/orders/${orderId}`);
             setFilteredOrders(filteredOrders.filter(order => order._id !== orderId));
         } catch (error) {
             console.error(error);
