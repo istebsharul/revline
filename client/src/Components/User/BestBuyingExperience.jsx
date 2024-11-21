@@ -104,19 +104,19 @@ function BestBuyingExperience({ handleScroll }) {
                         >
                             <div className='flex flex-col justify-center items-center text-white md:text-lg text-sm'>
                                 <p className='md:text-4xl text-2xl font-semibold'>
-                                    {counterOn && <CountUp start={0} end={1000} />}+
+                                    {counterOn && <CountUp start={0} end={27000} />}+
                                 </p>
                                 PARTS SOLD
                             </div>
                             <div className='flex flex-col justify-center items-center text-white md:text-lg text-sm'>
                                 <p className='md:text-4xl text-2xl font-semibold'>
-                                    {counterOn && <CountUp start={0} end={100} />}+
+                                    {counterOn && <CountUp start={0} end={250} />}+
                                 </p>
                                 ACTIVE VISITORS
                             </div>
                             <div className='flex flex-col justify-center items-center text-white md:text-lg text-sm'>
                                 <p className='md:text-4xl text-2xl font-semibold'>
-                                    {counterOn && <CountUp start={0} end={10} />}+
+                                    {counterOn && <CountUp start={0} end={180} />}+
                                 </p>
                                 CITIES
                             </div>

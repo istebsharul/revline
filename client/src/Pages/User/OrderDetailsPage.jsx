@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import OrderDetails from '../../Components/Order/OrderDetails';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import Banner from '../../Components/User/Banner';
 import { IoArrowBackOutline } from "react-icons/io5";
+import { ImSpinner2 } from "react-icons/im";
+
 
 // Fetch order details with support for optional parameters like `id`
 const fetchOrderDetails = async ({ queryKey }) => {
@@ -34,8 +35,9 @@ function OrderDetailsPage() {
     };
 
     // Display loading or error states
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error fetching order details: {error.message}</div>;
+    if (isLoading) return <div className='w-full h-screen flex justify-center items-center'><ImSpinner2 className="text-4xl text-red-600 animate-spin" />
+</div>;
+    if (error) return <div className='w-full h-screen flex justify-center items-center'>Error fetching order details: {error.message}</div>;
 
     return (
         <div className='w-full flex flex-col justify-center items-center bg-gray-100 md:pt-10 pt-10'>

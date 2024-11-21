@@ -3,8 +3,6 @@ import React from 'react';
 import Select from 'react-select';
 
 const VariantTransmissionForm = ({ trims,vehicleData, setVehicleData, errors }) => {
-    // const [transmission, setTransmission] = useState([]);
-
 
     const transmissionOptions = trims
         ? [...trims?.map(trim => ({ value: trim, label: trim })), { value: 'I\'m not sure', label: 'I\'m not sure' }]

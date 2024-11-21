@@ -50,7 +50,7 @@ function PaymentCancel() {
     <div className="flex flex-col items-center justify-center w-full h-screen bg-gray-50">
       {isProcessing ? (
         <div className="flex flex-col items-center">
-          <ImSpinner2 className="text-4xl text-blue-500 animate-spin" /> {/* Spinner */}
+          <ImSpinner2 className="text-4xl text-red-500 animate-spin" /> {/* Spinner */}
           <p className="mt-4 text-lg text-gray-600">{message}</p>
         </div>
       ) : (
