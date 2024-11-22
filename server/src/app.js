@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-    origin: ['https://revlineautoparts.com','https://admin.revlineautoparts.com',], // Only allow your frontend domain
+    origin: ['https://revlineautoparts.com','https://admin.revlineautoparts.com'], // Only allow your frontend domain
     methods: ['GET', 'POST', 'PUT', 'DELETE'],   // Allowed methods
     credentials: true,                          // Allow cookies/auth headers
   }));

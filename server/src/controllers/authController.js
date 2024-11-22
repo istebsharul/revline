@@ -4,6 +4,7 @@ import logger from '../utils/logger.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import sendToken from '../utils/jwt.js';
 import sendMail from '../utils/sendMail.js';
+import sendContactMail from '../utils/sendContactMail.js';
 import crypto from 'crypto';
 
 /**
@@ -216,4 +217,44 @@ export const resetPassword = asyncErrors(async (req, res) => {
 
     logger.info(`Password successfully reset for user: ${user.email}`);
     res.status(200).json({ success: true, message: `Password has been reset successfully${user.password}` });
+});
+
+export const contactForm = asyncErrors(async (req, res) => {
+    const { name, email, phoneNumber, message } = req.body;
+
+    // Log the incoming request
+    logger.info('Contact form endpoint hit');
+    logger.info(`Request body: ${JSON.stringify({ name, email, phoneNumber, message })}`);
+
+    // Validate required fields
+    if (!name || !email || !message) {
+        logger.warn('Validation failed: Missing required fields');
+        return res.status(400).json({
+            success: false,
+            message: 'Required fields are missing: name, email, and message are mandatory.',
+        });
+    }
+
+    try {
+        // Log before sending email
+        logger.info('Sending contact form email');
+        await sendContactMail({ name, email, phoneNumber, message });
+
+        // Log success
+        logger.info('Contact form email sent successfully');
+        res.status(200).json({
+            success: true,
+            message: 'Your message has been sent successfully. We will get back to you soon.',
+        });
+    } catch (error) {
+        // Log the error for debugging
+        logger.error(`Error sending contact form: ${error.message}`);
+
+        // Respond with an error
+        res.status(500).json({
+            success: false,
+            message: 'Failed to send your message. Please try again later.',
+            error: error.message, // Optional: include error details for debugging
+        });
+    }
 });

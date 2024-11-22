@@ -2,13 +2,21 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cta from './Cta';
 import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaLocationDot } from "react-icons/fa6";
+
 
 function Footer() {
   const navigate = useNavigate();
 
-  const handleClick = () =>{
+  const handleClick = () => {
     navigate('/#form');
   }
+
+  const handleCall = () => {
+    const phoneNumber = "+1 855 600 9480"; // Fixed phone number
+    const formattedNumber = `tel:${phoneNumber}`; // Use tel: protocol to open the dialer
+    window.location.href = formattedNumber;
+  };
 
   return (
     <>
@@ -16,9 +24,12 @@ function Footer() {
         <div className="flex flex-col lg:flex-row justify-around mx-2 my-6">
           <div className="w-full lg:w-1/4 mb-4 lg:mb-0">
             <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1729154791/revlineautoparts/Logo/olbaarffsi6guynmjunm.webp" width={100} height={100} alt="Logo" className="mx-auto lg:mx-0 w-32 lg:w-3/5" />
-            <div className="text-center lg:text-left font-thin text-md mt-2 lg:mt-0">
+            <div className="text-center lg:text-left font-thin text-sm mt-2 lg:mt-0">
               Revline Auto Parts offers a complete range of high-quality auto parts for all vehicles, ensuring reliability and performance at competitive prices. Your trusted source for everything your car needs.
+              <br/><span className='font-light text-sm flex mt-2'><FaLocationDot className='mr-0.5 my-0.5' />
+              8565 South Eastern Avenue Suite 255, Las Vegas, NV, 89123</span>
             </div>
+            <div></div>
           </div>
 
           <div className="w-full lg:w-2/5 flex flex-col lg:flex-row text-white text-sm justify-around md:p-0 px-8 mt-2 lg:mt-0">
@@ -58,10 +69,12 @@ function Footer() {
             <p className="text-left lg:text-left">Rev Up <span className="text-[#f6251a]">Your Ride<br />
               with the</span> Best Parts</p>
             <div className='w-full space-y-1 font-medium text-md'>
-              <button 
+              <button
                 onClick={handleClick}
                 className='w-full px-1 bg-white hover:bg-green-600 hover:text-white rounded-lg text-black'>Find Parts</button>
-              <button className='w-full px-1 bg-black hover:bg-blue-600 hover:border-blue-500 border rounded-lg text-white'>Call Now</button>
+              <button
+                onClick={handleCall}
+                className='w-full px-1 bg-black hover:bg-blue-600 hover:border-blue-500 border rounded-lg text-white'>Call Now</button>
             </div>
             <div className='flex space-x-3 p-1'>
               <a

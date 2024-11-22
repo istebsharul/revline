@@ -10,13 +10,13 @@ export default {
         inter: ['Inter', 'sans-serif'],
       },
       animation: {
-        marquee: 'marquee 15s linear infinite',
+        marquee: 'marquee 10s linear infinite',
         'car-slide': 'carSlide 2s ease-out forwards',
         'car-slideM': 'carSlideM 2s ease-out forwards'
       },
       keyframes: {
         marquee: {
-          '0%': { transform: 'translateX(100%)' },
+          '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-100%)' },
         },
         carSlide: {

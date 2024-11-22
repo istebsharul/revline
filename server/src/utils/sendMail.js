@@ -1,6 +1,7 @@
 import nodeMailer from 'nodemailer';
 import logger from './logger.js';
-import Order from '../models/order.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const sendMail = async (options) => {
     logger.info(options.email);

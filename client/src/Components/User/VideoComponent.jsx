@@ -3,25 +3,25 @@ import { useRef, useEffect } from 'react';
 const VideoComponent = () => {
   const videoRef = useRef(null);
 
-  useEffect(() => {
-    const video = videoRef.current;
+  // useEffect(() => {
+  //   const video = videoRef.current;
 
-    if (video) {
-      const handleTimeUpdate = () => {
-        if(video.currentTime >2.0){
-          video.playbackRate = 1.0;
-        }else{
-          video.playbackRate = 4.0;
-        }
-      };
+  //   if (video) {
+  //     const handleTimeUpdate = () => {
+  //       if(video.currentTime >2.0){
+  //         video.playbackRate = 1.0;
+  //       }else{
+  //         video.playbackRate = 4.0;
+  //       }
+  //     };
 
-      video.addEventListener('timeupdate', handleTimeUpdate);
+  //     video.addEventListener('timeupdate', handleTimeUpdate);
 
-      return () => {
-        video.removeEventListener('timeupdate', handleTimeUpdate);
-      };
-    }
-  }, []);
+  //     return () => {
+  //       video.removeEventListener('timeupdate', handleTimeUpdate);
+  //     };
+  //   }
+  // }, []);
 
   return (
     <video

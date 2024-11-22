@@ -49,19 +49,7 @@ const HeroSection = forwardRef((props, ref) => {
             Parts for Every <span className=' italic'>Make</span> and <span className='italic'>Model</span>
           </h1>
           <div className="flex justify-center items-center overflow-hidden mt-10">
-            {/* <img
-              src={car}
-              alt="Car"
-              className="w-[70%] md:w-full md:animate-car-slide animate-car-slideM" // Apply the custom animation class
-            /> */}
-            {/* <video
-              src="https://res.cloudinary.com/dp3xz2kbh/video/upload/v1731663935/revlineautoparts/Assets/ebhcbutjl5vmn7kfrfd5.mp4"
-              className='md:w-[35rem] w-1/2'
-              autoPlay
-              muted
-              playsInline
-            /> */}
-            <VideoComponent/>
+            <VideoComponent />
           </div>
         </div>
 
@@ -79,6 +67,11 @@ const HeroSection = forwardRef((props, ref) => {
             {/* Duplicate logos to create an infinite loop effect */}
             {brandImages.map((brand, index) => (
               <span key={index} className="text-lg font-bold flex-shrink-0">
+                <img src={brand.src} alt={brand.alt} className="h-10 w-auto" />
+              </span>
+            ))}
+            {brandImages.map((brand, index) => (
+              <span key={`duplicate-${index}`} className="text-lg font-bold flex-shrink-0">
                 <img src={brand.src} alt={brand.alt} className="h-10 w-auto" />
               </span>
             ))}

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import axios from 'axios';
 
-const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }) => {
+const VehicleInfoForm = ({ setTransmission, vehicleData, setVehicleData, errors }) => {
     const [years, setYears] = useState([]);
     const [makes, setMakes] = useState([]);
     const [models, setModels] = useState([]);
     const [parts, setParts] = useState([]);
+
+    const [isLoadingMakes, setIsLoadingMakes] = useState(false);
+    const [isLoadingModels, setIsLoadingModels] = useState(false);
+    const [isLoadingParts, setIsLoadingParts] = useState(false);
 
     // Generate the years from 2021 to 1917
     useEffect(() => {
@@ -19,61 +23,69 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
         setYears(yearsArray);
     }, []);
 
-    // fetchMakes
+    // Fetch Makes
     useEffect(() => {
-        // console.log(vehicleData?.year);
-        const fetchMakes = async() => {
+        const fetchMakes = async () => {
+            setIsLoadingMakes(true);
             try {
                 const response = await axios.get(`https://server.revlineautoparts.com/api/v1/form/makes/${vehicleData.year}`);
                 setMakes(response.data.makes);
-                console.log("Makes", response.data.makes);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoadingMakes(false);
             }
-        }
+        };
         if (vehicleData?.year) {
             fetchMakes();
+        } else {
+            setMakes([]);
         }
-    },[vehicleData.year]);
+    }, [vehicleData.year]);
 
-    useEffect(()=>{
-        if(vehicleData.make){
-            const selectedMake = makes?.find((make) => make.name === vehicleData.make);
-            // console.log("Models",selectedMake);
-            setModels(selectedMake?.models);
+    // Fetch Models
+    useEffect(() => {
+        if (vehicleData.make) {
+            const selectedMake = makes?.find(make => make.name === vehicleData.make);
+            setIsLoadingModels(true);
+            setModels(selectedMake?.models || []);
+            setIsLoadingModels(false);
+        } else {
+            setModels([]);
         }
-    },[vehicleData.make]);
+    }, [vehicleData.make, makes]);
 
-
-    useEffect(()=>{
-        if(vehicleData.make){
-            // console.log(vehicleData.part);
-            // console.log(models);
-            const transmission = models?.find((model => model.name === vehicleData.model));
-            setTransmission(transmission?.trims);
-            // console.log("Transmission",transmission?.trims);
-        }
-    })
-
-    // Fetching Parts
-    useEffect(()=>{ 
-        const fetchParts = async() =>{
+    // Fetch Parts
+    useEffect(() => {
+        const fetchParts = async () => {
+            setIsLoadingParts(true);
             try {
                 const response = await axios.get(`https://server.revlineautoparts.com/api/v1/form/parts`);
                 setParts(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoadingParts(false);
             }
-        }
-        if(vehicleData.model){
+        };
+        if (vehicleData.model) {
             fetchParts();
+        } else {
+            setParts([]);
         }
-    },[vehicleData.model]);
+    }, [vehicleData.model]);
+
+    // Set Transmission
+    useEffect(() => {
+        if (vehicleData.make) {
+            const transmission = models?.find(model => model.name === vehicleData.model);
+            setTransmission(transmission?.trims || []);
+        }
+    }, [vehicleData.model, models, setTransmission]);
 
     return (
         <div>
-            <div className='space-y-2'>
+            <div className="space-y-2">
                 <div>
                     <label className="block text-gray-800 text-sm p-1">Year*</label>
                     <Select
@@ -93,6 +105,7 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         value={vehicleData.make ? { value: vehicleData.make, label: vehicleData.make } : null}
                         onChange={option => setVehicleData({ ...vehicleData, make: option.value })}
                         options={makes?.map(make => ({ value: make.name, label: make.name }))}
+                        isLoading={isLoadingMakes}
                         isDisabled={!vehicleData.year}
                         placeholder="Select Make"
                     />
@@ -105,7 +118,8 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         className="w-full"
                         value={vehicleData.model ? { value: vehicleData.model, label: vehicleData.model } : null}
                         onChange={option => setVehicleData({ ...vehicleData, model: option.value })}
-                        options={models?.map(model => ({value:model.name, label:model.name}))}
+                        options={models?.map(model => ({ value: model.name, label: model.name }))}
+                        isLoading={isLoadingModels}
                         isDisabled={!vehicleData.make}
                         placeholder="Select Model"
                     />
@@ -118,7 +132,8 @@ const VehicleInfoForm = ({ setTransmission,vehicleData, setVehicleData, errors }
                         className="w-full"
                         value={vehicleData.part ? { value: vehicleData.part, label: vehicleData.part } : null}
                         onChange={option => setVehicleData({ ...vehicleData, part: option.value })}
-                        options={parts?.map(part => ({value:part.part_name,label: part.part_name}))}
+                        options={parts?.map(part => ({ value: part.part_name, label: part.part_name }))}
+                        isLoading={isLoadingParts}
                         isDisabled={!vehicleData.model}
                         placeholder="Select Part"
                     />
