@@ -52,7 +52,7 @@ const WhyChooseUs = () => {
         <div className="md:pb-40 pb-20">
             <div className="2xl:w-4/6 md:w-5/6 mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className='md:text-5xl text-4xl font-inter tracking-tight text-center py-20'>
-                    WHY <span className='text-red-600'>CHOOSE</span> US?
+                    WHY <span className='text-[#f6251a]'>CHOOSE</span> US?
                 </h1>
                 <div className="flex flex-wrap justify-center">
                     {reasons.map((reason, index) => (
@@ -62,11 +62,11 @@ const WhyChooseUs = () => {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ amount: 0.3 }} // Animate when 30% of the element is in view
-                            transition={{ duration: 0.5, delay: index * 0.4 }} // Staggered animations
+                            transition={{ duration: 0.3, delay: index * 0.3 }} // Staggered animations
                             variants={variants}
                         >
                             <div className='pt-4'>{reason.icon}</div>
-                            <h3 className="text-lg font-semibold text-red-600 mt-4">{reason.title}</h3>
+                            <h3 className="text-lg font-semibold text-[#f6251a] mt-4">{reason.title}</h3>
                             <p className="mt-2 text-gray-600">{reason.description}</p>
                         </motion.div>
                     ))}
@@ -117,7 +117,7 @@ export default WhyChooseUs;
 //         <div className="md:pb-40 pb-20 bg-gray-100">
 //             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
 //                 <h1 className='md:text-5xl text-4xl font-inter tracking-tight text-center py-20'>
-//                     WHY <span className='text-red-600'>CHOOSE</span> US?
+//                     WHY <span className='text-[#f6251a]'>CHOOSE</span> US?
 //                 </h1>
 //                 <div className="grid place-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 //                     {reasons.map((reason, index) => (
@@ -131,7 +131,7 @@ export default WhyChooseUs;
 //                             variants={variants}
 //                         >
 //                             <div className='pt-4'>{reason.icon}</div>
-//                             <h3 className="text-lg font-semibold text-red-600 mt-4">{reason.title}</h3>
+//                             <h3 className="text-lg font-semibold text-[#f6251a] mt-4">{reason.title}</h3>
 //                             <p className="mt-2 text-gray-600">{reason.description}</p>
 //                         </motion.div>
 //                     ))}

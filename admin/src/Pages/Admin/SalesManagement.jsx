@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 const fetchOrders = async ({ queryKey }) => {
     const [_key, { page, limit }] = queryKey; // Destructure queryKey to get page and limit
-    const { data } = await axios.get('/api/v1/orders/all', { params: { page, limit } });
+    const { data } = await axios.get('https://server.revlineautoparts.com/api/v1/orders/all', { params: { page, limit } });
     return data;
 };
 
@@ -42,7 +42,7 @@ const SalesManagement = () => {
         const confirmed = confirm("Are you sure you want to delete?");
         if (confirmed) {
             try {
-                await axios.delete(`/api/v1/orders/${orderId}`);
+                await axios.delete(`https://server.revlineautoparts.com/api/v1/orders/${orderId}`);
                 queryClient.invalidateQueries(['orders']); // Invalidate the 'orders' query to refetch
                 toast.success("Order deleted successfully");
             } catch (error) {
@@ -64,7 +64,7 @@ const SalesManagement = () => {
                         <p className="text-indigo-500 mt-2">Loading orders...</p>
                     </div>
                 ) : error ? (
-                    <div className="text-red-600 text-center">Failed to fetch orders. Please try again later.</div>
+                    <div className="text-[#f6251a] text-center">Failed to fetch orders. Please try again later.</div>
                 ) : (
                     <>
                         <OrderList orders={orders} onSelectOrder={setSelectedOrder} onDelete={handleDelete} />

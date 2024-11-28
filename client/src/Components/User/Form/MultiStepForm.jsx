@@ -92,7 +92,7 @@ const MultiStepForm = () => {
         console.log(email);
 
         // Define the promise
-        const postRequest = axios.post('/api/v1/customer/create', {
+        const postRequest = axios.post('https://server.revlineautoparts.com/api/v1/customer/create', {
             name,
             email,
             phone,
@@ -149,14 +149,14 @@ const MultiStepForm = () => {
     const debouncedHandleSubmit = useCallback(debounce(handleSubmit, 1000), [userData, vehicleData]);
 
     return (
-        <div className="w-full max-w-md mx-auto md:mt-10 rounded-lg">
+        <div className="w-full max-w-md mx-auto md:mt-10 rounded-lg ">
             <div className='flex justify-center items-center p-2 m-2'>
                 <div className="w-4/5 flex items-center justify-center">
                     {[1, 2, 3].map((item, index) => (
                         <React.Fragment key={item}>
                             <div
                                 className={`w-8 h-8 rounded-full flex items-center justify-center 
-                ${step === item ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-500 text-sm p-1'}`}
+                ${step === item ? 'bg-[#f6251a] text-white' : 'bg-gray-200 text-gray-500 text-sm p-1'}`}
                             >
                                 {item}
                             </div>
@@ -167,11 +167,10 @@ const MultiStepForm = () => {
                     ))}
                 </div>
             </div>
-            <div className='bg-gradient-to-r from-white to-red-500 rounded-lg 2xl:p-[0.05rem] md:p-[0.02rem]'>
-                <div className='bg-black p-4 rounded-lg'>
+            <div className='bg-white p-4 rounded-lg shadow-lg border-black'>
                     <div className=''>
                         <div>
-                            <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-white">
+                            <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-black">
                                 {step === 1 ? "Let's find your part!" :
                                     step === 2 ? 'You are just 1 step away!' :
                                         "You're just a click away!"}
@@ -209,12 +208,12 @@ const MultiStepForm = () => {
 
                     <div className="flex justify-between py-4 space-x-2">
                         {step > 1 && (
-                            <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-red-600 font-bold py-2 px-4 rounded-lg">
+                            <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-[#f6251a] font-bold py-2 px-4 rounded-lg border">
                                 Back
                             </button>
                         )}
                         {step < 3 && (
-                            <button onClick={handleNext} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                            <button onClick={handleNext} className="w-full bg-[#f6251a] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
                                 Next
                             </button>
                         )}
@@ -225,7 +224,9 @@ const MultiStepForm = () => {
                         )}
                     </div>
                 </div>
-            </div>
+            {/* <div className='bg-gradient-to-r from-white to-red-500 rounded-lg 2xl:p-[0.05rem] md:p-[0.02rem]'>
+                
+            </div> */}
         </div>
     );
 };

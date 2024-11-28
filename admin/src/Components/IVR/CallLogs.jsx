@@ -15,8 +15,9 @@ const CallLogs = () => {
   const fetchCallLogs = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/v1/twilio/call-logs');
+      const response = await axios.get('https://server.revlineautoparts.com/api/v1/twilio/call-logs');
       setCallLogs(response.data);
+      console.log(response.data);
       setError('');
       setHasFetched(true); // Mark as fetched
     } catch (error) {

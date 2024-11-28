@@ -29,9 +29,10 @@ const setCookie = (name, value, days) => {
 export const login = (email, password) => {
     return async (dispatch) => {
         try {
-            const response = await axios.post('/api/v1/auth/login', { email, password });
+            const response = await axios.post('https://server.revlineautoparts.com/api/v1/auth/login', { email, password });
             const { token, user } = response.data;
             setCookie("jwt", token, 1);
+            toast.success("Login Successful!")
             dispatch({ type: LOGIN_SUCCESS, payload: user });
             return { isLoggedIn: true };  
         } catch (error) {
@@ -46,7 +47,7 @@ export const login = (email, password) => {
 export const loadUser = () => async (dispatch) => {
     try {
         const { data } = await axios.get(
-            "/api/v1/auth/profile"
+            "https://server.revlineautoparts.com/api/v1/auth/profile"
         );
         // console.log("data retrieved using loadUser", data);
         console.log('User data loaded successfully',data);
@@ -65,15 +66,15 @@ export const signup = (name, email, password) => {
             console.log(name, email, password);
             // Simulate API call for signup
 
-            const endpoint = '/api/v1/auth/register';
+            const endpoint = 'https://server.revlineautoparts.com/api/v1/auth/register';
 
             const response = await axios.post(
                 endpoint,
                 { name, email, password }
             );
-            console.log("Response", response);
-            // toast.success('User Created Successfully');
-            dispatch({ type: SIGNUP_SUCCESS, payload: response.data });
+            console.log("Response", response.data);
+            toast.success('SignUp Successful');
+            dispatch({ type: SIGNUP_SUCCESS, payload: response.data.user });
             return { success: true, data: response.data };
         } catch (error) {
             toast.error('Signup Failed: ' + error.response.data.message);
@@ -88,7 +89,7 @@ export const logout = () => async (dispatch) => {
     try {
         console.log("apple in a day");
         await axios.get(
-            "/api/v1/auth/logout"
+            "https://server.revlineautoparts.com/api/v1/auth/logout"
         );
         toast.success('Logout Successful');
         dispatch({ type: LOGOUT_SUCCESS });
@@ -103,7 +104,7 @@ export const forgotPassword = (email) => {
         try {
             const result = await toast.promise(
                 (async () => {
-                    const endpoint = '/api/v1/auth/forgot-password';
+                    const endpoint = 'https://server.revlineautoparts.com/api/v1/auth/forgot-password';
                     const response = await axios.post(endpoint, { email });
                     console.log("Response", response);
 
@@ -135,7 +136,7 @@ export const resetPassword = (password, token) => {
             console.log("token", token);
 
             const response = await axios.put(
-                `/api/v1/auth/reset-password/${token}`,
+                `https://server.revlineautoparts.com/api/v1/auth/reset-password/${token}`,
                 { newPassword:password }
             );
             toast.success("Password Reset Successfully");

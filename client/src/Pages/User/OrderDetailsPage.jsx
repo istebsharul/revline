@@ -3,12 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import OrderDetails from '../../Components/Order/OrderDetails';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import Banner from '../../Components/User/Banner';
+import { IoArrowBackOutline } from "react-icons/io5";
+import { ImSpinner2 } from "react-icons/im";
+
 
 // Fetch order details with support for optional parameters like `id`
 const fetchOrderDetails = async ({ queryKey }) => {
     const [_key, { id }] = queryKey; // Extract 'id' from queryKey object
-    const { data } = await axios.get(`/api/v1/orders/user/${id}`);
+    const { data } = await axios.get(`https://server.revlineautoparts.com/api/v1/orders/user/${id}`);
     return data;
 };
 
@@ -33,19 +35,17 @@ function OrderDetailsPage() {
     };
 
     // Display loading or error states
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error fetching order details: {error.message}</div>;
+    if (isLoading) return <div className='w-full h-screen flex justify-center items-center'><ImSpinner2 className="text-4xl text-red-600 animate-spin" />
+</div>;
+    if (error) return <div className='w-full h-screen flex justify-center items-center'>Error fetching order details: {error.message}</div>;
 
     return (
-        <div className='w-full flex flex-col justify-center items-center bg-gray-100 md:pt-10 pt-16'>
-            <div className="relative">
-                <Banner />
-                <p className="absolute text-4xl inset-0 flex justify-center items-center text-white">
-                    Your Orders
-                </p>
-            </div>
+        <div className='w-full flex flex-col justify-center items-center bg-gray-100 md:pt-10 pt-10'>
             {/* Pass fetched order data to the OrderDetails component */}
-            {order && <OrderDetails order={order} onBack={handleBack} />}
+            <div className='mt-10'>
+                <div onClick={handleBack}  className='w-min flex justify-start items-center border border-gray-400 rounded-lg hover:shadow-lg hover:bg-gray-200 py-2 px-4 m-2 md:mx-4 gap-2 bg-gray-100 text-nowrap text-sm'><IoArrowBackOutline/>Go Back to Orders</div>
+                {order && <OrderDetails order={order} />}
+            </div>
         </div>
     );
 }

@@ -200,7 +200,7 @@ const PartsPage = () => {
               className="flex items-center justify-between cursor-pointer px-4 md:px-8 py-3 md:py-4 bg-gray-50 rounded-lg hover:bg-gray-200"
               onClick={() => handleToggle(category.name)}
             >
-              <h2 className="text-xl md:text-2xl text-red-600 font-medium">{category.name}</h2>
+              <h2 className="text-xl md:text-2xl text-[#f6251a] font-medium">{category.name}</h2>
               {openCategory === category.name ? (
                 <FaChevronUp className="text-gray-600 transition-transform duration-300" />
               ) : (

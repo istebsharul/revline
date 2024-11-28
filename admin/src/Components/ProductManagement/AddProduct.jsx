@@ -24,7 +24,7 @@ const AddProduct = () => {
         setError('');
         setSuccess('');
         try {
-            await axios.post('/api/v1/inventory/add', { 
+            await axios.post('https://server.revlineautoparts.com/api/v1/inventory/add', { 
                 year, make, model, part, variant, transmission, description, grade, sku, price, contact, quantity 
             });
             setYear('');

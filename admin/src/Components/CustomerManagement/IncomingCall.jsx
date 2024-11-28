@@ -24,11 +24,15 @@ const IncomingCall = ({ connection, onAccept, onReject }) => {
   };
 
   return (
-    <div className="incoming-call">
-      <h2>Incoming Call...</h2>
-      <p>Timer: {formatTime(callTimer)}</p>
-      <button onClick={onAccept}>Accept</button>
-      <button onClick={onReject}>Reject</button>
+    <div className="incoming-call w-full flex flex-col justify-center items-center">
+      <div className='mx-4 my-2'>
+        <h2>Incoming Call...</h2>
+        <p>Timer: {formatTime(callTimer)}</p>
+      </div>
+      <div className='w-full space-x-4'>
+        <button className='bg-green-500 text-white px-2 py-1 rounded-lg' onClick={onAccept}>Accept</button>
+        <button className='bg-red-500 text-white px-2 py-1 rounded-lg' onClick={onReject}>Reject</button>
+      </div>
     </div>
   );
 };

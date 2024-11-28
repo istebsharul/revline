@@ -12,7 +12,7 @@ const IVRSms = () => {
   const handleSendSms = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/v1/twilio/sms-send', {
+      const res = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/sms-send', {
         to: recipient,
         message: message,
       });

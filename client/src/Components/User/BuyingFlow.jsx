@@ -36,7 +36,7 @@ const BuyingFlow = React.forwardRef((props,ref) => {
         <div className="md:pb-40 pb-20 bg-gray-100" ref={ref}>
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className='md:text-5xl text-4xl font-inter tracking-tight text-center py-20'>
-                    FLOW OF <span className='text-red-600'>BUYING</span> PARTS
+                    FLOW OF <span className='text-[#f6251a]'>BUYING</span> PARTS
                 </h1>
                 <div className="grid place-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     {steps.map((step, index) => (
@@ -50,11 +50,11 @@ const BuyingFlow = React.forwardRef((props,ref) => {
                             variants={variants} // Apply animation variants
                         >
                             {/* Step Number */}
-                            <div className="absolute -top-6 w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white text-2xl font-bold">
+                            <div className="absolute -top-6 w-12 h-12 rounded-full bg-[#f6251a] flex items-center justify-center text-white text-2xl font-bold">
                                 {index + 1}
                             </div>
                             <div className='pt-10'>{step.icon}</div>
-                            <h3 className="text-lg font-semibold text-red-600 mt-4">{step.title}</h3>
+                            <h3 className="text-lg font-semibold text-[#f6251a] mt-4">{step.title}</h3>
                             <p className="mt-2 text-gray-600">{step.description}</p>
                         </motion.div>
                     ))}

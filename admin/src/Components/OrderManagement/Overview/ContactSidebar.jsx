@@ -9,6 +9,8 @@ const ContactSidebar = ({ customer, order_id}) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  console.log(customer);
+
   // Format the date if it's valid
   const formatDate = (dateString) => {
     const date = new Date(dateString);

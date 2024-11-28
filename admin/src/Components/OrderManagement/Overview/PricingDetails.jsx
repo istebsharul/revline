@@ -153,7 +153,7 @@ const PricingDetails = ({ pricingDetails = {}, isEditing, setOrderDetails }) => 
         </div>
         <div>
           <p>Gross Profit:</p>
-          <p className={`text-gray-600 ${localPricingDetails.gross_profit > 0 ? 'text-green-600': 'text-red-600'}`}>{localPricingDetails.gross_profit || '--'}</p>
+          <p className={`text-gray-600 ${localPricingDetails.gross_profit > 0 ? 'text-green-600': 'text-[#f6251a]'}`}>{localPricingDetails.gross_profit || '--'}</p>
         </div>
       </div>
     </div>

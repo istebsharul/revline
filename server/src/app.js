@@ -20,7 +20,20 @@ app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(cors());
+app.use(cors({
+    origin: ['https://revlineautoparts.com','https://admin.revlineautoparts.com'], // Only allow your frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],   // Allowed methods
+    credentials: true,                          // Allow cookies/auth headers
+  }));
+  
+
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'success',
+        message: 'Server is up and running!',
+        timestamp: new Date(),
+    });
+});
 
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/admin-auth',adminRoutes);
@@ -30,7 +43,7 @@ app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/ivr',ivrRoutes);
 app.use('/api/v1/twilio',customerSupportRoutes);
 app.use('/api/v1/service', serviceRoutes);
-app.use('/api/v1/paypal', paypalRoutes);
+app.use('/api/v1/stripe', paypalRoutes);
 app.use('/api/v1/tickets',ticketRoutes);
 app.use('/api/v1/form',formRoutes);
 // Use the error handling middleware after all routes and other middleware

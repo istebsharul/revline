@@ -37,7 +37,7 @@ const SendInvoice = ({ orderDetails }) => {
         setSuccess('');
 
         try {
-            const response = await axios.post('/api/v1/service/invoice/send', { orderId: orderDetails._id, transactionId:orderDetails.payment_details.transaction_id, paymentMode: orderDetails.payment_details.payment_method });
+            const response = await axios.post('https://server.revlineautoparts.com/api/v1/service/invoice/send', { orderId: orderDetails._id, transactionId:orderDetails.payment_details.transaction_id, paymentMode: orderDetails.payment_details.payment_method });
             setSuccess(response.data.message || 'Invoice sent successfully!');
         } catch (err) {
             console.error(err);
@@ -55,7 +55,7 @@ const SendInvoice = ({ orderDetails }) => {
                 onClick={handleSendInvoice}
                 disabled={isSending}
                 className={`w-full px-4 py-2 m-1 rounded-lg text-black ${
-                    isSending ? 'bg-gray-400' : success ? 'bg-green-500 hover:bg-green-600 text-white' : error ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-200 hover:bg-gray-300'
+                    isSending ? 'bg-gray-400' : success ? 'bg-green-500 hover:bg-green-600 text-white' : error ? 'bg-red-500 hover:bg-[#f6251a] text-white' : 'bg-gray-200 hover:bg-gray-300'
                 }`}
             >
                 {isSending ? 'Sending...' : 'Send Invoice'}

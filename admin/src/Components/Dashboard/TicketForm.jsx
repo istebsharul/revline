@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 const TicketForm = ({ setShowForm }) => {
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('Low');
+  const [priority, setPriority] = useState('High');
   const [category, setCategory] = useState('');
   const [orderId, setOrderId] = useState('');
 
@@ -21,13 +21,13 @@ const TicketForm = ({ setShowForm }) => {
     };
 
     try {
-      const response = await axios.post('/api/v1/tickets/ticket', ticketData);
+      const response = await axios.post('https://server.revlineautoparts.com/api/v1/tickets/ticket', ticketData);
       console.log('Ticket created:', response.data);
 
       // Reset form fields
       setSubject('');
       setDescription('');
-      setPriority('Low');
+      setPriority('High');
       setCategory('');
       setOrderId('');
 

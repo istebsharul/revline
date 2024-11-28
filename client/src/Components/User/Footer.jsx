@@ -1,17 +1,35 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Cta from './Cta';
-import { FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaLocationDot } from "react-icons/fa6";
+
 
 function Footer() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/#form');
+  }
+
+  const handleCall = () => {
+    const phoneNumber = "+1 855 600 9480"; // Fixed phone number
+    const formattedNumber = `tel:${phoneNumber}`; // Use tel: protocol to open the dialer
+    window.location.href = formattedNumber;
+  };
+
   return (
     <>
-      <footer className="py-4 px-5 lg:px-40 w-full text-white bg-black flex flex-col justify-between text-center z-50">
+      <footer className="py-4 px-5 2xl:px-64 md:px-44 w-full text-white bg-black flex flex-col justify-between text-center z-50">
         <div className="flex flex-col lg:flex-row justify-around mx-2 my-6">
           <div className="w-full lg:w-1/4 mb-4 lg:mb-0">
-            <img src="https://res.cloudinary.com/drszvaldf/image/upload/v1724749657/revline/q3a3p6sejtgzjjifmkgf.png" width={100} height={100} alt="Logo" className="mx-auto lg:mx-0 w-32 lg:w-3/5" />
-            <div className="text-center lg:text-left font-thin text-md mt-2 lg:mt-0">
+            <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1729154791/revlineautoparts/Logo/olbaarffsi6guynmjunm.webp" width={100} height={100} alt="Logo" className="mx-auto lg:mx-0 w-32 lg:w-3/5" />
+            <div className="text-center lg:text-left font-thin text-sm mt-2 lg:mt-0">
               Revline Auto Parts offers a complete range of high-quality auto parts for all vehicles, ensuring reliability and performance at competitive prices. Your trusted source for everything your car needs.
+              <br/><span className='font-light text-sm flex mt-2'><FaLocationDot className='mr-0.5 my-0.5' />
+              8565 South Eastern Avenue Suite 255, Las Vegas, NV, 89123</span>
             </div>
+            <div></div>
           </div>
 
           <div className="w-full lg:w-2/5 flex flex-col lg:flex-row text-white text-sm justify-around md:p-0 px-8 mt-2 lg:mt-0">
@@ -19,18 +37,18 @@ function Footer() {
               <a className="font-medium text-left no-underline text-xl">Popular Makes</a>
               <div className='flex'>
                 <ul className='text-left p-2 space-y-2'>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Ford</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Chevrolet</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Toyota</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Honda</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Nissan</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Ford</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Chevrolet</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Toyota</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Honda</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Nissan</a></li>
                 </ul>
                 <ul className='text-left p-2 font-light space-y-2'>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>BMW</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Mercedes-Benz</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Audi</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Volkswagen</a></li>
-                  <li className='hover:underline decoration-red-600 font-thin'><a>Lexus</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>BMW</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Mercedes-Benz</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Audi</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Volkswagen</a></li>
+                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Lexus</a></li>
                 </ul>
               </div>
 
@@ -48,48 +66,43 @@ function Footer() {
           </div>
 
           <div className="md:w-1/6 h-min gap-3 flex flex-col items-center lg:items-start justify-start font-inter font-light italic text-lg mt-2 lg:mt-0">
-            <p className="text-left lg:text-left">Rev Up <span className="text-red-600">Your Ride<br />
+            <p className="text-left lg:text-left">Rev Up <span className="text-[#f6251a]">Your Ride<br />
               with the</span> Best Parts</p>
             <div className='w-full space-y-1 font-medium text-md'>
-              <button className='w-full px-1 bg-white hover:bg-green-600 hover:text-white rounded-lg text-black'>Buy Now</button>
-              <button className='w-full px-1 bg-black hover:bg-blue-600 hover:border-blue-500 border rounded-lg text-white'>Call Now</button>
+              <button
+                onClick={handleClick}
+                className='w-full px-1 bg-white hover:bg-green-600 hover:text-white rounded-lg text-black'>Find Parts</button>
+              <button
+                onClick={handleCall}
+                className='w-full px-1 bg-black hover:bg-blue-600 hover:border-blue-500 border rounded-lg text-white'>Call Now</button>
             </div>
             <div className='flex space-x-3 p-1'>
               <a
-                href="https://instagram.com/yourprofile"
+                href="https://instagram.com/revlineautoparts"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className=" hover:text-red-600"
+                className=" hover:text-[#f6251a]"
               >
                 <FaInstagram />
               </a>
               <a
-                href="https://wa.me/yourphonenumber"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="WhatsApp"
-                className=" hover:text-red-600"
-              >
-                <FaWhatsapp />
-              </a>
-              <a
-                href="https://facebook.com/yourprofile"
+                href="https://www.facebook.com/profile.php?id=61566917829480"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className=" hover:text-red-600"
+                className=" hover:text-[#f6251a]"
               >
                 <FaFacebook />
               </a>
               <a
-                href="https://linkedin.com/in/yourprofile"
+                href="https://x.com/revlineautopart"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className=" hover:text-red-600"
+                aria-label="Twitter"
+                className=" hover:text-[#f6251a]"
               >
-                <FaLinkedin />
+                <FaTwitter />
               </a>
             </div>
           </div>

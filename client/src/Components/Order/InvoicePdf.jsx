@@ -16,7 +16,7 @@ function InvoicePdf({ pdfBinary }) {
                     <div className="w-full flex flex-col md:flex-row items-center">
                         <a
                             href={`data:application/pdf;base64,${getBase64String(pdfBinary)}`}
-                            download="quotation.pdf"
+                            download="Invoice.pdf"
                             className="w-full flex items-center justify-center text-nowrap text-black font-medium rounded-lg py-2 px-8 bg-gray-200 hover:bg-gray-300 w-full md:w-auto"
                         >
                             Invoice

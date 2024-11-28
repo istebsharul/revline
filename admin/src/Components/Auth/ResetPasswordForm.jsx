@@ -105,7 +105,7 @@ function ResetPassword({ match }) {
                         href="/login"
                         className="text-black font-medium text-sm md:text-sm"
                     >
-                        Already have an account? <span className="text-red-600">Login</span>
+                        Already have an account? <span className="text-[#f6251a]">Login</span>
                     </a>
                 </div>
             </div>

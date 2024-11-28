@@ -14,7 +14,7 @@ function Customers() {
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get('/api/v1/customer/list');
+                const response = await axios.get('https://server.revlineautoparts.com/api/v1/customer/list');
                 const data = response.data;  // Axios provides the data directly in response.data
                 console.log(data);
                 setCustomers(data);

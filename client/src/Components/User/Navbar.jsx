@@ -63,13 +63,13 @@ function Navbar() {
     };
 
     return (
-        <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 bg-red-400">
-            <div className="w-full md:h-14 lg:w-4/6 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-4">
+        <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 bg-red-400 shadow-lg">
+            <div className="w-full md:h-14 lg:w-4/6 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-1">
                 {/* LOGO */}
                 <div className='flex md:flex-col items-center justify-between md:block'>
-                    <div className="w-[9rem]">
+                    <div className="w-[9rem] p-1">
                         <Link to="/">
-                            <img src="https://res.cloudinary.com/drszvaldf/image/upload/v1724180173/revline/kn373iik4j6x2txiqs0p.png" alt="Logo" width={200} height={100} />
+                            <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1729154384/revlineautoparts/Logo/murh0xodziul4oj5jalu.jpg" alt="Logo" width={200} height={100} />
                         </Link>
                     </div>
                     {/* HAMBURGER BUTTON FOR MOBILE */}
@@ -85,7 +85,7 @@ function Navbar() {
                 <div className={`transparent text-black flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'}`}>
                     <ul className="text-black text-sm md:h-fit flex md:flex-row flex-col items-center justify-center md:flex relative">
                         {['/Home', '/Parts', '/About', '/Warranty', '/FAQ','/Shipping', '/Contact'].map((path, index) => (
-                            <li key={index} className="hover:text-red-600 pb-3 text-[1rem] py-2 md:px-6 text-center transform transition-transform hover:translate-y-1">
+                            <li key={index} className="hover:text-[#f6251a] pb-3 text-[1rem] py-2 md:px-6 text-center transform transition-transform hover:translate-y-1">
                                 <Link to={path.toLowerCase()} onClick={() => setNavbar(false)}>
                                     <div>
                                         {path.slice(1) || 'Home'}
@@ -99,7 +99,7 @@ function Navbar() {
                             {isLoggedIn ? (
                                 <button><FaUserCircle className="w-7 h-7" /></button>
                             ) : (
-                                <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-red-600' to="/login">LOGIN</Link>
+                                <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-[#f6251a]' to="/login">LOGIN</Link>
                             )}
                         </div>
                         {isLoggedIn && userDropdown && (
@@ -127,7 +127,7 @@ function Navbar() {
                         {isLoggedIn ? (
                             <button><FaUserCircle className="w-7 h-7" /></button>
                         ) : (
-                            <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-red-600' to="/login">LOGIN</Link>
+                            <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-[#f6251a]' to="/login">LOGIN</Link>
                         )}
                     </div>
                     {isLoggedIn && userDropdown && (

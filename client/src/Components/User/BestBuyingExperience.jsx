@@ -35,7 +35,7 @@ function BestBuyingExperience({ handleScroll }) {
                     animate={controls}
                     transition={{ duration: 0.6 }}
                 >
-                    BEST <span className='text-red-600'>BUYING</span> EXPERIENCE
+                    BEST <span className='text-[#f6251a]'>BUYING</span> EXPERIENCE
                 </motion.h1>
                 <motion.p
                     className='p-4'
@@ -65,7 +65,7 @@ function BestBuyingExperience({ handleScroll }) {
                             <p className='w-11/12 md:text-sm text-xs'>
                                 Discover top-rated auto parts that offer unbeatable quality and performance.
                             </p>
-                            <a className='w-2/5 h-min bg-red-600 p-1 rounded-full flex justify-center items-center text-sm'>
+                            <a className='w-2/5 h-min bg-[#f6251a] p-1 rounded-full flex justify-center items-center text-sm'>
                                 SEE ALL <FaArrowUp className='mx-2 rotate-90' />
                             </a>
                         </div>
@@ -92,31 +92,31 @@ function BestBuyingExperience({ handleScroll }) {
                                     Understand<br />the process
                                 </h1>
                                 <a onClick={handleScroll} className='w-[3rem] h-[3rem] mx-9 bg-white hover:bg-white/90 rounded-full flex justify-center items-center'>
-                                    <FaArrowUp className='text-2xl rotate-45 text-red-600' />
+                                    <FaArrowUp className='text-2xl rotate-45 text-[#f6251a]' />
                                 </a>
                             </div>
                         </motion.div>
                         <motion.div
-                            className='w-full h-1/3 bg-red-600 rounded-xl flex justify-around p-3 hover:shadow-2xl'
+                            className='w-full h-1/3 bg-[#f6251a] rounded-xl flex justify-around p-3 hover:shadow-2xl'
                             initial={{ opacity: 0, y: 50 }}
                             animate={controls}
                             transition={{ duration: 0.6 }}
                         >
                             <div className='flex flex-col justify-center items-center text-white md:text-lg text-sm'>
                                 <p className='md:text-4xl text-2xl font-semibold'>
-                                    {counterOn && <CountUp start={0} end={1000} />}+
+                                    {counterOn && <CountUp start={0} end={27000} />}+
                                 </p>
                                 PARTS SOLD
                             </div>
                             <div className='flex flex-col justify-center items-center text-white md:text-lg text-sm'>
                                 <p className='md:text-4xl text-2xl font-semibold'>
-                                    {counterOn && <CountUp start={0} end={100} />}+
+                                    {counterOn && <CountUp start={0} end={250} />}+
                                 </p>
                                 ACTIVE VISITORS
                             </div>
                             <div className='flex flex-col justify-center items-center text-white md:text-lg text-sm'>
                                 <p className='md:text-4xl text-2xl font-semibold'>
-                                    {counterOn && <CountUp start={0} end={10} />}+
+                                    {counterOn && <CountUp start={0} end={180} />}+
                                 </p>
                                 CITIES
                             </div>

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const TicketForm = ({ order_id }) => {
+const TicketForm = ({ order_id,setShowForm }) => {
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('Low');
+  const [priority, setPriority] = useState('High');
   const [category, setCategory] = useState('');
   const [orderId, setOrderId] = useState(order_id.slice(-6));
 
@@ -16,17 +16,17 @@ const TicketForm = ({ order_id }) => {
       subject,
       description,
       category,
-      orderId,
+      orderId:order_id,
     };
 
     try {
-      const response = await axios.post('/api/v1/tickets/ticket', ticketData);
+      const response = await axios.post('https://server.revlineautoparts.com/api/v1/tickets/ticket', ticketData);
       console.log('Ticket created:', response.data);
 
       // Reset form fields
       setSubject('');
       setDescription('');
-      setPriority('Low');
+      setPriority('High');
       setCategory('');
       setOrderId('');
       toast.success('Congratulations! Your complaint has been submitted. Our support team will contact you shortly!');

@@ -45,7 +45,7 @@ const OrderList = ({ orders }) => {
         }
 
         try {
-            await axios.delete(`/api/v1/orders/${orderId}`);
+            await axios.delete(`https://server.revlineautoparts.com/api/v1/orders/${orderId}`);
             setFilteredOrders(filteredOrders.filter(order => order._id !== orderId));
         } catch (error) {
             console.error(error);
@@ -64,7 +64,6 @@ const OrderList = ({ orders }) => {
                 order?.customer?.name || 'N/A',
                 order?.customer?.email || 'N/A',
                 order?.customer?.phone || 'N/A',
-                order?.quoteNumber || 'N/A',
             ])
         ]
             .map(e => e.join(','))
@@ -132,7 +131,7 @@ const OrderList = ({ orders }) => {
                     <p className="text-indigo-500 mt-2">Loading orders...</p>
                 </div>
             ) : error ? (
-                <div className="text-red-600 text-center">{error}</div>
+                <div className="text-[#f6251a] text-center">{error}</div>
             ) : (
                 <ul className="divide-y divide-gray-200">
                     {filteredOrders.map((order, index) => (

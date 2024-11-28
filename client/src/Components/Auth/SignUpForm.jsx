@@ -47,17 +47,26 @@ function Signup() {
             alert("Passwords do not match");
             return;
         }
-        try {
-            const result = dispatch(signup(name, email, password));
-            if (result && result.success) {
-                toast.success("Signup successful!");
-            } else {
-                toast.error(result.message || "Signup failed.");
-            }
-        } catch (error) {
-            toast.error("An error occurred during signup.");
-            console.error("Signup error:", error);
-        }
+        // try {
+        //     const result = dispatch(signup(name, email, password));
+        //     if (result && result.success) {
+        //         toast.success("Signup successful!");
+        //     } else {
+        //         toast.error(result.message || "Signup failed.");
+        //     }
+        // } catch (error) {
+        //     toast.error("An error occurred during signup.");
+        //     console.error("Signup error:", error);
+        // }
+        dispatch(signup(name, email, password))
+            .then((result) => {
+                if (result && result.success) {
+                    navigate('/');
+                }
+            })
+            .catch((error) => {
+                console.error("SignUp Error: ", error);
+            })
         navigate('/');
         setName("");
         setEmail("");
@@ -150,7 +159,7 @@ function Signup() {
                             href="/login"
                             className="text-black font-medium text-sm md:text-sm"
                         >
-                            Already have an account? <span className="text-red-600">Login</span>
+                            Already have an account? <span className="text-[#f6251a]">Login</span>
                         </a>
                     </div>
                 </form>

@@ -14,7 +14,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
     const handlePartsFocus = async () => {
         if (parts.length === 0) { // Fetch only if parts haven't been fetched yet
             try {
-                const response = await axios.get(`/api/v1/form/parts`);
+                const response = await axios.get(`https://server.revlineautoparts.com/api/v1/form/parts`);
                 setParts(response.data);
             } catch (error) {
                 console.error(error);
@@ -216,22 +216,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                     </div>
                     <div>
                         <p>Gross Profit:</p>
-                        <p className="text-gray-600">{pricingDetails?.gross_profit || '--'}</p>
-                    </div>
-                    <div>
-                        <p>Quoted Price:</p>
-                        {isEditing ? (
-                            <input
-                                type="text"
-                                name="quoted_price"
-                                value={pricingDetails?.quoted_price || ''}
-                                onChange={handleChange}
-                                className="text-gray-600 border border-gray-300 rounded p-1"
-                                placeholder="Enter quoted price"
-                            />
-                        ) : (
-                            <p className="text-gray-600">{pricingDetails?.quoted_price || '--'}</p>
-                        )}
+                        <p className={`text-gray-600 ${pricingDetails.gross_profit > 0 ? 'text-green-600': 'text-[#f6251a]'}`}>{pricingDetails?.gross_profit || '--'}</p>
                     </div>
                     <div>
                         <p>Cost Price:</p>
@@ -246,6 +231,21 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                             />
                         ) : (
                             <p className="text-gray-600">{pricingDetails?.cost_price || '--'}</p>
+                        )}
+                    </div>
+                    <div>
+                        <p>Quoted Price:</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="quoted_price"
+                                value={pricingDetails?.quoted_price || ''}
+                                onChange={handleChange}
+                                className="text-gray-600 border border-gray-300 rounded p-1"
+                                placeholder="Enter quoted price"
+                            />
+                        ) : (
+                            <p className="text-gray-600">{pricingDetails?.quoted_price || '--'}</p>
                         )}
                     </div>
                 </div>

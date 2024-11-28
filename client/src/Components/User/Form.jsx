@@ -185,7 +185,7 @@ const MultiStepForm1 = () => {
         console.log([vehicleData]);
 
         // Define the promise
-        const postRequest = axios.post('/api/v1/customer/create', {
+        const postRequest = axios.post('https://server.revlineautoparts.com/api/v1/customer/create', {
             name,
             email,
             phone,
@@ -247,7 +247,7 @@ const MultiStepForm1 = () => {
                         <React.Fragment key={item}>
                             <div
                                 className={`w-8 h-8 rounded-full flex items-center justify-center 
-                ${step === item ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-200 text-sm p-1'}`}
+                ${step === item ? 'bg-[#f6251a] text-white' : 'bg-gray-200 text-gray-200 text-sm p-1'}`}
                             >
                                 {item}
                             </div>
@@ -272,8 +272,8 @@ const MultiStepForm1 = () => {
                     </div>
                     {step === 1 && (
                         <div>
-                            {!noOfParts && <div className='p-1 text-red-600 text-lg font-semibold mb-1'>Search from {data.length} Parts Available</div>}
-                            {noOfParts ? <div className='flex justify-between items-center p-1'><p className='p-1 text-red-600 text-lg font-semibold mb-1'>Parts in stock</p><p className='w-1/4 p-1 bg-red-600 text-white font-bold rounded-md text-center'>{noOfParts}</p></div> : <div></div>}
+                            {!noOfParts && <div className='p-1 text-[#f6251a] text-lg font-semibold mb-1'>Search from {data.length} Parts Available</div>}
+                            {noOfParts ? <div className='flex justify-between items-center p-1'><p className='p-1 text-[#f6251a] text-lg font-semibold mb-1'>Parts in stock</p><p className='w-1/4 p-1 bg-[#f6251a] text-white font-bold rounded-md text-center'>{noOfParts}</p></div> : <div></div>}
                             <div className='space-y-2'>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Year*</label>
@@ -284,7 +284,7 @@ const MultiStepForm1 = () => {
                                         options={years.map(year => ({ value: year, label: year }))}
                                         placeholder="Select Year"
                                     />
-                                    {errors.year && <p className="text-xs text-red-600">{errors.year}</p>}
+                                    {errors.year && <p className="text-xs text-[#f6251a]">{errors.year}</p>}
                                 </div>
 
                                 <div >
@@ -297,7 +297,7 @@ const MultiStepForm1 = () => {
                                         isDisabled={!vehicleData.year}
                                         placeholder="Select Make"
                                     />
-                                    {errors.make && <p className="text-xs text-red-600">{errors.make}</p>}
+                                    {errors.make && <p className="text-xs text-[#f6251a]">{errors.make}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Model*</label>
@@ -309,7 +309,7 @@ const MultiStepForm1 = () => {
                                         isDisabled={!vehicleData.make}
                                         placeholder="Select Model"
                                     />
-                                    {errors.model && <p className="text-xs text-red-600">{errors.model}</p>}
+                                    {errors.model && <p className="text-xs text-[#f6251a]">{errors.model}</p>}
                                 </div>
                                 <div className="mb-6">
                                     <label className="block text-gray-200 text-sm p-1">Part*</label>
@@ -321,7 +321,7 @@ const MultiStepForm1 = () => {
                                         isDisabled={!vehicleData.model}
                                         placeholder="Select Part"
                                     />
-                                    {errors.carPart && <p className="text-xs text-red-600">{errors.carPart}</p>}
+                                    {errors.carPart && <p className="text-xs text-[#f6251a]">{errors.carPart}</p>}
                                 </div>
                             </div>
                         </div>
@@ -330,7 +330,7 @@ const MultiStepForm1 = () => {
 
                     {step === 2 && (
                         <div>
-                            {noOfParts ? <div className='flex justify-between items-center p-1'><p className='p-1 text-red-600 text-lg font-semibold mb-1'>Parts in stock</p><p className='w-1/4 p-1 bg-red-600 text-white font-bold rounded-md text-center'>{noOfParts}</p></div> : <div></div>}
+                            {noOfParts ? <div className='flex justify-between items-center p-1'><p className='p-1 text-[#f6251a] text-lg font-semibold mb-1'>Parts in stock</p><p className='w-1/4 p-1 bg-[#f6251a] text-white font-bold rounded-md text-center'>{noOfParts}</p></div> : <div></div>}
                             <div className='space-y-2'>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Variant*</label>
@@ -342,7 +342,7 @@ const MultiStepForm1 = () => {
                                         isDisabled={!vehicleData.carPart}
                                         placeholder="Select Variant"
                                     />
-                                    {errors.variant && <p className="text-xs text-red-600">{errors.variant}</p>}
+                                    {errors.variant && <p className="text-xs text-[#f6251a]">{errors.variant}</p>}
                                 </div>
 
                                 <div >
@@ -355,7 +355,7 @@ const MultiStepForm1 = () => {
                                         isDisabled={!vehicleData.variant}
                                         placeholder="Select Specification"
                                     />
-                                    {errors.transmission && <p className="text-xs text-red-600">{errors.transmission}</p>}
+                                    {errors.transmission && <p className="text-xs text-[#f6251a]">{errors.transmission}</p>}
                                 </div>
 
                                 <div >
@@ -367,7 +367,7 @@ const MultiStepForm1 = () => {
                                         value={vehicleData.vin}
                                         onChange={e => setVehicleData({ ...vehicleData, vin: e.target.value })}
                                     />
-                                    {errors.vin && <p className="text-xs text-red-600">{errors.vin}</p>}
+                                    {errors.vin && <p className="text-xs text-[#f6251a]">{errors.vin}</p>}
                                 </div>
 
                                 <div className="mb-6">
@@ -378,7 +378,7 @@ const MultiStepForm1 = () => {
                                         value={vehicleData.message}
                                         onChange={e => setVehicleData({ ...vehicleData, message: e.target.value })}
                                     />
-                                    {errors.message && <p className="text-xs text-red-600">{errors.message}</p>}
+                                    {errors.message && <p className="text-xs text-[#f6251a]">{errors.message}</p>}
                                 </div>
                             </div>
                         </div>
@@ -388,7 +388,7 @@ const MultiStepForm1 = () => {
 
                     {step === 3 && (
                         <div>
-                            {noOfParts ? <div className='flex justify-center items-start p-1 text-red-500 text-lg font-semibold mb-1'><div>{vehicleData.year} {vehicleData.make} {vehicleData.model} {vehicleData.carPart} {vehicleData.variant} {vehicleData.transmission}</div> <div className='h-min flex justify-center items-center text-md text-nowrap bg-red-600 text-white pl-2 pr-3 rounded ml-2'><TiTick className='mr-2' />In Stock</div></div> : <div></div>}
+                            {noOfParts ? <div className='flex justify-center items-start p-1 text-red-500 text-lg font-semibold mb-1'><div>{vehicleData.year} {vehicleData.make} {vehicleData.model} {vehicleData.carPart} {vehicleData.variant} {vehicleData.transmission}</div> <div className='h-min flex justify-center items-center text-md text-nowrap bg-[#f6251a] text-white pl-2 pr-3 rounded ml-2'><TiTick className='mr-2' />In Stock</div></div> : <div></div>}
                             <div className='space-y-2'>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Full Name*</label>
@@ -399,7 +399,7 @@ const MultiStepForm1 = () => {
                                         value={userData.name}
                                         onChange={e => setUserData({ ...userData, name: e.target.value })}
                                     />
-                                    {errors.name && <p className="text-xs text-red-600">{errors.name}</p>}
+                                    {errors.name && <p className="text-xs text-[#f6251a]">{errors.name}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Email* </label>
@@ -410,7 +410,7 @@ const MultiStepForm1 = () => {
                                         value={userData.email}
                                         onChange={e => setUserData({ ...userData, email: e.target.value })}
                                     />
-                                    {errors.email && <p className="text-xs text-red-600">{errors.email}</p>}
+                                    {errors.email && <p className="text-xs text-[#f6251a]">{errors.email}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Contact Number*</label>
@@ -421,7 +421,7 @@ const MultiStepForm1 = () => {
                                         value={userData.phone}
                                         onChange={e => setUserData({ ...userData, phone: e.target.value })}
                                     />
-                                    {errors.phone && <p className="text-xs text-red-600">{errors.phone}</p>}
+                                    {errors.phone && <p className="text-xs text-[#f6251a]">{errors.phone}</p>}
                                 </div>
                                 <div >
                                     <label className="block text-gray-200 text-sm p-1">Zip Code*</label>
@@ -432,7 +432,7 @@ const MultiStepForm1 = () => {
                                         value={userData.zipcode}
                                         onChange={e => setUserData({ ...userData, zipcode: e.target.value })}
                                     />
-                                    {errors.zipcode && <p className="text-xs text-red-600">{errors.zipcode}</p>}
+                                    {errors.zipcode && <p className="text-xs text-[#f6251a]">{errors.zipcode}</p>}
                                 </div>
                             </div>
                         </div>
@@ -440,12 +440,12 @@ const MultiStepForm1 = () => {
 
                     <div className="flex justify-between py-4 space-x-2">
                         {step > 1 && (
-                            <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-red-600 font-bold py-2 px-4 rounded-lg">
+                            <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-[#f6251a] font-bold py-2 px-4 rounded-lg">
                                 Back
                             </button>
                         )}
                         {step < 3 && (
-                            <button onClick={handleNext} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                            <button onClick={handleNext} className="w-full bg-[#f6251a] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
                                 Next
                             </button>
                         )}
