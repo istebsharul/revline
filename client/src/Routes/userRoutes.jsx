@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../Pages/Landing/HomePage';
 import ContactUsPage from '../Pages/Landing/ContactUsPage';
@@ -17,36 +17,38 @@ import PaymentCancel from '../Pages/User/PaymentCancel';
 import OrderDetailsPage from '../Pages/User/OrderDetailsPage';
 import ShippingHandlingPage from '../Pages/Landing/ShippingHandlingPage';
 
-const UserRoutes = () => (
-  <Routes>
-    {/* Public Routes */}
-    <Route path="/" element={<HomePage />} />
-    <Route path="parts" element={<PartsPage />} />
-    <Route path="contact" element={<ContactUsPage />} />
-    <Route path="about" element={<AboutUsPage />} />
-    <Route path="warranty" element={<WarrantyReturnsPage />} />
-    <Route path="faq" element={<FAQPage />} />
-    <Route path="shipping" element={<ShippingHandlingPage/>}/>
-    <Route path="login" element={<LoginPage />} />
-    <Route path="signup" element={<SignupPage />} />
-    <Route path="forgot-password" element={<ForgotPasswordPage />} />
-    <Route path="reset-password/:token" element={<ResetPasswordPage />} />
-    
-    {/* Protected Routes */}
-    <Route
-      path="orders"
-    >
-      {/* Nested route for order details */}
-      <Route index element={<ProtectedRoute><OrderPage /></ProtectedRoute>}/>
-      <Route path="details/:id" element={<OrderDetailsPage />} />
-    </Route>
-    
-    <Route path="return" element={<PaymentSuccessfulPage />} />
-    <Route path="cancel" element={<PaymentCancel />} />
-
-    {/* Catch-all Route (404) */}
-    <Route path="*" element={<HomePage />} /> {/* Or HomePage if desired */}
-  </Routes>
-);
+function UserRoutes() {
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<HomePage />} />
+      <Route path="parts" element={<PartsPage />} />
+      <Route path="contact" element={<ContactUsPage />} />
+      <Route path="about" element={<AboutUsPage />} />
+      <Route path="warranty" element={<WarrantyReturnsPage />} />
+      <Route path="faq" element={<FAQPage />} />
+      <Route path="shipping" element={<ShippingHandlingPage />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="signup" element={<SignupPage />} />
+      <Route path="forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+      
+      {/* Protected Routes */}
+      <Route
+        path="orders"
+      >
+        {/* Nested route for order details */}
+        <Route index element={<ProtectedRoute><OrderPage /></ProtectedRoute>} />
+        <Route path="details/:id" element={<OrderDetailsPage />} />
+      </Route>
+      
+      <Route path="payment/success" element={<PaymentSuccessfulPage />} />
+      <Route path="payment/cancel" element={<PaymentCancel />} />
+  
+      {/* Catch-all Route (404) */}
+      <Route path="*" element={<HomePage />} /> {/* Or HomePage if desired */}
+    </Routes>
+  );
+}
 
 export default UserRoutes;

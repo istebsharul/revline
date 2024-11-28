@@ -7,7 +7,7 @@ const PaymentDetails = ({ paymentDetails = {} }) => {
       <div className="grid grid-cols-3 gap-4">
         <div>
           <p>Payment ID:</p>
-          <p className="text-gray-600">{paymentDetails?.payment_id || '--'}</p>
+          <p className="text-gray-600 break-words">{paymentDetails?.payment_id || '--'}</p>
         </div>
         <div>
           <p>Payer ID:</p>
@@ -51,7 +51,7 @@ const PaymentDetails = ({ paymentDetails = {} }) => {
         </div>
         <div>
           <p>Token:</p>
-          <p className="text-gray-600">{paymentDetails?.token || '--'}</p>
+          <p className="text-gray-600 break-words">{paymentDetails?.token || '--'}</p>
         </div>
         <div>
           <p>Refund ID:</p>

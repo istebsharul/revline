@@ -25,7 +25,7 @@ const OrderPage = () => {
       setLoading(true);
       // Fetch orders for the customer
       const response = await axios.get(`https://server.revlineautoparts.com/api/v1/orders/customer/${customerId}`);
-      console.log(response.data);
+      // console.log(response.data);
       setOrders(response.data);
 
       // Update local storage after fetching
@@ -52,10 +52,10 @@ const OrderPage = () => {
   // Handle order selection to show details
   const handleOrderClick = (id) => {
     const order = orders.find((order) => order._id === id);
-    console.log(order);
+    // console.log(order);
     if (order?.order_disposition_details?.order_status === 'Pending Approval') {
       toast.error('Quotation is not ready, We will inform you via email once ready.');
-      console.log("jejeisvbslvn");
+      // console.log("jejeisvbslvn");
       return;
     }
     navigate(`details/${id}`);

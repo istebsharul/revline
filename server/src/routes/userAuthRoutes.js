@@ -10,6 +10,6 @@ router.get('/logout',logoutUser);
 router.post('/forgot-password',forgotPassword);
 router.put('/reset-password/:token',resetPassword);
 router.get('/profile',userAuthMiddleware,userProfile);
-router.get('/contact',contactForm);
+router.post('/contact',contactForm);
 
 export default router;

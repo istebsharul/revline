@@ -11,30 +11,12 @@ export default {
       },
       animation: {
         marquee: 'marquee 10s linear infinite',
-        'car-slide': 'carSlide 2s ease-out forwards',
-        'car-slideM': 'carSlideM 2s ease-out forwards'
       },
       keyframes: {
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-100%)' },
         },
-        carSlide: {
-          '0%': {
-            transform: 'translateX(-100%)', // Start off-screen
-          },
-          '100%': {
-            transform: 'translateX(-30%)', // End at normal position
-          },
-        },
-        carSlideM: {
-          '0%': {
-            transform: 'translateX(-100%)', // Start off-screen
-          },
-          '100%': {
-            transform: 'translateX(0%)', // End at normal position
-          },
-        }
       },
       maxHeight: {
         'screen': '100vh',  // Ensure 'max-h-screen' covers the viewport height

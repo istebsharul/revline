@@ -73,10 +73,10 @@ const OrderDetails = ({ order }) => {
   const handleAccept = async () => {
     setLoading(true);
     toast.promise(
-      axios.post('https://server.revlineautoparts.com/api/v1/paypal/create-payment', { orderId: order._id }),
+      axios.post('https://server.revlineautoparts.com/api/v1/stripe/create-payment', { orderId: order._id }),
       {
         loading: 'Creating PayPal payment...',
-        success: <b>Redirecting to PayPal...</b>,
+        success: <b>Redirecting to Payment Gateway...</b>,
         error: (error) => {
           const errorMessage = error.response?.data?.message || 'An error occurred while creating PayPal payment.';
           return <b>{errorMessage}</b>;
@@ -84,8 +84,8 @@ const OrderDetails = ({ order }) => {
       }
     )
       .then((response) => {
-        if (response.data.approvalUrl) {
-          window.location.href = response.data.approvalUrl;
+        if (response.data.checkoutUrl) {
+          window.location.href = response.data.checkoutUrl;
         }
       })
       .catch((err) => {

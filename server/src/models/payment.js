@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const PaymentSchema = new mongoose.Schema({
     payment_id: { type: String, trim: true, unique: true },
     payer_id: { type: String, trim: true },
-    transaction_id: { type: String, trim: true, unique: true},
+    transaction_id: { type: String, trim: true, unique: true,sparse:true},
     order_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
     payment_status: { type: String, default: 'Pending', trim: true },
     amount: { type: Number, required: true },
