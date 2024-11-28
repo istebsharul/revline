@@ -13,7 +13,7 @@ const sendContactMail = async ({ name, email, phoneNumber, message }) => {
 
     const mailOptions = {
         from: `"Contact Form" <${email}>`,
-        to: process.env.SMTP_USER,
+        to: 'contact@revlineautoparts.com',
         subject: 'New Contact Form Submission',
         text: `
             Name: ${name}

@@ -43,7 +43,7 @@ app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/ivr',ivrRoutes);
 app.use('/api/v1/twilio',customerSupportRoutes);
 app.use('/api/v1/service', serviceRoutes);
-app.use('/api/v1/paypal', paypalRoutes);
+app.use('/api/v1/stripe', paypalRoutes);
 app.use('/api/v1/tickets',ticketRoutes);
 app.use('/api/v1/form',formRoutes);
 // Use the error handling middleware after all routes and other middleware

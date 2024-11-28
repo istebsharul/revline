@@ -24,7 +24,7 @@ const generatePdf = ({
 
     // Header
     doc.fillColor('#5f5d5a').fontSize(30).font('Times-Roman').text('REVLINE AUTO PARTS', { align: 'right' });
-    doc.fontSize(12).font('Helvetica').text('427 Crooked Stick Dr\nYerington, NV 89447, USA', { align: 'right' });
+    doc.fontSize(12).font('Helvetica').text('8565 South Eastern Avenue Suite 255,\n Las Vegas, NV-89123, USA', { align: 'right' });
     doc.moveDown(1);
 
     // Title
@@ -103,27 +103,6 @@ const generatePdf = ({
     doc.text(`$${quoted_price.toFixed(2)}`, totalX, subtotalY + 70, { align: 'right' });
     doc.moveDown(1.5);
 
-    // // Subtotals and Totals
-    // const totalX = doc.page.width - doc.page.margins.right - 100;
-    // const subtotalY = doc.y;
-    // doc.fontSize(12).font('Helvetica');
-    // doc.text(`Sub-total: $${quoted_price.toFixed(2)}`, totalX - 80, subtotalY);
-    // doc.text(`$${quoted_price.toFixed(2)}`, totalX, subtotalY, { align: 'right' });
-    // doc.moveDown(0.2);
-    // doc.text(`Shipping: $${shipping_cost.toFixed(2)}`, totalX - 80, subtotalY + 20);
-    // doc.text(`$${shipping_cost.toFixed(2)}`, totalX, subtotalY + 20, { align: 'right' });
-    // doc.moveDown(0.2);
-    // doc.text(`Sales Tax: $${salesTax.toFixed(2)}`, totalX - 80, subtotalY + 40);
-    // doc.text(`$${salesTax.toFixed(2)}`, totalX, subtotalY + 40, { align: 'right' });
-    // doc.moveDown(0.5);
-
-    // const lineWidth = availableWidth * 0.4;
-    // const startX = doc.page.width - doc.page.margins.right - lineWidth;
-    // doc.moveTo(startX, doc.y).lineTo(doc.page.width - doc.page.margins.right, doc.y).stroke();
-    // doc.fontSize(12).font('Helvetica-Bold').text('TOTAL:', totalX - 80, subtotalY + 70);
-    // doc.text(`$${totalAmount.toFixed(2)}`, totalX, subtotalY + 70, { align: 'right' });
-    // doc.moveDown(1.5);
-
     // Terms and Conditions Section
     doc.rect(doc.page.margins.left, doc.y, availableWidth, 150).fill('#e4dbd7');
     doc.moveDown(1);
@@ -156,7 +135,7 @@ const generatePdf = ({
 
     // Payment Information (Left Side)
     doc.fillColor('black').fontSize(12).font('Helvetica-Bold').text('Payment to :', doc.page.margins.left + 10, footerY, { align: 'left' });
-    doc.fillColor('#5f5d5a').fontSize(12).font('Helvetica').text('Bank name: Cahaya Dewi\nBank code: 12345678999', { align: 'left' });
+    doc.fillColor('#5f5d5a').fontSize(12).font('Helvetica').text('Bank name: Choice Financial Group\nBank code: CHFGUS44021', { align: 'left' });
 
     // Contact Information (Right Side)
     doc.fillColor('black').fontSize(12).font('Helvetica').text(

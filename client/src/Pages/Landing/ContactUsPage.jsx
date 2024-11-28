@@ -12,11 +12,11 @@ function ContactUsPage() {
         </p>
       </div>
 
-      <div className='md:p-20 p-5'>
+      <div className='md:p-20 p-5 text-center'>
         <h1 className='md:text-4xl text-2xl text-[#f6251a] font-medium font-inter'>
           HAVING TROUBLE?
         </h1>
-        <p className='md:text-2xl  tracking-wider text-center'>CALL NOW XXXXXXXXXX</p>
+        <p className='md:text-2xl  tracking-wider text-center'>CALL NOW +1 855-600-9080</p>
       </div>
 
       <ContactForm />

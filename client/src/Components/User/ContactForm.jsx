@@ -26,8 +26,8 @@ const ContactForm = () => {
         if (data.name.trim() === '') errors.name = 'Name is required.';
         if (data.email.trim() === '' || !data.email.includes('@') || !data.email.includes('.')) errors.email = 'Invalid email address.';
         if (data.message.trim() === '') errors.message = 'Message cannot be empty.';
-
-        if (data.phoneNumber && !/^\d*$/.test(data.phoneNumber)) errors.phoneNumber = 'Phone number must contain only numbers.';
+        if (data.phoneNumber.trim()=== '') errors.message = 'Phone Number cannot be empty.';
+        if (data.phoneNumber.trim() && !/^\d*$/.test(data.phoneNumber)) errors.phoneNumber = 'Phone number must contain only numbers.';
 
         return errors;
     };
@@ -101,7 +101,6 @@ const ContactForm = () => {
                     <div className="mb-4">
                         <div className='flex justify-between text-sm'>
                             <p>Phone</p>
-                            <p className='text-gray-400'>(Optional)</p>
                         </div>
                         <input
                             type="tel"

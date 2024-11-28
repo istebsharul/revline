@@ -27,7 +27,7 @@ const generateInvoice = ({
 
     // Header
     doc.fillColor('#5f5d5a').fontSize(30).font('Times-Roman').text('REVLINE AUTO PARTS', { align: 'right' });
-    doc.fontSize(12).font('Helvetica').text('427 Crooked Stick Dr\nYerington, NV 89447, USA', { align: 'right' });
+    doc.fontSize(12).font('Helvetica').text('187 E. Warm Springs Rd. Suite B NV152 \n Las Vegas, NV 89119', { align: 'right' });
     doc.moveDown(1);
 
     // Title
@@ -77,8 +77,8 @@ const generateInvoice = ({
       doc.fontSize(12).font('Helvetica');
       doc.text(order_summary.part_name, doc.page.margins.left, summaryY, { width: descriptionWidth, align: 'left' });
       doc.text(order_summary.quantity || 1, doc.page.margins.left + descriptionWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
-      doc.text(`$${(quoted_price-shipping_cost).toFixed(2)}`, doc.page.margins.left + descriptionWidth + otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
-      doc.text(`$${((quoted_price-shipping_cost) * (order_summary.quantity || 1)).toFixed(2)}`, doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'right' });
+      doc.text(`$${(quoted_price).toFixed(2)}`, doc.page.margins.left + descriptionWidth + otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
+      doc.text(`$${((quoted_price) * (order_summary.quantity || 1)).toFixed(2)}`, doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'right' });
     } else {
       doc.text('No order summary provided.', doc.page.margins.left);
     }
@@ -94,11 +94,8 @@ const generateInvoice = ({
     // Calculate parts price
     const partsPrice = quoted_price - shipping_cost;
 
-    doc.text(`Parts Price:`, totalX - 80, subtotalY);
-    doc.text(`$${partsPrice.toFixed(2)}`, totalX, subtotalY, { align: 'right' });
-    doc.moveDown(0.2);
-    doc.text(`Shipping:`, totalX - 80, subtotalY + 20);
-    doc.text(`$${shipping_cost.toFixed(2)}`, totalX, subtotalY + 20, { align: 'right' });
+    doc.text(`Sub Total:`, totalX - 80, subtotalY);
+    doc.text(`$${quoted_price.toFixed(2)}`, totalX, subtotalY, { align: 'right' });
     doc.moveDown(0.2);
 
     doc.moveDown(0.5);
@@ -115,10 +112,10 @@ const generateInvoice = ({
     const footerY = doc.y + 10;
 
     doc.fillColor('black').fontSize(12).font('Helvetica-Bold').text('Payment to :', doc.page.margins.left + 10, footerY, { align: 'left' });
-    doc.fillColor('#5f5d5a').fontSize(12).font('Helvetica').text('Bank name: Cahaya Dewi\nBank code: 12345678999', { align: 'left' });
+    doc.fillColor('#5f5d5a').fontSize(12).font('Helvetica').text('Bank name: Choice Financial Group\nBank code: CHFGUS44021', { align: 'left' });
 
     doc.fillColor('black').fontSize(12).font('Helvetica').text(
-      '+123-456-789\nSupport@revlineautoparts.com\nrevlineautoparts.com',
+      '+1 855 600 9080\nSupport@revlineautoparts.com\nrevlineautoparts.com',
       doc.page.width - doc.page.margins.right - 200,
       footerY,
       { align: 'left' }

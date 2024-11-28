@@ -62,7 +62,7 @@ const WhyChooseUs = () => {
                             initial="hidden"
                             whileInView="visible"
                             viewport={{ amount: 0.3 }} // Animate when 30% of the element is in view
-                            transition={{ duration: 0.5, delay: index * 0.4 }} // Staggered animations
+                            transition={{ duration: 0.3, delay: index * 0.3 }} // Staggered animations
                             variants={variants}
                         >
                             <div className='pt-4'>{reason.icon}</div>

@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 const TicketForm = ({ setShowForm }) => {
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('Low');
+  const [priority, setPriority] = useState('High');
   const [category, setCategory] = useState('');
   const [orderId, setOrderId] = useState('');
 
@@ -27,7 +27,7 @@ const TicketForm = ({ setShowForm }) => {
       // Reset form fields
       setSubject('');
       setDescription('');
-      setPriority('Low');
+      setPriority('High');
       setCategory('');
       setOrderId('');
 
