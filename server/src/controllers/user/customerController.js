@@ -5,8 +5,7 @@ import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import logger from '../../utils/logger.js';
 import sendMail from '../../utils/sendMail.js';
 import Part from '../../models/parts.js';
-import emailQueue from '../../queue/emailQueue.js';
-import { sendAccountActivationEmail, sendOrderConfirmationEmail, sendWelcomeBackEmail } from '../../utils/emailService.js';
+import { sendAccountActivationEmail, sendWelcomeBackEmail } from '../../utils/emailService.js';
 
 // Get all customers
 export const getAllCustomers = asyncErrors(async (req, res) => {
@@ -47,7 +46,6 @@ export const getAllCustomers = asyncErrors(async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
 
 export const getCustomerById = asyncErrors(async (req, res) => {
     try {
@@ -131,6 +129,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
         res.status(500).json({ message: 'Failed to create customer and order', error: error.message });
     }
 });
+
 export const updateCustomer = asyncErrors(async (req, res) => {
     try {
         const { quotationStatus } = req.body; // Expecting "Accepted" or "Rejected" status from the request body
