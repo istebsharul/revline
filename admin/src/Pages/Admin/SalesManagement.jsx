@@ -21,7 +21,7 @@ const SalesManagement = () => {
     const { data, error, isLoading } = useQuery({
         queryKey: ['orders', { page, limit }],
         queryFn: fetchOrders,
-        staleTime: 7 * 24 * 60 * 60 * 1000, // 1 week in milliseconds
+        staleTime: 5 * 60 * 1000, // 5min in milliseconds
         keepPreviousData: true,
     });
 

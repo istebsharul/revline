@@ -2,12 +2,61 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const TicketForm = ({ order_id,setShowForm }) => {
+const categories = [
+  'Part Inquiry',
+  'Availability Check',
+  'Compatibility Verification',
+  'Pricing Information',
+  'Warranty Details',
+  'Order Issues',
+  'Delayed Delivery',
+  'Wrong Part Received',
+  'Missing Parts',
+  'Damaged Parts on Arrival',
+  'Return and Exchange',
+  'Incorrect Fitment',
+  'Product Defect',
+  'Exchange Request',
+  'Return Eligibility',
+  'Payment and Billing',
+  'Invoice Request',
+  'Payment Failure',
+  'Refund Request',
+  'Overcharged or Duplicate Billing',
+  'Technical Support',
+  'Fitment Guidance',
+  'Installation Support',
+  'Compatibility Questions',
+  'Technical Specifications',
+  'Shipping and Tracking',
+  'Shipping Cost Inquiry',
+  'Delivery Timeframes',
+  'Tracking Updates',
+  'Lost Shipment',
+  'Account Management',
+  'Profile Update Issues',
+  'Account Login Problems',
+  'Data Privacy Requests',
+  'Feedback and Complaints',
+  'Service Feedback',
+  'Product Feedback',
+  'General Complaints',
+  'Custom Requests',
+  'Rare or Hard-to-Find Parts',
+  'Bulk Orders',
+  'Special Discounts or Offers',
+  'Cancellation Requests',
+  'Cancel Order Before Dispatch',
+  'Refund for Cancelled Order',
+  'others'
+];
+
+const TicketForm = ({ order_id, setShowForm }) => {
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('High');
   const [category, setCategory] = useState('');
-  const [orderId, setOrderId] = useState(order_id.slice(-6));
+  const [orderId, setOrderId] = useState(order_id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +65,7 @@ const TicketForm = ({ order_id,setShowForm }) => {
       subject,
       description,
       category,
-      orderId:order_id,
+      orderId: order_id,
     };
 
     try {
@@ -38,7 +87,7 @@ const TicketForm = ({ order_id,setShowForm }) => {
 
   return (
     <form onSubmit={handleSubmit} className="w-full flex flex-col space-y-4 p-4">
-      <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-4'>
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">Order ID</label>
           <input
@@ -51,13 +100,19 @@ const TicketForm = ({ order_id,setShowForm }) => {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Category</label>
-          <input
-            type="text"
+          <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
             className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-          />
+          >
+            <option value="" disabled>Select a category</option>
+            {categories.map((cat, index) => (
+              <option key={index} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">Subject</label>

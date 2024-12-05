@@ -143,6 +143,7 @@ export const resumeCall = async (req, res) => {
 
 export const holdMusicTwiml = (req, res) => {
   const twiml = new twilio.twiml.VoiceResponse();
+  twiml.say('Did you know? Revline Auto Parts offers a 30-day warranty on all parts to give you peace of mind with every purchase.Looking for hard-to-find parts? Let our team of experts assist you. Visit revlineautoparts.com for more details! Looking for hard-to-find parts? Let our team of experts assist you. Visit revlineautoparts.com for more details!');
   twiml.play('http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3');  // URL to hold music
 
   res.type('text/xml');
@@ -195,11 +196,11 @@ export const voiceResponse = (req, res) => {
     if (isAgentAvailable) {
       // Agent is available, connect the call directly
       isAgentAvailable = false; // Mark agent as busy
-      twiml.say("Connecting you to an agent.");
+      twiml.say("Hi there! Thank you for calling Revline Auto Parts. We’re excited to help you find exactly what you need.Connecting you to an agent");
       twiml.dial().client('web-user'); // Replace with your agent's identifier
     } else {
       // Agent is busy, place the call in the queue
-      twiml.say("All agents are currently busy. Please wait while we connect or call after sometime.");
+      twiml.say("Thank you for calling Revline Auto Parts. Our representatives are currently unavailable. We will return your call as soon as possible. For instant assistance, visit us at revlineautoparts.com.");
       twiml.enqueue('support-queue', {
         waitUrl: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music'
       });

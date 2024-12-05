@@ -46,7 +46,7 @@ const BuyingFlow = React.forwardRef((props,ref) => {
                             initial="hidden" // Animation starts hidden
                             whileInView="visible" // Animates when in view
                             viewport={{ amount: 0.3 }} // Animates every time 30% of the element is in view
-                            transition={{ duration: 0.5, delay: index * 0.4 }} // Duration and delay for stagger effect
+                            transition={{ duration: 0.4, delay: index * 0.3 }} // Duration and delay for stagger effect
                             variants={variants} // Apply animation variants
                         >
                             {/* Step Number */}

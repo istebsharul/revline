@@ -19,7 +19,7 @@ function AboutUsPage() {
           <div className="w-full flex flex-col justify-center items-center">
             <div className='w-4/5 flex justify-center'>
               <img
-                src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1729154384/revlineautoparts/Logo/murh0xodziul4oj5jalu.jpg" // Add the path to your img file
+                src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.png" // Add the path to your img file
                 alt="About Us img"
                 width={500} // Set your desired width
                 height={500} // Set your desired height

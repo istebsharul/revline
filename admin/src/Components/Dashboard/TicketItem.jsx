@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import { FaTrash, FaEdit, FaCheck, FaTimes } from 'react-icons/fa';
 import { MdContentCopy } from "react-icons/md";
@@ -7,6 +8,11 @@ import { toast } from 'react-hot-toast'; // Import toast
 const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [status, setStatus] = useState(ticket.status);
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    console.log("Helllllll",ticket);
+  })
 
   const handleEdit = async () => {
     // Only proceed if the status has changed
@@ -65,26 +71,30 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
       });
   };
 
+  const handleNavigateToOrder = (orderId) =>{
+    navigate(`sales-management/overview/${orderId}`)
+  }
+
   return (
     <div className="py-3 px-4 border rounded-lg shadow-md bg-white flex flex-col space-y-1 mb-1">
       {/* Ticket Info Section */}
-      <div className="flex justify-between items-start gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start gap-4">
         {/* Ticket Details */}
-        <div className="w-3/5 flex justify-start items-center">
-          <h3 className="w-min font-bold text-lg pr-10">#{ticket.ticketNumber}</h3>
-          <p className='w-full flex items-center text-nowrap'>
+        <div className="w-full md:w-3/5 flex justify-start items-center space-y-2 md:space-y-0 gap-8">
+          <h3 className="w-min font-bold text-lg">#{ticket.ticketNumber}</h3>
+          <p className="flex items-center text-nowrap">
             <span className="text-sm font-semibold">Order ID:</span>
-            <span className="ml-1">{ticket?.orderId.slice(-6)}</span>
+            <span className="ml-1 hover:underline hover:text-blue-500" onClick={()=>handleNavigateToOrder(ticket?.orderId)}>{ticket?.orderId.slice(-6)}</span>
             <button onClick={handleCopyToClipboard} className="ml-2 text-gray-600 hover:text-gray-800">
               <MdContentCopy />
             </button>
           </p>
-          <p className='w-80 text-nowrap'><span className="text-sm font-semibold">Subject:</span> {ticket.subject}</p>
+          <p className="text-nowrap"><span className="text-sm font-semibold">Subject:</span> {ticket.subject}</p>
         </div>
 
         {/* Status and Action Buttons */}
-        <div className="w-2/5 flex justify-end items-center space-x-4">
-          <div className="w-1/3 flex justify-start items-center">
+        <div className="w-full md:w-min flex justify-between items-center mt-3 gap-8 md:mt-0">
+          <div className="flex justify-start items-center space-x-2">
             <span className="font-semibold">Status:</span>
             {isEditing ? (
               <select
@@ -103,9 +113,9 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
             )}
           </div>
 
-          <div>
+          <div className="flex items-center space-x-4">
             {isEditing ? (
-              <div className='w-full space-x-4'>
+              <div className="w-full space-x-4 flex justify-end">
                 <button
                   onClick={handleEdit}
                   className="text-blue-500 hover:text-blue-700 transition duration-150"
@@ -121,7 +131,7 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
                 </button>
               </div>
             ) : (
-              <div className='w-full space-x-4'>
+              <div className="w-full space-x-4 flex justify-end">
                 <button
                   onClick={() => setIsEditing(true)}
                   className="text-yellow-500 hover:text-yellow-700 transition duration-150"
@@ -137,9 +147,10 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
               </div>
             )}
           </div>
+
           <button
             onClick={handleDelete}
-            className="text-red-500 hover:text-red-700 transition duration-150"
+            className="text-red-500 hover:text-red-700 transition duration-150 mt-2 md:mt-0"
           >
             <FaTrash /> {/* Delete icon */}
           </button>
@@ -147,10 +158,11 @@ const TicketItem = ({ ticket, onEditSuccess, onDeleteSuccess }) => {
       </div>
 
       {/* Description Section */}
-      <div className="text-sm">
+      <div className="text-sm mt-2">
         <p><span className="font-semibold">Description:</span> {ticket.description}</p>
       </div>
     </div>
+
   );
 };
 

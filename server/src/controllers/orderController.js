@@ -32,7 +32,7 @@ export const getAllOrders = asyncErrors(async (req, res) => {
             .sort({ request_date: -1 })
             .skip(skip)
             .limit(limit)
-            .populate('customer', 'name email phone') // Populate only customer details you want (name, email, phone)
+            .populate('customer', 'name email phone zipcode createdAt') // Populate only customer details you want (name, email, phone)
             .select('_id customer quotations.quote_number request_date'); // Select only the fields you need
 
         // Get the total number of orders for pagination info

@@ -5,7 +5,7 @@ import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import logger from '../../utils/logger.js';
 import sendMail from '../../utils/sendMail.js';
 import Part from '../../models/parts.js';
-import emailQueue from '../../queue/emailQueue.js';
+import { sendAccountActivationEmail, sendWelcomeBackEmail } from '../../utils/emailService.js';
 
 // Get all customers
 export const getAllCustomers = asyncErrors(async (req, res) => {
@@ -46,7 +46,6 @@ export const getAllCustomers = asyncErrors(async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
 
 export const getCustomerById = asyncErrors(async (req, res) => {
     try {
@@ -108,7 +107,9 @@ export const createCustomer = asyncErrors(async (req, res) => {
             newOrder.customer = existingCustomer._id;
             newOrder.shipping_details.customer = existingCustomer._id;
             await Promise.all([existingCustomer.save(), newOrder.save()]);
-            logger.info(`Updated existing customer: ${existingCustomer.email}`);
+            logger.info(`Updated existing customer: ${existingCustomer.email}`);      
+            
+            await sendWelcomeBackEmail({name,email, vehicleData})
         } else {
             newCustomer = new Customer({ name, email, phone, zipcode, orderInfo: [orderInfo] });
             await newCustomer.save();
@@ -116,18 +117,11 @@ export const createCustomer = asyncErrors(async (req, res) => {
             newOrder.shipping_details.customer = newCustomer._id;
             await newOrder.save();
             logger.info(`Created new customer: ${email}`);
+
+            await sendAccountActivationEmail({name,email,vehicleData})
+            logger.info(`Email Sent: ${email}`,res);
         }
 
-        // Add email to queue
-        const registrationLink = `https://yourcompany.com/signup?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`;
-        // const res  = await emailQueue.add({
-        //     email,
-        //     subject: 'Order Confirmation',
-        //     message: `Please register yourself by clicking the link. ${registrationLink}\n\nBest regards,\nRevline Autoparts`,
-        // });
-
-        await sendMail({email,subject:"Order Confirmation"})
-        logger.info(`Email queued for: ${email}`,res);
 
         res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
     } catch (error) {
@@ -135,6 +129,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
         res.status(500).json({ message: 'Failed to create customer and order', error: error.message });
     }
 });
+
 export const updateCustomer = asyncErrors(async (req, res) => {
     try {
         const { quotationStatus } = req.body; // Expecting "Accepted" or "Rejected" status from the request body

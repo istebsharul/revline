@@ -7,6 +7,7 @@ import HeroSection from '../../Components/User/HeroSection'
 import WhyChooseUs from '../../Components/User/WhyChooseUs'
 import BuyingFlow from '../../Components/User/BuyingFlow'
 import { useLocation } from 'react-router-dom';
+import VideoComponent from '../../Components/User/VideoComponent'
 
 
 function HomePage() {

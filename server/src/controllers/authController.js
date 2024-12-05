@@ -6,6 +6,7 @@ import sendToken from '../utils/jwt.js';
 import sendMail from '../utils/sendMail.js';
 import sendContactMail from '../utils/sendContactMail.js';
 import crypto from 'crypto';
+import { sendWelcomeEmail } from '../utils/emailService.js';
 
 /**
  * Register a new user.
@@ -40,6 +41,9 @@ export const registerUser = asyncErrors(async (req, res) => {
 
         // Send token and response
         sendToken(user, 201, res);
+
+        await sendWelcomeEmail(email,name);
+        logger.info('Welcome email sent.');
 
         // Log successful registration
         logger.info('User registered successfully', { email, userId: user._id });

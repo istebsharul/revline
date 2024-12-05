@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FilterInput from './FilterInput';
 import ExportButton from './ExportButton';
@@ -40,8 +40,7 @@ const CustomerList = ({ customers, setCustomers,setShowForm, showForm }) => {
             // Perform the delete request
             await axios.delete(`https://server.revlineautoparts.com/api/v1/customer/${customerId}`);
 
-            // Update the customers and filteredCustomers state
-            setCustomers(customers.filter(customer => customer._id !== customerId));
+            // Updatint the filteredCustomers state
             setFilteredCustomers(filteredCustomers.filter(customer => customer._id !== customerId));
         } catch (error) {
             console.error(error);

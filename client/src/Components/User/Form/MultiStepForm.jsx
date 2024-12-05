@@ -49,12 +49,34 @@ const MultiStepForm = () => {
 
     const validateStep3 = () => {
         const errors = {};
+
+        // Check if the name is provided
         if (!userData.name) errors.name = 'Full Name is required';
-        if (!userData.email) errors.email = 'Email is required';
-        if (!userData.phone) errors.phone = 'Contact Number is required';
-        if (!userData.zipcode) errors.zipcode = 'Zip Code is required';
+
+        // Check if the email is provided and is in a valid format
+        if (!userData.email) {
+            errors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)) {
+            errors.email = 'Invalid email format';
+        }
+
+        // Check if the phone number is provided and is a valid 10-digit number
+        if (!userData.phone) {
+            errors.phone = 'Contact Number is required';
+        } else if (!/^\d{10}$/.test(userData.phone)) {
+            errors.phone = 'Contact Number must be exactly 10 digits';
+        }
+
+        // Check if the ZIP code is provided and is a valid 5-digit number
+        if (!userData.zipcode) {
+            errors.zipcode = 'Zip Code is required';
+        } else if (!/^\d{5}$/.test(userData.zipcode)) {
+            errors.zipcode = 'Zip Code must be exactly 5 digits';
+        }
+
         return errors;
     };
+
 
     const handleNext = () => {
         // Implement validation or steps switching logic here
@@ -80,6 +102,17 @@ const MultiStepForm = () => {
     };
 
     const handleSubmit = async () => {
+
+        // Perform Step 3 validation
+        const validationErrors = validateStep3();
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors); // Set the errors to the state for display
+            toast.error('Please fix the errors in Step 3 before submitting.'); // Display a toast error message
+            return; // Exit the function early if there are validation errors
+        }
+        setErrors({});
+
         const formData = {
             vehicleData,
             userData,
@@ -168,62 +201,62 @@ const MultiStepForm = () => {
                 </div>
             </div>
             <div className='bg-white p-4 rounded-lg shadow-lg border-black'>
-                    <div className=''>
-                        <div>
-                            <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-black">
-                                {step === 1 ? "Let's find your part!" :
-                                    step === 2 ? 'You are just 1 step away!' :
-                                        "You're just a click away!"}
-                            </h2>
-                            <p>
+                <div className=''>
+                    <div>
+                        <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-black">
+                            {step === 1 ? "Let's find your part!" :
+                                step === 2 ? 'You are just 1 step away!' :
+                                    "You're just a click away!"}
+                        </h2>
+                        <p>
 
-                            </p>
-                        </div>
-                        {step === 1 && (
-                            <VehicleInfoForm
-                                setTransmission={setTransmission}
-                                vehicleData={vehicleData}
-                                setVehicleData={setVehicleData}
-                                errors={errors}
-                            // Add any other necessary props here
-                            />
-                        )}
-                        {step === 2 && (
-                            <VariantTransmissionForm
-                                trims={transmission}
-                                vehicleData={vehicleData}
-                                setVehicleData={setVehicleData}
-                                errors={errors}
-                            // Add any other necessary props here
-                            />
-                        )}
-                        {step === 3 && (
-                            <UserInfoForm
-                                userData={userData}
-                                setUserData={setUserData}
-                                errors={errors}
-                            />
-                        )}
+                        </p>
                     </div>
-
-                    <div className="flex justify-between py-4 space-x-2">
-                        {step > 1 && (
-                            <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-[#f6251a] font-bold py-2 px-4 rounded-lg border">
-                                Back
-                            </button>
-                        )}
-                        {step < 3 && (
-                            <button onClick={handleNext} className="w-full bg-[#f6251a] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
-                                Next
-                            </button>
-                        )}
-                        {step === 3 && (
-                            <button onClick={debouncedHandleSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
-                                Submit
-                            </button>
-                        )}
-                    </div>
+                    {step === 1 && (
+                        <VehicleInfoForm
+                            setTransmission={setTransmission}
+                            vehicleData={vehicleData}
+                            setVehicleData={setVehicleData}
+                            errors={errors}
+                        // Add any other necessary props here
+                        />
+                    )}
+                    {step === 2 && (
+                        <VariantTransmissionForm
+                            trims={transmission}
+                            vehicleData={vehicleData}
+                            setVehicleData={setVehicleData}
+                            errors={errors}
+                        // Add any other necessary props here
+                        />
+                    )}
+                    {step === 3 && (
+                        <UserInfoForm
+                            userData={userData}
+                            setUserData={setUserData}
+                            errors={errors}
+                        />
+                    )}
                 </div>
+
+                <div className="flex justify-between py-4 space-x-2">
+                    {step > 1 && (
+                        <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-[#f6251a] font-bold py-2 px-4 rounded-lg border">
+                            Back
+                        </button>
+                    )}
+                    {step < 3 && (
+                        <button onClick={handleNext} className="w-full bg-[#f6251a] hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                            Next
+                        </button>
+                    )}
+                    {step === 3 && (
+                        <button onClick={debouncedHandleSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+                            Submit
+                        </button>
+                    )}
+                </div>
+            </div>
             {/* <div className='bg-gradient-to-r from-white to-red-500 rounded-lg 2xl:p-[0.05rem] md:p-[0.02rem]'>
                 
             </div> */}
