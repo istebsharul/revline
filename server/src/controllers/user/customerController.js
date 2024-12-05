@@ -156,21 +156,28 @@ export const updateCustomer = asyncErrors(async (req, res) => {
 // Delete a customer
 export const deleteCustomer = asyncErrors(async (req, res) => {
     try {
-        const customer = await Customer.findByIdAndDelete(req.params.id);
-    
+        // Retrieve the customer by ID first (without deleting)
+        const customer = await Customer.findById(req.params.id);
+
         if (!customer) {
             logger.error(`Customer not found: ${req.params.id}`);
             return res.status(404).json({ message: 'Customer not found' });
         }
 
+        // Extract all order IDs from customer's orderInfo
         const orderIds = customer.orderInfo.map(order => order.orderId);
 
-        await Order.deleteMany({_id: {$in: orderIds}});
+        // Delete all associated orders
+        await Order.deleteMany({ _id: { $in: orderIds } });
+        logger.info(`Orders deleted successfully for customer: ${req.params.id}`);
 
+        // Delete the customer after the orders are removed
+        await Customer.findByIdAndDelete(req.params.id);
         logger.info(`Customer deleted successfully: ${req.params.id}`);
-        res.status(200).json({ message: 'Customer deleted successfully' });
+
+        res.status(200).json({ message: 'Customer and associated orders deleted successfully' });
     } catch (error) {
-        logger.error(`Error deleting customer: ${error.message}`);
+        logger.error(`Error deleting customer or orders: ${error.message}`);
         res.status(500).json({ message: 'Internal server error' });
     }
-}); 
+});
