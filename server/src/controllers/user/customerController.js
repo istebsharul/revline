@@ -157,10 +157,16 @@ export const updateCustomer = asyncErrors(async (req, res) => {
 export const deleteCustomer = asyncErrors(async (req, res) => {
     try {
         const customer = await Customer.findByIdAndDelete(req.params.id);
+    
         if (!customer) {
             logger.error(`Customer not found: ${req.params.id}`);
             return res.status(404).json({ message: 'Customer not found' });
         }
+
+        const orderIds = customer.orderInfo.map(order => order.orderId);
+
+        await Order.deleteMany({_id: {$in: orderIds}});
+
         logger.info(`Customer deleted successfully: ${req.params.id}`);
         res.status(200).json({ message: 'Customer deleted successfully' });
     } catch (error) {
