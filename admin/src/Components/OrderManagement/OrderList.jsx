@@ -20,22 +20,22 @@ const OrderList = ({ orders }) => {
                 const phone = (order.customer?.phone ?? '').toLowerCase();
                 const orderId = (order._id ?? '').toLowerCase();
                 const quoteNumber = (order.quotations?.quote_number ?? '').toLowerCase();
-    
+
                 return customerName.includes(lowercasedFilter) ||
                     status.includes(lowercasedFilter) ||
                     email.includes(lowercasedFilter) ||
                     phone.includes(lowercasedFilter) ||
-                    orderId.includes(lowercasedFilter)||
+                    orderId.includes(lowercasedFilter) ||
                     quoteNumber.includes(lowercasedFilter);
             })
             : orders;
-    
+
         // Reverse the order list
         // filtered = filtered.slice().reverse();
-    
+
         setFilteredOrders(filtered);
     }, [filter, orders]);
-    
+
 
     // Function to handle deletion of an order
     const handleDelete = async (orderId) => {
@@ -53,17 +53,24 @@ const OrderList = ({ orders }) => {
         }
     };
 
+    function formatDate(createdAt) {
+        const date = new Date(createdAt);
+        const options = { month: "long", day: "numeric", year: "numeric" };
+        return date.toLocaleDateString("en-US", options);
+    }
+
     // Function to handle exporting the order list to CSV
     const handleExport = () => {
         const csvContent = [
-            ['Index', 'Order ID','Quote No', 'Name','Email', 'Phone', 'Quote Number'],
+            ['Index', 'Order ID', 'Name', 'Email', 'Phone', 'Zipcode', 'Requested Date'],
             ...filteredOrders.map((order, index) => [
                 index + 1,
                 order?._id.slice(-6) || 'N/A',
-                order?.quotations?.quote_number || 'N/A',
                 order?.customer?.name || 'N/A',
                 order?.customer?.email || 'N/A',
                 order?.customer?.phone || 'N/A',
+                order?.customer?.zipcode || 'N/A',
+                formatDate(order?.customer?.createdAt) || 'N/A'
             ])
         ]
             .map(e => e.join(','))

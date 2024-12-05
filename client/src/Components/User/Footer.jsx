@@ -23,11 +23,11 @@ function Footer() {
       <footer className="py-4 px-5 2xl:px-64 md:px-44 w-full text-white bg-black flex flex-col justify-between text-center z-50">
         <div className="flex flex-col lg:flex-row justify-around mx-2 my-6">
           <div className="w-full lg:w-1/4 mb-4 lg:mb-0">
-            <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1729154791/revlineautoparts/Logo/olbaarffsi6guynmjunm.webp" width={100} height={100} alt="Logo" className="mx-auto lg:mx-0 w-32 lg:w-3/5" />
+            <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812716/revlineautoparts/Logo/tzeavglpto0z7toihv5e.png" width={100} height={100} alt="Logo" className="mx-auto lg:mx-0 w-32 lg:w-3/5" />
             <div className="text-center lg:text-left font-thin text-sm mt-2 lg:mt-0">
               Revline Auto Parts offers a complete range of high-quality auto parts for all vehicles, ensuring reliability and performance at competitive prices. Your trusted source for everything your car needs.
-              <br/><span className='font-light text-sm flex mt-2'><FaLocationDot className='mr-0.5 my-0.5' />
-              8565 South Eastern Avenue Suite 255, Las Vegas, NV, 89123</span>
+              <br /><span className='font-light text-sm flex mt-2'><FaLocationDot className='mr-0.5 my-0.5' />
+                8565 South Eastern Avenue, Las Vegas, NV, 89123</span>
             </div>
             <div></div>
           </div>
@@ -35,20 +35,31 @@ function Footer() {
           <div className="w-full lg:w-2/5 flex flex-col lg:flex-row text-white text-sm justify-around md:p-0 px-8 mt-2 lg:mt-0">
             <div className="my-2 lg:my-0 flex flex-col">
               <a className="font-medium text-left no-underline text-xl">Popular Makes</a>
-              <div className='flex'>
-                <ul className='text-left p-2 space-y-2'>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Ford</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Chevrolet</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Toyota</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Honda</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Nissan</a></li>
+              <div className="flex">
+                <ul className="text-left p-2 space-y-2">
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Ford</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Chevrolet</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Toyota</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Honda</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Nissan</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Hyundai</a></li>
                 </ul>
-                <ul className='text-left p-2 font-light space-y-2'>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>BMW</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Mercedes-Benz</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Audi</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Volkswagen</a></li>
-                  <li onClick={handleClick} className='hover:underline decoration-red-600 font-thin'><a>Lexus</a></li>
+
+                <ul className="text-left p-2 space-y-2">
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Kia</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Jeep</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Subaru</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Dodge</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>GMC</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Volkswagen</a></li>
+                </ul>
+                <ul className="text-left p-2 space-y-2">
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Mazda</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Ram</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Buick</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Chrysler</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Mitsubishi</a></li>
+                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Fiat</a></li>
                 </ul>
               </div>
 
@@ -110,7 +121,7 @@ function Footer() {
 
         <div className="mt-4 lg:mt-2">
           <p className="font-light text-sm">
-            © revlineautoparts.com 2023 | All rights reserved. | Privacy Policy
+            © Copyright updated 2024 | All rights reserved. | Privacy Policy
           </p>
         </div>
       </footer>

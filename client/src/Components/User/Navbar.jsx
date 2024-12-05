@@ -69,7 +69,7 @@ function Navbar() {
                 <div className='flex md:flex-col items-center justify-between md:block'>
                     <div className="w-[9rem] p-1">
                         <Link to="/">
-                            <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1729154384/revlineautoparts/Logo/murh0xodziul4oj5jalu.jpg" alt="Logo" width={200} height={100} />
+                            <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.png" alt="Logo" width={200} height={100} />
                         </Link>
                     </div>
                     {/* HAMBURGER BUTTON FOR MOBILE */}
