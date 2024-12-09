@@ -6,6 +6,8 @@ import Footer from './Components/User/Footer';
 import { Toaster } from 'react-hot-toast';
 import UserRoutes from './Routes/userRoutes';
 import { loadUser } from './Actions/userActions';
+import Call from './Components/CustomerSupport/Call.jsx';
+import WhatsApp from './Components/CustomerSupport/Whatsapp.jsx';
 import store from './Store/store.js';
 
 
@@ -22,6 +24,8 @@ const App = () => {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+      <Call/>
+      <WhatsApp/>
       <Navbar />
       <UserRoutes />
       <Footer />

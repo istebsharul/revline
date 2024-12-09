@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cta from './Cta';
-import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { FaLocationDot } from "react-icons/fa6";
 
 
@@ -114,6 +114,15 @@ function Footer() {
                 className=" hover:text-[#f6251a]"
               >
                 <FaTwitter />
+              </a>
+              <a
+                href="https://www.youtube.com/@revlineautoparts"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Youtube"
+                className="hover:text-[#f6251a]"
+              >
+                <FaYoutube/>
               </a>
             </div>
           </div>

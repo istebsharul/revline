@@ -82,9 +82,10 @@ function Navbar() {
                         </button>
                     </div>
                 </div>
-                <div className={`transparent text-black flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${navbar ? 'block' : 'hidden'}`}>
+                <div className={`${navbar ? 'block' : 'md:w-full md:block md:flex md:justify-self-center hidden'}`}>
+                <div className={`transparent text-black flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0`}>
                     <ul className="text-black text-sm md:h-fit flex md:flex-row flex-col items-center justify-center md:flex relative">
-                        {['/Home', '/Parts', '/About', '/Warranty', '/FAQ','/Shipping', '/Contact'].map((path, index) => (
+                        {['/Home', '/Parts', '/About', '/Warranty', '/FAQ', '/Shipping', '/Contact'].map((path, index) => (
                             <li key={index} className="hover:text-[#f6251a] pb-3 text-[1rem] py-2 md:px-6 text-center transform transition-transform hover:translate-y-1">
                                 <Link to={path.toLowerCase()} onClick={() => setNavbar(false)}>
                                     <div>
@@ -94,7 +95,43 @@ function Navbar() {
                             </li>
                         ))}
                     </ul>
-                    <div className="w-full md:hidden md:py-0 py-3 relative decoration-none flex justify-center items-center" ref={dropdownRef}>
+                </div>
+                <div className="flex justify-center items-center md:py-0 py-3 relative decoration-none" ref={dropdownRef}>
+                    <div className="cursor-pointer" onClick={toggleUserDropdown}>
+                        {isLoggedIn ? (
+                            <button><FaUserCircle className="w-7 h-7" /></button>
+                        ) : (
+                            <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-[#f6251a]' to="/login" onClick={()=>setNavbar(false)}>LOGIN</Link>
+                        )}
+                    </div>
+                    {isLoggedIn && userDropdown && (
+                        <div className="absolute top-2 right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
+                            <div
+                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                            >
+                                {username}
+                            </div>
+                            <Link to="/orders" onClick={()=>setNavbar(false)} className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
+                                Orders
+                            </Link>
+                            <div
+                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </div>
+                        </div>
+                    )}
+                </div>
+                </div>
+            </div>
+        </nav>
+    );
+}
+
+export default Navbar;
+
+{/* <div className="w-full h-full md:hidden md:py-0 py-3 relative decoration-none flex justify-center items-center bg-red-400" ref={dropdownRef}>
                         <div className="cursor-pointer " onClick={toggleUserDropdown}>
                             {isLoggedIn ? (
                                 <button><FaUserCircle className="w-7 h-7" /></button>
@@ -103,7 +140,7 @@ function Navbar() {
                             )}
                         </div>
                         {isLoggedIn && userDropdown && (
-                            <div className="absolute right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
+                            <div className="absolute right-0 mt-10 w-48 bg-blue-400 shadow-md rounded-lg">
                                 <div
                                     className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
                                 >
@@ -120,38 +157,4 @@ function Navbar() {
                                 </div>
                             </div>
                         )}
-                    </div>
-                </div>
-                <div className="hidden md:block md:py-0 py-3 relative decoration-none flex" ref={dropdownRef}>
-                    <div className="cursor-pointer " onClick={toggleUserDropdown}>
-                        {isLoggedIn ? (
-                            <button><FaUserCircle className="w-7 h-7" /></button>
-                        ) : (
-                            <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-[#f6251a]' to="/login">LOGIN</Link>
-                        )}
-                    </div>
-                    {isLoggedIn && userDropdown && (
-                        <div className="absolute top-2 right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
-                            <div
-                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                            >
-                                {username}
-                            </div>
-                            <Link to="/orders" className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
-                                Orders
-                            </Link>
-                            <div
-                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                                onClick={handleLogout}
-                            >
-                                Logout
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </nav>
-    );
-}
-
-export default Navbar;
+                    </div> */}
