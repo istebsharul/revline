@@ -1,5 +1,8 @@
+import Customer from '../../models/customer.js';
+import Order from '../../models/order.js';
 import Ticket from '../../models/ticket.js';
 import logger from '../../utils/logger.js';
+import sendMail from '../../utils/sendMail.js';
 
 const generateTicketNumber = async () => {
   let number;
@@ -26,6 +29,22 @@ export const createTicket = async (req, res) => {
 
     await newTicket.save();
     logger.info(`Ticket created: ${newTicket.ticketNumber}`); // Log ticket creation
+
+    const order = await Order.findById(orderId).populate('customer');
+    if(!order || !order.customer){
+      logger.error(`Order not found for order id: ${orderId}`);
+      res.status(404).json({message:'Order or Customer not found.'})
+    }
+    const mailStatus = await sendMail({
+      email:order?.customer?.email,
+      subject:`Your Ticket #${ticketNumber} Has Been Successfully Created`,
+      message: `Dear ${order?.customer?.name},\n\nYour ticket with the number ${ticketNumber} has been successfully created. Our support team will contact you soon.\n\nTicket Details:\nSubject: ${subject}\nDescription: ${description}\nPriority: ${priority}\nCategory: ${category}\n\nThank you for reaching out to us!\n\nBest Regards,\nSupport Team`,
+    })
+
+    if(mailStatus){
+      logger.info(`Email sent fort ticket #${ticketNumber}`);
+    }
+
     res.status(201).json(newTicket);
   } catch (error) {
     logger.error('Error creating ticket:', error);

@@ -78,7 +78,7 @@ const TicketForm = ({ order_id, setShowForm }) => {
       setPriority('High');
       setCategory('');
       setOrderId('');
-      toast.success('Congratulations! Your complaint has been submitted. Our support team will contact you shortly!');
+      toast.success('We are Sorry! Your complaint has been submitted. Our support team will contact you shortly!');
     } catch (error) {
       console.error('Error creating ticket:', error);
       toast.error('Error occurred while submitting your complaint! Please try to contact us via email or give us a missed call.');
