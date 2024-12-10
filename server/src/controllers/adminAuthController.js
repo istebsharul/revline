@@ -61,7 +61,6 @@ export const loginAdmin = asyncErrors(async (req, res) => {
     logger.info(`Admin logged in successfully: ${email}`);
 });
 
-
 export const logoutAdmin = asyncErrors(async (req, res) => {
     res.cookie('token', null, {
         expires: new Date(Date.now()),
@@ -117,9 +116,6 @@ export const forgotPassword = asyncErrors(async (req, res) => {
         .update(resetToken)
         .digest('hex');
 
-
-    // const resetToken = admin.getResetPasswordToken(); //defined models/userModel
-    // const resetToken = admin.getResetPasswordToken();
     logger.info("Reset Token ", resetToken);
     logger.info("Hashed Reset Token ", resetPasswordToken);
 
@@ -133,8 +129,8 @@ export const forgotPassword = asyncErrors(async (req, res) => {
     await admin.save();
 
     // Send the reset token via email
-    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
-    const message = `You are receiving this email because you (or someone else) has requested to reset your password. Please make a PUT request to:\n\n${resetUrl}`;
+    const resetUrl = `admin.revlineautoparts.com/reset-password/${resetToken}`;
+    const message = `Click the link below to reset your password\n\n${resetUrl}`;
 
     try {
         await sendMail({

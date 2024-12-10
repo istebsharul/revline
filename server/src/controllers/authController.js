@@ -14,11 +14,11 @@ import { sendWelcomeEmail } from '../utils/emailService.js';
  * @param {import('express').Response} res - The response object.
  */
 export const registerUser = asyncErrors(async (req, res) => {
-    const { name, email, phone, password } = req.body;
+    const { name, email, password } = req.body;
 
     try {
         // Log attempt to register a user
-        logger.info('Attempting to register user', { email });
+        logger.info('Attempting to register user', { name,email});
 
         const customer = await Customer.findOne({ email });
 
@@ -34,16 +34,16 @@ export const registerUser = asyncErrors(async (req, res) => {
         const user = await User.create({
             name,
             email,
-            phone,
-            password, // Ensure you handle password securely
-            customer: customer._id
+            phone:customer?.phone,
+            password,
+            customer: customer?._id
         });
+
+        await sendWelcomeEmail({email, name});
+        logger.info('Welcome email sent.');
 
         // Send token and response
         sendToken(user, 201, res);
-
-        await sendWelcomeEmail(email,name);
-        logger.info('Welcome email sent.');
 
         // Log successful registration
         logger.info('User registered successfully', { email, userId: user._id });
@@ -151,19 +151,29 @@ export const forgotPassword = asyncErrors(async (req, res) => {
 
     // Set token and expiry date in the user document
     user.resetPasswordToken = resetPasswordToken;
-    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    user.resetPasswordExpires = Date.now() + 900000; // 1 hour
 
     logger.info("Saving on Db", user.resetPasswordToken)
     await user.save();
 
     // Send the reset token via email
-    const resetUrl = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
-    const message = `You are receiving this email because you (or someone else) has requested to reset your password. Please make a PUT request to:\n\n${resetUrl}`;
+    const resetUrl = `revlineautoparts.com/reset-password/${resetToken}`;
+    const message = `
+        Hello ${user.name},
+        
+        We received a request to reset your password for your revline account. If you made this request, you can reset your password by clicking the link below:
+        ${resetUrl}
+        If you didn’t request a password reset, please ignore this email or contact our support team if you have concerns.
+        This link is valid for the next 15 min, so be sure to use it before then.
+
+        Thank you,
+        Team Revline Autoparts
+        `;
 
     try {
         await sendMail({
             email: user.email,
-            subject: 'Password Reset Request',
+            subject: 'Reset Your Password',
             message
         });
 
