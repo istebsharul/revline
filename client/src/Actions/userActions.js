@@ -132,9 +132,6 @@ export const forgotPassword = (email) => {
 export const resetPassword = (password, token) => {
     return async (dispatch) => {
         try {
-            console.log("p", password);
-            console.log("token", token);
-
             const response = await axios.put(
                 `https://server.revlineautoparts.com/api/v1/auth/reset-password/${token}`,
                 { newPassword:password }

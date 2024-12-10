@@ -58,7 +58,7 @@ export const sendWelcomeEmail = async (clientData) => {
 
     await sendMail({
         email,
-        subject: `Welcome Aboard, ${firstName}! Your Journey with Revline Auto Parts Begins`,
+        subject: `Welcome Aboard, ${name}! Your Journey with Revline Auto Parts Begins`,
         message,
     });
 };
@@ -96,10 +96,10 @@ export const sendWelcomeBackEmail = async (clientData) => {
 };
 
 export const sendOrderConfirmationEmail = async (clientData) => {
-    const { email, firstName, orderId, orderDate, shippingAddress, items, totalAmount } = clientData;
+    const { email, name, orderId, orderDate, shippingAddress, items, totalAmount } = clientData;
 
     const message = `
-        Dear ${firstName},
+        Dear ${name},
 
         Thank you for your order! We're excited to get started on it right away.
 
@@ -130,10 +130,10 @@ export const sendOrderConfirmationEmail = async (clientData) => {
 };
 
 export const sendProcessingUpdateEmail = async (clientData) => {
-    const { email, firstName, orderId, estimatedShippingDate } = clientData;
+    const { email, name, orderId, estimatedShippingDate } = clientData;
 
     const message = `
-        Dear ${firstName},
+        Dear ${name},
 
         Good news! Your order #${orderId} is currently being processed and is on schedule.
 
@@ -156,10 +156,10 @@ export const sendProcessingUpdateEmail = async (clientData) => {
 };
 
 export const sendShippingUpdateEmail = async (clientData) => {
-    const { email, firstName, orderId, trackingLink } = clientData;
+    const { email, name, orderId, trackingLink } = clientData;
 
     const message = `
-        Dear ${firstName},
+        Dear ${name},
 
         Your order #${orderId} has been shipped and is on its way!
 
@@ -180,10 +180,10 @@ export const sendShippingUpdateEmail = async (clientData) => {
 };
 
 export const sendDeliveryConfirmationEmail = async (clientData) => {
-    const { email, firstName, orderId } = clientData;
+    const { email, name, orderId } = clientData;
 
     const message = `
-        Dear ${firstName},
+        Dear ${name},
 
         We're happy to inform you that your order #${orderId} has been delivered successfully.
 
@@ -204,10 +204,10 @@ export const sendDeliveryConfirmationEmail = async (clientData) => {
 };
 
 export const sendFeedbackRequestEmail = async (clientData) => {
-    const { email, firstName, feedbackLink } = clientData;
+    const { email, name, feedbackLink } = clientData;
 
     const message = `
-        Dear ${firstName},
+        Dear ${name},
 
         Thank you for your recent purchase! We'd love to hear about your experience.
 
@@ -228,10 +228,10 @@ export const sendFeedbackRequestEmail = async (clientData) => {
 };
 
 export const sendPromotionalEmail = async (clientData) => {
-    const { email, firstName, promoDetails } = clientData;
+    const { email, name, promoDetails } = clientData;
 
     const message = `
-        Dear ${firstName},
+        Dear ${name},
         
         Exciting news! Here's an exclusive offer just for you:
         
