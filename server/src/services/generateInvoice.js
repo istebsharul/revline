@@ -61,9 +61,9 @@ const generateInvoice = ({
     const headerY = doc.y;
 
     doc.fontSize(12).font('Helvetica-Bold');
-    doc.text('DESCRIPTION', doc.page.margins.left, headerY, { width: descriptionWidth, align: 'left' });
-    doc.text('QTY', doc.page.margins.left + descriptionWidth, headerY, { width: otherColumnsWidth, align: 'center' });
-    doc.text('PRICE', doc.page.margins.left + descriptionWidth + otherColumnsWidth, headerY, { width: otherColumnsWidth, align: 'center' });
+    doc.text('DESCRIPTION', doc.page.margins.left, headerY, { width: descriptionWidth + 60, align: 'left' });
+    doc.text('QTY', doc.page.margins.left + descriptionWidth + 60, headerY, { width: otherColumnsWidth, align: 'center' });
+    doc.text('PRICE', doc.page.margins.left + descriptionWidth + otherColumnsWidth + 60, headerY, { width: otherColumnsWidth, align: 'center' });
     doc.text('TOTAL', doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, headerY, { width: otherColumnsWidth, align: 'right' });
 
     doc.moveDown(0.5);
@@ -75,17 +75,17 @@ const generateInvoice = ({
     // Order Summary Details
     if (order_summary && order_summary.part_name) {
       doc.fontSize(12).font('Helvetica');
-      doc.text(order_summary.part_name, doc.page.margins.left, summaryY, { width: descriptionWidth, align: 'left' });
-      doc.text(order_summary.quantity || 1, doc.page.margins.left + descriptionWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
-      doc.text(`$${(quoted_price).toFixed(2)}`, doc.page.margins.left + descriptionWidth + otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'center' });
-      doc.text(`$${((quoted_price) * (order_summary.quantity || 1)).toFixed(2)}`, doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, summaryY, { width: otherColumnsWidth, align: 'right' });
+      doc.fontSize(10).text(`${order_summary?.year || ''} ${order_summary?.make || ''} ${order_summary?.model || ''} ${order_summary?.part_name || ''} ${order_summary?.variant || ''} ${order_summary?.transmission || ''} ${order_summary?.variant2 || ''}`, doc.page.margins.left, summaryY, { width: descriptionWidth + 60, align: 'left' });
+      doc.text(order_summary.quantity || 1, doc.page.margins.left + descriptionWidth + 60, summaryY+5, { width: otherColumnsWidth, align: 'center' });
+      doc.text(`$${(quoted_price).toFixed(2)}`, doc.page.margins.left + descriptionWidth + otherColumnsWidth + 60, summaryY+5, { width: otherColumnsWidth, align: 'center' });
+      doc.text(`$${((quoted_price) * (order_summary.quantity || 1)).toFixed(2)}`, doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, summaryY+5, { width: otherColumnsWidth, align: 'right' });
     } else {
       doc.text('No order summary provided.', doc.page.margins.left);
     }
-    doc.moveDown(1);
+    doc.moveDown(2);
     doc.moveTo(doc.page.margins.left, doc.y).lineTo(doc.page.width - doc.page.margins.right, doc.y).stroke();
     doc.moveDown(1);
-    
+
     // Subtotals and Totals
     const totalX = doc.page.width - doc.page.margins.right - 100;
     const subtotalY = doc.y;
@@ -102,22 +102,28 @@ const generateInvoice = ({
     const lineWidth = availableWidth * 0.4;
     const startX = doc.page.width - doc.page.margins.right - lineWidth;
     doc.moveTo(startX, doc.y).lineTo(doc.page.width - doc.page.margins.right, doc.y).stroke();
-    doc.fontSize(12).font('Helvetica-Bold').text('TOTAL:', totalX - 80, subtotalY + 70);
-    doc.text(`$${quoted_price.toFixed(2)}`, totalX, subtotalY + 70, { align: 'right' });
+    doc.fontSize(12).font('Helvetica-Bold').text('TOTAL:', totalX - 80, subtotalY + 50);
+    doc.text(`$${quoted_price.toFixed(2)}`, totalX, subtotalY + 50, { align: 'right' });
     doc.moveDown(1.5);
 
 
     // Footer - Payment and Contact Information
-    doc.rect(doc.page.margins.left, doc.y, availableWidth, 60).fill('#e4dbd7');
+    doc.rect(doc.page.margins.left, doc.y, availableWidth, 100).fill('#e4dbd7');
     const footerY = doc.y + 10;
 
     doc.fillColor('black').fontSize(12).font('Helvetica-Bold').text('Payment to :', doc.page.margins.left + 10, footerY, { align: 'left' });
-    doc.fillColor('#5f5d5a').fontSize(12).font('Helvetica').text('Bank name: Choice Financial Group\nBank code: CHFGUS44021', { align: 'left' });
+    doc.fillColor('#5f5d5a')
+      .fontSize(12)
+      .font('Helvetica')
+      .text('Beneficiary Name: Revline Auto Parts, LLC\nAccount Number: 202487384909\nABA Routing Number: 091311229\nType of Account: Checking\nBank Name: Choice Financial Group', { align: 'left' });
 
-    doc.fillColor('black').fontSize(12).font('Helvetica').text(
-      '+1 855 600 9080\nSupport@revlineautoparts.com\nrevlineautoparts.com',
-      doc.page.width - doc.page.margins.right - 200,
-      footerY,
+    doc.fillColor('black').fontSize(12).font('Helvetica-Bold').text('Contact Us :',doc.page.width - doc.page.margins.right - 200,footerY,{align: 'left'})
+    doc.fillColor('#5f5d5a')
+      .fontSize(12)
+      .font('Helvetica').text(
+        '+1 855 600 9080\nSupport@revlineautoparts.com\nrevlineautoparts.com',
+      // doc.page.width - doc.page.margins.right - 200,
+      // footerY,
       { align: 'left' }
     );
 

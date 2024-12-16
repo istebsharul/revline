@@ -32,8 +32,15 @@ export const getAllOrders = asyncErrors(async (req, res) => {
             .sort({ request_date: -1 })
             .skip(skip)
             .limit(limit)
-            .populate('customer', 'name email phone zipcode createdAt') // Populate only customer details you want (name, email, phone)
-            .select('_id customer quotations.quote_number request_date'); // Select only the fields you need
+            .populate({
+                path: 'customer',
+                select: 'name email phone zipcode createdAt', // Select only the customer fields you need
+            })
+            .populate({
+                path: 'payment_details', // Specify the path to the sub-document
+                select: 'payment_id transaction_id payment_status amount' // Select only the fields from the payment_details you need
+            })
+            .select('-invoices.invoicePdf'); // Exclude the invoicePdf field from the result
 
         // Get the total number of orders for pagination info
         const totalOrders = await Order.countDocuments();

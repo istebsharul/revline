@@ -64,6 +64,7 @@ const TicketForm = ({ order_id, setShowForm }) => {
     const ticketData = {
       subject,
       description,
+      priority,
       category,
       orderId: order_id,
     };
@@ -75,10 +76,10 @@ const TicketForm = ({ order_id, setShowForm }) => {
       // Reset form fields
       setSubject('');
       setDescription('');
-      setPriority('High');
+      setPriority('');
       setCategory('');
       setOrderId('');
-      toast.success('We are Sorry! Your complaint has been submitted. Our support team will contact you shortly!');
+      toast.success('We appreciate your patience! Your complaint has been submitted. Our support team will contact you shortly!');
     } catch (error) {
       console.error('Error creating ticket:', error);
       toast.error('Error occurred while submitting your complaint! Please try to contact us via email or give us a missed call.');

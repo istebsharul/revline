@@ -7,8 +7,15 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
 
     // Function to calculate gross profit
     const calculateGrossProfit = (costPrice, quotedPrice, shippingCost) => {
-        return (quotedPrice - costPrice - shippingCost).toFixed(2); // Calculate and format to two decimal places
+        // Ensure all inputs are valid numbers
+        const cost = Number(costPrice) || 0;
+        const quoted = Number(quotedPrice) || 0;
+        const shipping = Number(shippingCost) || 0;
+    
+        // Calculate and format to two decimal places, ensuring the result is a number
+        return parseFloat((quoted - cost - shipping).toFixed(2));
     };
+    
 
     // Handle fetch only on focus
     const handlePartsFocus = async () => {
@@ -26,7 +33,6 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
         // Check if input is a selected option (for the Select component)
         if (actionMeta) {
             const part = parts.find(part => part.part_name === input.value);
-
             // Update order details for selected part, including shipping size and shipping cost
             setOrderDetails((prev) => ({
                 ...prev,
@@ -36,13 +42,13 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                 },
                 pricing_details: {
                     ...prev.pricing_details,
-                    shipping_size: part.size,          // Automatically set shipping size based on selected part
-                    shipping_cost: part.shipping_cost, // Automatically set shipping cost based on selected part
+                    shipping_size: part?.size,          // Automatically set shipping size based on selected part
+                    shipping_cost: part?.shipping_cost, // Automatically set shipping cost based on selected part
                     // Recalculate gross profit on part selection
                     gross_profit: calculateGrossProfit(
                         pricingDetails.cost_price || 0,
                         pricingDetails.quoted_price || 0,
-                        part.shipping_cost
+                        part?.shipping_cost
                     ),
                 }
             }));
@@ -64,9 +70,14 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                     ); // Calculate gross profit
                 }
 
+                // const 
                 return {
                     ...prev,
                     pricing_details: updatedPricingDetails,
+                    order_summary:{
+                        ...prev.order_summary,
+                        [name]:value,
+                    }
                 };
             });
         }
@@ -88,7 +99,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                                 type="text"
                                 name="year"
                                 value={orderSummary?.year || ''}
-                                onChange={(e) => handleChange({ value: e.target.value }, { name: 'year' })}
+                                onChange={handleChange}
                                 className="text-gray-800 border border-gray-300 rounded p-1"
                                 placeholder="Enter year"
                             />
@@ -103,7 +114,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                                 type="text"
                                 name="make"
                                 value={orderSummary?.make || ''}
-                                onChange={(e) => handleChange({ value: e.target.value }, { name: 'make' })}
+                                onChange={handleChange}
                                 className="text-gray-800 border border-gray-300 rounded p-1"
                                 placeholder="Enter make"
                             />
@@ -118,7 +129,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                                 type="text"
                                 name="model"
                                 value={orderSummary?.model || ''}
-                                onChange={(e) => handleChange({ value: e.target.value }, { name: 'model' })}
+                                onChange={handleChange}
                                 className="text-gray-800 border border-gray-300 rounded p-1"
                                 placeholder="Enter model"
                             />
@@ -151,7 +162,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                                 type="text"
                                 name="variant"
                                 value={orderSummary?.variant || ''}
-                                onChange={(e) => handleChange({ value: e.target.value }, { name: 'variant' })}
+                                onChange={handleChange}
                                 className="text-gray-800 border border-gray-300 rounded p-1"
                                 placeholder="Enter variant"
                             />
@@ -166,12 +177,28 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                                 type="text"
                                 name="transmission"
                                 value={orderSummary?.transmission || ''}
-                                onChange={(e) => handleChange({ value: e.target.value }, { name: 'transmission' })}
+                                onChange={handleChange}
                                 className="text-gray-800 border border-gray-300 rounded p-1"
                                 placeholder="Enter transmission"
                             />
                         ) : (
                             <p className="text-gray-800">{orderSummary?.transmission || '--'}</p>
+                        )}
+                    </div>
+                    <div>
+                        <p className="font-medium text-gray-500">Variant 2:</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="variant2"
+                                value={orderSummary?.variant2 || ''}
+                                // onChange={(e) => handleChange({ value: e.target.value }, { name: 'variant2' })}
+                                onChange={handleChange}
+                                className="text-gray-800 border border-gray-300 rounded p-1 break-words"
+                                placeholder="Enter variant 2"
+                            />
+                        ) : (
+                            <p className="text-gray-800">{orderSummary?.variant2 || '--'}</p>
                         )}
                     </div>
                 </div>

@@ -70,6 +70,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
       .replace(/{{model}}/g, order.order_summary.model)
       .replace(/{{partName}}/g, order.order_summary.part_name)
       .replace(/{{variant}}/g, order.order_summary.variant)
+      .replace(/{{variant2}}/g, order.order_summary.variant2)
       .replace(/{{transmission}}/g, order.order_summary.transmission)
       .replace(/{{quotedPrice}}/g, `$${quoted_price.toFixed(2)}`)
       .replace(/{{shippingCost}}/g, `$${shipping_cost.toFixed(2)}`)
@@ -102,118 +103,6 @@ export const sendQuotation = asyncErrors(async (req, res) => {
     }
   }
 });
-
-// import generatePdf from '../../services/generatePdf.js';
-// import sendMail from '../../utils/sendMail.js';
-// import asyncErrors from '../../middlewares/catchAsyncErrors.js';
-// import Order from '../../models/order.js';
-// import logger from '../../utils/logger.js';
-// import fs from 'fs';
-// import { promisify } from 'util';
-// import path from 'path';
-
-// const __dirname = path.dirname(new URL(import.meta.url).pathname);
-
-// const filePath = path.resolve(__dirname, '../../services/emailContent.html');
-
-// const readFileAsync = promisify(fs.readFile);
-
-// // Function to generate a unique 6-digit quote number
-// const generateQuoteNumber = async () => {
-//   let unique = false;
-//   let quoteNumber;
-
-//   while (!unique) {
-//     quoteNumber = Math.floor(100000 + Math.random() * 999999).toString();
-//     const existingOrder = await Order.findOne({ 'quotations.quote_number': quoteNumber });
-
-//     if (!existingOrder) {
-//       unique = true;
-//     }
-//   }
-
-//   return 'RL'+quoteNumber;
-// };
-
-// export const sendQuotation = asyncErrors(async (req, res) => {
-//   const { orderId } = req.body;
-
-//   if (!orderId) {
-//     return res.status(400).json({ message: 'Order ID is required.' });
-//   }
-
-//   try {
-//     // Fetch the order from the database
-//     const order = await Order.findById(orderId).populate('customer');
-
-//     if (!order) {
-//       return res.status(404).json({ message: 'Order not found.' });
-//     }
-
-//     // Use fallback logic for customer details
-//     const customerName = order.shipping_details?.customer_name ?? order.customer.name;
-//     const customerEmail = order.shipping_details?.customer_email ?? order.customer.email;
-//     const customerPhone = order.shipping_details?.customer_phone ?? order.customer.phone;
-//     // const stateOrRegion = order.shipping_details?.state_or_region ?? '';
-
-//     const { quoted_price, shipping_cost } = order.pricing_details || {};
-
-//     // Check for missing required fields
-//     if (!customerEmail) {
-//       return res.status(400).json({ message: 'Customer email is required.' });
-//     }
-
-//     if (!customerName) {
-//       return res.status(400).json({ message: 'Customer name is required.' });
-//     }
-
-//     if (typeof quoted_price !== 'number' || typeof shipping_cost !== 'number') {
-//       return res.status(400).json({ message: 'Pricing details are incomplete or incorrect.' });
-//     }
-
-//     if (!order.order_summary || !order.order_summary.part_name) {
-//       return res.status(400).json({ message: 'Order summary is missing required data.' });
-//     }
-
-//     // Generate a unique quote number
-//     const quoteNumber = await generateQuoteNumber();
-
-//     // Create or update the quotation
-//     const newQuotation = {
-//       status: 'Pending',
-//       quote_number: quoteNumber, // Add quote number here
-//     };
-
-//     // Set the new quotation (overwrite if it exists)
-//     order.quotations = newQuotation;
-//     order.order_disposition_details.order_status = 'Awaiting Payment';
-
-//     // Save the updated order document
-//     await order.save();
-
-//     const htmlTemplate = await readFileAsync(filePath, 'utf-8');
-
-//     // Send Email with PDF attachment
-//     const mailSent = await sendMail({
-//       email: customerEmail,
-//       subject: 'Your Quotation',
-//       message: `Dear ${customerName}, please find attached your quotation.`,
-//       htmlContent:htmlTemplate,
-//     });
-
-//     logger.info(customerEmail, customerName);
-
-//     // Send success response
-//     res.json({ message: 'Quotation sent and saved successfully!' });
-
-//   } catch (error) {
-//     console.error(error);
-//     // Ensure only one response is sent
-//     if (!res.headersSent) {
-//       res.status(500).json({ message: 'Failed to send quotation. Please try again later.' });
-//     }
-//   }
-// });
 
 export const rejectQuotation = asyncErrors(async (req, res) => {
   const { orderId } = req.params;
