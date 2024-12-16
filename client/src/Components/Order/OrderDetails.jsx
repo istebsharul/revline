@@ -11,10 +11,6 @@ const OrderDetails = ({ order }) => {
   const paymentDetails = order?.payment_details;
   const date = order?.quotations?.created_at;
 
-  useEffect(() => {
-    console.log(order);
-  }, [order]);
-
   const features = [
     {
       title: "Unmatched Expertise",
@@ -69,13 +65,12 @@ const OrderDetails = ({ order }) => {
     },
   ];
 
-
   const handleAccept = async () => {
     setLoading(true);
     toast.promise(
       axios.post('https://server.revlineautoparts.com/api/v1/stripe/create-payment', { orderId: order._id }),
       {
-        loading: 'Creating PayPal payment...',
+        loading: 'Please wait...',
         success: <b>Redirecting to Payment Gateway...</b>,
         error: (error) => {
           const errorMessage = error.response?.data?.message || 'An error occurred while creating PayPal payment.';
@@ -123,16 +118,19 @@ const OrderDetails = ({ order }) => {
             <div className="w-full md:w-1/3 bg-gray-100 text-gray-800 p-4 md:p-8 border-b md:border-b-0 md:border-r border-gray-200">
               <h2 className="text-2xl text-[#f6251a] font-bold mb-4 md:mb-6 text-center md:text-left">REVLINE AUTO PARTS</h2>
               <div className="mb-4 md:mb-6">
-                <strong>QUOTED TO:</strong>
+                <h1 className='font-bold text-xl'>Quoted To:</h1>
                 <p>{order?.shipping_details?.customer?.name}</p>
                 <p>{order?.shipping_details?.customer?.zipcode}</p>
                 <p>{order?.shipping_details?.customer?.email}</p>
                 <p>{order?.shipping_details?.customer?.phone}</p>
               </div>
-              <div className="mb-4 md:mb-6">
-                <strong>PAYMENT</strong>
-                <p>Bank Account: ***** ***** *****</p>
-                <p>Paypal: support@revlineautoparts.com</p>
+              <div className="mb-4 md:mb-6 text-xl">
+                <strong>Payment</strong>
+                <p className='text-sm'>Beneficiary Name: <span className='italic text-gray-600'>Revline Auto Parts, LLC</span></p>
+                <p className='text-sm'>Account Number: <span className='italic text-gray-600'>202487384909</span></p>
+                <p className='text-sm'>ABA Routing Number: <span className='italic text-gray-600'>091311229</span></p>
+                <p className='text-sm'>Type of Account: <span className='italic text-gray-600'>Checking</span></p>
+                <p className='text-sm'>Bank Name: <span className='italic text-gray-600'>Choice Financial Group</span></p>
               </div>
               <div className="bg-gray-100">
                 <h2 className="text-xl font-bold mb-2 md:mb-4">Terms</h2>
@@ -221,7 +219,7 @@ const OrderDetails = ({ order }) => {
               <a href="tel:+13105550147" className="block w-full md:w-48 mx-auto py-3 text-center bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 mb-4 md:mb-6">
                 Call Us
               </a>
-              <p className="text-center md:text-left">Jack Morrison<br />Senior Parts Specialist</p>
+              <p className="text-center md:text-left">Adam Reed<br />Senior Parts Specialist</p>
             </div>
           </div>
 

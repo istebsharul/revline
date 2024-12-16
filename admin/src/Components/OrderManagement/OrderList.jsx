@@ -61,19 +61,115 @@ const OrderList = ({ orders }) => {
 
     // Function to handle exporting the order list to CSV
     const handleExport = () => {
+        // Function to escape CSV values
+        const escapeCsvValue = (value) => {
+            if (typeof value === 'string' && (value.includes(',') || value.includes(';') || value.includes('"'))) {
+                return `"${value.replace(/"/g, '""')}"`; // Escape double quotes by doubling them
+            }
+            return value;
+        };
+
+        const formatDispositionHistory = (history) => {
+            if (!Array.isArray(history) || history.length === 0) {
+                return 'N/A'; // Return N/A if the history is empty or not an array
+            }
+            return history
+                .map(entry => 
+                    `Agent Notes: ${entry.agent_notes || 'N/A'}, Updated At: ${new Date(entry.updated_at).toLocaleString()}`
+                )
+                .join('; '); // Separate entries with a semicolon
+        };        
+
         const csvContent = [
-            ['Index', 'Order ID', 'Name', 'Email', 'Phone', 'Zipcode', 'Requested Date'],
-            ...filteredOrders.map((order, index) => [
-                index + 1,
+            [
+                'Order ID',
+                'Customer Name',
+                'Customer Email',
+                'Customer Phone',
+                'Zip Code',
+                'Requested Date',
+                'Quote Number',
+                'Year',
+                'Make',
+                'Model',
+                'Part',
+                'Variant',
+                'Transmission',
+                'Shipping Size',
+                'Shipping Cost',
+                'Shipping Speed',
+                'Cost Price',
+                'Quoted Price',
+                'Gross Profit',
+                'Shipping Customer Name',
+                'Shipping Customer Email',
+                'Shipping Customer Phone',
+                'Shipping Zip Code',
+                'Shipping Address Line 1',
+                'Shipping Address Line 2',
+                'Shipping City',
+                'Shipping State/Region',
+                'Shipping Country/Region',
+                'Quotation Number',
+                'Quotation Status',
+                'Quotation Created At',
+                'Invoice Number',
+                'Invoice Status',
+                'Invoice Created At',
+                'Payment ID',
+                'Transaction ID',
+                'Payment Status',
+                'Payment Amount',
+                'Agent Notes',
+                'Order Status',
+                'Specific Request for Warehouse Team',
+                'Disposition History'
+            ],
+            ...filteredOrders.map((order) => [
                 order?._id.slice(-6) || 'N/A',
-                order?.customer?.name || 'N/A',
-                order?.customer?.email || 'N/A',
-                order?.customer?.phone || 'N/A',
-                order?.customer?.zipcode || 'N/A',
-                formatDate(order?.customer?.createdAt) || 'N/A'
-            ])
+                escapeCsvValue(order?.customer?.name || 'N/A'),
+                escapeCsvValue(order?.customer?.email || 'N/A'),
+                escapeCsvValue(order?.customer?.phone || 'N/A'),
+                escapeCsvValue(order?.customer?.zipcode || 'N/A'),
+                escapeCsvValue(formatDate(order?.request_date) || 'N/A'),
+                escapeCsvValue(order?.quotations?.quote_number || 'N/A'),
+                escapeCsvValue(order?.order_summary?.year || 'N/A'),
+                escapeCsvValue(order?.order_summary?.make || 'N/A'),
+                escapeCsvValue(order?.order_summary?.model || 'N/A'),
+                escapeCsvValue(order?.order_summary?.part_name || 'N/A'),
+                escapeCsvValue(order?.order_summary?.variant || 'N/A'),
+                escapeCsvValue(order?.order_summary?.transmission || 'N/A'),
+                escapeCsvValue(order?.pricing_details?.shipping_size || 'N/A'),
+                escapeCsvValue(order?.pricing_details?.shipping_cost || 'N/A'),
+                escapeCsvValue(order?.pricing_details?.shipping_speed || 'N/A'),
+                escapeCsvValue(order?.pricing_details?.cost_price || 'N/A'),
+                escapeCsvValue(order?.pricing_details?.quoted_price || 'N/A'),
+                escapeCsvValue(order?.pricing_details?.gross_profit || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.customer_name || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.customer_email || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.customer_phone || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.zipcode || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.address_line_1 || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.address_line_2 || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.city || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.state_or_region || 'N/A'),
+                escapeCsvValue(order?.shipping_details?.country_or_region || 'N/A'),
+                escapeCsvValue(order?.quotations?.quote_number || 'N/A'),
+                escapeCsvValue(order?.quotations?.status || 'N/A'),
+                escapeCsvValue(formatDate(order?.quotations?.created_at) || 'N/A'),
+                escapeCsvValue(order?.invoices?.invoice_number || 'N/A'),
+                escapeCsvValue(order?.invoices?.status || 'N/A'),
+                escapeCsvValue(formatDate(order?.invoices?.created_at) || 'N/A'),
+                escapeCsvValue(order?.payment_details?.payment_id || 'N/A'),
+                escapeCsvValue(order?.payment_details?.transaction_id || 'N/A'),
+                escapeCsvValue(order?.payment_details?.payment_status || 'N/A'),
+                escapeCsvValue(order?.payment_details?.amount || 'N/A'),
+                escapeCsvValue(order?.order_disposition_details?.agent_notes || 'N/A'),
+                escapeCsvValue(order?.order_disposition_details?.order_status || 'N/A'),
+                escapeCsvValue(order?.order_disposition_details?.specific_request_for_warehouse_team || 'N/A'),
+                escapeCsvValue(formatDispositionHistory(order?.disposition_history))            ])
         ]
-            .map(e => e.join(','))
+            .map(e => e.join(';')) // Use semicolon as delimiter
             .join('\n');
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });

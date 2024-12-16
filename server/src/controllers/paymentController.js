@@ -85,27 +85,52 @@ export const createPayment = async (req, res) => {
 
 
 export const verifyPayment = async (req, res) => {
-  console.log("Hello from Verify Payment!");
+  logger.info("Hello from Verify Payment!");
   try {
     const { session_id } = req.query;
+
     if (!session_id) {
+      logger.warn("Session ID is missing");
       return res.status(400).json({ success: false, message: 'Session ID is required' });
     }
 
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
-    let payment = await Payment.findOne({ token: session_id });
+    const payment = await Payment.findOne({ token: session_id });
+
+    if (!payment) {
+      logger.warn(`Payment record not found for session ID: ${session_id}`);
+      return res.status(404).json({ success: false, message: 'Payment record not found' });
+    }
+
+    const order = await Order.findById(payment.order_id).populate('order_disposition_details');
+
+    if (!order) {
+      logger.warn(`Order not found for payment ID: ${payment._id}`);
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    if (!order.order_disposition_details) {
+      logger.warn(`Order disposition details missing for order ID: ${order._id}`);
+      return res.status(400).json({ success: false, message: 'Order disposition details not found' });
+    }
 
     if (session.payment_status === 'paid') {
       payment.payment_status = 'Completed';
       payment.transaction_id = session.payment_intent;
       await payment.save();
+
+      order.order_disposition_details.order_status = 'Payment Received';
+      await order.save();
+
+      logger.info(`Payment successful for session ID: ${session_id}`);
       return res.status(200).json({ success: true, message: 'Payment successful' });
     } else {
+      logger.warn(`Payment not successful for session ID: ${session_id}`);
       return res.status(400).json({ success: false, message: 'Payment not successful' });
     }
   } catch (error) {
-    console.error('Error verifying payment:', error);
+    logger.error('Error verifying payment:', error);
     res.status(500).json({ success: false, message: 'Internal Server Error' });
   }
 };
