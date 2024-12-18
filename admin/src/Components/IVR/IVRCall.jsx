@@ -23,12 +23,22 @@ const IVRCall = () => {
     waitingConnection,
     handleWaitingConnection,
     queueStatus,
-    isOutgoingRef
+    isOutgoingRef,
+    sendDTMF
   } = useCallContext();
 
   const handleNumberChange = (phoneNumber) => {
     console.log("HNC clicked!!");
     setPhoneNumber(phoneNumber);
+  }
+
+  const handleNumberClick = (digit) => {
+    if (!incomingConnection) {
+      setPhoneNumber((prev) => prev + digit);
+      console.log('Taking number for making call');
+    } else {
+      sendDTMF(digit);
+    }
   }
 
   return (
@@ -42,7 +52,7 @@ const IVRCall = () => {
       </div> */}
       <DialPad
         phoneNumber={phoneNumber}
-        handleNumberClick={(digit) => setPhoneNumber((prev) => prev + digit)}
+        handleNumberClick={handleNumberClick}
         handleMakeCall={(e) => {
           e.preventDefault();
           handleMakeCall(phoneNumber);

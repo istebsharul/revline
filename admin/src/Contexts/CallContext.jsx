@@ -13,7 +13,6 @@ const CallContext = createContext();
 export const CallProvider = ({ children }) => {
 	const [device, setDevice] = useState(null);
 	const [incomingConnection, setIncomingConnection] = useState(null);
-	const [outgoingConnection, setOutgoingConnection] = useState(null);
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [callSid, setCallSid] = useState('');
 	const [incomingCallSid, setIncomingCallSid] = useState('');
@@ -66,6 +65,7 @@ export const CallProvider = ({ children }) => {
 		// 	socket.off('queue-status-update');
 		// 	console.log("Queue Status socket off...");
 		// })
+		console.log("Incoming Check......",incomingConnection);
 		const fetchQueueStatus = async() =>{
 			try {
 				const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/queue-status');
@@ -112,6 +112,13 @@ export const CallProvider = ({ children }) => {
 			return null;
 		}
 	};
+
+	const sendDTMF = (digit) =>{
+		if(incomingConnection){
+			incomingConnection.sendDigits(String(digit));
+			console.log(`Sending DTMF: ${digit}`);
+		}
+	}
 
 	const initDevice = async () => {
 		const token = await getToken();
@@ -327,7 +334,8 @@ export const CallProvider = ({ children }) => {
 			isOutgoingRef,
 			waitingConnection,
 			handleWaitingConnection,
-			queueStatus
+			queueStatus,
+			sendDTMF
 		}}>
 			{children}
 		</CallContext.Provider>
