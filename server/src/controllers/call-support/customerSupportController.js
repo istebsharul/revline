@@ -11,6 +11,8 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioClient = twilio(accountSid, authToken);
 
 let io;
+let outgoing = false;
+
 // Helper to handle response and errors
 const sendTwimlResponse = (res, responseText) => {
   res.set('Content-Type', 'text/xml');
@@ -57,7 +59,7 @@ export const makeCall = async (req, res) => {
   }
 
   try {
-
+    outgoing = true;
     const call = await twilioClient.calls.create({
       url: `https://server.revlineautoparts.com/api/v1/twilio/voice`, // URL to TwiML voice instructions
       to: phoneNumber,
@@ -65,7 +67,6 @@ export const makeCall = async (req, res) => {
       statusCallback: `https://server.revlineautoparts.com/api/v1/twilio/callback`,
       statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
     });
-
     logger.info(`Call started successfully, SID: ${call.sid}`);
     res.send({ message: 'Call started', callSid: call.sid }); // Send callSid in response
   } catch (error) {
@@ -76,7 +77,7 @@ export const makeCall = async (req, res) => {
 
 export const endCall = async (req, res) => {
   const { callSid } = req.body;
-  if (!callSid || callSid=== '') {
+  if (!callSid || callSid === '') {
     logger.warn("Call SID is missing in the request");
     return res.status(400).send('Call SID is required');
   }
@@ -102,12 +103,12 @@ export const endCall = async (req, res) => {
 
 export const holdCall = async (req, res) => {
   const { callSid } = req.body;
-  console.log("Call Sid",callSid);
-  if(callSid === ''){
-    logger.info("No call Sid found",callSid);
+  console.log("Call Sid", callSid);
+  if (callSid === '') {
+    logger.info("No call Sid found", callSid);
     return;
   }
-  logger.info("Call sid to hold",callSid);
+  logger.info("Call sid to hold", callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
       url: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music',
@@ -123,11 +124,11 @@ export const holdCall = async (req, res) => {
 
 export const resumeCall = async (req, res) => {
   const { callSid } = req.body;
-  if(callSid === ''){
+  if (callSid === '') {
     logger.info("No call Sid found");
     return;
   }
-  logger.info("Call sid to resume",callSid);
+  logger.info("Call sid to resume", callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
       url: 'https://server.revlineautoparts.com/api/v1/twilio/resume-connection',
@@ -143,7 +144,7 @@ export const resumeCall = async (req, res) => {
 
 export const holdMusicTwiml = (req, res) => {
   const twiml = new twilio.twiml.VoiceResponse();
-  twiml.say('Did you know? Revline Auto Parts offers a 30-day warranty on all parts to give you peace of mind with every purchase.Looking for hard-to-find parts? Let our team of experts assist you. Visit revlineautoparts.com for more details! Looking for hard-to-find parts? Let our team of experts assist you. Visit revlineautoparts.com for more details!');
+  twiml.say('Your are on Hold Did you know Revline Auto Parts offers a 30-day warranty on all parts to give you peace of mind with every purchase.Looking for hard-to-find parts? Let our team of experts assist you. Visit revlineautoparts.com for more details! Looking for hard-to-find parts? Let our team of experts assist you. Visit revlineautoparts.com for more details!');
   twiml.play('http://com.twilio.sounds.music.s3.amazonaws.com/MARKOVICHAMP-Borghestral.mp3');  // URL to hold music
 
   res.type('text/xml');
@@ -196,7 +197,9 @@ export const voiceResponse = (req, res) => {
     if (isAgentAvailable) {
       // Agent is available, connect the call directly
       isAgentAvailable = false; // Mark agent as busy
-      twiml.say("Hi there! Thank you for calling Revline Auto Parts. We’re excited to help you find exactly what you need.Connecting you to an agent");
+      if(outgoing===false){
+        twiml.say("Hi there! Thank you for calling Revline Auto Parts. We’re excited to help you find exactly what you need Connecting you to an agent");
+      }
       twiml.dial().client('web-user'); // Replace with your agent's identifier
     } else {
       // Agent is busy, place the call in the queue
@@ -363,10 +366,10 @@ export const callBackVoice = async (req, res) => {
       });
 
       if (status === 'completed' || status === 'no-answer' || status === 'busy') {
-          isAgentAvailable = true;
-      //   io.close();
-      //   console.log("IO closed since status", status);
-      //   io = null;
+        isAgentAvailable = true;
+        //   io.close();
+        //   console.log("IO closed since status", status);
+        //   io = null;
       }
 
       // Handle the status as before...
