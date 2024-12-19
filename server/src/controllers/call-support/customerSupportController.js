@@ -12,6 +12,8 @@ const twilioClient = twilio(accountSid, authToken);
 
 let io;
 let outgoing = false;
+let incomingCallSid;
+let isAgentAvailable = true;
 
 // Helper to handle response and errors
 const sendTwimlResponse = (res, responseText) => {
@@ -102,13 +104,15 @@ export const endCall = async (req, res) => {
 };
 
 export const holdCall = async (req, res) => {
-  const { callSid } = req.body;
+  let { callSid } = req.body;
   console.log("Call Sid", callSid);
   if (callSid === '') {
-    logger.info("No call Sid found", callSid);
-    return;
+    logger.info("No call Sid found, So holding Incoming Call", callSid);
+    callSid = incomingCallSid;
+    // return;
   }
   logger.info("Call sid to hold", callSid);
+  console.log("Call sid to hold", callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
       url: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music',
@@ -123,10 +127,11 @@ export const holdCall = async (req, res) => {
 };
 
 export const resumeCall = async (req, res) => {
-  const { callSid } = req.body;
+  let { callSid } = req.body;
   if (callSid === '') {
     logger.info("No call Sid found");
-    return;
+    callSid = incomingCallSid;
+    // return;
   }
   logger.info("Call sid to resume", callSid);
   try {
@@ -160,8 +165,6 @@ export const originalTwiml = (req, res) => {
   res.send(twiml.toString());
 };
 
-let isAgentAvailable = true;
-
 export const voiceResponse = (req, res) => {
   logger.info("Generating TwiML voice response");
   try {
@@ -191,6 +194,8 @@ export const voiceResponse = (req, res) => {
       });
     }
 
+    incomingCallSid = req.body.CallSid;
+    console.log(incomingCallSid);
     // Create a new TwiML Voice Response
     const twiml = new twilio.twiml.VoiceResponse();
 
@@ -208,10 +213,10 @@ export const voiceResponse = (req, res) => {
         waitUrl: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music'
       });
     }
-
-    // Respond with the TwiML instructions
+    // // Respond with the TwiML instructions
     res.type('text/xml');
     res.send(twiml.toString());
+    // res.send();
     logger.info("TwiML voice response sent successfully");
   } catch (error) {
     logger.error(`Error generating TwiML response: ${error.message}`);

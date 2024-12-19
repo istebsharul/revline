@@ -173,7 +173,7 @@ export const CallProvider = ({ children }) => {
 					setCallStatus('Outgoing call accepted');
 				} else {
 					// Handle incoming call scenario
-					console.log("Connecting as Incoming Call");
+					console.log("Connecting as Incoming Call",incomingCallSid);
 					setIncomingConnection(connection);
 					setShowCallPopup(true);
 					setCallStatus(`Incoming Call SID: ${incomingCallSid}`);
@@ -271,11 +271,11 @@ export const CallProvider = ({ children }) => {
 	};
 
 	const muteCall = async () => {
-		const activeCallSid = isOutgoingRef.current ? callSid : incomingCallSid;
-		console.log(activeCallSid);
+		const activeCallSid = isOutgoingRef.current ? callSid : '';
+		console.log("Muting SID",activeCallSid);
 		if(activeCallSid === ''){
-			console.log("Call not found!");
-			return;
+			console.log("Holding inbound Call");
+			// return;
 		}
 		try {
 			const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/hold-call', {
@@ -296,7 +296,7 @@ export const CallProvider = ({ children }) => {
 	};
 
 	const resumeCall = async () => {
-		const activeCallSid = isOutgoingRef.current ? callSid: incomingCallSid;
+		const activeCallSid = isOutgoingRef.current ? callSid: '';
 		console.log(activeCallSid);
 		try {
 			const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/resume-call', {
