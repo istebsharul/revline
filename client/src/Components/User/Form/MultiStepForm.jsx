@@ -26,7 +26,8 @@ const MultiStepForm = () => {
         name: '',
         email: '',
         phone: '',
-        zipcode: ''
+        zipcode: '',
+        smsConsent: false
     });
 
     const [errors, setErrors] = useState({});
@@ -74,6 +75,8 @@ const MultiStepForm = () => {
             errors.zipcode = 'Zip Code must be exactly 5 digits';
         }
 
+        if(!userData.smsConsent) errors.smsConsent = 'Please agree to receive SMS';
+        
         return errors;
     };
 
@@ -108,7 +111,7 @@ const MultiStepForm = () => {
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors); // Set the errors to the state for display
-            toast.error('Please fix the errors in Step 3 before submitting.'); // Display a toast error message
+            toast.error('Please fill all the required field.'); // Display a toast error message
             return; // Exit the function early if there are validation errors
         }
         setErrors({});
@@ -126,10 +129,7 @@ const MultiStepForm = () => {
 
         // Define the promise
         const postRequest = axios.post('https://server.revlineautoparts.com/api/v1/customer/create', {
-            name,
-            email,
-            phone,
-            zipcode, // Include address as per the schema
+            userData,
             vehicleData: vehicleData, // Corrected: Send vehicleData as an array
         });
 

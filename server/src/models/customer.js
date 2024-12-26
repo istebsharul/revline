@@ -61,6 +61,10 @@ const CustomerSchema = new mongoose.Schema({
       message: props => `${props.value} is not a valid ZIP code!`
     }
   },
+  smsConsent: {
+    type: Boolean,
+    default: false
+  },
   orderInfo: [OrderInfoSchema],
 }, { timestamps: true });  // Add timestamps option
 

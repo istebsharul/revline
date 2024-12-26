@@ -65,7 +65,7 @@ function BestBuyingExperience({ handleScroll }) {
                             <p className='w-11/12 md:text-sm text-xs'>
                                 Discover top-rated auto parts that offer unbeatable quality and performance.
                             </p>
-                            <a className='w-2/5 h-min bg-[#f6251a] p-1 rounded-full flex justify-center items-center text-sm'>
+                            <a href="/parts" className='w-2/5 h-min bg-[#f6251a] p-1 rounded-full flex justify-center items-center text-sm'>
                                 SEE ALL <FaArrowUp className='mx-2 rotate-90' />
                             </a>
                         </div>

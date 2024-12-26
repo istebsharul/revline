@@ -91,7 +91,7 @@ const OrderSchema = new mongoose.Schema({
     transaction_method: { type: String, trim: true }
   },
   order_disposition_details: {
-    specific_request_for_warehouse_team: { type: String, trim: true },
+    customer_notes: { type: String, trim: true },
     agent_notes: { type: String, trim: true },
     order_status: { type: String, trim: true, default: 'Pending Approval' },
   },

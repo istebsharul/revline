@@ -83,7 +83,7 @@ const generateInvoiceNumber = async () => {
 
 // Controller function to send an invoice
 export const sendInvoice = asyncErrors(async (req, res) => {
-  const { orderId,transactionId, paymentMode } = req.body;
+  const { orderId, transactionId, paymentMode } = req.body;
 
   if (!orderId) {
     return res.status(400).json({ message: 'Order ID is required.' });
@@ -177,10 +177,34 @@ export const sendInvoice = asyncErrors(async (req, res) => {
     // Send Email with PDF attachment
     const mailSent = await sendMail({
       email: customerEmail,
-      subject: 'Your Invoice',
-      message: `Dear ${customerName}, please find attached your invoice.`,
+      subject: `Order Confirmation #[${orderId.slice(-6)}] – We're Processing Your Order!`,
+      message: `
+        Dear ${customerName},
+    
+        Thank you for your order! We're excited to get started on it right away.
+    
+        **Order Summary:**
+        - Order ID: ${orderId.slice(-6)}
+        - Order Date: ${new Date(order.createdAt).toLocaleDateString()}
+        - Shipping Address: ${address}, ${address1}
+        - Items Ordered:
+          - Part: ${order.order_summary.part_name}
+        - Total Amount: $${totalAmount}
+    
+        Attached to this email is the invoice for your records.
+    
+        **What's Next?**
+        Our team is now processing your order. We'll notify you once it's shipped. You can view your order status anytime by logging into your account.
+    
+        Need Assistance? Contact us at support@revlineautoparts.com or call +1 855 600 9080.
+    
+        Best regards,
+        Adam Reed
+        Customer Service Team
+        Revline Auto Parts
+      `,
       filename: 'invoice.pdf',
-      pdfStream: pdfBuffer, // Pass Buffer here
+      pdfStream: pdfBuffer,
     });
 
     logger.info(`Invoice sent to ${customerEmail}`, { customerName, pdfBuffer });

@@ -41,14 +41,14 @@ const OrderDispositionDetails = ({ orderDispositionDetails = {}, isEditing, setO
           {isEditing ? (
             <input
               type="text"
-              name="specific_request_for_warehouse_team"
-              value={orderDispositionDetails.specific_request_for_warehouse_team || ''}
+              name="customer_notes"
+              value={orderDispositionDetails.customer_notes || ''}
               onChange={handleChange}
               className="text-gray-600 border border-gray-300 rounded p-1"
               placeholder="Enter request for warehouse team"
             />
           ) : (
-            <p className="text-gray-600">{orderDispositionDetails.specific_request_for_warehouse_team || '--'}</p>
+            <p className="text-gray-600">{orderDispositionDetails.customer_notes || '--'}</p>
           )}
         </div>
         <div>

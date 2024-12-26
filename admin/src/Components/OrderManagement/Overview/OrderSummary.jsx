@@ -89,7 +89,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                 <h3 className="text-lg font-bold mb-4">Order Summary</h3>
                 <div className="grid grid-cols-4 gap-4">
                     <div>
-                        <p className="font-medium text-gray-500">Part Code:</p>
+                        <p className="font-medium text-gray-500">VIN:</p>
                         <p className="text-gray-800">{orderSummary?.part_code || '--'}</p>
                     </div>
                     <div>
