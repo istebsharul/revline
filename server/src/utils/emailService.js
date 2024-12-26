@@ -1,7 +1,9 @@
 import sendMail from './sendMail.js';
+import logger from '../../utils/logger.js';
 
 export const sendAccountActivationEmail = async (clientData) => {
     const { email, name, vehicleData } = clientData;
+    logger.info(`Sending account activation email to ${email}`);
 
     const message = `
         Dear ${name},
@@ -26,15 +28,22 @@ export const sendAccountActivationEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: 'Welcome to Revline Auto Parts – Complete Your Account Setup',
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: 'Welcome to Revline Auto Parts – Complete Your Account Setup',
+            message,
+        });
+        logger.info(`Successfully sent account activation email to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send account activation email to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendWelcomeEmail = async (clientData) => {
     const { email, name } = clientData;
+    logger.info(`Sending welcome email to ${email}`);
 
     const message = `
         Dear ${name},
@@ -60,24 +69,31 @@ export const sendWelcomeEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: `Welcome Aboard, ${name}! Your Journey with Revline Auto Parts Begins`,
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: `Welcome Aboard, ${name}! Your Journey with Revline Auto Parts Begins`,
+            message,
+        });
+        logger.info(`Successfully sent welcome email to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send welcome email to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendWelcomeBackEmail = async (clientData) => {
     const { email, name, vehicleData } = clientData;
+    logger.info(`Sending welcome back email to ${email}`);
 
     const message = `
         Dear ${name},
 
-        Welcome back to Revline Auto Parts! We’re thrilled to have you with us again. Your loyalty means the world to us, and we’re committed to ensuring every experience exceeds your expectations.
+        Welcome back to Revline Auto Parts! We're thrilled to have you with us again. Your loyalty means the world to us, and we're committed to ensuring every experience exceeds your expectations.
 
         We have received your order for the ${vehicleData?.part} of the ${vehicleData?.year} ${vehicleData?.make} ${vehicleData?.model}.
 
-        Here’s what’s waiting for you as a returning member:
+        Here's what's waiting for you as a returning member:
         - Tailored Recommendations: Explore auto parts based on your past preferences and orders.
         - Exclusive Loyalty Perks: Enjoy personalized discounts and offers as a thank-you for your trust.
         - Seamless Ordering: Experience faster checkout with your saved details for effortless shopping.
@@ -92,15 +108,22 @@ export const sendWelcomeBackEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: `Welcome Back, ${name}! Your Next Journey with Revline Auto Parts`,
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: `Welcome Back, ${name}! Your Next Journey with Revline Auto Parts`,
+            message,
+        });
+        logger.info(`Successfully sent welcome back email to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send welcome back email to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendOrderConfirmationEmail = async (clientData) => {
     const { email, name, orderId, orderDate, shippingAddress, items, totalAmount } = clientData;
+    logger.info(`Sending order confirmation email for order ${orderId} to ${email}`);
 
     const message = `
         Dear ${name},
@@ -126,15 +149,22 @@ export const sendOrderConfirmationEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: `Order Confirmation #${orderId} – We're Processing Your Order!`,
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: `Order Confirmation #${orderId} – We're Processing Your Order!`,
+            message,
+        });
+        logger.info(`Successfully sent order confirmation email for order ${orderId} to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send order confirmation email for order ${orderId} to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendProcessingUpdateEmail = async (clientData) => {
     const { email, name, orderId, estimatedShippingDate } = clientData;
+    logger.info(`Sending processing update email for order ${orderId} to ${email}`);
 
     const message = `
         Dear ${name},
@@ -150,17 +180,24 @@ export const sendProcessingUpdateEmail = async (clientData) => {
         Best regards,
         Customer Service Team
         Revline Auto Parts
-            `;
+    `;
 
-    await sendMail({
-        email,
-        subject: `Order Update: Your Order #${orderId} is in Progress`,
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: `Order Update: Your Order #${orderId} is in Progress`,
+            message,
+        });
+        logger.info(`Successfully sent processing update email for order ${orderId} to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send processing update email for order ${orderId} to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendShippingUpdateEmail = async (clientData) => {
     const { email, name, orderId, trackingLink } = clientData;
+    logger.info(`Sending shipping update email for order ${orderId} to ${email}`);
 
     const message = `
         Dear ${name},
@@ -176,15 +213,22 @@ export const sendShippingUpdateEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: `Shipping Update: Your Order #${orderId} is on the Way`,
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: `Shipping Update: Your Order #${orderId} is on the Way`,
+            message,
+        });
+        logger.info(`Successfully sent shipping update email for order ${orderId} to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send shipping update email for order ${orderId} to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendDeliveryConfirmationEmail = async (clientData) => {
     const { email, name, orderId } = clientData;
+    logger.info(`Sending delivery confirmation email for order ${orderId} to ${email}`);
 
     const message = `
         Dear ${name},
@@ -200,15 +244,22 @@ export const sendDeliveryConfirmationEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: `Delivery Confirmation: Your Order #${orderId} is Complete`,
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: `Delivery Confirmation: Your Order #${orderId} is Complete`,
+            message,
+        });
+        logger.info(`Successfully sent delivery confirmation email for order ${orderId} to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send delivery confirmation email for order ${orderId} to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendFeedbackRequestEmail = async (clientData) => {
     const { email, name, feedbackLink } = clientData;
+    logger.info(`Sending feedback request email to ${email}`);
 
     const message = `
         Dear ${name},
@@ -224,15 +275,22 @@ export const sendFeedbackRequestEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: 'We Value Your Feedback!',
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: 'We Value Your Feedback!',
+            message,
+        });
+        logger.info(`Successfully sent feedback request email to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send feedback request email to ${email}`, error);
+        throw error;
+    }
 };
 
 export const sendPromotionalEmail = async (clientData) => {
     const { email, name, promoDetails } = clientData;
+    logger.info(`Sending promotional email to ${email}`);
 
     const message = `
         Dear ${name},
@@ -248,37 +306,50 @@ export const sendPromotionalEmail = async (clientData) => {
         Revline Auto Parts
     `;
 
-    await sendMail({
-        email,
-        subject: 'Exclusive Offer Just for You!',
-        message,
-    });
+    try {
+        await sendMail({
+            email,
+            subject: 'Exclusive Offer Just for You!',
+            message,
+        });
+        logger.info(`Successfully sent promotional email to ${email}`);
+    } catch (error) {
+        logger.error(`Failed to send promotional email to ${email}`, error);
+        throw error;
+    }
 };
 
-// Admin
 export const sendOrderNotificationEmail = async (clientData) => {
-
     const { orderId, orderDate, customerName, items } = clientData;
+    logger.info(`Sending order notification email for order ${orderId}`);
+
+    const OrderId = orderId.slice(-6);
 
     const message = `
         Hello Team,
         We're pleased to inform you that ${customerName} has placed a new order.
         
         Order Details:
-            Order ID: ${orderId.slice(-6)},
+            Order ID: ${OrderId},
             Order Date: ${orderDate},
-            Partname: ${items.year, items.make, items.model, items.part_name}
+            Partname: ${items.year}, ${items.make}, ${items.model}, ${items.part_name}
 
         Please log in to the admin dashboard to process this order promptly: https://admin.revlineautoparts.com/sales-management/overview/${orderId}
         Let's continue to provide exceptional service to our customers.
         
         Best regards,
         Revline Auto Parts Team
-        `;
+    `;
 
-    await sendMail({
-        email: 'support@revlineautoparts.com',
-        subject: `New Order Alert – Order #${orderId.slice(-6)} Placed by ${customerName}`,
-        message,
-    });
+    try {
+        await sendMail({
+            email: 'support@revlineautoparts.com',
+            subject: `New Order Alert – Order #${OrderId} Placed by ${customerName}`,
+            message,
+        });
+        logger.info(`Successfully sent order notification email for order ${orderId}`);
+    } catch (error) {
+        logger.error(`Failed to send order notification email for order ${orderId}`, error);
+        throw error;
+    }
 };
