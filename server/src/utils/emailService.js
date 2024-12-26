@@ -322,7 +322,8 @@ export const sendOrderNotificationEmail = async (clientData) => {
     const { orderId, orderDate, customerName, items } = clientData;
     logger.info(`Sending order notification email for order ${orderId}`);
 
-    const OrderId = orderId.slice(-6);
+    // Convert orderId to string and safely get last 6 characters
+    const OrderId = String(orderId || '').slice(-6) || 'N/A';
 
     const message = `
         Hello Team,
@@ -331,7 +332,7 @@ export const sendOrderNotificationEmail = async (clientData) => {
         Order Details:
             Order ID: ${OrderId},
             Order Date: ${orderDate},
-            Partname: ${items.year}, ${items.make}, ${items.model}, ${items.part_name}
+            Partname: ${items?.year}, ${items?.make}, ${items?.model}, ${items?.part_name }
 
         Please log in to the admin dashboard to process this order promptly: https://admin.revlineautoparts.com/sales-management/overview/${orderId}
         Let's continue to provide exceptional service to our customers.
