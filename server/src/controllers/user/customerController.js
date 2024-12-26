@@ -75,11 +75,11 @@ export const createCustomer = asyncErrors(async (req, res) => {
 
         console.log(userData);
 
-        const name = userData.name;
-        const email = userData.email;
-        const phone = userData.phone;
-        const zipcode = userData.zipcode;
-        const smsConsent = userData.smsConsent;
+        const name = userData?.name;
+        const email = userData?.email;
+        const phone = userData?.phone;
+        const zipcode = userData?.zipcode;
+        const smsConsent = userData?.smsConsent;
 
         logger.info(`Received request to create customer: ${email}`);
 
@@ -132,7 +132,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             logger.info(`Email Sent: ${email}`, res);
         }
 
-        await sendOrderNotificationEmail({ orderId: newOrder._id, orderDate: newOrder.order_date, customerName: existingCustomer.name, items: newOrder.order_summary });
+        await sendOrderNotificationEmail({ orderId: newOrder._id, orderDate: newOrder.order_date, customerName: name, items: newOrder.order_summary });
 
         res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
     } catch (error) {
