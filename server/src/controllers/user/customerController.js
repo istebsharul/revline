@@ -5,7 +5,7 @@ import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import logger from '../../utils/logger.js';
 import sendMail from '../../utils/sendMail.js';
 import Part from '../../models/parts.js';
-import { sendAccountActivationEmail, sendWelcomeBackEmail } from '../../utils/emailService.js';
+import { sendAccountActivationEmail, sendOrderNotificationEmail, sendWelcomeBackEmail } from '../../utils/emailService.js';
 
 // Get all customers
 export const getAllCustomers = asyncErrors(async (req, res) => {
@@ -71,7 +71,15 @@ export const getCustomerById = asyncErrors(async (req, res) => {
 
 export const createCustomer = asyncErrors(async (req, res) => {
     try {
-        const { name, email, phone, zipcode, vehicleData } = req.body;
+        const { userData, vehicleData } = req.body;
+
+        console.log(userData);
+
+        const name = userData.name;
+        const email = userData.email;
+        const phone = userData.phone;
+        const zipcode = userData.zipcode;
+        const smsConsent = userData.smsConsent;
 
         logger.info(`Received request to create customer: ${email}`);
 
@@ -89,10 +97,10 @@ export const createCustomer = asyncErrors(async (req, res) => {
 
         // Create order
         const newOrder = new Order({
-            order_summary: { ...vehicleData, part_name: vehicleData.part },
+            order_summary: { ...vehicleData, part_name: vehicleData.part, part_code: vehicleData.vin },
             pricing_details: { shipping_size: part.size, shipping_cost: part.shipping_cost },
             shipping_details: { customer: existingCustomer ? existingCustomer._id : null },
-            order_disposition_details: { agent_notes: vehicleData.message },
+            order_disposition_details: { customer_notes: vehicleData.message },
         });
 
         let newCustomer;
@@ -107,11 +115,12 @@ export const createCustomer = asyncErrors(async (req, res) => {
             newOrder.customer = existingCustomer._id;
             newOrder.shipping_details.customer = existingCustomer._id;
             await Promise.all([existingCustomer.save(), newOrder.save()]);
-            logger.info(`Updated existing customer: ${existingCustomer.email}`);      
-            
-            await sendWelcomeBackEmail({name,email, vehicleData})
+            logger.info(`Updated existing customer: ${existingCustomer.email}`);
+
+            await sendWelcomeBackEmail({ name, email, vehicleData });
+
         } else {
-            newCustomer = new Customer({ name, email, phone, zipcode, orderInfo: [orderInfo] });
+            newCustomer = new Customer({ name, email, phone, zipcode, smsConsent, orderInfo: [orderInfo] });
             await newCustomer.save();
             newOrder.customer = newCustomer._id;
             newOrder.shipping_details.customer = newCustomer._id;
@@ -119,10 +128,11 @@ export const createCustomer = asyncErrors(async (req, res) => {
             await newOrder.save();
             logger.info(`Created new customer: ${email}`);
 
-            await sendAccountActivationEmail({name,email,vehicleData})
-            logger.info(`Email Sent: ${email}`,res);
+            await sendAccountActivationEmail({ name, email, vehicleData });
+            logger.info(`Email Sent: ${email}`, res);
         }
 
+        await sendOrderNotificationEmail({ orderId: newOrder._id, orderDate: newOrder.order_date, customerName: existingCustomer.name, items: newOrder.order_summary });
 
         res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
     } catch (error) {

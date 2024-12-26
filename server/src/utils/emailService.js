@@ -1,7 +1,7 @@
 import sendMail from './sendMail.js';
 
 export const sendAccountActivationEmail = async (clientData) => {
-    const { email, name,vehicleData } = clientData;
+    const { email, name, vehicleData } = clientData;
 
     const message = `
         Dear ${name},
@@ -51,7 +51,11 @@ export const sendWelcomeEmail = async (clientData) => {
 
         Should you need assistance, reach out to us at support@revlineautoparts.com or call us at +1 855 600 9080.
 
+        Welcome once again, and thank you for choosing Revline Auto Parts. We're committed to driving excellence together.
+
         Warm regards,
+
+        Adam Reed
         Customer Service Team
         Revline Auto Parts
     `;
@@ -64,7 +68,7 @@ export const sendWelcomeEmail = async (clientData) => {
 };
 
 export const sendWelcomeBackEmail = async (clientData) => {
-    const { email, name,vehicleData } = clientData;
+    const { email, name, vehicleData } = clientData;
 
     const message = `
         Dear ${name},
@@ -247,6 +251,34 @@ export const sendPromotionalEmail = async (clientData) => {
     await sendMail({
         email,
         subject: 'Exclusive Offer Just for You!',
+        message,
+    });
+};
+
+// Admin
+export const sendOrderNotificationEmail = async (clientData) => {
+
+    const { orderId, orderDate, customerName, items } = clientData;
+
+    const message = `
+        Hello Team,
+        We're pleased to inform you that ${customerName} has placed a new order.
+        
+        Order Details:
+            Order ID: ${orderId.slice(-6)},
+            Order Date: ${orderDate},
+            Partname: ${items.year, items.make, items.model, items.part_name}
+
+        Please log in to the admin dashboard to process this order promptly: https://admin.revlineautoparts.com/sales-management/overview/${orderId}
+        Let's continue to provide exceptional service to our customers.
+        
+        Best regards,
+        Revline Auto Parts Team
+        `;
+
+    await sendMail({
+        email: 'support@revlineautoparts.com',
+        subject: `New Order Alert – Order #${orderId.slice(-6)} Placed by ${customerName}`,
         message,
     });
 };

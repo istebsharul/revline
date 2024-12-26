@@ -1,6 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+// Example usage:
+// const state = getStateFromZipCode("90210"); // Returns "California"
 
 const UserInfoForm = ({ userData, setUserData, errors }) => {
+    const [location, setLocation] = useState(null);
+
+    useEffect(() => {
+        const timeoutId = setTimeout(async () => {
+            const getLocation = async () => {
+                if (userData.zipcode.length === 5) {
+                    try {
+                        const response = await axios.get(`https://api.zippopotam.us/us/${userData.zipcode}`);
+                        if (response.data) {
+                            setLocation(response.data.places[0]['place name'] + ', ' + response.data.places[0].state + ', ' + response.data.country);
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        setLocation('Invalid ZIP code');
+                    }
+                } else {
+                    setLocation('Enter 5 digit ZIP code only');
+                }
+            }
+            getLocation();
+        }, 500);
+
+        return () => clearTimeout(timeoutId);
+    }, [userData.zipcode]);
+
     return (
         <div className='space-y-2'>
             <div >
@@ -46,6 +75,24 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                     onChange={e => setUserData({ ...userData, zipcode: e.target.value })}
                 />
                 {errors.zipcode && <p className="text-xs text-[#f6251a]">{errors.zipcode}</p>}
+                {location && <p className='text-xs text-red-600 p-1'>{location}</p>}
+            </div>
+
+            <div className='p-1 text-xs text-gray-600 space-y-1'>
+                <div className='flex justify-start md:items-center items-start space-x-1'>
+                    <input
+                        type="checkbox"
+                        className='md:w-4 md:h-4 accent-blue-700'
+                        checked={userData.smsConsent}
+                        onChange={e => setUserData({
+                            ...userData,
+                            smsConsent: e.target.checked,
+                        })}
+                    />
+                    <label>I agree to receive order updates and promotional messages via SMS.</label>
+                </div>
+                {errors.smsConsent && <p className="text-xs text-[#f6251a]">{errors.smsConsent}</p>}
+                <div className='p-1 text-gray-500'>By checking this box, you agree to receive SMS order updates and promotional messages. Msg & data rates apply. Reply STOP to opt out anytime.</div>
             </div>
         </div>
     );

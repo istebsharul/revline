@@ -10,7 +10,7 @@ const PaymentSection = ({ orderId, paymentDetails, orderStatus, quotationsStatus
 
   const handleReject = async (message) => {
     try {
-      await axios.put(`api/v1/service/quotation/reject/${orderId}`, {
+      await axios.put(`https://server.revlineautoparts.com/api/v1/service/quotation/reject/${orderId}`, {
         quotationsStatus: 'Rejected',
         message: message
       });

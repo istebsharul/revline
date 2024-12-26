@@ -107,6 +107,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
 export const rejectQuotation = asyncErrors(async (req, res) => {
   const { orderId } = req.params;
   const { quotationsStatus, reason, message } = req.body;
+  logger.info(`Rejecting quotation for order ${orderId}.`); 
 
   try {
     const order = await Order.findById(orderId);
@@ -121,6 +122,7 @@ export const rejectQuotation = asyncErrors(async (req, res) => {
         $set: {
           'quotations.status': quotationsStatus || order?.quotations?.status,
           'quotations.message': message || order?.quotations?.message,
+          'order_disposition_details.order_status': 'Cancelled',
         }
       },
       { new: true } // Return the updated document
