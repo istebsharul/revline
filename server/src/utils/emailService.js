@@ -1,6 +1,5 @@
 import sendMail from './sendMail.js';
-import logger from '../../utils/logger.js';
-
+import logger from './logger.js';
 export const sendAccountActivationEmail = async (clientData) => {
     const { email, name, vehicleData } = clientData;
     logger.info(`Sending account activation email to ${email}`);
