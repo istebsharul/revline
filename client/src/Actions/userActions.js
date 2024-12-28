@@ -60,17 +60,17 @@ export const loadUser = () => async (dispatch) => {
 };
 
 
-export const signup = (name, email, password) => {
+export const signup = (name, email, password,smsConsent) => {
     return async (dispatch) => {
         try {
-            console.log(name, email, password);
+            console.log(name, email, password,smsConsent);
             // Simulate API call for signup
 
             const endpoint = 'https://server.revlineautoparts.com/api/v1/auth/register';
 
             const response = await axios.post(
                 endpoint,
-                { name, email, password }
+                { name, email, password, smsConsent }
             );
             console.log("Response", response.data);
             toast.success('SignUp Successful');

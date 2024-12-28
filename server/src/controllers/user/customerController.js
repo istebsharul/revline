@@ -132,7 +132,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             logger.info(`Email Sent: ${email}`, res);
         }
 
-        await sendOrderNotificationEmail({ orderId: newOrder._id, orderDate: newOrder.order_date, customerName: name, items: newOrder.order_summary });
+        await sendOrderNotificationEmail({ orderId: newOrder._id, orderDate: Date.now(), customerName: name, items: newOrder.order_summary });
 
         res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
     } catch (error) {

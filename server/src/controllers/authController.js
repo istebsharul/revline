@@ -14,7 +14,7 @@ import { sendWelcomeEmail } from '../utils/emailService.js';
  * @param {import('express').Response} res - The response object.
  */
 export const registerUser = asyncErrors(async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password,smsConsent } = req.body;
 
     try {
         // Log attempt to register a user
@@ -29,6 +29,9 @@ export const registerUser = asyncErrors(async (req, res) => {
                 message: 'Fill up the Parts Form Before Register',
             });
         }
+
+        customer.smsConsent = smsConsent;
+        await customer.save();
 
         // Create a new user with the provided details
         const user = await User.create({

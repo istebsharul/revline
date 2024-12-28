@@ -1,5 +1,6 @@
 import sendMail from './sendMail.js';
 import logger from './logger.js';
+
 export const sendAccountActivationEmail = async (clientData) => {
     const { email, name, vehicleData } = clientData;
     logger.info(`Sending account activation email to ${email}`);
@@ -318,6 +319,11 @@ export const sendPromotionalEmail = async (clientData) => {
     }
 };
 
+const formatDate = (inputDate) => {
+    const dateObj = new Date(inputDate);
+    return `${dateObj.toLocaleString('default', { month: 'long' })} ${dateObj.getDate()}, ${dateObj.getFullYear()}, ${dateObj.toLocaleTimeString()}`;
+}
+
 export const sendOrderNotificationEmail = async (clientData) => {
     const { orderId, orderDate, customerName, items } = clientData;
     logger.info(`Sending order notification email for order ${orderId}`);
@@ -331,7 +337,7 @@ export const sendOrderNotificationEmail = async (clientData) => {
         
         Order Details:
             Order ID: ${OrderId},
-            Order Date: ${orderDate},
+            Order Date: ${formatDate(orderDate)},
             Partname: ${items?.year}, ${items?.make}, ${items?.model}, ${items?.part_name }
 
         Please log in to the admin dashboard to process this order promptly: https://admin.revlineautoparts.com/sales-management/overview/${orderId}
