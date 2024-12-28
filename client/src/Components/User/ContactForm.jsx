@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import {debounce} from 'lodash';
 
 const ContactForm = () => {
     const initialFormData = {
@@ -75,7 +76,7 @@ const ContactForm = () => {
                 <div className='flex flex-col justify-center items-center'>
                     <h1 className="md:text-3xl text-2xl mb-4 text-center text-[#f6251a] font-inter">Contact Us</h1>
                 </div>
-                <form onSubmit={handleSendMessage} className="block md:w-2/5 w-4/5 space-y-6">
+                <form onSubmit={handleSendMessage} className="block md:w-2/5 w-4/5 md:space-y-6">
                     <div>
                         <h1 className='py-1 text-sm'>Name</h1>
                         <input

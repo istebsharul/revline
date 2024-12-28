@@ -16,6 +16,7 @@ import PaymentSuccessfulPage from '../Pages/User/PaymentSuccessfulPage';
 import PaymentCancel from '../Pages/User/PaymentCancel';
 import OrderDetailsPage from '../Pages/User/OrderDetailsPage';
 import ShippingHandlingPage from '../Pages/Landing/ShippingHandlingPage';
+import OptInPage from '../Pages/Landing/Opt-InPage';
 
 function UserRoutes() {
   return (
@@ -32,6 +33,7 @@ function UserRoutes() {
       <Route path="signup" element={<SignupPage />} />
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password/:token" element={<ResetPasswordPage />} />
+      <Route path='opt-in' element={<OptInPage />} />
       
       {/* Protected Routes */}
       <Route
