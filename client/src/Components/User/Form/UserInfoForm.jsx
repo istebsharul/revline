@@ -38,6 +38,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                     type="text"
                     className="w-full p-2 border rounded"
                     placeholder='Enter Name'
+                    id="name"
                     value={userData.name}
                     onChange={e => setUserData({ ...userData, name: e.target.value })}
                 />
@@ -47,6 +48,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 <label className="block text-gray-800 text-sm p-1">Email* </label>
                 <input
                     type="email"
+                    id="email"
                     className="w-full p-2 border rounded"
                     placeholder='Enter Email'
                     value={userData.email}
@@ -58,6 +60,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 <label className="block text-gray-800 text-sm p-1">Contact Number*</label>
                 <input
                     type="tel"
+                    id="phone"
                     className="w-full p-2 border rounded"
                     placeholder='Enter Contact Number'
                     value={userData.phone}
@@ -69,6 +72,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 <label className="block text-gray-800 text-sm p-1">Zip Code*</label>
                 <input
                     type="text"
+                    id="pincode"
                     className="w-full p-2 border rounded"
                     placeholder='Enter your ZIP Code'
                     value={userData.zipcode}

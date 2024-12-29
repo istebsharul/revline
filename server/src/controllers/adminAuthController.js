@@ -9,25 +9,96 @@ import crypto from 'crypto';
  * Register a new admin.
  * @param {import('express').Request} req - The request object.
  * @param {import('express').Response} res - The response object.
- */
+//  */
+
 export const registerAdmin = asyncErrors(async (req, res) => {
-    const { name, email, contactNumber, password, zipCode } = req.body;
+    const { name, email, password } = req.body;
 
-    // Create a new admin with the provided details
-    const admin = await Admin.create({
-        name,
-        email,
-        contactNumber,
-        password, // Use password instead of password
-        zipCode,
-    });
+    // Log incoming request
+    logger.info(`[REGISTER ADMIN] Request received: name=${name}, email=${email}`);
 
-    // Send token and response
-    sendToken(admin, 201, res);
+    try {
+        // Check if admin already exists
+        const existingAdmin = await Admin.findOne({ email });
+        if (existingAdmin) {
+            logger.warn(`[REGISTER ADMIN] Admin already exists: email=${email}`);
+            return res.status(400).json({ message: 'Admin already exists!' });
+        }
 
-    // Log successful registration
-    logger.info(`Admin registered successfully: ${email}`);
+        // Log admin creation
+        logger.info(`[REGISTER ADMIN] Creating new admin: email=${email}`);
+        const admin = await Admin.create({
+            name,
+            email,
+            password,
+        });
+
+        // Generate OTP
+        const otp = admin.generateOTP();
+        logger.info(`[REGISTER ADMIN] OTP generated: email=${email}, OTP=${otp}`);
+
+        // Save the admin with the generated OTP
+        await admin.save();
+        logger.info(`[REGISTER ADMIN] Admin saved successfully: email=${email}`);
+
+        // Send email notification
+        logger.info(`[REGISTER ADMIN] Sending OTP email to admin`);
+        await sendMail({
+            email: 'revlineautoparts.official@gmail.com',
+            subject: 'New Admin Registration Request',
+            message: `Please share this OTP: ${otp} to get admin verified.`,
+        });
+        logger.info(`[REGISTER ADMIN] OTP email sent to: revlineautoparts.official@gmail.com`);
+
+        // Respond to the client
+        res.status(201).json({ message: 'OTP request sent! Please ask your admin for OTP and get verified.' });
+
+        // Log successful registration
+        logger.info(`[REGISTER ADMIN] Admin registered successfully: email=${email}`);
+    } catch (error) {
+        // Log errors for debugging
+        logger.error(`[REGISTER ADMIN] Registration error: ${error.message}`);
+        res.status(500).json({ message: 'An error occurred during registration. Please try again later.' });
+    }
 });
+
+export const verifyOtp = asyncErrors(async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        logger.info(`OTP verification initiated for email: ${email}`);
+
+        const admin = await Admin.findOne({ email });
+
+        if (!admin) {
+            logger.warn(`Admin not found for email: ${email}`);
+            return res.status(404).json({ message: 'Admin not found' });
+        }
+
+        const isValid = admin.validateOTP(otp);
+
+        if (!isValid) {
+            logger.warn(`Invalid or expired OTP for email: ${email}`);
+            return res.status(400).json({ message: 'Invalid or expired' });
+        }
+
+        logger.info(`OTP successfully validated for email: ${email}`);
+
+        admin.isVerified = true;
+        admin.otp = undefined;
+        admin.otpExpires = undefined;
+
+        await admin.save();
+        logger.info(`Admin verified and saved for email: ${email}`);
+
+        sendToken(admin, 200, res);
+        logger.info(`Token sent successfully for email: ${email}`);
+    } catch (error) {
+        logger.error(`Error verifying OTP for email: ${req.body.email}, Error: ${error.message}`);
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 /**
  * Log in an existing admin.
@@ -55,6 +126,11 @@ export const loginAdmin = asyncErrors(async (req, res) => {
         return res.status(401).json({ success: false, message: `Incorrect password for email: ${email}` });
     }
 
+    if (admin.isVerified === false) {
+        logger.error(`Failed to login, Admin registration not completed. Please ask Admin to get Verified ${email}`);
+        return res.status(401).json({ success: false, message: `Admin not Verified for email: ${email}` });
+    }
+
     // Send token and response, ensure consistency in the response structure
     sendToken(admin, 200, res);
 
@@ -77,7 +153,7 @@ export const logoutAdmin = asyncErrors(async (req, res) => {
 });
 
 export const adminProfile = asyncErrors(async (req, res) => {
-    
+
     console.log("Admin Id", req.admin._id);
 
     const admin = await Admin.findById(req.admin._id);

@@ -56,10 +56,11 @@ const TasksWidget = () => {
 
   const handleDeleteTasks = () => {
     const updatedTasks = tasks.filter((_, index) => !selectedTasks[index]);
-    setTasks(updatedTasks);
+    setTasks(updatedTasks); // Update the state
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Explicitly update localStorage
     setShowCheckboxes(false);
     setSelectedTasks({});
-  };
+  };  
 
   const handleToggleCheckbox = (index) => {
     setSelectedTasks((prev) => ({
@@ -181,7 +182,7 @@ const TasksWidget = () => {
                 <div className="flex items-center">
                   {editingIndex === index ?
                     <FaSave
-                      onClick={()=> handleUpdateTask(index)}
+                      onClick={() => handleUpdateTask(index)}
                       className="text-yellow-500 cursor-pointer mx-1"
                       size={24}
                     /> : <FaEdit

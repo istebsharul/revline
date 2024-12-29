@@ -11,6 +11,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const error = useSelector((state) => state.error);
+  const adminName = useSelector((state)=> state?.auth?.admin?.name);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -27,6 +28,7 @@ function Login() {
       .then((result) => {
         if (result && result.isLoggedIn) {
           navigate('/');
+          toast.success(`Login Successful`);
         }
       })
       .catch((error) => {

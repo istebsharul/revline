@@ -33,7 +33,7 @@ export const login = (email, password) => {
             const { token, user } = response.data;
             setCookie("jwt", token, 1);
             dispatch({ type: LOGIN_SUCCESS, payload: user });
-            return { isLoggedIn: true };  
+            return { isLoggedIn: true };
         } catch (error) {
             toast.error('Login Failed: ' + error.response.data.message);
             dispatch({ type: LOGIN_FAILURE, payload: error.response.data.message });
@@ -72,11 +72,46 @@ export const signup = (name, email, password) => {
             );
             console.log("Response", response);
             // toast.success('User Created Successfully');
-            dispatch({ type: SIGNUP_SUCCESS, payload: response.data });
+            // dispatch({ type: SIGNUP_SUCCESS, payload: response.data });
             return { success: true, data: response.data };
         } catch (error) {
             // toast.error('Signup Failed: ' + error.message);
+            toast.error(error.response.data.message);
             dispatch({ type: SIGNUP_FAILURE, payload: error.message.data });
+            return { success: false, message: error.message };
+        }
+    };
+};
+
+export const verifyOtp = (email, verificationCode) => {
+    return async (dispatch) => {
+        try {
+            const response = await axios.post('https://server.revlineautoparts.com/api/v1/admin-auth/verify-otp', { email, verificationCode });
+
+            if (response.data.success) {
+                toast.success('OTP Verified Successfully');
+                // On successful OTP verification, trigger SIGNUP_SUCCESS
+                dispatch({
+                    type: SIGNUP_SUCCESS,
+                    payload: response.data, // Send response data to the reducer
+                });
+                return { success: true, message: 'OTP Verified and Signup Successful' };
+            } else {
+                toast.error('OTP Verification Failed');
+                // On failure, trigger SIGNUP_FAILURE
+                dispatch({
+                    type: SIGNUP_FAILURE,
+                    payload: response.data.message, // Send error message to the reducer
+                });
+                return { success: false, message: response.data.message };
+            }
+        } catch (error) {
+            toast.error('OTP Verification Failed: ' + error.message);
+            // On error, trigger SIGNUP_FAILURE
+            dispatch({
+                type: SIGNUP_FAILURE,
+                payload: error.message, // Send error message to the reducer
+            });
             return { success: false, message: error.message };
         }
     };
@@ -133,7 +168,7 @@ export const resetPassword = (password, token) => {
 
             const response = await axios.put(
                 `https://server.revlineautoparts.com/api/v1/admin-auth/reset-password/${token}`,
-                { newPassword:password }
+                { newPassword: password }
             );
             toast.success("Password Reset Successfully");
             dispatch({ type: RESET_PASSWORD_SUCCESS, payload: response.data });
