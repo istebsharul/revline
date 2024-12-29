@@ -8,7 +8,7 @@ import { debounce } from 'lodash';
 
 
 const MultiStepForm = () => {
-    const [step, setStep] = useState(3);
+    const [step, setStep] = useState(1);
     const [vehicleData, setVehicleData] = useState({
         year: '',
         make: '',
