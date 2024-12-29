@@ -9,14 +9,20 @@ import { useEffect } from 'react';
 const AdminNavBar = ({ toggleSidebar }) => {
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state)=> state.auth?.admin);
+  const adminName = useSelector((state)=> state.auth?.admin?.name);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
+    const confirm = window.confirm('Are you sure you want to logout');
+    if(!confirm){
+      return;
+    }
     // Add your logout logic here
     if(!isLoggedIn){
       toast.error('Admin Already logged out!');
       return;
     };
+    
     navigate('/login');
     dispatch(logout());
   };
@@ -26,11 +32,10 @@ const AdminNavBar = ({ toggleSidebar }) => {
       {isLoggedIn &&
         <div className="flex items-center space-x-4">
         <FaBars className="text-xl cursor-pointer" onClick={toggleSidebar} />
-        <FaSearch className="text-xl cursor-pointer" />
       </div>
       }
       <div className="w-full flex justify-end items-center space-x-6">
-        <FaUser className="text-xl cursor-pointer" />
+        <p className='px-3'>{adminName}</p>
         <div className="relative">
           <FaSignOutAlt className="text-xl cursor-pointer" onClick={handleLogout} />
         </div>

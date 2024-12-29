@@ -37,11 +37,21 @@ const adminSchema = new Schema(
             type: Date,
             default: Date.now,
         },
+        isVerified: {
+            type: Boolean,
+            default: false
+        },
+        otp: {
+            type: String,
+        },
+        otpExpires: {
+            type: Date,
+        },
         resetPasswordToken: String,
         resetPasswordExpires: Date,
     },
     {
-        timestamps:true
+        timestamps: true
     }
 );
 
@@ -55,13 +65,28 @@ adminSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
 });
 
+adminSchema.methods.generateOTP = function () {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    this.otp = otp;
+    this.otpExpires = Date.now() + 10 * 60 * 1000;
+
+    return otp;
+};
+
+adminSchema.methods.validateOTP = async function (enteredOtp) {
+    if (this.otp === enteredOtp && this.otpExpires > Date.now()) {
+        return true;
+    }
+    return false;
+}
+
 // Method to compare the provided password with the stored hash
 adminSchema.methods.comparePassword = async function (password) {
     console.log("Compare Password Hitttt");
     const newPass = await bcrypt.compare(password, this.password);
-    console.log("From Login",password);
-    console.log("From DB",this.password);
-    return newPass ;
+    console.log("From Login", password);
+    console.log("From DB", this.password);
+    return newPass;
 };
 
 // Method to generate a JWT token
