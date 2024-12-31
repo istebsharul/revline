@@ -133,16 +133,18 @@ function OptInPage() {
                 )}
 
                 {/* Always show the consent checkbox */}
-                <div className="mb-4">
-                    <label className="flex items-center text-xs">
+                <div className="mb-4 space-y-1">
+                    <label className="flex items-start text-xs">
                         <input
                             type="checkbox"
-                            className="mr-2"
+                            className="mr-2 m-1"
                             checked={consent}
                             onChange={(e) => setConsent(e.target.checked)}
                         />
-                        I agree to receive SMS updates and promotional messages.
+                        I agree to receive SMS updates from Revline Auto Parts. I understand that I can opt out at any time by replying STOP.
                     </label>
+                    <p className='text-xs text-gray-600'>At Revline Auto Parts, we ensure that all communications are sent with your explicit consent. By providing your phone number, you agree to receive SMS notifications, including order updates, promotions, and support inquiries.
+                    </p>
                 </div>
 
                 {isVerified && (
