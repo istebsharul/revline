@@ -80,7 +80,7 @@ const BillingDetails = ({ paymentEligible, orderId, billingDetails = {}, isEditi
 
   const handlePayment = () => {
     toast.promise(
-      axios.post(`http://localhost:3000/api/v1/stripe/create-payment`, { orderId }),
+      axios.post(`https://server.revlineautoparts.com/api/v1/stripe/create-payment`, { orderId }),
       {
         loading: 'Processing payment...',
         success: <b>Redirecting to Payment Gateway...</b>,
