@@ -43,42 +43,63 @@ function Signup() {
       return;
     }
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
-
-    try {
-      const result = await dispatch(signup(name, email, password)); // Assuming signup is a redux action
-      if (result && result.success) {
-        toast.success('Admin register request sent! Please ask for OTP to get verified.');
-        setIsVerificationSent(true);
-        console.log(isVerificationSent);
+  
+    await toast.promise(
+      (async () => {
+        try {
+          const result = await dispatch(signup(name, email, password)); // Assuming signup is a redux action
+          if (result && result.success) {
+            setIsVerificationSent(true);
+            console.log(isVerificationSent);
+          } else {
+            throw new Error(result.message || "Signup failed");
+          }
+        } catch (error) {
+          console.error("Error sending OTP: ", error);
+          throw error;
+        }
+      })(),
+      {
+        loading: "Sending OTP request...",
+        success: <b>OTP request sent successfully!</b>,
+        error: <b>Failed to send OTP request.</b>,
       }
-    } catch (error) {
-      console.error("Error sending OTP: ", error);
-      toast.error("Error sending OTP.");
-    }
+    );
   };
-
+  
   const handleOtpVerification = async (e) => {
-      e.preventDefault();
-      const result = await dispatch(verifyOtp(email, verificationCode));
-      console.log(email, verificationCode);
-      if (result.success) {
-        toast.success('OTP verified and Signup Successfull');
-        console.log('OTP verified and signup successful:', result.message);
-        navigate('/');
-        setName('');
-        setEmail('')
-        setPassword('')
-        setConfirmPassword('');
-        setVerificationCode('');
-        // Do something on success, like redirecting to another page or updating UI
-      } else {
-        console.log('OTP verification failed:', result.message);
-        // Handle failure (e.g., show error message)
+    e.preventDefault();
+  
+    await toast.promise(
+      (async () => {
+        try {
+          const result = await dispatch(verifyOtp(email, verificationCode)); // Assuming verifyOtp is a redux action
+          if (result.success) {
+            console.log("OTP verified and signup successful:", result.message);
+            navigate("/");
+            setName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+            setVerificationCode("");
+          } else {
+            throw new Error(result.message || "OTP verification failed");
+          }
+        } catch (error) {
+          console.error("Error verifying OTP:", error);
+          throw error;
+        }
+      })(),
+      {
+        loading: "Verifying OTP...",
+        success: <b>OTP verified successfully!</b>,
+        error: <b>Failed to verify OTP.</b>,
       }
-  };
+    );
+  };  
 
   return (
     <div className="w-4/5 h-full md:w-3/6 flex flex-wrap justify-center items-center">

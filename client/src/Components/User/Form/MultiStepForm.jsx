@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import VehicleInfoForm from './VehicleInfoForm';
 import VariantTransmissionForm from './VariantTransmissionForm';
 import UserInfoForm from './UserInfoForm';
@@ -6,9 +6,9 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { debounce } from 'lodash';
 
-
 const MultiStepForm = () => {
     const [step, setStep] = useState(1);
+
     const [vehicleData, setVehicleData] = useState({
         year: '',
         make: '',
@@ -75,8 +75,8 @@ const MultiStepForm = () => {
             errors.zipcode = 'Zip Code must be exactly 5 digits';
         }
 
-        if(!userData.smsConsent) errors.smsConsent = 'Please agree to receive SMS';
-        
+        if (!userData.smsConsent) errors.smsConsent = 'Please agree to receive SMS';
+
         return errors;
     };
 

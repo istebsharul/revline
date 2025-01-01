@@ -33,7 +33,7 @@ const BuyingFlow = React.forwardRef((props,ref) => {
     };
 
     return (
-        <div className="md:pb-40 pb-20 bg-gray-100" ref={ref}>
+        <div className="md:pb-40 pb-20" ref={ref}>
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className='md:text-5xl text-4xl font-inter tracking-tight text-center py-20'>
                     FLOW OF <span className='text-[#f6251a]'>BUYING</span> PARTS
