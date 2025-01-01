@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
-const BillingDetails = ({ billingDetails = {}, isEditing, setOrderDetails }) => {
+const BillingDetails = ({ paymentEligible, orderId, billingDetails = {}, isEditing, setOrderDetails }) => {
   const [localDetails, setLocalDetails] = useState(billingDetails);
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    console.log(paymentEligible);
+  })
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,9 +78,35 @@ const BillingDetails = ({ billingDetails = {}, isEditing, setOrderDetails }) => 
   // Generate year options from 2024 to 2050
   const years = Array.from({ length: 27 }, (_, i) => 2024 + i);
 
+  const handlePayment = () => {
+    toast.promise(
+      axios.post(`https://server.revlineautoparts.com/api/v1/stripe/create-payment`, { orderId }),
+      {
+        loading: 'Processing payment...',
+        success: <b>Redirecting to Payment Gateway...</b>,
+        error: (err) => {
+          const errorMessage = err.response?.data?.message || 'Failed to process payment';
+          return <b>{errorMessage}</b>;
+        },
+      }
+    )
+
+      .then((response) => {
+        if (response.data.checkoutUrl) {
+          window.location.href = response.data.checkoutUrl;
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to process payment:', err);
+      })
+  }
+
   return (
     <div className="p-4 bg-white shadow rounded-md">
-      <h3 className="text-lg font-semibold mb-4">Billing Details</h3>
+      <div className='mb-4 flex justify-between items-center'>
+        <h3 className="text-lg font-semibold">Billing Details</h3>
+        <button onClick={handlePayment} disabled={!paymentEligible} className={`border bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-lg ${paymentEligible === false ? 'cursor-not-allowed ' : ''}`}>Make Payments</button>
+      </div>
       <div className="grid grid-cols-4 gap-4">
         {/* Credit Card Details */}
         <div>
