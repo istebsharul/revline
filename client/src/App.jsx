@@ -8,8 +8,6 @@ import UserRoutes from './Routes/userRoutes';
 import { loadUser } from './Actions/userActions';
 import Call from './Components/CustomerSupport/Call.jsx';
 import WhatsApp from './Components/CustomerSupport/Whatsapp.jsx';
-import store from './Store/store.js';
-
 
 const App = () => {
   const dispatch = useDispatch();

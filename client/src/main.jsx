@@ -18,8 +18,8 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
-          <ScrollToTop/>
-          <App />
+          <ScrollToTop />
+            <App />
         </QueryClientProvider>
       </BrowserRouter>
     </Provider>

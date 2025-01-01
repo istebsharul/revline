@@ -17,6 +17,8 @@ import PaymentCancel from '../Pages/User/PaymentCancel';
 import OrderDetailsPage from '../Pages/User/OrderDetailsPage';
 import ShippingHandlingPage from '../Pages/Landing/ShippingHandlingPage';
 import OptInPage from '../Pages/Landing/Opt-InPage';
+import BlogsPage from '../Pages/Landing/BlogsPage';
+import BlogPage from '../Pages/Landing/BlogPage';
 
 function UserRoutes() {
   return (
@@ -34,6 +36,8 @@ function UserRoutes() {
       <Route path="forgot-password" element={<ForgotPasswordPage />} />
       <Route path="reset-password/:token" element={<ResetPasswordPage />} />
       <Route path='opt-in' element={<OptInPage />} />
+      <Route path='blogs/:make' element={<BlogsPage/>} />
+      <Route path='blogs' element={<BlogPage/>} />
       
       {/* Protected Routes */}
       <Route
