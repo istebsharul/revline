@@ -19,6 +19,7 @@ const OverviewContainer = ({ order }) => {
   const[orderDetails,setOrderDetails] = useState(order);
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('overview'); // State to manage active tab
+  const paymentEligible = orderDetails?.pricing_details?.quoted_price > 0;
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -92,7 +93,7 @@ const OverviewContainer = ({ order }) => {
             <CustomerPersonalInfo customer={orderDetails.customer} quote_number={orderDetails?.quotations?.quote_number} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <OrderSummary orderSummary={orderDetails.order_summary} pricingDetails={orderDetails.pricing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <ShippingDetails shippingDetails={orderDetails.shipping_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
-            <BillingDetails billingDetails={orderDetails.billing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
+            <BillingDetails paymentEligible={paymentEligible} orderId={orderDetails?._id} billingDetails={orderDetails.billing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <QuotationDetails quotationDetails={orderDetails.quotations} />
             <InvoiceDetails invoiceDetails={orderDetails.invoices} />
             <PaymentDetails paymentDetails={orderDetails.payment_details} />
