@@ -141,10 +141,7 @@ function OptInPage() {
                             checked={consent}
                             onChange={(e) => setConsent(e.target.checked)}
                         />
-                        I agree to receive SMS updates from Revline Auto Parts. I understand that I can opt out at any time by replying STOP.
-                    </label>
-                    <p className='text-xs text-gray-600'>At Revline Auto Parts, we ensure that all communications are sent with your explicit consent. By providing your phone number, you agree to receive SMS notifications, including order updates, promotions, and support inquiries.
-                    </p>
+                        I agree to receive SMS updates about my orders, delivery status, and promotional offers from Revline Auto Parts. Opting in is optional and will not affect my ability to use any services or place orders. I understand that I can opt out at any time by replying STOP to any message. Standard message and data rates may apply.                    </label>
                 </div>
 
                 {isVerified && (
