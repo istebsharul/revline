@@ -17,13 +17,21 @@ export const sendAccountActivationEmail = async (clientData) => {
         We have received your order for the ${vehicleData?.part} of the ${vehicleData?.year} ${vehicleData?.make} ${vehicleData?.model}.
         
         With your Revline account, you can:
-        - Explore Our Catalog: Access a comprehensive range of high-quality auto parts.
-        - Manage Orders: View order history and track current shipments effortlessly.
-        - Enjoy Exclusive Offers: Receive personalized promotions and updates tailored to your interests.
-
-        If you have any questions or need assistance, contact us at support@revlineautoparts.com or +1 855 600 9080.
+            - Explore Our Catalog: Access a comprehensive range of high-quality auto parts.
+            - Manage Orders: View order history and track current shipments effortlessly.
+            - Enjoy Exclusive Offers: Receive personalized promotions and updates tailored to your interests.
+        
+        We’d also like to keep you updated about your orders, special promotions, and important updates via SMS. To opt in for SMS communication, please click here:
+        
+        Our team is committed to providing you with exceptional service.
+        If you have any questions or need assistance, please don't hesitate to contact us at:
+            - Email: support@revlineautoparts.com
+            - Phone: +1 855 600 9080
+        
+        Thank you for choosing Revline Auto Parts. We look forward to supporting all your automotive needs with professionalism and reliability.
 
         Best regards,
+        Adam Reed
         Customer Service Team
         Revline Auto Parts
     `;
@@ -104,6 +112,7 @@ export const sendWelcomeBackEmail = async (clientData) => {
         If you have any questions or need assistance, feel free to reach out at support@revlineautoparts.com or call us at +1 855 600 9080.
 
         Warm regards,
+        Adam Reeds
         Customer Service Team
         Revline Auto Parts
     `;
@@ -121,6 +130,7 @@ export const sendWelcomeBackEmail = async (clientData) => {
     }
 };
 
+// another email template is being used not this one since pdf is along with email.
 export const sendOrderConfirmationEmail = async (clientData) => {
     const { email, name, orderId, orderDate, shippingAddress, items, totalAmount } = clientData;
     logger.info(`Sending order confirmation email for order ${orderId} to ${email}`);
@@ -131,20 +141,23 @@ export const sendOrderConfirmationEmail = async (clientData) => {
         Thank you for your order! We're excited to get started on it right away.
 
         Order Summary:
-        Order ID: ${orderId}
-        Order Date: ${orderDate}
-        Shipping Address: ${shippingAddress}
-        Items Ordered:
-        ${items.map(item => `${item.name} – Quantity: ${item.qty}`).join('\n')}
-        Total Amount: $${totalAmount}
+            - Order ID: ${orderId}
+            - Order Date: ${orderDate}
+            - Shipping Address: ${shippingAddress}
+            Items Ordered: ${items.map(item => `${item.name} – Quantity: ${item.qty}`).join('\n')}
+       
+            Total Amount: $${totalAmount}
 
         What's Next?
         Our team is processing your order. We'll notify you once it's shipped. 
         You can view your order status anytime by logging into your account.
+            - www.revlineautoparts.com/login
 
-        If you have any questions, contact us at support@revlineautoparts.com or +1 855 600 9080.
+        If you have any questions or need to make changes to your order, please contact us at support@revlineautoparts.com or call +1 855 600 9080.
+        Thank you for choosing Revline Auto Parts. We're committed to providing you with the best products and service.
 
         Best regards,
+        Adam Reed
         Customer Service Team
         Revline Auto Parts
     `;
@@ -338,7 +351,7 @@ export const sendOrderNotificationEmail = async (clientData) => {
         Order Details:
             Order ID: ${OrderId},
             Order Date: ${formatDate(orderDate)},
-            Partname: ${items?.year}, ${items?.make}, ${items?.model}, ${items?.part_name }
+            Partname: ${items?.year}, ${items?.make}, ${items?.model}, ${items?.part_name}
 
         Please log in to the admin dashboard to process this order promptly: https://admin.revlineautoparts.com/sales-management/overview/${orderId}
         Let's continue to provide exceptional service to our customers.
@@ -357,5 +370,48 @@ export const sendOrderNotificationEmail = async (clientData) => {
     } catch (error) {
         logger.error(`Failed to send order notification email for order ${orderId}`, error);
         throw error;
+    }
+};
+
+export const sendTicketConfirmationEmail = async (clientData) => {
+    const { ticketId, ticketSubject, ticketDate, customerName, orderId, email } = clientData;
+
+    const formattedTicketDate = formatDate(ticketDate);
+
+    logger.info(`Request received for ticket Mail`);
+    const message = `
+        Dear ${customerName},
+        
+        Thank you for reaching out to us. Your support request has been received.
+            
+        Ticket Details:
+            Ticket ID: ${ticketId}
+            Subject: ${ticketSubject}
+            Date Submitted: ${formattedTicketDate}
+        
+        Our support team is reviewing your inquiry and will get back to you within [Expected Response Time 2-4 hours].
+        In the meantime, you can view your ticket status here: https://revlineautoparts.com/orders/details/${orderId}
+        
+        We appreciate your patience and are here to assist you.
+        
+        Best regards,
+
+        Richard Rodriguez
+        Support Team
+        Revline Auto Parts
+    `;
+
+    try {
+        logger.info(`Sending confirmation email for Ticket ID: ${ticketId}`);
+
+        await sendMail({
+            email,
+            subject: `Support Ticket # ${ticketId} – We've Received Your Request`,
+            message,
+        });
+
+        logger.info(`Confirmation email sent successfully for Ticket ID: ${ticketId}`);
+    } catch (error) {
+        logger.error(`Failed to send confirmation email for Ticket ID: ${ticketId}. Error: ${error.message}`);
     }
 };

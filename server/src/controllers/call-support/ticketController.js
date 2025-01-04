@@ -1,6 +1,7 @@
 import Customer from '../../models/customer.js';
 import Order from '../../models/order.js';
 import Ticket from '../../models/ticket.js';
+import { sendTicketConfirmationEmail } from '../../utils/emailService.js';
 import logger from '../../utils/logger.js';
 import sendMail from '../../utils/sendMail.js';
 
@@ -35,14 +36,11 @@ export const createTicket = async (req, res) => {
       logger.error(`Order not found for order id: ${orderId}`);
       res.status(404).json({message:'Order or Customer not found.'})
     }
-    const mailStatus = await sendMail({
-      email:order?.customer?.email,
-      subject:`Your Ticket #${ticketNumber} Has Been Successfully Created`,
-      message: `Dear ${order?.customer?.name},\n\nYour ticket with the number ${ticketNumber} has been successfully created. Our support team will contact you soon.\n\nTicket Details:\nSubject: ${subject}\nDescription: ${description}\nPriority: ${priority}\nCategory: ${category}\n\nThank you for reaching out to us!\n\nBest Regards,\nSupport Team`,
-    })
+
+    const mailStatus = await sendTicketConfirmationEmail({ticketId:ticketNumber, ticketSubject:subject, ticketDate:newTicket.createdAt, customerName:order.customer.name, orderId, email: order.customer.email});
 
     if(mailStatus){
-      logger.info(`Email sent fort ticket #${ticketNumber}`);
+      logger.info(`Email sent for ticket #${ticketNumber}`);
     }
 
     res.status(201).json(newTicket);
