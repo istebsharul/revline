@@ -145,7 +145,7 @@ const OrderDetails = ({ order }) => {
             </div>
 
             <div className="w-full md:w-2/3 p-4 md:p-8">
-              <div className="flex justify-between items-center bg-[#f6251a] text-white md:p-4 p-4 rounded-md mb-4 md:mb-6 text-sm md:text-lg">
+              <div className="flex justify-between items-center bg-[#f6251a] text-white md:p-4 p-4 rounded-md mb-4 md:mb-6 text-sm md:text-md">
                 <div className="font-bold text-left">
                   Quote ID: {order?.quotations?.quote_number}<br />Date: {formatDate(date)}
                 </div>
