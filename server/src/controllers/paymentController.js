@@ -60,6 +60,7 @@ export const createPayment = async (req, res) => {
       mode: 'payment', // Use 'payment' for one-time payments
       success_url: `https://revlineautoparts.com/payment/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `https://revlineautoparts.com/payment/cancel`,
+      allow_promotion_codes: true,
     });
 
     // Save payment session ID
