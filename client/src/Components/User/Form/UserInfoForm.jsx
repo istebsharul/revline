@@ -97,21 +97,8 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 {location && <p className='text-xs text-red-600 p-1'>{location}</p>}
             </div>
 
-            <div className='p-1 text-xs text-gray-600 space-y-1'>
-                <div className='flex justify-start md:items-center items-start space-x-1'>
-                    <input
-                        type="checkbox"
-                        className='md:w-4 md:h-4 accent-blue-700'
-                        checked={userData.smsConsent}
-                        onChange={e => setUserData({
-                            ...userData,
-                            smsConsent: e.target.checked,
-                        })}
-                    />
-                    <label>I agree to receive order updates and promotional messages via SMS.</label>
-                </div>
-                {errors.smsConsent && <p className="text-xs text-[#f6251a]">{errors.smsConsent}</p>}
-                <div className='p-1 text-gray-500'>By checking this box, you agree to receive SMS order updates and promotional messages. Msg & data rates apply. Reply STOP to opt out anytime.</div>
+            <div className='text-xs text-gray-600 space-y-1'>
+                <div className='p-1 text-gray-500'>By submitting, you agree to receive SMS order updates and promotional messages. Msg & data rates apply. Reply STOP to opt out anytime.</div>
             </div>
         </div>
     );
