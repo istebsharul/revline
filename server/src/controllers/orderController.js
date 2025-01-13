@@ -1,6 +1,8 @@
 import Order from '../models/order.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
+import { sendSmsNotification } from '../utils/smsService.js';
+import { sendDeliveryConfirmationEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail } from '../utils/emailService.js';
 
 // Create a new order
 export const createOrder = asyncErrors(async (req, res) => {
@@ -177,11 +179,6 @@ export const updateOrder = asyncErrors(async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        // Update order details with all other fields
-        // Merge otherDetails into existingOrder
-        Object.assign(existingOrder, otherDetails);
-
-
         // Check if `agent_notes` has changed and update disposition history
         if (order_disposition_details && order_disposition_details.agent_notes) {
             const currentNotes = existingOrder.order_disposition_details?.agent_notes || 'Not taken Properly';
@@ -196,16 +193,97 @@ export const updateOrder = asyncErrors(async (req, res) => {
                     updated_at: new Date(),  // Capture the current time of the update
                 };
 
-                existingOrder.disposition_history.push(historyEntry);  // Add to the disposition history
+                otherDetails.disposition_history.push(historyEntry);  // Add to the disposition history
+                console.log('In other details',otherDetails.disposition_history);
                 console.log('Existing History', existingOrder.disposition_history);
                 console.log('Adding to disposition history:', historyEntry);
             }
         }
 
-        // Update order_disposition_details separately if provided
+        // Handling SMS and Emails for the respective order status
+        if (order_disposition_details && order_disposition_details.order_status && order_disposition_details.order_status !== existingOrder.order_disposition_details.order_status) {
+            logger.info('Order Status Updating.');
+
+            switch (order_disposition_details.order_status) {
+                case "Order Placed":
+                    logger.info(`Sending 'Order Placed' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'order_placed',
+                        to: existingOrder.customer.phone,
+                        data: {
+                            orderId,
+                            invoiceLink: `https://revlineautoparts.com/orders/details/${orderId}`
+                        }
+                    });
+                    // Email is being sent directly from invoice controller
+                    break;  // Add 'break' here to avoid fall-through
+                case "Shipped":
+                    logger.info(`Sending 'Order Shipped' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'order_shipped',
+                        to: existingOrder.customer.phone,
+                        data: {
+                            orderId,
+                            trackingLink: existingOrder?.order_summary?.part_code
+                        }
+                    });
+                    sendShippingUpdateEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId, trackingLink: existingOrder.order_summary.part_code });
+                    break;  // Add 'break' here to avoid fall-through
+                case "Delivered":
+                    logger.info(`Sending 'Order Delivered' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'order_delivered',
+                        to: existingOrder.customer.phone,
+                        data: { orderId, feedbackLink: 'https://www.yelp.com/writeareview/biz/dKqwma3pGntKsaDf_V9R7A?return_url=%2Fbiz%2FdKqwma3pGntKsaDf_V9R7A&review_origin=biz-details-war-button' }
+                    });
+                    sendDeliveryConfirmationEmail({email:existingOrder.customer.email, name:existingOrder.customer.name, orderId});
+                    break;  // Add 'break' here to avoid fall-through
+                case "Return Initiated":
+                    logger.info(`Sending 'Return Initiated' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'return_initiated',
+                        to: existingOrder.customer.phone,
+                        data: { orderId }
+                    });
+                    break;  // Add 'break' here to avoid fall-through
+                case "Return Received":
+                    logger.info(`Sending 'Return Received' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'return_received',
+                        to: existingOrder.customer.phone,
+                        data: { orderId }
+                    });
+                    sendReturnConfirmationEmail({email:existingOrder.customer.email, name: existingOrder.customer.name, })
+                    break;  // Add 'break' here to avoid fall-through
+                case "Refund Processed":
+                    logger.info(`Sending 'Refund Processed' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'refund_processed',
+                        to: existingOrder.customer.phone,
+                        data: { orderId }
+                    });
+                    break;  // Add 'break' here to avoid fall-through
+                case "Refund Completed":
+                    logger.info(`Sending 'Refund Completed' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'refund_completed',  // Fixed typo 'tyep' -> 'type'
+                        to: existingOrder.customer.phone,
+                        data: { orderId }
+                    });
+                    break;  // Add 'break' here to avoid fall-through
+                default:
+                    logger.error(`Order Status '${order_disposition_details.status}' does not require to send SMS for Order #${orderId}`);
+            }
+        }
+
+        // // // Update order_disposition_details separately if provided
         if (order_disposition_details) {
             Object.assign(existingOrder.order_disposition_details, order_disposition_details);
         }
+
+        // Update order details with all other fields
+        // Merge otherDetails into existingOrder
+        Object.assign(existingOrder, otherDetails);
 
         // Save the updated order
         const updatedOrder = await existingOrder.save();
@@ -215,6 +293,7 @@ export const updateOrder = asyncErrors(async (req, res) => {
 
     } catch (error) {
         logger.error('Error updating order', { orderId, error: error.message });
+        console.error(error);
         res.status(400).json({ message: error.message });
     }
 });

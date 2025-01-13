@@ -45,7 +45,6 @@ export const sendAccountActivationEmail = async (clientData) => {
         logger.info(`Successfully sent account activation email to ${email}`);
     } catch (error) {
         logger.error(`Failed to send account activation email to ${email}`, error);
-        throw error;
     }
 };
 
@@ -86,7 +85,7 @@ export const sendWelcomeEmail = async (clientData) => {
         logger.info(`Successfully sent welcome email to ${email}`);
     } catch (error) {
         logger.error(`Failed to send welcome email to ${email}`, error);
-        throw error;
+        
     }
 };
 
@@ -126,11 +125,11 @@ export const sendWelcomeBackEmail = async (clientData) => {
         logger.info(`Successfully sent welcome back email to ${email}`);
     } catch (error) {
         logger.error(`Failed to send welcome back email to ${email}`, error);
-        throw error;
+        
     }
 };
 
-// another email template is being used not this one since pdf is along with email.
+// another email template is being used not this one since pdf is along with email in invoice controller.
 export const sendOrderConfirmationEmail = async (clientData) => {
     const { email, name, orderId, orderDate, shippingAddress, items, totalAmount } = clientData;
     logger.info(`Sending order confirmation email for order ${orderId} to ${email}`);
@@ -171,7 +170,7 @@ export const sendOrderConfirmationEmail = async (clientData) => {
         logger.info(`Successfully sent order confirmation email for order ${orderId} to ${email}`);
     } catch (error) {
         logger.error(`Failed to send order confirmation email for order ${orderId} to ${email}`, error);
-        throw error;
+        
     }
 };
 
@@ -204,7 +203,7 @@ export const sendProcessingUpdateEmail = async (clientData) => {
         logger.info(`Successfully sent processing update email for order ${orderId} to ${email}`);
     } catch (error) {
         logger.error(`Failed to send processing update email for order ${orderId} to ${email}`, error);
-        throw error;
+        
     }
 };
 
@@ -215,13 +214,16 @@ export const sendShippingUpdateEmail = async (clientData) => {
     const message = `
         Dear ${name},
 
-        Your order #${orderId} has been shipped and is on its way!
+        We're excited to let you know that your order is on its way!
 
-        You can track your shipment here: [Track Your Order](${trackingLink})
+        Shipping Details:
+            - Track your package here: ${trackingLink}
 
-        If you have any questions, please contact us at support@revlineautoparts.com or +1 855 600 9080.
+        Thank you for choosing Revline Auto Parts. We hope you enjoy your purchase!
 
         Best regards,
+        
+        Adam Reed
         Customer Service Team
         Revline Auto Parts
     `;
@@ -229,13 +231,13 @@ export const sendShippingUpdateEmail = async (clientData) => {
     try {
         await sendMail({
             email,
-            subject: `Shipping Update: Your Order #${orderId} is on the Way`,
+            subject: `Your Order #${orderId.slice(-6)} Has Shipped – Track Your Package`,
             message,
         });
         logger.info(`Successfully sent shipping update email for order ${orderId} to ${email}`);
     } catch (error) {
         logger.error(`Failed to send shipping update email for order ${orderId} to ${email}`, error);
-        throw error;
+        
     }
 };
 
@@ -246,13 +248,15 @@ export const sendDeliveryConfirmationEmail = async (clientData) => {
     const message = `
         Dear ${name},
 
-        We're happy to inform you that your order #${orderId} has been delivered successfully.
+        We are pleased to confirm that your order has been delivered.
 
-        Thank you for choosing Revline Auto Parts! We hope you enjoy your purchase.
+        We hope everything arrived in excellent condition and meets your expectations. If you have any questions or need assistance, please don't hesitate to contact us.
 
-        If you have any issues or feedback, please contact us at support@revlineautoparts.com or +1 855 600 9080.
-
-        Best regards,
+        Enjoy your new auto parts, and thank you for choosing Revline Auto Parts!
+    
+        Warm regards,
+        
+        Adam Reed
         Customer Service Team
         Revline Auto Parts
     `;
@@ -260,13 +264,13 @@ export const sendDeliveryConfirmationEmail = async (clientData) => {
     try {
         await sendMail({
             email,
-            subject: `Delivery Confirmation: Your Order #${orderId} is Complete`,
+            subject: `Your Order #[${orderId.slice(-6)}] Has Been Delivered`,
             message,
         });
         logger.info(`Successfully sent delivery confirmation email for order ${orderId} to ${email}`);
     } catch (error) {
         logger.error(`Failed to send delivery confirmation email for order ${orderId} to ${email}`, error);
-        throw error;
+        
     }
 };
 
@@ -297,7 +301,7 @@ export const sendFeedbackRequestEmail = async (clientData) => {
         logger.info(`Successfully sent feedback request email to ${email}`);
     } catch (error) {
         logger.error(`Failed to send feedback request email to ${email}`, error);
-        throw error;
+        
     }
 };
 
@@ -328,15 +332,49 @@ export const sendPromotionalEmail = async (clientData) => {
         logger.info(`Successfully sent promotional email to ${email}`);
     } catch (error) {
         logger.error(`Failed to send promotional email to ${email}`, error);
-        throw error;
+        
     }
 };
+
+export const sendReturnConfirmationEmail = async (clientData) =>{
+    const {email,name,orderId} = clientData;
+    logger.info(`Sending Return Confirmation Email to ${email}`);
+
+    const message = `
+        Dear ${name},
+    
+        We have received your returned item(s) from order #${orderId}.
+
+        Our team will inspect the returned item(s) and process your refund or exchange as per our return policy. We will update you once the process is complete.
+
+        If you have any questions, please contact us at support@revlineautoparts.com.
+
+        Thank you for your patience.
+
+        Best regards,
+        
+        Adam Reed
+        Returns Department
+        Revline Auto Parts
+    `;
+
+    try {
+        await sendMail({
+            email,
+            subject:`Return Received for Order #${orderId}`,
+            message
+        })
+    } catch (error) {
+        logger.error(`Failed to send return confirmation Email`);
+    }
+}
 
 const formatDate = (inputDate) => {
     const dateObj = new Date(inputDate);
     return `${dateObj.toLocaleString('default', { month: 'long' })} ${dateObj.getDate()}, ${dateObj.getFullYear()}, ${dateObj.toLocaleTimeString()}`;
 }
 
+// This mail is to admin
 export const sendOrderNotificationEmail = async (clientData) => {
     const { orderId, orderDate, customerName, items } = clientData;
     logger.info(`Sending order notification email for order ${orderId}`);
@@ -369,7 +407,7 @@ export const sendOrderNotificationEmail = async (clientData) => {
         logger.info(`Successfully sent order notification email for order ${orderId}`);
     } catch (error) {
         logger.error(`Failed to send order notification email for order ${orderId}`, error);
-        throw error;
+        
     }
 };
 

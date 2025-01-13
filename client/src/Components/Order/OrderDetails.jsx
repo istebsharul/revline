@@ -107,11 +107,33 @@ const OrderDetails = ({ order }) => {
     <>
       {order.quotations &&
         <div className="flex flex-col items-center bg-gray-100 min-h-screen gap-2 p-2 sm:p-4">
-          <div className="w-full bg-white rounded-lg flex justify-between items-center p-2">
-            <p className="text-md md:p-2 p-1 flex flex-wrap">
-              <strong>Order Status:</strong>{order?.order_disposition_details.order_status}
-            </p>
-            <div className='p-1'>{order.invoices && <InvoicePdf pdfBinary={order?.invoices?.invoicePdf?.data?.data} />}</div>
+          <div className="w-full bg-white rounded-lg flex md:flex-row flex-col justify-between items-center p-2 md:space-y-0 space-y-1">
+            <div className='text-md md:p-2 p-1 flex flex-wrap'>
+              <p className="">
+                <strong>Order Status: </strong>{order?.order_disposition_details.order_status}
+              </p>
+            </div>
+            <div>
+
+            </div>
+            <div className='flex gap-2'>
+              <button
+                onClick={() => {
+                  if (order?.order_summary?.part_code) {
+                    window.open(order?.order_summary?.part_code, "_blank", "noopener,noreferrer");
+                  }
+                }}
+                disabled={!order?.order_summary?.part_code}
+                className={`font-medium px-4 py-2 border rounded-lg ${order?.order_summary?.part_code
+                  ? "hover:text-white hover:bg-blue-700 bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  }`}
+              >
+                Track Your Order
+              </button>
+
+              <InvoicePdf pdfBinary={order?.invoices?.invoicePdf?.data?.data} />
+            </div>
           </div>
 
           <div className="w-full max-w-4xl bg-white flex flex-col md:flex-row shadow-lg rounded-lg overflow-hidden">

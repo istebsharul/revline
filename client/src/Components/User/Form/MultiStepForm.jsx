@@ -27,7 +27,8 @@ const MultiStepForm = () => {
         email: '',
         phone: '',
         zipcode: '',
-        smsConsent: false
+        countryCode: '+1',
+        smsConsent: true
     });
 
     const [errors, setErrors] = useState({});
@@ -74,8 +75,6 @@ const MultiStepForm = () => {
         } else if (!/^\d{5}$/.test(userData.zipcode)) {
             errors.zipcode = 'Zip Code must be exactly 5 digits';
         }
-
-        if (!userData.smsConsent) errors.smsConsent = 'Please agree to receive SMS';
 
         return errors;
     };

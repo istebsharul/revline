@@ -6,6 +6,7 @@ import logger from '../../utils/logger.js';
 import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
+import { sendSmsNotification } from '../../utils/smsService.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const filePath = path.resolve(__dirname, '../../services/emailContent.html');
@@ -91,6 +92,8 @@ export const sendQuotation = asyncErrors(async (req, res) => {
       message: `Dear ${customerName}, please find attached your quotation.`,
       htmlContent: htmlTemplate,
     });
+
+    await sendSmsNotification({type:'quotation',to:customerPhone,data: {amount:quoted_price, orderId}});
 
     logger.info(`Quotation sent to ${customerEmail} for ${customerName}.`);
 
