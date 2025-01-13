@@ -56,16 +56,31 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                 />
                 {errors.email && <p className="text-xs text-[#f6251a]">{errors.email}</p>}
             </div>
-            <div >
+            <div>
                 <label className="block text-gray-800 text-sm p-1">Contact Number*</label>
-                <input
-                    type="tel"
-                    id="phone"
-                    className="w-full p-2 border rounded"
-                    placeholder='Enter Contact Number'
-                    value={userData.phone}
-                    onChange={e => setUserData({ ...userData, phone: e.target.value })}
-                />
+                <div className="flex items-center gap-1">
+                    {/* Country Code Dropdown */}
+                    <select
+                        id="countryCode"
+                        className="w-1/4 p-2 bg-gray-100 text-md border rounded appearance-none"
+                        value={userData.countryCode || "+1"} // Default country code
+                        onChange={e => setUserData({...userData,countryCode: e.target.value})}
+                    >
+                        <option value="+1">+1 (USA)</option>
+                        <option value="">We are operating in USA only.</option>
+                        {/* Add more country codes as needed */}
+                    </select>
+
+                    {/* Phone Number Input */}
+                    <input
+                        type="tel"
+                        id="phone"
+                        className="w-3/4 p-2 text-md border rounded"
+                        placeholder="Enter Contact Number"
+                        value={userData.phone}
+                        onChange={e => setUserData({ ...userData, phone: e.target.value })}
+                    />
+                </div>
                 {errors.phone && <p className="text-xs text-[#f6251a]">{errors.phone}</p>}
             </div>
             <div >

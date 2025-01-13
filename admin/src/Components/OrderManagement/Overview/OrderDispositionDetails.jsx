@@ -18,7 +18,9 @@ const OrderDispositionDetails = ({ orderDispositionDetails = {}, isEditing, setO
     'Delivered',
     'Completed',
     'Cancelled',
-    'Returned/Refund Initiated',
+    'Return Initiated',
+    'Return Received',
+    'Refund Processed',
     'Refund Completed'
   ];
 

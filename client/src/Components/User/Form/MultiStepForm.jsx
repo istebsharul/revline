@@ -27,6 +27,7 @@ const MultiStepForm = () => {
         email: '',
         phone: '',
         zipcode: '',
+        countryCode: '+1',
         smsConsent: false
     });
 

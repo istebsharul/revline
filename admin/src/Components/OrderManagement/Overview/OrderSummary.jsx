@@ -74,9 +74,9 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                 return {
                     ...prev,
                     pricing_details: updatedPricingDetails,
-                    order_summary:{
+                    order_summary: {
                         ...prev.order_summary,
-                        [name]:value,
+                        [name]: value,
                     }
                 };
             });
@@ -89,8 +89,19 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                 <h3 className="text-lg font-bold mb-4">Order Summary</h3>
                 <div className="grid grid-cols-4 gap-4">
                     <div>
-                        <p className="font-medium text-gray-500">VIN:</p>
-                        <p className="text-gray-800">{orderSummary?.part_code || '--'}</p>
+                        <p className="font-medium text-gray-500">Tracking Link:</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="part_code"
+                                value={orderSummary?.part_code || ''}
+                                onChange={handleChange}
+                                className="w-full text-gray-800 border border-gray-300 rounded p-1"
+                                placeholder="Enter Tracking Link"
+                            />
+                        ) : (
+                            <p className="text-gray-800">{orderSummary?.part_code || '--'}</p>
+                        )}
                     </div>
                     <div>
                         <p className="font-medium text-gray-500">Year:</p>
@@ -277,7 +288,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

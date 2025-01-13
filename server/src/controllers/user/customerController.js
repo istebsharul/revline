@@ -80,6 +80,8 @@ export const createCustomer = asyncErrors(async (req, res) => {
         const phone = userData?.phone;
         const zipcode = userData?.zipcode;
         const smsConsent = userData?.smsConsent;
+        const countryCode = userData?.countryCode;
+
 
         logger.info(`Received request to create customer: ${email}`);
 
@@ -118,9 +120,9 @@ export const createCustomer = asyncErrors(async (req, res) => {
             logger.info(`Updated existing customer: ${existingCustomer.email}`);
 
             await sendWelcomeBackEmail({ name, email, vehicleData });
-
+            
         } else {
-            newCustomer = new Customer({ name, email, phone, zipcode, smsConsent, orderInfo: [orderInfo] });
+            newCustomer = new Customer({ name, email, phone:`${countryCode}${phone}`, zipcode, smsConsent, orderInfo: [orderInfo] });
             await newCustomer.save();
             newOrder.customer = newCustomer._id;
             newOrder.shipping_details.customer = newCustomer._id;
@@ -132,6 +134,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             logger.info(`Email Sent: ${email}`, res);
         }
 
+        // This is to admin
         await sendOrderNotificationEmail({ orderId: newOrder._id, orderDate: Date.now(), customerName: name, items: newOrder.order_summary });
 
         res.status(existingCustomer ? 200 : 201).json({ order: newOrder, customer: existingCustomer || newCustomer });
