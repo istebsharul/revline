@@ -132,6 +132,7 @@ function OptInPage() {
                     </div>
                 )}
 
+                <div className='text-xs pl-6 mb-2'>By providing my phone number, I agree to receive SMS updates about my orders and delivery status from Revline Auto Parts. I understand that I can opt out at any time by replying STOP to any message. Standard message and data rates may apply.</div>
                 {/* Always show the consent checkbox */}
                 <div className="mb-4 space-y-1">
                     <label className="flex items-start text-xs">
@@ -141,8 +142,7 @@ function OptInPage() {
                             checked={consent}
                             onChange={(e) => setConsent(e.target.checked)}
                         />
-                        I agree to receive SMS updates about my orders, delivery status, and promotional offers from Revline Auto Parts. Opting in is optional and will not affect my ability to use any services or place orders. I understand that I can opt out at any time by replying STOP to any message. Standard message and data rates may apply.
-                    </label>
+                        By checking the box, I agree to receive SMS promotional offers from Revline Auto Parts. Opting in is optional and will not affect my ability to use any services or place orders. / understand that / can opt out at any time by replying STOP to any message. Standard message and data rates may apply.                    </label>
                 </div>
 
                 {isVerified && (
