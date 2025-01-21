@@ -111,9 +111,9 @@ const MultiStepForm = () => {
                 window.gtag("event", "conversion", {
                     send_to: "AW-11561633611/9tQfCMjphI0aEMuOgokr",
                 });
-                logger.info("Google Ads conversion event triggered");
+                console.log("Google Ads conversion event triggered");
             } else {
-                logger.warn("Google Tag is not loaded yet.");
+                console.warn("Google Tag is not loaded yet.");
             }
         } catch (error) {
             logger.error("Error triggering Google Ads conversion:", error);
