@@ -2,13 +2,10 @@ import React,{useEffect, useRef} from 'react'
 import Tagline from '../../Components/User/Tagline'
 import BestBuyingExperience from '../../Components/User/BestBuyingExperience'
 import Testimonials from '../../Components/User/Testimonials'
-import MultiStepForm from '../../Components/User/Form'
 import HeroSection from '../../Components/User/HeroSection'
 import WhyChooseUs from '../../Components/User/WhyChooseUs'
 import BuyingFlow from '../../Components/User/BuyingFlow'
 import { useLocation } from 'react-router-dom';
-import VideoComponent from '../../Components/User/VideoComponent'
-
 
 function HomePage() {
   const flowSectionRef = useRef(null);

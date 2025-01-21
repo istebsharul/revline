@@ -54,13 +54,6 @@ const ContactSidebar = ({ customer, order_id}) => {
           <div>
             <p>Email: {customer?.email || 'No Email'}</p>
             <p>Phone number: {customer?.phone || 'No Phone Number'}</p>
-            <div className="flex mt-4 space-x-2">
-              <FaEnvelope className="text-gray-500" />
-              <FaPhone className="text-gray-500" />
-              <FaTasks className="text-gray-500" />
-              <FaVideo className="text-gray-500" />
-              <FaRegCalendarAlt className="text-gray-500" />
-            </div>
           </div>
         </div>
 

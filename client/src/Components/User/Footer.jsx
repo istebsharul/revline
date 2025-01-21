@@ -13,7 +13,7 @@ function Footer() {
   }
 
   const handleCall = () => {
-    const phoneNumber = "+1 855 600 9480"; // Fixed phone number
+    const phoneNumber = "+1 888 632 0709"; // Fixed phone number
     const formattedNumber = `tel:${phoneNumber}`; // Use tel: protocol to open the dialer
     window.location.href = formattedNumber;
   };
@@ -37,32 +37,27 @@ function Footer() {
               <a className="font-medium text-left no-underline text-xl">Popular Makes</a>
               <div className="flex">
                 <ul className="text-left p-2 space-y-2">
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Ford</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Chevrolet</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Toyota</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Honda</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Nissan</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Hyundai</a></li>
-                </ul>
-
-                <ul className="text-left p-2 space-y-2">
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Kia</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Jeep</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Subaru</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Dodge</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>GMC</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Volkswagen</a></li>
+                  {['Ford', 'Chevrolet', 'Toyota', 'Honda', 'Nissan', 'Hyundai'].map(make => (
+                    <li key={make} className="hover:underline decoration-red-600 font-thin">
+                      <a href={`/blogs/${make.toLowerCase()}`}>{make}</a>
+                    </li>
+                  ))}
                 </ul>
                 <ul className="text-left p-2 space-y-2">
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Mazda</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Ram</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Buick</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Chrysler</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Mitsubishi</a></li>
-                  <li onClick={handleClick} className="hover:underline decoration-red-600 font-thin"><a>Fiat</a></li>
+                  {['Kia', 'Jeep', 'Subaru', 'Dodge', 'GMC', 'Volkswagen'].map(make => (
+                    <li key={make} className="hover:underline decoration-red-600 font-thin">
+                      <a href={`/blogs/${make.toLowerCase()}`}>{make}</a>
+                    </li>
+                  ))}
+                </ul>
+                <ul className="text-left p-2 space-y-2">
+                  {['Mazda', 'Ram', 'Buick', 'Chrysler', 'Mitsubishi', 'Fiat'].map(make => (
+                    <li key={make} className="hover:underline decoration-red-600 font-thin">
+                      <a href={`/blogs/${make.toLowerCase()}`}>{make}</a>
+                    </li>
+                  ))}
                 </ul>
               </div>
-
             </div>
             <div className="my-2 lg:my-0 flex flex-col">
               <a className="font-medium text-left no-underline text-xl">Quick Links</a>
@@ -122,7 +117,7 @@ function Footer() {
                 aria-label="Youtube"
                 className="hover:text-[#f6251a]"
               >
-                <FaYoutube/>
+                <FaYoutube />
               </a>
             </div>
           </div>
