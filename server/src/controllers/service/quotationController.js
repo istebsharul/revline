@@ -71,7 +71,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
       .replace(/{{model}}/g, order?.order_summary?.model)
       .replace(/{{partName}}/g, order?.order_summary?.part_name)
       .replace(/{{variant}}/g, order?.order_summary?.variant)
-      .replace(/{{variant2}}/g, order?.order_summary?.variant2)
+      .replace(/{{variant2}}/g, order?.order_summary?.variant2 ?? "")
       .replace(/{{transmission}}/g, order.order_summary.transmission)
       .replace(/{{quotedPrice}}/g, `$${quoted_price.toFixed(2)}`)
       .replace(/{{shippingCost}}/g, `$${shipping_cost.toFixed(2)}`)
