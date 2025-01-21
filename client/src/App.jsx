@@ -10,18 +10,19 @@ import Call from './Components/CustomerSupport/Call.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
-  const userData = useSelector((state)=> state.auth.user);
+  const userData = useSelector((state) => state.auth.user);
 
   const fetchUserData = () => {
-    if(!userData){
+    if (!userData) {
       dispatch(loadUser());
     }
   }
 
   return (
     <>
+
       <Toaster position="top-center" reverseOrder={false} />
-      <Call/>
+      <Call />
       <Navbar />
       <UserRoutes />
       <Footer />

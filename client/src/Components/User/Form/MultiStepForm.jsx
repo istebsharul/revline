@@ -105,6 +105,16 @@ const MultiStepForm = () => {
 
     const handleSubmit = async () => {
 
+        // Trigger Google Ads conversion tracking
+        if (typeof window.gtag === "function") {
+            window.gtag("event", "conversion", {
+                send_to: "AW-11561633611/9tQfCMjphI0aEMuOgokr",
+            });
+            console.log("Google Ads conversion event triggered");
+        } else {
+            console.warn("Google Tag is not loaded yet.");
+        }
+
         // Perform Step 3 validation
         const validationErrors = validateStep3();
 
