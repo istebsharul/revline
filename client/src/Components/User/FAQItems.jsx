@@ -84,7 +84,7 @@ const faqItems = [
     },
     {
         question: "What if I have additional questions not covered here?",
-        answer: "We're here to help! If you have any other questions or need further assistance, please don't hesitate to contact our customer support team via phone or email.\nContact Information:\n• Phone: +1 855-600-9080\n• Email: Support@revlineautoparts.com"
+        answer: "We're here to help! If you have any other questions or need further assistance, please don't hesitate to contact our customer support team via phone or email.\nContact Information:\n• Phone: +1 888 632 0709\n• Email: Support@revlineautoparts.com"
     }
 ];
 

@@ -238,10 +238,10 @@ const OrderDetails = ({ order }) => {
                 <p className="italic text-gray-700 mt-2">"Excellent service and great prices. I saved a lot..." - Maria L.</p>
               </div>
 
-              <a href="tel:+13105550147" className="block w-full md:w-48 mx-auto py-3 text-center bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 mb-4 md:mb-6">
+              <a href="tel:+8886320709" className="block w-full md:w-48 mx-auto py-2 text-center bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 mb-4 md:mb-6">
                 Call Us
               </a>
-              <p className="text-center md:text-left">Adam Reed<br />Senior Parts Specialist</p>
+              <p className="text-center md:text-left">Adam Reed<br /> <span className='text-sm text-gray-500'>+1 775 350 1908</span> <br/>Senior Parts Specialist</p>
             </div>
           </div>
 

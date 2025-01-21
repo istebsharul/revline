@@ -16,7 +16,7 @@ function ContactUsPage() {
         <h1 className='md:text-4xl text-2xl text-[#f6251a] font-medium font-inter'>
           HAVING TROUBLE?
         </h1>
-        <p className='md:text-2xl  tracking-wider text-center'>CALL NOW +1 855-600-9080</p>
+        <p className='md:text-2xl  tracking-wider text-center'>CALL NOW +1 888 632 0709</p>
       </div>
 
       <ContactForm />

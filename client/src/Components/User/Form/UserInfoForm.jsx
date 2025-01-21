@@ -98,7 +98,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
             </div>
 
             <div className='text-xs text-gray-600 space-y-1'>
-                <div className='p-1 text-gray-500'>By submitting, you agree to receive SMS order updates and promotional messages. Msg & data rates apply. Reply STOP to opt out anytime.</div>
+                <div className='p-1 text-gray-500'>By submitting, you agree to receive SMS updates about your order and occasional promotional messages. Msg & data rates may apply. Reply STOP to opt out anytime.</div>
             </div>
         </div>
     );

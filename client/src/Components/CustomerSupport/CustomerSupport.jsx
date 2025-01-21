@@ -14,7 +14,7 @@ const CustomerSupport = ({orderId}) => {
       <h3 className="text-sm font-medium mb-2">Need Help? Contact Customer Support</h3>
       <p className="text-xs text-gray-500">If you have any issues or need assistance with your order, feel free to reach out to our customer support team:</p>
       <p className="text-xs text-gray-500"><strong>Email:</strong> support@revlineautoparts.com</p>
-      <p className="text-xs text-gray-500"><strong>Phone:</strong>+1 855 600 9080</p>
+      <p className="text-xs text-gray-500"><strong>Phone:</strong>+1 888 632 0709</p>
       <p className="text-xs text-gray-600 mt-2">Our team is available 24/7 to assist you with any questions or concerns.</p>
 
       {/* Raise a Complaint Button */}
