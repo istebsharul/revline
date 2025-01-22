@@ -1,4 +1,5 @@
 import Order from '../models/order.js';
+import Customer from '../models/customer.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
 import { sendSmsNotification } from '../utils/smsService.js';
@@ -165,9 +166,41 @@ export const getOrderByCustomerId = asyncErrors(async (req, res) => {
 //     }
 // });
 
+const updatedCustomerIfDifferent = async (customerId, newCustomerData) => {
+    try {
+        const existingCustomer = await Customer.findById(customerId).lean();
+
+        if (!existingCustomer) {
+            logger.error('Customer not found');
+        }
+
+        const isDifferent = Object.keys(newCustomerData).some((key) => {
+            return newCustomerData[key] !== existingCustomer[key];
+        });
+
+        // Update only if data is different
+        if (isDifferent) {
+            const updatedCustomer = await Customer.findByIdAndUpdate(
+                customerId,
+                { $set: newCustomerData },
+                { new: true }
+            );
+
+            // console.log('Customer updated:', updatedCustomer);
+            return updatedCustomer;
+        } else {
+            console.log('Customer data is the same. No update needed.');
+            return existingCustomer;
+        }
+    } catch (error) {
+        console.log('Customer data is the same. No update needed');
+        return existingCustomer;
+    }
+}
+
 export const updateOrder = asyncErrors(async (req, res) => {
     const orderId = req.params.id;
-    const { order_disposition_details, ...otherDetails } = req.body;
+    const { order_disposition_details, customer: newCustomerId, ...otherDetails } = req.body;
 
     try {
         logger.info('Incoming update request for order:', orderId);
@@ -179,13 +212,17 @@ export const updateOrder = asyncErrors(async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
+        if (newCustomerId && existingOrder.customer) {
+            await updatedCustomerIfDifferent(existingOrder.customer._id, newCustomerId);
+        }
+
         // Check if `agent_notes` has changed and update disposition history
         if (order_disposition_details && order_disposition_details.agent_notes) {
             const currentNotes = existingOrder.order_disposition_details?.agent_notes || 'Not taken Properly';
             const newNotes = order_disposition_details.agent_notes;
 
-            console.log('Current agent notes:', currentNotes);
-            console.log('New agent notes:', newNotes);
+            // console.log('Current agent notes:', currentNotes);
+            // console.log('New agent notes:', newNotes);
 
             if (currentNotes !== newNotes) {
                 const historyEntry = {
@@ -194,9 +231,9 @@ export const updateOrder = asyncErrors(async (req, res) => {
                 };
 
                 otherDetails.disposition_history.push(historyEntry);  // Add to the disposition history
-                console.log('In other details',otherDetails.disposition_history);
-                console.log('Existing History', existingOrder.disposition_history);
-                console.log('Adding to disposition history:', historyEntry);
+                // console.log('In other details', otherDetails.disposition_history);
+                // console.log('Existing History', existingOrder.disposition_history);
+                // console.log('Adding to disposition history:', historyEntry);
             }
         }
 
@@ -236,7 +273,7 @@ export const updateOrder = asyncErrors(async (req, res) => {
                         to: existingOrder.customer.phone,
                         data: { orderId, feedbackLink: 'https://www.yelp.com/writeareview/biz/dKqwma3pGntKsaDf_V9R7A?return_url=%2Fbiz%2FdKqwma3pGntKsaDf_V9R7A&review_origin=biz-details-war-button' }
                     });
-                    sendDeliveryConfirmationEmail({email:existingOrder.customer.email, name:existingOrder.customer.name, orderId});
+                    sendDeliveryConfirmationEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId });
                     break;  // Add 'break' here to avoid fall-through
                 case "Return Initiated":
                     logger.info(`Sending 'Return Initiated' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
@@ -253,7 +290,7 @@ export const updateOrder = asyncErrors(async (req, res) => {
                         to: existingOrder.customer.phone,
                         data: { orderId }
                     });
-                    sendReturnConfirmationEmail({email:existingOrder.customer.email, name: existingOrder.customer.name, })
+                    sendReturnConfirmationEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, })
                     break;  // Add 'break' here to avoid fall-through
                 case "Refund Processed":
                     logger.info(`Sending 'Refund Processed' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
