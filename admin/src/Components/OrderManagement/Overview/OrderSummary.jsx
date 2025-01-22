@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Select from 'react-select';
 import axios from 'axios';
+import CreatableSelect from 'react-select/creatable';
 
 const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOrderDetails }) => {
     const [parts, setParts] = useState([]);
@@ -11,17 +11,16 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
         const cost = Number(costPrice) || 0;
         const quoted = Number(quotedPrice) || 0;
         const shipping = Number(shippingCost) || 0;
-    
+
         // Calculate and format to two decimal places, ensuring the result is a number
         return parseFloat((quoted - cost - shipping).toFixed(2));
     };
-    
 
     // Handle fetch only on focus
     const handlePartsFocus = async () => {
         if (parts.length === 0) { // Fetch only if parts haven't been fetched yet
             try {
-                const response = await axios.get(`https://server.revlineautoparts.com/api/v1/form/parts`);
+                const response = await axios.get(`http://localhost:3000/api/v1/form/parts`);
                 setParts(response.data);
             } catch (error) {
                 console.error(error);
@@ -151,16 +150,24 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                     <div>
                         <p className="font-medium text-gray-500">Part Name:</p>
                         {isEditing ? (
-                            <Select
+                            <CreatableSelect
                                 name="part_name"
                                 value={parts.find(part => part?.part_name === orderSummary?.part_name) ?
                                     { value: orderSummary?.part_name, label: orderSummary?.part_name }
                                     : null}
-                                onChange={handleChange}
+                                onChange={(input, actionMeta) => {
+                                    if (actionMeta.action === "create-option") {
+                                        // Add new custom option to the parts list
+                                        const newPart = { part_name: input.value, size: null, shipping_cost: null };
+                                        setParts(prevParts => [...prevParts, newPart]); // Update parts state to include the new part
+                                    }
+                                    handleChange(input, actionMeta); // Handle change logic
+                                }}
                                 onFocus={handlePartsFocus} // Trigger fetching parts on focus
                                 options={parts.map(part => ({ value: part.part_name, label: part.part_name }))}
-                                placeholder="Select part name"
+                                placeholder="Select or create part name"
                                 className="text-gray-800"
+                                isClearable={true}
                             />
                         ) : (
                             <p className="text-gray-800">{orderSummary?.part_name || '--'}</p>
@@ -254,7 +261,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                     </div>
                     <div>
                         <p>Gross Profit:</p>
-                        <p className={`text-gray-600 ${pricingDetails.gross_profit > 0 ? 'text-green-600': 'text-[#f6251a]'}`}>{pricingDetails?.gross_profit || '--'}</p>
+                        <p className={`text-gray-600 ${pricingDetails.gross_profit > 0 ? 'text-green-600' : 'text-[#f6251a]'}`}>{pricingDetails?.gross_profit || '--'}</p>
                     </div>
                     <div>
                         <p>Cost Price:</p>
