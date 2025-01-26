@@ -20,7 +20,7 @@ function PaymentSuccessfulPage() {
     // Call backend to verify payment
     const verifyPayment = async () => {
       try {
-        const response = await axios.get(`https://server.revlineautoparts.com/api/v1/stripe/verify-payment?session_id=${sessionId}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/stripe/verify-payment?session_id=${sessionId}`);
         if (response.data.success) {
           setMessage('Payment successful! Thank you for your purchase.');
         } else {

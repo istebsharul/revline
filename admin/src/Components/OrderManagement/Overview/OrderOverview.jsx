@@ -7,7 +7,7 @@ import OverviewContainer from './OverviewContainer';
 
 // Function to fetch order details
 const fetchOrderDetails = async (orderId) => {
-    const response = await axios.get(`https://server.revlineautoparts.com/api/v1/orders/${orderId}`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/${orderId}`);
     // console.log("Fetched order data directly:", response.data); // Log fetched data directly
     return response.data; // Return order data
 };

@@ -28,7 +28,7 @@ const VehicleInfoForm = ({ setTransmission, vehicleData, setVehicleData, errors 
         const fetchMakes = async () => {
             setIsLoadingMakes(true);
             try {
-                const response = await axios.get(`https://server.revlineautoparts.com/api/v1/form/makes/${vehicleData.year}`);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/form/makes/${vehicleData.year}`);
                 setMakes(response.data.makes);
             } catch (error) {
                 console.error(error);
@@ -60,7 +60,7 @@ const VehicleInfoForm = ({ setTransmission, vehicleData, setVehicleData, errors 
         const fetchParts = async () => {
             setIsLoadingParts(true);
             try {
-                const response = await axios.get(`https://server.revlineautoparts.com/api/v1/form/parts`);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/form/parts`);
                 setParts(response.data);
             } catch (error) {
                 console.error(error);

@@ -6,7 +6,7 @@ import TicketsList from '../Dashboard/TicketsList';
 
 const fetchTickets = async ({ queryKey }) => {
     const [, { page, limit }] = queryKey;
-    const response = await axios.get(`https://server.revlineautoparts.com/api/v1/tickets/ticket`, {
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/tickets/ticket`, {
         params: {
             page,
             limit

@@ -68,7 +68,7 @@ export const CallProvider = ({ children }) => {
 		console.log("Incoming Check......",incomingConnection);
 		const fetchQueueStatus = async() =>{
 			try {
-				const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/queue-status');
+				const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/twilio/queue-status`);
 				setQueueStatus(response.data);
 				console.log("Queuee.........................",response);
 			} catch (error) {
@@ -105,7 +105,7 @@ export const CallProvider = ({ children }) => {
 
 	const getToken = async () => {
 		try {
-			const response = await axios.get('https://server.revlineautoparts.com/api/v1/twilio/token');
+			const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/twilio/token`);
 			return response.data.token;
 		} catch (error) {
 			console.error('Error fetching token:', error);
@@ -190,7 +190,7 @@ export const CallProvider = ({ children }) => {
 
 	const handleWaitingConnection = async () => {
 		try {
-			const res = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/handle-deqeue');
+			const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/twilio/handle-deqeue`);
 			console.log('Connecting to an agent',res);
 		} catch (error) {
 			console.error(error);
@@ -209,7 +209,7 @@ export const CallProvider = ({ children }) => {
 		if (device) {
 			isOutgoingRef.current = true;
 			try {
-				const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/call', { phoneNumber: number });
+				const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/twilio/call`, { phoneNumber: number });
 				console.log(response.data);
 				setCallSid(response.data.callSid);
 				console.log(callSid);
@@ -226,7 +226,7 @@ export const CallProvider = ({ children }) => {
 		const activeCallSid = incomingCallSid || callSid;
 		if (activeCallSid) {
 			try {
-				const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/end-call', { callSid: activeCallSid });
+				const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/twilio/end-call`, { callSid: activeCallSid });
 				console.log(response.data);
 				setCallStatus('Call ended');
 				setCallSid('');
@@ -278,7 +278,7 @@ export const CallProvider = ({ children }) => {
 			// return;
 		}
 		try {
-			const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/hold-call', {
+			const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/twilio/hold-call`, {
 				callSid:activeCallSid,
 			});
 
@@ -299,7 +299,7 @@ export const CallProvider = ({ children }) => {
 		const activeCallSid = isOutgoingRef.current ? callSid: '';
 		console.log(activeCallSid);
 		try {
-			const response = await axios.post('https://server.revlineautoparts.com/api/v1/twilio/resume-call', {
+			const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/twilio/resume-call`, {
 				callSid:activeCallSid,
 			});
 

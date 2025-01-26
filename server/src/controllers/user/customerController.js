@@ -3,7 +3,7 @@ import Customer from '../../models/customer.js';
 import Order from '../../models/order.js';
 import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import logger from '../../utils/logger.js';
-import sendMail from '../../utils/sendMail.js';
+import {sendMail} from '../../utils/sendMail.js';
 import Part from '../../models/parts.js';
 import { sendAccountActivationEmail, sendOrderNotificationEmail, sendWelcomeBackEmail } from '../../utils/emailService.js';
 
@@ -122,7 +122,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             await sendWelcomeBackEmail({ name, email, vehicleData });
             
         } else {
-            newCustomer = new Customer({ name, email, phone:`${countryCode}${phone}`, zipcode, smsConsent, orderInfo: [orderInfo] });
+            newCustomer = new Customer({ name, email, phone:`${countryCode|| '+1'}${phone}`, zipcode, smsConsent, orderInfo: [orderInfo] });
             await newCustomer.save();
             newOrder.customer = newCustomer._id;
             newOrder.shipping_details.customer = newCustomer._id;

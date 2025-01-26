@@ -28,7 +28,7 @@ const SendQuotation = ({ orderDetails }) => {
         setSuccess('');
 
         try {
-            const response = await axios.post('https://server.revlineautoparts.com/api/v1/service/quotation/send', { orderId: orderDetails._id });
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/service/quotation/send`, { orderId: orderDetails._id });
             setSuccess(response.data.message || 'Quotation sent successfully!');
         } catch (err) {
             console.error(err);

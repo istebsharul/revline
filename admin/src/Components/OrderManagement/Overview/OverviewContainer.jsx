@@ -31,7 +31,7 @@ const OverviewContainer = ({ order }) => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`https://server.revlineautoparts.com/api/v1/orders/${orderDetails._id}`, orderDetails, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${orderDetails._id}`, orderDetails, {
         headers: {
           'Content-Type': 'application/json', // Ensures the payload is sent in JSON format
         },
@@ -97,7 +97,7 @@ const OverviewContainer = ({ order }) => {
             <QuotationDetails quotationDetails={orderDetails.quotations} />
             <InvoiceDetails invoiceDetails={orderDetails.invoices} />
             <PaymentDetails paymentDetails={orderDetails.payment_details} />
-            <OrderDispositionDetails orderDispositionDetails={orderDetails.order_disposition_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
+            <OrderDispositionDetails trackingLink={orderDetails.order_summary.part_code} orderDispositionDetails={orderDetails.order_disposition_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
           </>
         )}
 

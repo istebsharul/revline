@@ -19,6 +19,9 @@ export const sendSmsNotification = async ({type, to, data}) => {
         case "order_placed":
             message = `Thanks for your order #${data.orderId.slice(-6)}! Your invoice is ready: ${data.invoiceLink}. We'll update you when it ships.`;
             break;
+        case "order_processing":
+            message = `We're processing your order #${data.orderId.slice(-6)}. We'll notify you once it's shipped. Questions? Call +1 855-600-9080.`;
+            break;
         case "order_shipped":
             message = `Great news! Order #${data.orderId.slice(-6)} is on its way. Track it here: ${data.trackingLink}. ETA: 1-10 days.`;
             break;

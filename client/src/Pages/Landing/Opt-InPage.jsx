@@ -28,7 +28,7 @@ function OptInPage() {
         const otpSms = `Your verification code is: ${smsOtp.current}. This code is valid for the next 10 minutes. By entering this code, you consent to receive SMS order updates and promotional messages from us. Please do not share this code with anyone. If you did not request this code, please ignore this message.`;
 
         try {
-            await axios.post(`https://server.revlineautoparts.com/api/v1/twilio/sms-send`, {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/twilio/sms-send`, {
                 to: phoneNumber,
                 message: otpSms,
             });

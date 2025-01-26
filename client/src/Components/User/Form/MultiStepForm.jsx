@@ -142,7 +142,7 @@ const MultiStepForm = () => {
         console.log(email);
 
         // Define the promise
-        const postRequest = axios.post('https://server.revlineautoparts.com/api/v1/customer/create', {
+        const postRequest = axios.post(`${import.meta.env.VITE_API_URL}/api/v1/customer/create`, {
             userData,
             vehicleData: vehicleData, // Corrected: Send vehicleData as an array
         });

@@ -63,10 +63,10 @@ export const makeCall = async (req, res) => {
   try {
     outgoing = true;
     const call = await twilioClient.calls.create({
-      url: `https://server.revlineautoparts.com/api/v1/twilio/voice`, // URL to TwiML voice instructions
+      url: `${import.meta.env.VITE_API_URL}/api/v1/twilio/voice`, // URL to TwiML voice instructions
       to: phoneNumber,
       from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number,
-      statusCallback: `https://server.revlineautoparts.com/api/v1/twilio/callback`,
+      statusCallback: `${import.meta.env.VITE_API_URL}/api/v1/twilio/callback`,
       statusCallbackEvent: ['initiated', 'ringing', 'answered', 'completed'],
     });
     logger.info(`Call started successfully, SID: ${call.sid}`);
@@ -115,7 +115,7 @@ export const holdCall = async (req, res) => {
   console.log("Call sid to hold", callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
-      url: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music',
+      url: `${import.meta.env.VITE_API_URL}/api/v1/twilio/wait-music`,
       method: 'POST'
     });
 
@@ -136,7 +136,7 @@ export const resumeCall = async (req, res) => {
   logger.info("Call sid to resume", callSid);
   try {
     const call = await twilioClient.calls(callSid).update({
-      url: 'https://server.revlineautoparts.com/api/v1/twilio/resume-connection',
+      url: `${import.meta.env.VITE_API_URL}/api/v1/twilio/resume-connection`,
       method: 'POST'
     });
 
@@ -210,7 +210,7 @@ export const voiceResponse = (req, res) => {
       // Agent is busy, place the call in the queue
       twiml.say("Thank you for calling Revline Auto Parts. Our representatives are currently unavailable. We will return your call as soon as possible. For instant assistance, visit us at revlineautoparts.com.");
       twiml.enqueue('support-queue', {
-        waitUrl: 'https://server.revlineautoparts.com/api/v1/twilio/wait-music'
+        waitUrl: `${import.meta.env.VITE_API_URL}/api/v1/twilio/wait-music`
       });
     }
     // // Respond with the TwiML instructions

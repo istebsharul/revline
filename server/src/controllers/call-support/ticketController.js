@@ -3,7 +3,7 @@ import Order from '../../models/order.js';
 import Ticket from '../../models/ticket.js';
 import { sendTicketConfirmationEmail } from '../../utils/emailService.js';
 import logger from '../../utils/logger.js';
-import sendMail from '../../utils/sendMail.js';
+import {sendMail} from '../../utils/sendMail.js';
 
 const generateTicketNumber = async () => {
   let number;

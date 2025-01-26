@@ -12,19 +12,31 @@ import paypalRoutes from './routes/paymentRoutes.js';
 import customerSupportRoutes from './routes/customerSupportRoutes.js';
 import ticketRoutes from './routes/ticketRoutes.js';
 import formRoutes from './routes/formRoutes.js';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
+
+const limiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    standardHeaders: true,
+    legacyHeaders: true,
+    message:{
+        status: 'error',
+        message: 'Too many requests, please try again later.',
+    }
+});
+app.use(limiter);
 
 app.use(cookieParser())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-    origin: ['https://revlineautoparts.com','https://admin.revlineautoparts.com'], // Only allow your frontend domain
-    methods: ['GET','POST','PATCH','PUT','DELETE'],   // Allowed methods
+    origin: ['https://revlineautoparts.com', 'https://admin.revlineautoparts.com'], // Only allow your frontend domain
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],   // Allowed methods
     credentials: true,                          // Allow cookies/auth headers
-  }));
-  
+}));
 
 app.get('/health', (req, res) => {
     res.status(200).json({
@@ -35,18 +47,17 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/v1/auth', userRoutes);
-app.use('/api/v1/admin-auth',adminRoutes);
+app.use('/api/v1/admin-auth', adminRoutes);
 app.use('/api/v1/inventory', inventoryRoutes); // Base path for inventory-related routes
 app.use('/api/v1/customer', customerRoutes);
 app.use('/api/v1/orders', orderRoutes);
-app.use('/api/v1/twilio',customerSupportRoutes);
+app.use('/api/v1/twilio', customerSupportRoutes);
 app.use('/api/v1/service', serviceRoutes);
 app.use('/api/v1/stripe', paypalRoutes);
-app.use('/api/v1/tickets',ticketRoutes);
-app.use('/api/v1/form',formRoutes);
+app.use('/api/v1/tickets', ticketRoutes);
+app.use('/api/v1/form', formRoutes);
 // Use the error handling middleware after all routes and other middleware
 app.use(errorHandler);
 
 
 export default app;
-   

@@ -185,7 +185,7 @@ const MultiStepForm1 = () => {
         console.log([vehicleData]);
 
         // Define the promise
-        const postRequest = axios.post('https://server.revlineautoparts.com/api/v1/customer/create', {
+        const postRequest = axios.post(`${import.meta.env.VITE_API_URL}/api/v1/customer/create`, {
             name,
             email,
             phone,

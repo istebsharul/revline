@@ -20,7 +20,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
     const handlePartsFocus = async () => {
         if (parts.length === 0) { // Fetch only if parts haven't been fetched yet
             try {
-                const response = await axios.get(`https://server.revlineautoparts.com/api/v1/form/parts`);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/form/parts`);
                 setParts(response.data);
             } catch (error) {
                 console.error(error);

@@ -2,7 +2,7 @@ import Admin from '../models/adminSchema.js';
 import logger from '../utils/logger.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import sendToken from '../utils/jwt.js';
-import sendMail from '../utils/sendMail.js';
+import {sendMail} from '../utils/sendMail.js';
 import crypto from 'crypto';
 
 /**

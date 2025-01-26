@@ -24,7 +24,7 @@ const OrderPage = () => {
       if (!customerId) return [];
       
       const response = await axios.get(
-        `https://server.revlineautoparts.com/api/v1/orders/customer/${customerId}`
+        `${import.meta.env.VITE_API_URL}/api/v1/orders/customer/${customerId}`
       );
       return response.data;
     },

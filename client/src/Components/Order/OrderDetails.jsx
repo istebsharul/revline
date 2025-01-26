@@ -68,7 +68,7 @@ const OrderDetails = ({ order }) => {
   const handleAccept = async () => {
     setLoading(true);
     toast.promise(
-      axios.post('https://server.revlineautoparts.com/api/v1/stripe/create-payment', { orderId: order._id }),
+      axios.post(`${import.meta.env.VITE_API_URL}/api/v1/stripe/create-payment`, { orderId: order._id }),
       {
         loading: 'Please wait...',
         success: <b>Redirecting to Payment Gateway...</b>,
@@ -241,7 +241,7 @@ const OrderDetails = ({ order }) => {
               <a href="tel:+8886320709" className="block w-full md:w-48 mx-auto py-2 text-center bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 mb-4 md:mb-6">
                 Call Us
               </a>
-              <p className="text-center md:text-left">Adam Reed<br /> <span className='text-sm text-gray-500'>+1 775 350 1908</span> <br/>Senior Parts Specialist</p>
+              <p className="text-center md:text-left">Adam Reed<br /> <span className='text-sm text-gray-500'>+1 775 350 1908</span> <br/>Sales Manager</p>
             </div>
           </div>
 
