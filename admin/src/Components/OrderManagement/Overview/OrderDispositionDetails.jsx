@@ -1,14 +1,14 @@
 import React from 'react';
 
-const OrderDispositionDetails = ({ orderDispositionDetails = {}, isEditing, setOrderDetails }) => {
+const OrderDispositionDetails = ({trackingLink, orderDispositionDetails = {}, isEditing, setOrderDetails }) => {
   // Define the status options
   const statusOptions = [
-    'Order Placed',
     'Pending Approval',
     'Approved',
     'Quotation Sent',
     'Awaiting Payment',
     'Payment Received',
+    'Order Placed',
     'Order Processing',
     'Awaiting Supplier Confirmation',
     'Supplier Confirmed',
@@ -25,6 +25,12 @@ const OrderDispositionDetails = ({ orderDispositionDetails = {}, isEditing, setO
   ];
 
   const handleChange = (e) => {
+
+    if(e.target.value === 'Shipped' && trackingLink.trim() === '') {
+      alert('Please add the tracking link before updating the status to Shipped');
+      return;
+    }
+
     setOrderDetails((prev) => ({
       ...prev,
       order_disposition_details: {

@@ -10,7 +10,7 @@ import { ImSpinner2 } from "react-icons/im";
 // Fetch order details with support for optional parameters like `id`
 const fetchOrderDetails = async ({ queryKey }) => {
     const [_key, { id }] = queryKey; // Extract 'id' from queryKey object
-    const { data } = await axios.get(`https://server.revlineautoparts.com/api/v1/orders/user/${id}`);
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/user/${id}`);
     return data;
 };
 

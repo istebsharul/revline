@@ -38,7 +38,7 @@ const CustomerList = ({ customers, setCustomers,setShowForm, showForm }) => {
 
         try {
             // Perform the delete request
-            await axios.delete(`https://server.revlineautoparts.com/api/v1/customer/${customerId}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/customer/${customerId}`);
 
             // Updatint the filteredCustomers state
             setFilteredCustomers(filteredCustomers.filter(customer => customer._id !== customerId));

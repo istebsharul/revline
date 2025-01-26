@@ -1,5 +1,5 @@
 import generatePdf from '../../services/generatePdf.js';
-import sendMail from '../../utils/sendMail.js';
+import {sendOrdersMail} from '../../utils/sendMail.js';
 import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import Order from '../../models/order.js';
 import logger from '../../utils/logger.js';
@@ -86,7 +86,7 @@ export const sendQuotation = asyncErrors(async (req, res) => {
 
     console.log(`The size of the HTML template is: ${byteSize} kb.`);
 
-    const mailSent = await sendMail({
+    const mailSent = await sendOrdersMail({
       email: customerEmail,
       subject: 'Your Quotation',
       message: `Dear ${customerName}, please find attached your quotation.`,

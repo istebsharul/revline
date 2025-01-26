@@ -3,7 +3,7 @@ import Customer from '../models/customer.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
 import { sendSmsNotification } from '../utils/smsService.js';
-import { sendDeliveryConfirmationEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail } from '../utils/emailService.js';
+import { sendDeliveryConfirmationEmail, sendProcessingUpdateEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail } from '../utils/emailService.js';
 
 // Create a new order
 export const createOrder = asyncErrors(async (req, res) => {
@@ -254,6 +254,17 @@ export const updateOrder = asyncErrors(async (req, res) => {
                     });
                     // Email is being sent directly from invoice controller
                     break;  // Add 'break' here to avoid fall-through
+                case "Order Processing":
+                    logger.info(`Sending 'Order Processing' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'order_processing',
+                        to: existingOrder.customer.phone,
+                        data:{
+                            orderId
+                        }
+                    });
+                    sendProcessingUpdateEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId });
+                    break;
                 case "Shipped":
                     logger.info(`Sending 'Order Shipped' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
                     sendSmsNotification({
@@ -261,19 +272,20 @@ export const updateOrder = asyncErrors(async (req, res) => {
                         to: existingOrder.customer.phone,
                         data: {
                             orderId,
-                            trackingLink: existingOrder?.order_summary?.part_code
+                            trackingLink: otherDetails?.order_summary?.part_code
                         }
                     });
-                    sendShippingUpdateEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId, trackingLink: existingOrder.order_summary.part_code });
+                    console.log("Tracking Link",existingOrder.order_summary.part_code);
+                    sendShippingUpdateEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId, trackingLink: otherDetails?.order_summary.part_code });
                     break;  // Add 'break' here to avoid fall-through
                 case "Delivered":
                     logger.info(`Sending 'Order Delivered' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
                     sendSmsNotification({
                         type: 'order_delivered',
                         to: existingOrder.customer.phone,
-                        data: { orderId, feedbackLink: 'https://www.yelp.com/writeareview/biz/dKqwma3pGntKsaDf_V9R7A?return_url=%2Fbiz%2FdKqwma3pGntKsaDf_V9R7A&review_origin=biz-details-war-button' }
+                        data: { orderId, feedbackLink: 'https://g.page/r/CVl0S1321maCEBM/review' }
                     });
-                    sendDeliveryConfirmationEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId });
+                    sendDeliveryConfirmationEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId, feedbackLink: 'https://g.page/r/CVl0S1321maCEBM/review' });
                     break;  // Add 'break' here to avoid fall-through
                 case "Return Initiated":
                     logger.info(`Sending 'Return Initiated' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);

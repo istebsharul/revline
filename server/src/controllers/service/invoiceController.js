@@ -1,5 +1,5 @@
 import generateInvoice from '../../services/generateInvoice.js';
-import sendMail from '../../utils/sendMail.js';
+import { sendOrdersMail } from '../../utils/sendMail.js';
 import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import Order from '../../models/order.js';
 import logger from '../../utils/logger.js';
@@ -80,6 +80,18 @@ const generateInvoiceNumber = async () => {
 
   return invoiceNumber;
 };
+
+  // Format the date if it's valid
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return isNaN(date.getTime())
+      ? 'Invalid Date'
+      : date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+  };
 
 // Controller function to send an invoice
 export const sendInvoice = asyncErrors(async (req, res) => {
@@ -175,33 +187,35 @@ export const sendInvoice = asyncErrors(async (req, res) => {
     await order.save();
 
     // Send Email with PDF attachment
-    const mailSent = await sendMail({
+    const mailSent = await sendOrdersMail({
       email: customerEmail,
       subject: `Order Confirmation #[${orderId.slice(-6)}] – We're Processing Your Order!`,
       message: `
-        Dear ${customerName},
+Dear ${customerName},
     
-        Thank you for your order! We're excited to get started on it right away.
+Thank you for your order! We're excited to get started on it right away.
     
-        **Order Summary:**
-        - Order ID: ${orderId.slice(-6)}
-        - Order Date: ${new Date(order.createdAt).toLocaleDateString()}
-        - Shipping Address: ${address}, ${address1}
-        - Items Ordered:
-          - Part: ${order.order_summary.part_name}
-        - Total Amount: $${totalAmount}
+  Order Summary:
+    - Order ID: ${orderId.slice(-6)}
+    - Order Date: ${formatDate(order.request_date)}
+    - Shipping Address: ${address}, ${address1}
+    - Items Ordered:
+    - Part: ${order.order_summary.part_name}
+    - Total Amount: $${totalAmount}
     
-        Attached to this email is the invoice for your records.
+Attached to this email is the invoice for your records.
     
-        **What's Next?**
-        Our team is now processing your order. We'll notify you once it's shipped. You can view your order status anytime by logging into your account.
+What's Next?
+Our team is now processing your order. We'll notify you once it's shipped. You can view your order status anytime by logging into your account.
     
-        Need Assistance? Contact us at support@revlineautoparts.com or call +1 855 600 9080.
+Need Assistance? Contact us at support@revlineautoparts.com or call +1 888 632 0709.
     
-        Best regards,
-        Adam Reed
-        Customer Service Team
-        Revline Auto Parts
+Best regards,
+
+Adam Reed
++1 775 350 1908
+Sales Team,
+Revline Auto Parts
       `,
       filename: 'invoice.pdf',
       pdfStream: pdfBuffer,

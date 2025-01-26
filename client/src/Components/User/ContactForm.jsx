@@ -41,7 +41,7 @@ const ContactForm = () => {
             if (Object.keys(errors).length === 0) {
                 console.log('Form data:', formData);
 
-                const response = await fetch('https://server.revlineautoparts.com/api/v1/auth/contact', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/auth/contact`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -37,7 +37,7 @@ const SendInvoice = ({ orderDetails }) => {
         setSuccess('');
 
         try {
-            const response = await axios.post('https://server.revlineautoparts.com/api/v1/service/invoice/send', { orderId: orderDetails._id, transactionId:orderDetails.payment_details.transaction_id, paymentMode: orderDetails.payment_details.payment_method });
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/service/invoice/send`, { orderId: orderDetails._id, transactionId:orderDetails.payment_details.transaction_id, paymentMode: orderDetails.payment_details.payment_method });
             setSuccess(response.data.message || 'Invoice sent successfully!');
         } catch (err) {
             console.error(err);

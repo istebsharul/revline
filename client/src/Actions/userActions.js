@@ -29,7 +29,7 @@ const setCookie = (name, value, days) => {
 export const login = (email, password) => {
     return async (dispatch) => {
         try {
-            const response = await axios.post('https://server.revlineautoparts.com/api/v1/auth/login', { email, password });
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/auth/login`, { email, password });
             const { token, user } = response.data;
             setCookie("jwt", token, 1);
             toast.success("Login Successful!")
@@ -47,7 +47,7 @@ export const login = (email, password) => {
 export const loadUser = () => async (dispatch) => {
     try {
         const { data } = await axios.get(
-            "https://server.revlineautoparts.com/api/v1/auth/profile"
+            `${import.meta.env.VITE_API_URL}/api/v1/auth/profile`
         );
         // console.log("data retrieved using loadUser", data);
         console.log('User data loaded successfully',data);
@@ -66,7 +66,7 @@ export const signup = (name, email, password,smsConsent) => {
             console.log(name, email, password,smsConsent);
             // Simulate API call for signup
 
-            const endpoint = 'https://server.revlineautoparts.com/api/v1/auth/register';
+            const endpoint = `${import.meta.env.VITE_API_URL}/api/v1/auth/register`;
 
             const response = await axios.post(
                 endpoint,
@@ -89,7 +89,7 @@ export const logout = () => async (dispatch) => {
     try {
         console.log("apple in a day");
         await axios.get(
-            "https://server.revlineautoparts.com/api/v1/auth/logout"
+            `${import.meta.env.VITE_API_URL}/api/v1/auth/logout`
         );
         toast.success('Logout Successful');
         dispatch({ type: LOGOUT_SUCCESS });
@@ -104,7 +104,7 @@ export const forgotPassword = (email) => {
         try {
             const result = await toast.promise(
                 (async () => {
-                    const endpoint = 'https://server.revlineautoparts.com/api/v1/auth/forgot-password';
+                    const endpoint = `${import.meta.env.VITE_API_URL}/api/v1/auth/forgot-password`;
                     const response = await axios.post(endpoint, { email });
                     console.log("Response", response);
 
@@ -133,7 +133,7 @@ export const resetPassword = (password, token) => {
     return async (dispatch) => {
         try {
             const response = await axios.put(
-                `https://server.revlineautoparts.com/api/v1/auth/reset-password/${token}`,
+                `${import.meta.env.VITE_API_URL}/api/v1/auth/reset-password/${token}`,
                 { newPassword:password }
             );
             toast.success("Password Reset Successfully");
@@ -150,7 +150,7 @@ export const updateProfile = (formData) => {
     return async (dispatch) => {
         try {
             const response = await toast.promise(
-                axios.put("/api/user/profile/update", {
+                axios.put(`${import.meta.env.VITE_API_URL}/api/user/profile/update`, {
                     name: formData.name,
                     email: formData.email,
                     organisation: formData.organisation,

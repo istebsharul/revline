@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 const fetchOrders = async ({ queryKey }) => {
     const [_key, { page, limit }] = queryKey; // Destructure queryKey to get page and limit
-    const { data } = await axios.get('https://server.revlineautoparts.com/api/v1/orders/all', { params: { page, limit } });
+    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/all`, { params: { page, limit } });
     return data;
 };
 
@@ -42,7 +42,7 @@ const SalesManagement = () => {
         const confirmed = confirm("Are you sure you want to delete?");
         if (confirmed) {
             try {
-                await axios.delete(`https://server.revlineautoparts.com/api/v1/orders/${orderId}`);
+                await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/orders/${orderId}`);
                 queryClient.invalidateQueries(['orders']); // Invalidate the 'orders' query to refetch
                 toast.success("Order deleted successfully");
             } catch (error) {
