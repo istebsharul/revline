@@ -99,7 +99,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
 
         // Create order
         const newOrder = new Order({
-            order_summary: { ...vehicleData, part_name: vehicleData.part, part_code: vehicleData.vin },
+            order_summary: { ...vehicleData, part_name: vehicleData.part, vin: vehicleData.vin },
             pricing_details: { shipping_size: part.size, shipping_cost: part.shipping_cost },
             shipping_details: { customer: existingCustomer ? existingCustomer._id : null },
             order_disposition_details: { customer_notes: vehicleData.message },
