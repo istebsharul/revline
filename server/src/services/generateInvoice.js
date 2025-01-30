@@ -121,7 +121,7 @@ const generateInvoice = ({
     doc.fillColor('#5f5d5a')
       .fontSize(12)
       .font('Helvetica').text(
-        '+1 855 600 9080\nSupport@revlineautoparts.com\nrevlineautoparts.com',
+        '+1 888 632 0709\nSupport@revlineautoparts.com\nrevlineautoparts.com',
       // doc.page.width - doc.page.margins.right - 200,
       // footerY,
       { align: 'left' }
