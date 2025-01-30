@@ -219,6 +219,22 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                             <p className="text-gray-800">{orderSummary?.variant2 || '--'}</p>
                         )}
                     </div>
+                    <div>
+                        <p className="font-medium text-gray-500">Vin:</p>
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="vin"
+                                value={orderSummary?.vin || ''}
+                                // onChange={(e) => handleChange({ value: e.target.value }, { name: 'variant2' })}
+                                onChange={handleChange}
+                                className="text-gray-800 border border-gray-300 rounded p-1 break-words"
+                                placeholder="Enter variant 2"
+                            />
+                        ) : (
+                            <p className="text-gray-800">{orderSummary?.vin || '--'}</p>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className="p-4 bg-white shadow rounded-md mt-2">

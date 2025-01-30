@@ -9,6 +9,7 @@ const OrderSummarySchema = new mongoose.Schema({
   part_name: { type: String, required: true, trim: true },
   variant: { type: String, required: true, trim: true },
   transmission: { type: String, required: true, trim: true },
+  vin: {type:String, trim: true},
   variant2: { type: String, trim: true },
 }, { _id: false });
 
@@ -94,6 +95,7 @@ const OrderSchema = new mongoose.Schema({
     customer_notes: { type: String, trim: true },
     agent_notes: { type: String, trim: true },
     order_status: { type: String, trim: true, default: 'Pending Approval' },
+    admin_order_status: { type: String, trim: true },
   },
   disposition_history: { type: [OrderDispositionHistorySchema], default: [] },
   quotations: { type: QuotationSchema },  // New field for quotations

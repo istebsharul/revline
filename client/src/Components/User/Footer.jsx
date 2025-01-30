@@ -125,7 +125,7 @@ function Footer() {
 
         <div className="mt-4 lg:mt-2">
           <p className="font-light text-sm">
-            © Copyright updated 2024 | All rights reserved. | Privacy Policy
+            © Copyright updated 2025 | All rights reserved. | Privacy Policy
           </p>
         </div>
       </footer>
