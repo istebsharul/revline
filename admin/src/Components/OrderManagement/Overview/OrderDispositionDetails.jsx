@@ -5,6 +5,8 @@ const OrderDispositionDetails = ({ trackingLink, orderDispositionDetails = {}, i
   const adminStatusOptions = [
     'Awaiting Supplier Confirmation',
     'Supplier Confirmed',
+    'We Do Not Sell',
+    'Already Bought'
   ];
 
     // Define the customer status options
@@ -25,7 +27,8 @@ const OrderDispositionDetails = ({ trackingLink, orderDispositionDetails = {}, i
       'Return Initiated',
       'Return Received',
       'Refund Processed',
-      'Refund Completed'
+      'Refund Completed',
+      'Part Not Available'
     ];
 
   const handleChange = (e) => {
@@ -49,7 +52,7 @@ const OrderDispositionDetails = ({ trackingLink, orderDispositionDetails = {}, i
       <h3 className="text-lg font-semibold mb-4">Order Disposition Details</h3>
       <div className="w-full flex justify-between gap-4">
         <div className='w-1/3' >
-          <p>Specific Request for Warehouse Team:</p>
+          <p>Customer Notes:</p>
           {isEditing ? (
             <textarea
               type="text"

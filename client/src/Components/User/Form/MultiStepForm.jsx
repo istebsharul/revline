@@ -4,10 +4,10 @@ import VariantTransmissionForm from './VariantTransmissionForm';
 import UserInfoForm from './UserInfoForm';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
-import { debounce } from 'lodash';
 
 const MultiStepForm = () => {
     const [step, setStep] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     const [vehicleData, setVehicleData] = useState({
         year: '',
@@ -118,7 +118,6 @@ const MultiStepForm = () => {
         } catch (error) {
             logger.error("Error triggering Google Ads conversion:", error);
         }
-        
 
         // Perform Step 3 validation
         const validationErrors = validateStep3();
@@ -146,6 +145,7 @@ const MultiStepForm = () => {
             userData,
             vehicleData: vehicleData, // Corrected: Send vehicleData as an array
         });
+        setLoading(true);
 
         // Use toast.promise to handle the promise states
         toast.promise(postRequest, {
@@ -156,14 +156,19 @@ const MultiStepForm = () => {
             .then((response) => {
                 // Handle success response
                 console.log('Success:', response.data);
+                setLoading(false);
+                setStep(4);  // Update the step after successful submission
+                setTimeout(() => {
+                    setStep(1);
+                }, 4000);
 
                 // Clear the form by resetting the state to initial values
-                setUserData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    zipcode: '',
-                });
+                // setUserData({
+                //     name: '',
+                //     email: '',
+                //     phone: '',
+                //     zipcode: '',
+                // });
 
                 setVehicleData({
                     year: '',
@@ -175,8 +180,6 @@ const MultiStepForm = () => {
                     vin: '',
                     message: ''
                 });
-
-                setStep(1);  // Update the step after successful submission
             })
             .catch((error) => {
                 // Handle errors (axios will throw for HTTP errors as well)
@@ -193,10 +196,9 @@ const MultiStepForm = () => {
             });
     };
 
-    const debouncedHandleSubmit = useCallback(debounce(handleSubmit, 1000), [userData, vehicleData]);
-
     return (
         <div className="w-full max-w-md mx-auto md:mt-10 rounded-lg ">
+            {/* progress Bar 1 2 3 */}
             <div className='flex justify-center items-center p-2 m-2'>
                 <div className="w-4/5 flex items-center justify-center">
                     {[1, 2, 3].map((item, index) => (
@@ -214,13 +216,16 @@ const MultiStepForm = () => {
                     ))}
                 </div>
             </div>
+
+            {/* Form Box */}
             <div className='bg-white p-4 rounded-lg shadow-lg border-black'>
                 <div className=''>
                     <div>
                         <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-black">
                             {step === 1 ? "Let's find your part!" :
                                 step === 2 ? 'You are just 1 step away!' :
-                                    "You're just a click away!"}
+                                    step === 3 ? "You're just a click away!" : "Thank you!"
+                            }
                         </h2>
                         <p>
 
@@ -251,10 +256,15 @@ const MultiStepForm = () => {
                             errors={errors}
                         />
                     )}
+                    {step === 4 && (
+                        <div className='p-2'>
+                            Thank you {userData.name} for your inquiry! We've received your details and are processing your request. Your quote will be sent to your email shortly.
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex justify-between py-4 space-x-2">
-                    {step > 1 && (
+                    {step > 1 && step < 4 && loading ===false && (
                         <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-[#f6251a] font-bold py-2 px-4 rounded-lg border">
                             Back
                         </button>
@@ -264,10 +274,20 @@ const MultiStepForm = () => {
                             Next
                         </button>
                     )}
-                    {step === 3 && (
-                        <button onClick={debouncedHandleSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+                    {step === 3 && loading === false && (
+                        <button onClick={handleSubmit} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
                             Submit
                         </button>
+                    )}
+                    {step === 4 && (
+                        <button onClick={()=>{setStep(1)}} className="w-full border bg-gray-200 hover:bg-blue-600 hover:text-white font-bold py-2 px-4 rounded-lg">
+                            Order Again
+                        </button>
+                    )}
+                    {loading && (
+                        <div className="w-full flex items-center justify-center">
+                            <div className="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                        </div>
                     )}
                 </div>
             </div>
