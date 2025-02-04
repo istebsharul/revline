@@ -3,9 +3,10 @@ import Customer from '../../models/customer.js';
 import Order from '../../models/order.js';
 import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import logger from '../../utils/logger.js';
-import {sendMail} from '../../utils/sendMail.js';
 import Part from '../../models/parts.js';
 import { sendAccountActivationEmail, sendOrderNotificationEmail, sendWelcomeBackEmail } from '../../utils/emailService.js';
+import User from '../../models/userModel.js';
+import { sendSmsNotification } from '../../utils/smsService.js';
 
 // Get all customers
 export const getAllCustomers = asyncErrors(async (req, res) => {
@@ -129,7 +130,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             newOrder.payment_details = newOrder._id;
             await newOrder.save();
             logger.info(`Created new customer: ${email}`);
-
+            await sendSmsNotification({type:'activation',to:newCustomer.phone});
             await sendAccountActivationEmail({ name, email, vehicleData });
             logger.info(`Email Sent: ${email}`, res);
         }
@@ -180,6 +181,9 @@ export const deleteCustomer = asyncErrors(async (req, res) => {
 
         // Extract all order IDs from customer's orderInfo
         const orderIds = customer.orderInfo.map(order => order.orderId);
+
+        await User.findOneAndDelete({email: customer.email});
+        logger.info(`User deleted successfully: ${customer.email}`);
 
         // Delete all associated orders
         await Order.deleteMany({ _id: { $in: orderIds } });

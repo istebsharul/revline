@@ -13,6 +13,13 @@ export const sendSmsNotification = async ({type, to, data}) => {
 
     // Define the message templates
     switch (type) {
+        case "activation": 
+            message = `
+Welcome to Revline Auto Parts!
+🚚 Free Shipping Offer  
+Limited Time: Free Shipping on Your First Order!  
+✅ Only valid for the next 24 hours.`;
+        break;
         case "quotation":
             message = `Your quotation is ${data.amount} with shipping. For more details visit https://revlineautoparts.com/orders/details/${data.orderId} or call +1 888 632 0709 for assistance.`;
             break;
@@ -23,7 +30,7 @@ export const sendSmsNotification = async ({type, to, data}) => {
             message = `We're processing your order #${data.orderId.slice(-6)}. We'll notify you once it's shipped. Questions? Call +1 888 632 0709.`;
             break;
         case "order_shipped":
-            message = `Great news! Order #${data.orderId.slice(-6)} is on its way. Track it here: ${data.trackingLink}. ETA: 1-10 days.`;
+            message = `Great news! Order #${data.orderId.slice(-6)} is on its way. Track it here: ${data.trackingLink}. ETA: 7-10 days.`;
             break;
         case "order_delivered":
             message = `Order #${data.orderId.slice(-6)} delivered! Share your experience: ${data.feedbackLink}. Thanks for choosing Revline!`;
@@ -40,9 +47,11 @@ export const sendSmsNotification = async ({type, to, data}) => {
         case "refund_completed":
             message = `Your refund for Order #${data.orderId.slice(-6)} has been successfully completed. The amount of ${data.refundAmount} has been credited back to your original payment method. If you have any questions, please reach out to us at +1 888 632 0709. Thank you for choosing Revline!`;
             break;
+        case "part_not_available":
+            message = `We're sorry, but the part you requested is currently out of stock. We'll notify you once it's available. Questions? Call +1 888 632 0709.`;
         default:
             logger.error(`SendSmsNotification: Invalid SMS type - ${type}`);
-    }
+}
 
     // Send the SMS
     try {

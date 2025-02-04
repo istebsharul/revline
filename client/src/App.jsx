@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Navbar from './Components/User/Navbar';
 import Footer from './Components/User/Footer';
-import { Toaster } from 'react-hot-toast';
+import { Toaster, ToastBar } from 'react-hot-toast';
 import UserRoutes from './Routes/userRoutes';
 import { loadUser } from './Actions/userActions';
 import Call from './Components/CustomerSupport/Call.jsx';
@@ -20,8 +20,51 @@ const App = () => {
 
   return (
     <>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          style:{
+            width:'400px',
+            height:'100%',
+            padding:'10px 20px',
+            margin:'3vh',
+          },
+          success: {
+            style: {
+              background: '#41B619',
+              color:'white',
+            },
+            iconTheme: {
+              primary: 'white',
+              secondary: '#41B619',
+            }
+          },
+          error: {
+            style: {
+              background: 'red',
+              color:'white',
+            },
+            iconTheme: {
+              primary: 'white',
+              secondary: 'red',
+            }
+          },
+        }}
+      >
+        {(t) => (
+          <ToastBar
+            toast={t}
+            style={{
+              ...t.style,
+              animation: t.visible
+                ? 'custom-enter 1s ease'
+                : 'custom-exit 5s ease forwards',
+            }}
+          />
+        )}
+      </Toaster>
 
-      <Toaster position="top-center" reverseOrder={false} />
       <Call />
       <Navbar />
       <UserRoutes />

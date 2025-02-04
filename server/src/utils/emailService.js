@@ -397,7 +397,7 @@ Revline Auto Parts Team
 
     try {
         await sendMail({
-            email: 'orders@revlineautoparts.com',
+        email: process.env.SMTP_USER_ORDER,
             subject: `New Order Alert – Order #${OrderId} Placed by ${customerName}`,
             message,
         });
@@ -455,3 +455,38 @@ Revline Auto Parts
         logger.error(`Failed to send confirmation email for Ticket ID: ${ticketId}. Error: ${error.message}`);
     }
 };
+
+
+export const sendPartNotAvailableEmail = async (clientData) => {
+    const { email, name, orderId, orderSummary } = clientData;
+    logger.info(`Sending part not available email for order ${orderId} to ${email}`);
+
+    const message = `
+Dear ${name},
+
+Thank you for reaching out to Revline Auto Parts. We truly appreciate your interest in our products and services.
+
+Unfortunately, we regret to inform you that the ${orderSummary?.part_name} for the ${orderSummary?.year}, ${orderSummary?.make}, ${orderSummary?.model} is currently out of stock. We understand how important it is to get the right components for your vehicle, and we sincerely apologize for any inconvenience this may cause.
+
+If you are in need of an alternative part or have any other questions, please don’t hesitate to contact us. Our team is here to assist you and help you find the best solution. You can reach us at +1 888 632-0709 or simply reply to this email.
+
+Thank you again for considering Revline Auto Parts. We look forward to serving you and assisting with all your automotive needs.
+
+Best regards,
+
+Adam Reed
+(+1 775 350 1908)
+Adamreed@revlineautoparts.com
+Sales Team
+Revline Auto Parts
+    `
+    try {
+        await sendOrdersMail({
+            email,
+            subject: `Update on Your Requested Part - ${orderSummary?.part_name} for ${orderSummary?.year}, ${orderSummary?.make}, ${orderSummary?.model}`,
+            message,
+        });
+    } catch (error) {
+        
+    }
+}

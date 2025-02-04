@@ -2,8 +2,8 @@ import mongoose from "mongoose";  // Corrected import statement
 
 const OrderInfoSchema = new mongoose.Schema({
   orderId: { 
-    type: String,  // Use ObjectId for order references
-    trim: true,  // Assuming there's an Order model to reference
+    type: String,
+    trim: true,
   },
   requestDate: { 
     type: Date, 

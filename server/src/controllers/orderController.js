@@ -3,7 +3,7 @@ import Customer from '../models/customer.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
 import { sendSmsNotification } from '../utils/smsService.js';
-import { sendDeliveryConfirmationEmail, sendProcessingUpdateEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail } from '../utils/emailService.js';
+import { sendDeliveryConfirmationEmail, sendProcessingUpdateEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail, sendPartNotAvailableEmail } from '../utils/emailService.js';
 
 // Create a new order
 export const createOrder = asyncErrors(async (req, res) => {
@@ -259,7 +259,7 @@ export const updateOrder = asyncErrors(async (req, res) => {
                     sendSmsNotification({
                         type: 'order_processing',
                         to: existingOrder.customer.phone,
-                        data:{
+                        data: {
                             orderId
                         }
                     });
@@ -275,7 +275,7 @@ export const updateOrder = asyncErrors(async (req, res) => {
                             trackingLink: otherDetails?.order_summary?.part_code
                         }
                     });
-                    console.log("Tracking Link",existingOrder.order_summary.part_code);
+                    console.log("Tracking Link", existingOrder.order_summary.part_code);
                     sendShippingUpdateEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId, trackingLink: otherDetails?.order_summary.part_code });
                     break;  // Add 'break' here to avoid fall-through
                 case "Delivered":
@@ -320,6 +320,15 @@ export const updateOrder = asyncErrors(async (req, res) => {
                         data: { orderId }
                     });
                     break;  // Add 'break' here to avoid fall-through
+                case "Part Not Available":
+                    logger.info(`Sending 'Part Not Available' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);
+                    sendSmsNotification({
+                        type: 'part_not_available',
+                        to: existingOrder.customer.phone,
+                        data: { orderId }
+                    });
+                    sendPartNotAvailableEmail({ name: existingOrder.customer.name, email: existingOrder.customer.email, orderId, orderSummary: existingOrder.order_summary });
+                    break;  // Add 'break' here to avoid fall-through
                 default:
                     logger.error(`Order Status '${order_disposition_details.status}' does not require to send SMS for Order #${orderId}`);
             }
@@ -349,15 +358,37 @@ export const updateOrder = asyncErrors(async (req, res) => {
 
 // Delete an order by ID
 export const deleteOrder = asyncErrors(async (req, res) => {
+    const orderId = req.params.id;
+
     try {
-        const deletedOrder = await Order.findByIdAndDelete(req.params.id);
-        if (!deletedOrder) {
+        // Find and delete the order
+        const order = await Order.findByIdAndDelete(orderId);
+
+        if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
+
+        const customerId = order.customer;
+
+        // Delete the order from the customer's orderInfo array
+        const customerUpdate = await Customer.updateOne(
+            { _id: customerId },
+            { $pull: { orderInfo: { orderId: orderId } } }  // No need to slice the orderId
+        );
+
+        // Check if the customer orderInfo was updated
+        if (customerUpdate.modifiedCount === 0) {
+            console.log('No order found with the provided orderId to delete from customer orders list.');
+        } else {
+            console.log('Order deleted successfully from Customer Orders list!');
+        }
+
         res.json({ message: 'Order deleted successfully' });
         logger.info('Order deleted successfully', { orderId: req.params.id });
+
     } catch (error) {
         logger.error('Error deleting order', { orderId: req.params.id, error: error.message });
         res.status(500).json({ message: error.message });
     }
 });
+
