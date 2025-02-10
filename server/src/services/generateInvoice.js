@@ -7,6 +7,7 @@ const generateInvoice = ({
   customer_phone,
   customer_address,
   customer_address1,
+  zipcode,
   invoice_number,
   transaction_id,
   payment_mode,
@@ -14,7 +15,6 @@ const generateInvoice = ({
   order_summary,
   quoted_price,
   shipping_cost,
-  totalAmount,
 }) => {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 40 });
@@ -40,7 +40,7 @@ const generateInvoice = ({
     doc.fontSize(16).font('Times-Roman').text(customer_name, { align: 'left' });
     doc.moveDown(0.1);
     doc.fontSize(12).font('Times-Roman').text(
-      `${customer_address}\n${customer_address1}\n${customer_phone}\n${customer_email}`,
+      `${customer_address}\n${customer_address1}\n${zipcode}\n${customer_phone}\n${customer_email}`,
       { align: 'left' }
     );
     doc.moveUp(4.5);
@@ -75,7 +75,7 @@ const generateInvoice = ({
     // Order Summary Details
     if (order_summary && order_summary.part_name) {
       doc.fontSize(12).font('Helvetica');
-      doc.fontSize(10).text(`${order_summary?.year || ''} ${order_summary?.make || ''} ${order_summary?.model || ''} ${order_summary?.part_name || ''} ${order_summary?.variant || ''} ${order_summary?.transmission || ''} ${order_summary?.variant2 || ''}`, doc.page.margins.left, summaryY, { width: descriptionWidth + 60, align: 'left' });
+      doc.fontSize(10).text(`${order_summary?.year || ''} ${order_summary?.make || ''} ${order_summary?.model || ''} ${order_summary?.part_name || ''}`, doc.page.margins.left, summaryY, { width: descriptionWidth + 60, align: 'left' });
       doc.text(order_summary.quantity || 1, doc.page.margins.left + descriptionWidth + 60, summaryY+5, { width: otherColumnsWidth, align: 'center' });
       doc.text(`$${(quoted_price).toFixed(2)}`, doc.page.margins.left + descriptionWidth + otherColumnsWidth + 60, summaryY+5, { width: otherColumnsWidth, align: 'center' });
       doc.text(`$${((quoted_price) * (order_summary.quantity || 1)).toFixed(2)}`, doc.page.margins.left + descriptionWidth + 2 * otherColumnsWidth, summaryY+5, { width: otherColumnsWidth, align: 'right' });
