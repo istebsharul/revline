@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 // Define a schema for the order summary without an automatic _id field
 const OrderSummarySchema = new mongoose.Schema({
   part_code: { type: String, trim: true },
-  year: { type: String, required: true, trim: true },
-  make: { type: String, required: true, trim: true },
-  model: { type: String, required: true, trim: true },
-  part_name: { type: String, required: true, trim: true },
-  variant: { type: String, required: true, trim: true },
-  transmission: { type: String, required: true, trim: true },
+  year: { type: String, trim: true },
+  make: { type: String, trim: true },
+  model: { type: String, trim: true },
+  part_name: { type: String, trim: true },
+  variant: { type: String, trim: true },
+  transmission: { type: String, trim: true },
   vin: {type:String, trim: true},
   variant2: { type: String, trim: true },
 }, { _id: false });
@@ -43,7 +43,6 @@ const OrderSchema = new mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Customer',
-    // required: true,
   },
   request_date: { type: Date, default: Date.now },
   assignee: { type: String, trim: true },

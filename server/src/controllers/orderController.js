@@ -198,6 +198,43 @@ const updatedCustomerIfDifferent = async (customerId, newCustomerData) => {
     }
 }
 
+const updateOrderInfo = async (customerId, orderId, part) => {
+    try {
+        logger.info(`Updating order info for Customer ID: ${customerId}, Order ID: ${orderId}`);
+
+        // Find the customer and check if the order exists without a part
+        const customer = await Customer.findOne({
+            _id: customerId,
+            "orderInfo": { 
+                $elemMatch: { orderId: orderId, part: { $in: [null, "", undefined] } } 
+            }
+        });
+
+        if (!customer) {
+            logger.info(`Order ID: ${orderId} for Customer ID: ${customerId} already has a part name or was not found`);
+            return { success: false, message: "Order already has a part name or not found" };
+        }
+
+        // Update only if part is missing
+        const updatedCustomer = await Customer.findOneAndUpdate(
+            { _id: customerId, "orderInfo.orderId": orderId, "orderInfo.part": { $in: [null, "", undefined] } },
+            { $set: { "orderInfo.$.part": part } },
+            { new: true }
+        );
+
+        if (!updatedCustomer) {
+            logger.info(`Order ID: ${orderId} for Customer ID: ${customerId} not found or already has a part name`);
+            return { success: false, message: "Order not found or already has a part name" };
+        }
+
+        logger.info(`Successfully updated order part for Customer ID: ${customerId}, Order ID: ${orderId}`);
+        return { success: true, message: "Order part updated successfully", updatedCustomer };
+    } catch (error) {
+        logger.error(`Error updating order info for Customer ID: ${customerId}, Order ID: ${orderId}: ${error.message}`);
+        return { success: false, message: "Internal Server Error" };
+    }
+};
+
 export const updateOrder = asyncErrors(async (req, res) => {
     const orderId = req.params.id;
     const { order_disposition_details, customer: newCustomerId, ...otherDetails } = req.body;
@@ -212,9 +249,13 @@ export const updateOrder = asyncErrors(async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
+        // It is used for updating customer info.
         if (newCustomerId && existingOrder.customer) {
             await updatedCustomerIfDifferent(existingOrder.customer._id, newCustomerId);
         }
+
+        // Updating Part Name if not in Customer Order Info
+        await updateOrderInfo(existingOrder.customer._id,orderId,otherDetails.order_summary.part_name);
 
         // Check if `agent_notes` has changed and update disposition history
         if (order_disposition_details && order_disposition_details.agent_notes) {
@@ -355,6 +396,47 @@ export const updateOrder = asyncErrors(async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 });
+
+export const createSubOrder = asyncErrors(async (req, res) => {
+    const { customerId } = req.body;
+
+    try {
+        logger.info(`Creating sub-order for customer: ${customerId}`);
+
+        const existingCustomer = await Customer.findById(customerId);
+
+        if (!existingCustomer) {
+            logger.error(`Customer not found: ${customerId}`);
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+
+        const newOrder = new Order({
+            customer: customerId,
+            shipping_details: { customer: customerId },
+        });
+
+        const orderInfo = {
+            orderId:newOrder._id,
+            requestDate: new Date(),
+        }
+
+        existingCustomer.orderInfo.push(orderInfo);
+
+        await Promise.all([existingCustomer.save(),newOrder.save()]);
+
+        logger.info(`New order created successfully for customer: ${existingCustomer.name}, Order ID: ${newOrder._id}`);
+
+        return res.status(201).json({ 
+            message: `New Order Created successfully for ${existingCustomer.name}`, 
+            customer: existingCustomer.name,
+            orderInfo
+        });
+    } catch (error) {
+        logger.error(`Error creating sub-order: ${error.message}`);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 
 // Delete an order by ID
 export const deleteOrder = asyncErrors(async (req, res) => {

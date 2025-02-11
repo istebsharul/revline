@@ -8,11 +8,15 @@ import {
   getOrderByCustomerId
 } from '../controllers/orderController.js';  // Adjust the import path as per your directory structure
 import { getOrderByIdUser } from '../controllers/user/userOrderController.js';
+import { createSubOrder } from '../controllers/orderController.js';
 
 const router = express.Router();
 
 // Create a new order
 router.post('/create', createOrder);
+
+// Create a sub order
+router.post('/create-sub-order',createSubOrder);
 
 // Get all orders
 router.get('/all', getAllOrders);
