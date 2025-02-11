@@ -113,6 +113,7 @@ export const sendInvoice = asyncErrors(async (req, res) => {
     const customerName = order.shipping_details?.customer_name ?? order.customer.name;
     const customerEmail = order.shipping_details?.customer_email ?? order.customer.email;
     const customerPhone = order.shipping_details?.customer_phone ?? order.customer.phone;
+    const customerZipcode = order.shipping_details?.zipcode;
     const stateOrRegion = order.shipping_details?.state_or_region ?? '';
 
     const { quoted_price, shipping_cost } = order.pricing_details || {};
@@ -155,6 +156,7 @@ export const sendInvoice = asyncErrors(async (req, res) => {
       customer_phone: customerPhone,
       customer_address: address,
       customer_address1: address1,
+      zipcode: customerZipcode,
       order_summary: order.order_summary,
       quoted_price,
       invoice_date: new Date().toISOString().split('T')[0],
@@ -198,7 +200,7 @@ Thank you for your order! We're excited to get started on it right away.
   Order Summary:
     - Order ID: ${orderId.slice(-6)}
     - Order Date: ${formatDate(order.request_date)}
-    - Shipping Address: ${address}, ${address1}
+    - Shipping Address: ${address}, ${address1}, ${customerZipcode}
     - Items Ordered:
     - Part: ${order.order_summary.part_name}
     - Total Amount: $${totalAmount}

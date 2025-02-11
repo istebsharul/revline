@@ -160,7 +160,7 @@ const MultiStepForm = () => {
                 setStep(4);  // Update the step after successful submission
                 setTimeout(() => {
                     setStep(1);
-                }, 4000);
+                }, 10000);
 
                 // Clear the form by resetting the state to initial values
                 // setUserData({
@@ -224,7 +224,7 @@ const MultiStepForm = () => {
                         <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-black">
                             {step === 1 ? "Let's find your part!" :
                                 step === 2 ? 'You are just 1 step away!' :
-                                    step === 3 ? "You're just a click away!" : "Thank you!"
+                                    step === 3 ? "You're just a click away!" : <h1 className='font-bold'>FREE SHIPPING 🎉</h1>
                             }
                         </h2>
                         <p>
@@ -257,14 +257,18 @@ const MultiStepForm = () => {
                         />
                     )}
                     {step === 4 && (
-                        <div className='p-2'>
-                            Thank you {userData.name} for your inquiry! We've received your details and are processing your request. Your quote will be sent to your email shortly.
+                        <div className='p-2 space-y-2'>
+                            <div className='text-sm space-y-3'>
+                                <p>We appreciate your interest in Revline Auto Parts! As a special welcome, we are offering FREE shipping on your <span className='text-xs'> 🎉 </span>first order.</p>
+                                <p>This exclusive offer is valid for the next 24 hours only. Secure your savings before it expires!</p>
+                                <p>Have questions? Contact us at +1 888 632 0709</p>
+                            </div>
                         </div>
                     )}
                 </div>
 
                 <div className="flex justify-between py-4 space-x-2">
-                    {step > 1 && step < 4 && loading ===false && (
+                    {step > 1 && step < 4 && loading === false && (
                         <button onClick={handlePrevious} className="w-full bg-white hover:bg-gray-200 text-[#f6251a] font-bold py-2 px-4 rounded-lg border">
                             Back
                         </button>
@@ -280,7 +284,7 @@ const MultiStepForm = () => {
                         </button>
                     )}
                     {step === 4 && (
-                        <button onClick={()=>{setStep(1)}} className="w-full border bg-gray-200 hover:bg-blue-600 hover:text-white font-bold py-2 px-4 rounded-lg">
+                        <button onClick={() => { setStep(1) }} className="w-full border bg-gray-200 hover:bg-blue-600 hover:text-white font-bold py-2 px-4 rounded-lg">
                             Order Again
                         </button>
                     )}

@@ -130,7 +130,7 @@ export const createCustomer = asyncErrors(async (req, res) => {
             newOrder.payment_details = newOrder._id;
             await newOrder.save();
             logger.info(`Created new customer: ${email}`);
-            await sendSmsNotification({type:'activation',to:newCustomer.phone});
+            await sendSmsNotification({type:'activation',to:newCustomer.phone, data:{customerName:name}});
             await sendAccountActivationEmail({ name, email, vehicleData });
             logger.info(`Email Sent: ${email}`, res);
         }

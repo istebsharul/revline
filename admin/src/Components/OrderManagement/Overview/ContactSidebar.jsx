@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { FaPhone, FaEnvelope, FaTasks, FaVideo, FaRegCalendarAlt, FaCopy } from 'react-icons/fa'; // Import FaCopy
+import React, { useState } from 'react';
+import { FaCopy } from 'react-icons/fa'; // Import FaCopy
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
+import { IoAddCircleOutline } from "react-icons/io5";
+import toast from 'react-hot-toast';
+import axios from 'axios';
+
 
 const ContactSidebar = ({ customer, order_id}) => {
   const [orders, setOrders] = useState(customer?.orderInfo);
@@ -37,9 +41,31 @@ const ContactSidebar = ({ customer, order_id}) => {
     });
   };
 
+  const handleSubOrderClick = async () => {
+
+    const alert = window.confirm(`Are you sure you want to create new Order for ${customer.name}`);
+
+    if(!alert){
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/orders/create-sub-order`,
+        { customerId: customer._id }
+      );
+  
+      console.log("Response:", response); // Log full response
+      toast.success(`Sub-order created successfully! for ${response.data.customer}`);
+      setOrders([...orders,response.data.orderInfo]);
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message); // Log error details
+      toast.error(error.response?.data?.message || "Failed to create sub-order");
+    }
+  };  
 
   return (
-    <div className="w-1/4 h-screen-minus-14 p-2 rounded-md bg-white shadow-md flex flex-col">
+    <div className="w-1/4 h-full p-2 rounded-md bg-white shadow-md flex flex-col">
       {/* Contact Header */}
       <div
         className='flex items-center m-1 hover:underline cursor-pointer'
@@ -48,7 +74,7 @@ const ContactSidebar = ({ customer, order_id}) => {
         <MdArrowBack />
         <h1>Back</h1>
       </div>
-      <div className='bg-gray-100 p-2 rounded-lg'>
+      <div className='w-full h-full flex-1 bg-gray-100 p-2 rounded-lg'>
         <div className="p-4 bg-white rounded-lg shadow-lg">
           <div className="text-2xl font-semibold ">{customer?.name || 'No Name'}</div>
           <div>
@@ -57,9 +83,15 @@ const ContactSidebar = ({ customer, order_id}) => {
           </div>
         </div>
 
+        {/* Conversion Date Section */}
+        <div className="mt-2">
+          <h1 className="font-semibold text-md p-1">First Conversion Date</h1>
+          <p className="text-sm bg-white shadow-lg rounded-lg p-2">{formattedDate}</p>
+        </div>
+
         {/* Orders Section */}
-        <div className="mt-4 h-min max-h-80 overflow-y-auto">
-          <h1 className="font-semibold text-md py-2 px-1">Orders</h1>
+        <div className='w-full mt-2 flex justify-between items-center'><h1 className="font-semibold text-md py-2 px-1">Orders</h1><button onClick={handleSubOrderClick}><IoAddCircleOutline className='w-6 h-6'/></button></div>
+        <div className=" h-min 2xl:max-h-[65vh] max-h-[48vh] overflow-y-auto">
           {loading ? (
             <p className="text-sm text-gray-500">Loading orders...</p>
           ) : error ? (
@@ -68,7 +100,7 @@ const ContactSidebar = ({ customer, order_id}) => {
             <div className="space-y-2 my-2">
               {orders.slice().reverse().map((order) => (  // Reverse the orders array here
                 <div key={order.orderId} 
-                  onClick={()=>{navigate(`/sales-management/overview/${order.orderId}`)}}
+                  onClick={()=>{navigate(`/sales-management/overview/${order.orderId}`);window.location.reload()}}
                   className={`border-b ${order_id === order.orderId ? 'bg-white' : 'shadow-none cursor-pointer'} hover:bg-white hover:shadow-md rounded-md shadow-lg last:border-b-0 p-3 space-y-1`}>
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-sm">Order ID: {order.orderId.slice(-6)}</p>
@@ -86,12 +118,6 @@ const ContactSidebar = ({ customer, order_id}) => {
             <p className="text-sm text-gray-500">No orders found.</p>
           )}
 
-        </div>
-
-        {/* Conversion Date Section */}
-        <div className="mt-4">
-          <h1 className="font-semibold text-md p-1">First Conversion Date</h1>
-          <p className="text-sm bg-white shadow-lg rounded-lg p-2">{formattedDate}</p>
         </div>
       </div>
     </div>

@@ -15,10 +15,8 @@ export const sendSmsNotification = async ({type, to, data}) => {
     switch (type) {
         case "activation": 
             message = `
-Welcome to Revline Auto Parts!
-🚚 Free Shipping Offer  
-Limited Time: Free Shipping on Your First Order!  
-✅ Only valid for the next 24 hours.`;
+Hi ${data.customerName}, thanks for inquiring at Revline Auto Parts!
+FREE shipping on your first order is now active! Offer valid for 24 hours only – don’t miss out!`;
         break;
         case "quotation":
             message = `Your quotation is ${data.amount} with shipping. For more details visit https://revlineautoparts.com/orders/details/${data.orderId} or call +1 888 632 0709 for assistance.`;
