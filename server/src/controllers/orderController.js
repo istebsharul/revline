@@ -167,9 +167,12 @@ export const getOrderByCustomerId = asyncErrors(async (req, res) => {
 // });
 
 const updatedCustomerIfDifferent = async (customerId, newCustomerData) => {
-    try {
-        const existingCustomer = await Customer.findById(customerId).lean();
+    const existingCustomer = await Customer.findById(customerId).lean();
+    console.log(customerId);
+    console.log("New CustomerData", newCustomerData);
+    console.log("Existing CustomerData", existingCustomer);
 
+    try {
         if (!existingCustomer) {
             logger.error('Customer not found');
         }
@@ -180,16 +183,17 @@ const updatedCustomerIfDifferent = async (customerId, newCustomerData) => {
 
         // Update only if data is different
         if (isDifferent) {
+            console.log('It is Different');
             const updatedCustomer = await Customer.findByIdAndUpdate(
                 customerId,
                 { $set: newCustomerData },
                 { new: true }
             );
-
+            console.log("Updated Successfully.");
             // console.log('Customer updated:', updatedCustomer);
             return updatedCustomer;
         } else {
-            console.log('Customer data is the same. No update needed.');
+            console.log('Customer is the same. No update needed.');
             return existingCustomer;
         }
     } catch (error) {
@@ -255,7 +259,7 @@ export const updateOrder = asyncErrors(async (req, res) => {
         }
 
         // Updating Part Name if not in Customer Order Info
-        await updateOrderInfo(existingOrder.customer._id,orderId,otherDetails.order_summary.part_name);
+        await updateOrderInfo(existingOrder.customer._id,orderId,otherDetails.order_summary?.part_name);
 
         // Check if `agent_notes` has changed and update disposition history
         if (order_disposition_details && order_disposition_details.agent_notes) {
@@ -437,6 +441,59 @@ export const createSubOrder = asyncErrors(async (req, res) => {
     }
 });
 
+export const createEmptyOrder = asyncErrors(async (req, res) => {
+    try {
+        // Step 1: Create a new customer
+        const newCustomer = new Customer({
+            name: "John Doe",
+            email: `user_${Math.random().toString(36).substring(2, 10)}@example.com`,
+            phone: "+1234567890",
+            zipcode: "12345",
+            smsConsent: true
+        });
+
+        await newCustomer.save();
+        logger.info(`New customer created with ID: ${newCustomer._id}`);
+
+        // Step 2: Create a new empty order and link it to the customer
+        const newOrder = new Order({
+            customer: newCustomer._id, // Reference customer ID in the order
+            shipping_details: {
+                customer_name: newCustomer.name,
+                customer_email: newCustomer.email,
+                customer_phone: newCustomer.phone,
+                zipcode: newCustomer.zipcode
+            }
+        });
+
+        await newOrder.save();
+        logger.info(`New empty order created with ID: ${newOrder._id} for customer ${newCustomer._id}`);
+
+        // Step 3: Update customer with orderInfo
+        newCustomer.orderInfo.push({
+            orderId: newOrder._id.toString(),  // Store order ID
+            requestDate: new Date(),          // Current timestamp
+            part: "",                          // Keep blank
+            quoteNumber: ""                    // Keep blank
+        });
+
+        await newCustomer.save();
+        logger.info(`Customer ${newCustomer._id} updated with new order info`);
+
+        return res.status(201).json({
+            message: "New Empty Order Created & Linked to Customer",
+            orderId: newOrder._id,
+            customer: newCustomer,
+        });
+    } catch (error) {
+        logger.error(`Error creating customer and blank order: ${error.message}`, { error });
+
+        return res.status(500).json({
+            message: "Failed to create customer and order",
+            error: error.message
+        });
+    }
+});
 
 // Delete an order by ID
 export const deleteOrder = asyncErrors(async (req, res) => {
