@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CustomerPersonalInfo = ({ customer = {},quote_number, isEditing, setOrderDetails }) => {
+const CustomerPersonalInfo = ({ customer = {},quote_number, requestedDate, isEditing, setOrderDetails }) => {
 
   const handleChange = (e) => {
     setOrderDetails((prev) => ({
@@ -14,16 +14,23 @@ const CustomerPersonalInfo = ({ customer = {},quote_number, isEditing, setOrderD
 
   // Format the createdAt date if it exists
   const formatDate = (dateString) => {
+    if (!dateString) return 'N/A'; // Handle missing/null values
+  
     const date = new Date(dateString);
-    return isNaN(date.getTime())
-      ? 'Invalid Date'
-      : date.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        });
+    if (isNaN(date.getTime())) return 'Invalid Date'; // Handle invalid dates
+  
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Los_Angeles', // Force PST time zone
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true, // 12-hour format with AM/PM
+    }).format(date);
   };
-
+  
   return (
     <div className="p-4 bg-white shadow rounded-md">
       <h3 className="text-lg font-semibold mb-4">Customer Personal Info</h3>
@@ -90,18 +97,7 @@ const CustomerPersonalInfo = ({ customer = {},quote_number, isEditing, setOrderD
         </div>
         <div>
           <p>Requested Date</p>
-          {isEditing ? (
-            <input
-              type="text"
-              name="createdAt"
-              value={customer.createdAt ? formatDate(customer.createdAt) : ''}
-              onChange={handleChange}
-              className="text-gray-600 border border-gray-300 rounded p-1"
-              placeholder="Enter creation date"
-            />
-          ) : (
-            <p className="text-gray-600">{customer.createdAt ? formatDate(customer.createdAt) : '--'}</p>
-          )}
+          <p className="text-gray-600">{formatDate(requestedDate)}</p>
         </div>
         <div>
           <p>Quote Number</p>

@@ -19,7 +19,7 @@ Hi ${data.customerName}, thanks for inquiring at Revline Auto Parts!
 FREE shipping on your first order is now active! Offer valid for 24 hours only – don’t miss out!`;
         break;
         case "quotation":
-            message = `Your quotation is ${data.amount} with shipping. For more details visit https://revlineautoparts.com/orders/details/${data.orderId} or call +1 888 632 0709 for assistance.`;
+            message = `Your quotation is ready. Check your quotation here https://revlineautoparts.com/orders/details/${data.orderId} or call +1 888 632 0709 for assistance.`;
             break;
         case "order_placed":
             message = `Thanks for your order #${data.orderId.slice(-6)}! Your invoice is ready: ${data.invoiceLink}. We'll update you when it ships.`;
@@ -28,7 +28,7 @@ FREE shipping on your first order is now active! Offer valid for 24 hours only �
             message = `We're processing your order #${data.orderId.slice(-6)}. We'll notify you once it's shipped. Questions? Call +1 888 632 0709.`;
             break;
         case "order_shipped":
-            message = `Great news! Order #${data.orderId.slice(-6)} is on its way. Track it here: ${data.trackingLink}. ETA: 7-10 days.`;
+            message = `Great news! Order #${data.orderId.slice(-6)} is on its way. Track it here: ${data.trackingLink}.`;
             break;
         case "order_delivered":
             message = `Order #${data.orderId.slice(-6)} delivered! Share your experience: ${data.feedbackLink}. Thanks for choosing Revline!`;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaFilter, FaFileExport } from 'react-icons/fa'; // Import necessary icons
 import axios from 'axios'; // Import axios for API calls
 import OrderListItem from './OrderListItem'; // Import the new OrderListItem component
+import { MdAdd } from "react-icons/md";
 
 const OrderList = ({ orders }) => {
     const [filteredOrders, setFilteredOrders] = useState([]);
@@ -58,6 +59,35 @@ const OrderList = ({ orders }) => {
         const options = { month: "long", day: "numeric", year: "numeric" };
         return date.toLocaleDateString("en-US", options);
     }
+
+    const handleCreateNewEmptyOrderClick = async () => {
+        const alert = window.confirm('Are you sure you want to create New Empty Order?');
+
+        if(!alert){
+            return;
+        }
+
+        try {
+            setLoading(true);
+            setError('');
+    
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/orders/create-empty-order`);
+            
+            const newOrder = {
+                _id: response.data.orderId,
+                customer: response.data.customer,
+            };
+    
+            setFilteredOrders(prevOrders => [newOrder, ...prevOrders]);
+    
+        } catch (error) {
+            console.error("Error creating new order:", error);
+            setError("Failed to create a new order. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+    
 
     // Function to handle exporting the order list to CSV
     const handleExport = () => {
@@ -187,12 +217,15 @@ const OrderList = ({ orders }) => {
 
     return (
         <div className="w-full mx-auto p-4 bg-white">
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="w-full text-2xl flex flex-col font-semibold text-left">
+            <div className="w-full flex items-center justify-between mb-6">
+                <h2 className="w-[10%] text-2xl flex flex-col font-semibold text-left">
                     <span>Order List</span>
                     <span className='text-xs text-gray-500'>Total Orders - {filteredOrders.length}</span>
                 </h2>
-                <div className="w-full flex justify-evenly items-center space-x-4">
+                <div className="w-[60%] flex justify-evenly items-center space-x-4 bg-red">
+                    <button 
+                        onClick={handleCreateNewEmptyOrderClick}
+                        className='w-1/3 flex justify-center items-center p-2 bg-blue-600 text-white text-nowrap rounded-md shadow-md hover:bg-blue-700' disabled={loading}><MdAdd className="mr-2 h-5 w-5"/>{loading ? "Creating..." : "Create New Order"}</button>
                     <div className="w-full relative">
                         <input
                             type="text"

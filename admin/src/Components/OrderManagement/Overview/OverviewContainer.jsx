@@ -90,7 +90,7 @@ const OverviewContainer = ({ order }) => {
         {activeTab === 'overview' && (
           <>
             {/* Overview Content */}
-            <CustomerPersonalInfo customer={orderDetails.customer} quote_number={orderDetails?.quotations?.quote_number} isEditing={isEditing} setOrderDetails={setOrderDetails} />
+            <CustomerPersonalInfo customer={orderDetails.customer} quote_number={orderDetails?.quotations?.quote_number} requestedDate={orderDetails?.request_date} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <OrderSummary orderSummary={orderDetails.order_summary} pricingDetails={orderDetails.pricing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <ShippingDetails shippingDetails={orderDetails.shipping_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
             <BillingDetails paymentEligible={paymentEligible} orderId={orderDetails?._id} billingDetails={orderDetails.billing_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />

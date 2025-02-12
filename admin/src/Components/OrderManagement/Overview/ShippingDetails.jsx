@@ -27,7 +27,7 @@ const ShippingDetails = ({ shippingDetails = {}, isEditing, setOrderDetails }) =
   };
 
   useEffect(() => {
-    if (zipcode) {
+    if (zipcode.length === 5) {
       const updateLocation = async () => {
         const { city, state } = await fetchCityAndState(zipcode);
         setCity(city);
