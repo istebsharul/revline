@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 const PaymentSection = ({ orderId, paymentDetails, orderStatus, quotationsStatus, onAccept }) => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [isSubmitDisable, setIsSubmitDisable] = useState(true);
 
   const handleReject = async (message) => {
     try {
@@ -53,8 +54,10 @@ const PaymentSection = ({ orderId, paymentDetails, orderStatus, quotationsStatus
 
         {/* Conditionally render the FeedbackForm */}
         {showFeedback && (
-          <div className="p-4">
+          <div className="w-full py-4">
             <FeedbackForm
+              isSubmitDisable={isSubmitDisable}
+              setIsSubmitDisable={setIsSubmitDisable}
               onSubmit={(message) => {
                 setFeedbackMessage(message);
                 handleReject(message);

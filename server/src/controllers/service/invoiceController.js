@@ -140,7 +140,7 @@ export const sendInvoice = asyncErrors(async (req, res) => {
     }
 
     // Generate a unique invoice number
-    const invoiceNumber = await generateInvoiceNumber();
+    const invoiceNumber = order?.invoices?.invoice_number || await generateInvoiceNumber();
 
     // Total amount after tax (assuming you have a calculateSalesTax function like before)
     const salesTax = calculateSalesTax(quoted_price, stateOrRegion);
