@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const FeedbackForm = ({ onSubmit }) => {
+const FeedbackForm = ({ onSubmit, isSubmitDisable, setIsSubmitDisable }) => {
   const [selectedReason, setSelectedReason] = useState('');
   const [explanation, setExplanation] = useState('');
+
+  useEffect(()=>{
+    if(selectedReason !== ''){
+      setIsSubmitDisable(false)
+    }
+  })
 
   const handleReasonChange = (e) => {
     const value = e.target.value;
@@ -31,7 +37,7 @@ const FeedbackForm = ({ onSubmit }) => {
       <select
         value={selectedReason}
         onChange={handleReasonChange}
-        className='w-1/2 focus:outline-none px-4 py-2 mb-4 rounded-md border'
+        className='w-2/3 focus:outline-none px-4 py-2 mb-1 rounded-md border'
       >
         <option value='' disabled>
           Select a reason
@@ -48,20 +54,27 @@ const FeedbackForm = ({ onSubmit }) => {
         <option value='not_interested'>Others</option>
       </select>
 
+
+      {isSubmitDisable && <p className='text-xs text-red-600'>Please select the reason to submit cancellation.</p>}
       {/* Conditionally render the explanation input field */}
       {selectedReason === 'not_interested' && (
-        <div className='w-full flex flex-col justify-around items-center pb-4'>
+        <div className='w-2/3 flex flex-col justify-around items-center'>
           {/* Input field for explanation */}
           <input
             placeholder='Enter details here'
             value={explanation}
             onChange={handleExplanationChange}
-            className='w-1/2 border-b border-black focus:outline-none p-1'
+            className='w-full focus:outline-none p-2 rounded-md'
           />
         </div>
       )}
-
-      <button onClick={handleSubmit} className='bg-blue-500 hover:bg-blue-600 px-8 py-2 text-white rounded-full'>Submit</button>
+      <button 
+        disabled={isSubmitDisable}
+        onClick={handleSubmit} 
+        className={`bg-blue-500 hover:bg-blue-600 px-8 py-2 mt-4 text-white rounded-full ${isSubmitDisable ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed': ''}`}
+      >
+        Submit
+      </button>
     </div>
   );
 };

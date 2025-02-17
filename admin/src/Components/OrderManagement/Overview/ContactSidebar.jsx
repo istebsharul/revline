@@ -100,7 +100,7 @@ const ContactSidebar = ({ customer, order_id}) => {
             <div className="space-y-2 my-2">
               {orders.slice().reverse().map((order) => (  // Reverse the orders array here
                 <div key={order.orderId} 
-                  onClick={()=>{navigate(`/sales-management/overview/${order.orderId}`);window.location.reload()}}
+                  onClick={()=>{navigate(`/sales-management/overview/${order.orderId}`)}}
                   className={`border-b ${order_id === order.orderId ? 'bg-white' : 'shadow-none cursor-pointer'} hover:bg-white hover:shadow-md rounded-md shadow-lg last:border-b-0 p-3 space-y-1`}>
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-sm">Order ID: {order.orderId.slice(-6)}</p>

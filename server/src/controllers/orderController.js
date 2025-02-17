@@ -3,7 +3,9 @@ import Customer from '../models/customer.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
 import { sendSmsNotification } from '../utils/smsService.js';
-import { sendDeliveryConfirmationEmail, sendProcessingUpdateEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail, sendPartNotAvailableEmail } from '../utils/emailService.js';
+import { sendDeliveryConfirmationEmail, sendProcessingUpdateEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail, sendPartNotAvailableEmail, sendAccountActivationEmail, sendWelcomeBackEmail } from '../utils/emailService.js';
+import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 
 // Create a new order
 export const createOrder = asyncErrors(async (req, res) => {
@@ -39,11 +41,11 @@ export const getAllOrders = asyncErrors(async (req, res) => {
                 path: 'customer',
                 select: 'name email phone zipcode createdAt', // Select only the customer fields you need
             })
-            .populate({
-                path: 'payment_details', // Specify the path to the sub-document
-                select: 'payment_id transaction_id payment_status amount' // Select only the fields from the payment_details you need
-            })
-            .select('-invoices.invoicePdf'); // Exclude the invoicePdf field from the result
+            // .populate({
+            //     path: 'payment_details', // Specify the path to the sub-document
+            //     select: 'payment_id transaction_id payment_status amount' // Select only the fields from the payment_details you need
+            // })
+            .select("_id request_date order_summary quotations.quote_number order_disposition_details.order_status")
 
         // Get the total number of orders for pagination info
         const totalOrders = await Order.countDocuments();
@@ -61,7 +63,7 @@ export const getAllOrders = asyncErrors(async (req, res) => {
 
         // Calculate and log the response size
         const responseSize = Buffer.byteLength(JSON.stringify(response), 'utf8');
-        console.log(`Response size: ${responseSize} bytes`);
+        console.log(`Response size of All Orders: ${responseSize} bytes`);
 
         // Send the response
         res.json(response);
@@ -72,7 +74,6 @@ export const getAllOrders = asyncErrors(async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
 
 export const getOrderById = asyncErrors(async (req, res) => {
     const orderId = req.params.id;
@@ -136,6 +137,70 @@ export const getOrderByCustomerId = asyncErrors(async (req, res) => {
     }
 });
 
+// Search order 
+export const searchOrder = asyncErrors(async (req, res) => {
+  try {
+    const { search = '', page = 1, limit = 10 } = req.query;
+
+    // Initialize filter object
+    let filters = {};
+
+    if (search) {
+      // Create regex search term (case-insensitive)
+      const searchRegex = new RegExp(search, "i");
+
+      // Match multiple fields with the search term
+      filters = {
+        $or: [
+          { "shipping_details.customer_name": searchRegex },
+          { "shipping_details.customer_email": searchRegex },
+          { "shipping_details.customer_phone": searchRegex },
+          { "quotations.quote_number": searchRegex },
+          { "invoices.invoice_number": searchRegex },
+          { "order_disposition_details.order_status": searchRegex },
+          { "order_disposition_details.admin_order_status": searchRegex },
+          { 
+            // Convert _id to string and match the last 6 digits
+            $expr: {
+              $regexMatch: {
+                input: { $toString: "$_id" }, // Convert _id to string
+                regex: searchRegex
+              }
+            }
+          }
+        ]
+      };
+    }
+
+    console.log("Filter",filters);
+
+    // Perform the query with pagination
+    const orders = await Order.find(filters)
+      .populate("customer", "name email phone") // Populate customer details
+      .select("_id request_date order_summary quotations.quote_number order_disposition_details.order_status")
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .exec();
+
+    console.log("orders",orders);
+
+    // Log successful search
+    logger.info(`Search request successful. Found ${orders.length} orders for search term: "${search}"`);
+
+    return res.status(200).json({
+      success: true,
+      totalResults: orders.length,
+      page: Number(page),
+      limit: Number(limit),
+      orders
+    });
+
+  } catch (error) {
+    // Log error
+    logger.error(`Error searching orders: ${error.message}`);
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
 
 // export const getOrderByCustomerId = asyncErrors(async (req, res) => {
 //     const customerId = req.params.id;
@@ -167,68 +232,65 @@ export const getOrderByCustomerId = asyncErrors(async (req, res) => {
 // });
 
 const updatedCustomerIfDifferent = async (customerId, newCustomerData) => {
-    const existingCustomer = await Customer.findById(customerId).lean();
-    console.log(customerId);
-    console.log("New CustomerData", newCustomerData);
-    console.log("Existing CustomerData", existingCustomer);
-
     try {
+        const objectId = new ObjectId(customerId);
+        const existingCustomer = await Customer.findById(objectId).lean();
+
         if (!existingCustomer) {
-            logger.error('Customer not found');
+            console.error('Customer not found');
+            return null;
         }
 
-        const isDifferent = Object.keys(newCustomerData).some((key) => {
-            return newCustomerData[key] !== existingCustomer[key];
-        });
+        // Check for differences
+        const isDifferent = Object.keys(newCustomerData).some(
+            key => key !== "_id" && newCustomerData[key] !== existingCustomer[key]
+        );
 
-        // Update only if data is different
         if (isDifferent) {
-            console.log('It is Different');
             const updatedCustomer = await Customer.findByIdAndUpdate(
-                customerId,
+                objectId,
                 { $set: newCustomerData },
                 { new: true }
             );
-            console.log("Updated Successfully.");
-            // console.log('Customer updated:', updatedCustomer);
             return updatedCustomer;
-        } else {
-            console.log('Customer is the same. No update needed.');
-            return existingCustomer;
         }
-    } catch (error) {
-        console.log('Customer data is the same. No update needed');
+
         return existingCustomer;
+    } catch (error) {
+        console.error('Error updating customer:', error);
+        return error;
     }
-}
+};
 
-const updateOrderInfo = async (customerId, orderId, part) => {
+const updateOrderInfo = async (customerId, orderId, newPart) => {
     try {
-        logger.info(`Updating order info for Customer ID: ${customerId}, Order ID: ${orderId}`);
-
-        // Find the customer and check if the order exists without a part
         const customer = await Customer.findOne({
             _id: customerId,
             "orderInfo": { 
-                $elemMatch: { orderId: orderId, part: { $in: [null, "", undefined] } } 
+                $elemMatch: { 
+                    orderId: orderId, 
+                    $or: [
+                        { part: { $in: [null, "", undefined, "empty-order", "sub-order"] } },
+                        { part: { $ne: newPart } } // Update if the part is different
+                    ] 
+                } 
             }
         });
 
         if (!customer) {
-            logger.info(`Order ID: ${orderId} for Customer ID: ${customerId} already has a part name or was not found`);
-            return { success: false, message: "Order already has a part name or not found" };
+            return { success: false, message: "Order not found or no update needed" };
         }
 
-        // Update only if part is missing
+        // Update only if part is missing or different from the new one
         const updatedCustomer = await Customer.findOneAndUpdate(
-            { _id: customerId, "orderInfo.orderId": orderId, "orderInfo.part": { $in: [null, "", undefined] } },
-            { $set: { "orderInfo.$.part": part } },
+            { _id: customerId, "orderInfo.orderId": orderId },
+            { $set: { "orderInfo.$.part": newPart } },
             { new: true }
         );
 
         if (!updatedCustomer) {
-            logger.info(`Order ID: ${orderId} for Customer ID: ${customerId} not found or already has a part name`);
-            return { success: false, message: "Order not found or already has a part name" };
+            logger.info(`Order ID: ${orderId} for Customer ID: ${customerId} not found or no update needed`);
+            return { success: false, message: "Order not found or no update needed" };
         }
 
         logger.info(`Successfully updated order part for Customer ID: ${customerId}, Order ID: ${orderId}`);
@@ -244,7 +306,9 @@ export const updateOrder = asyncErrors(async (req, res) => {
     const { order_disposition_details, customer: newCustomerId, ...otherDetails } = req.body;
 
     try {
+
         logger.info('Incoming update request for order:', orderId);
+        // console.log("Customer from req body", newCustomerId);
 
         // Find the order first
         const existingOrder = await Order.findById(orderId).populate('customer');
@@ -253,37 +317,52 @@ export const updateOrder = asyncErrors(async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        // It is used for updating customer info.
+        let updatedCustomer;
+        // Update customer info if necessary
         if (newCustomerId && existingOrder.customer) {
-            await updatedCustomerIfDifferent(existingOrder.customer._id, newCustomerId);
+            updatedCustomer = await updatedCustomerIfDifferent(existingOrder.customer._id, newCustomerId);
         }
 
-        // Updating Part Name if not in Customer Order Info
-        await updateOrderInfo(existingOrder.customer._id,orderId,otherDetails.order_summary?.part_name);
+        // Updating Part Name if missing in Customer Order Info
+        await updateOrderInfo(existingOrder.customer._id, orderId, otherDetails.order_summary?.part_name);
 
-        // Check if `agent_notes` has changed and update disposition history
-        if (order_disposition_details && order_disposition_details.agent_notes) {
+        const vehicleData = {
+            year: otherDetails?.order_summary?.year,
+            make: otherDetails?.order_summary?.make,
+            model: otherDetails?.order_status?.model,
+            part: otherDetails?.order_summary?.part_name
+        };
+
+        if (existingOrder?.order_summary?.part_name === 'empty-order' && otherDetails?.order_summary?.part_name !== 'empty-order') {
+            logger.info("Sending Welcome Email after empty Order part name added.", vehicleData.part);
+            await sendAccountActivationEmail({
+                name: newCustomerId?.name,
+                email: newCustomerId?.email,
+            });
+        }
+
+        if (existingOrder?.order_summary?.part_name === 'sub-order' && otherDetails?.order_status?.part_name !== 'sub-order') {
+            logger.info("Sending Welcome Back Email after Sub Order created by Admin");
+            await sendWelcomeBackEmail({ name: newCustomerId?.name, email: newCustomerId?.email, vehicleData });
+        }
+
+        // Handle disposition history updates
+        if (order_disposition_details?.agent_notes) {
             const currentNotes = existingOrder.order_disposition_details?.agent_notes || 'Not taken Properly';
             const newNotes = order_disposition_details.agent_notes;
-
-            // console.log('Current agent notes:', currentNotes);
-            // console.log('New agent notes:', newNotes);
 
             if (currentNotes !== newNotes) {
                 const historyEntry = {
                     agent_notes: newNotes,
-                    updated_at: new Date(),  // Capture the current time of the update
+                    updated_at: new Date(),
                 };
 
-                otherDetails.disposition_history.push(historyEntry);  // Add to the disposition history
-                // console.log('In other details', otherDetails.disposition_history);
-                // console.log('Existing History', existingOrder.disposition_history);
-                // console.log('Adding to disposition history:', historyEntry);
+                otherDetails.disposition_history.push(historyEntry);
             }
         }
 
-        // Handling SMS and Emails for the respective order status
-        if (order_disposition_details && order_disposition_details.order_status && order_disposition_details.order_status !== existingOrder.order_disposition_details.order_status) {
+        // Handle SMS & Email notifications
+        if (order_disposition_details?.order_status && order_disposition_details.order_status !== existingOrder.order_disposition_details.order_status) {
             logger.info('Order Status Updating.');
 
             switch (order_disposition_details.order_status) {
@@ -385,7 +464,10 @@ export const updateOrder = asyncErrors(async (req, res) => {
         }
 
         // Update order details with all other fields
-        // Merge otherDetails into existingOrder
+        otherDetails.shipping_details.customer_name = updatedCustomer.name;
+        otherDetails.shipping_details.customer_email = updatedCustomer.email;
+        otherDetails.shipping_details.customer_phone = updatedCustomer.phone;
+        otherDetails.shipping_details.zipcode = updatedCustomer.zipcode;
         Object.assign(existingOrder, otherDetails);
 
         // Save the updated order
@@ -417,21 +499,25 @@ export const createSubOrder = asyncErrors(async (req, res) => {
         const newOrder = new Order({
             customer: customerId,
             shipping_details: { customer: customerId },
+            order_summary: {
+                part_name: 'sub-order',
+                trackingLink: ''
+            },
         });
 
         const orderInfo = {
-            orderId:newOrder._id,
+            orderId: newOrder._id,
             requestDate: new Date(),
         }
 
         existingCustomer.orderInfo.push(orderInfo);
 
-        await Promise.all([existingCustomer.save(),newOrder.save()]);
+        await Promise.all([existingCustomer.save(), newOrder.save()]);
 
         logger.info(`New order created successfully for customer: ${existingCustomer.name}, Order ID: ${newOrder._id}`);
 
-        return res.status(201).json({ 
-            message: `New Order Created successfully for ${existingCustomer.name}`, 
+        return res.status(201).json({
+            message: `New Order Created successfully for ${existingCustomer.name}`,
             customer: existingCustomer.name,
             orderInfo
         });
@@ -463,6 +549,10 @@ export const createEmptyOrder = asyncErrors(async (req, res) => {
                 customer_email: newCustomer.email,
                 customer_phone: newCustomer.phone,
                 zipcode: newCustomer.zipcode
+            },
+            order_summary: {
+                part_name: 'empty-order',
+                trackingLink: ''
             }
         });
 

@@ -6,7 +6,8 @@ import {
   updateOrder,
   deleteOrder,
   getOrderByCustomerId,
-  createEmptyOrder
+  createEmptyOrder,
+  searchOrder
 } from '../controllers/orderController.js';  // Adjust the import path as per your directory structure
 import { getOrderByIdUser } from '../controllers/user/userOrderController.js';
 import { createSubOrder } from '../controllers/orderController.js';
@@ -21,6 +22,8 @@ router.post('/create-sub-order',createSubOrder);
 
 // Create an empty Order
 router.post('/create-empty-order',createEmptyOrder);
+
+router.get('/search', searchOrder);
 
 // Get all orders
 router.get('/all', getAllOrders);

@@ -165,8 +165,7 @@ const OrderSummary = ({ orderSummary = {}, pricingDetails = {}, isEditing, setOr
                                 }}
                                 onFocus={handlePartsFocus} // Trigger fetching parts on focus
                                 options={parts.map(part => ({ value: part.part_name, label: part.part_name }))}
-                                placeholder="Select or create part name"
-                                className="text-gray-800"
+                                placeholder={orderSummary?.part_name || "Select or create part name"}                                className="text-gray-800"
                                 isClearable={true}
                             />
                         ) : (

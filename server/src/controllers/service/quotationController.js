@@ -41,8 +41,8 @@ export const sendQuotation = asyncErrors(async (req, res) => {
     const customerName = order.shipping_details?.customer_name ?? order.customer.name;
     const customerEmail = order.shipping_details?.customer_email ?? order.customer.email;
     const customerPhone = order.shipping_details?.customer_phone ?? order.customer.phone;
-    const { quoted_price, shipping_cost, gross_profit } = order.pricing_details || {};
-    const quoteNumber = await generateQuoteNumber();
+    const { quoted_price, shipping_cost } = order.pricing_details || {};
+    const quoteNumber = order?.quotations?.quote_number || await generateQuoteNumber();
 
     if (!customerEmail || !customerName || typeof quoted_price !== 'number' || typeof shipping_cost !== 'number' || !order.order_summary || !order.order_summary.part_name) {
       return res.status(400).json({ message: 'Missing required data.' });

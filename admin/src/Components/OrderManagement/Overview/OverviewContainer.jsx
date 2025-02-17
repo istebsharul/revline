@@ -13,6 +13,7 @@ import SendInvoice from '../SendInvoice';
 import QuotationDetails from './QuotationDetails';
 import InvoiceDetails from './InvoiceDetails';
 import PaymentDetails from './PaymentDetails';
+import {toast} from 'react-hot-toast';
 
 const OverviewContainer = ({ order }) => {
   // console.log(order);
@@ -38,7 +39,10 @@ const OverviewContainer = ({ order }) => {
       });
       setIsEditing(false);
       console.log('Updated Successfully!');
+      toast.success('Updated Successfully!');
     } catch (err) {
+      // toast.error(err);
+      toast.error(err.response.data.message);
       console.error('Failed to update order details:', err);
     }
   };
