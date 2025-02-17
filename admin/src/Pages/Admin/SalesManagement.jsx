@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import OrderList from '../../Components/OrderManagement/OrderList';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { FaFilter, FaFileExport } from 'react-icons/fa'; // Import necessary icons
+import { GrNext,GrPrevious } from "react-icons/gr";
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { MdAdd } from "react-icons/md";
@@ -62,7 +63,7 @@ const SalesManagement = () => {
                 const adminStatus = (order.order_disposition_details?.admin_status ?? '').toLowerCase();
 
                 return (
-                    name.includes(lowercasedFilter)||
+                    name.includes(lowercasedFilter) ||
                     status.includes(lowercasedFilter) ||
                     email.includes(lowercasedFilter) ||
                     phone.includes(lowercasedFilter) ||
@@ -84,7 +85,7 @@ const SalesManagement = () => {
         try {
             setLoading(true);
             const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/orders/search`, {
-                params: { search: searchTerm,page,limit },
+                params: { search: searchTerm, page, limit },
             });
             console.log(data);
             setFilteredOrders(data.orders);
@@ -295,8 +296,8 @@ const SalesManagement = () => {
 
 
     return (
-        <div className="w-full flex flex-col justify-start items-center bg-gray-100">
-            <div className="w-full flex items-center justify-between p-4">
+        <div className="w-full h-full flex flex-col justify-start items-center bg-gray-400">
+            <div className="w-full flex items-center justify-between py-2 px-4 bg-white">
                 <h2 className="w-[10%] text-2xl flex flex-col font-semibold text-left">
                     <span>Order List</span>
                     <span className='text-xs text-gray-500'>Total Orders - {filteredOrders.length}</span>
@@ -337,30 +338,30 @@ const SalesManagement = () => {
                 ) : queryError ? (
                     <div className="text-[#f6251a] text-center">Failed to fetch orders. Please try again later.</div>
                 ) : (
-                    <>
+                    <div className='w-full h-full flex flex-col justify-between items-center bg-white'>
                         <OrderList filteredOrders={filteredOrders} setFilteredOrders={setFilteredOrders} onSelectOrder={setSelectedOrder} onDelete={handleDelete} />
-                        <div className="flex flex-col justify-center items-center gap-4 mt-4">
-                            <span className="text-gray-700">
-                                Page {page} of {totalPages}
-                            </span>
-                            <div className='w-full flex justify-center items-center gap-2'>
+                        <div className="flex flex-col justify-center items-center p-2">
+                            <div className='w-full flex justify-center items-center gap-8'>
                                 <button
                                     onClick={handlePrevPage}
                                     disabled={page === 1}
-                                    className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                                    className="bg-gray-300 hover:bg-gray-800 hover:text-white rounded-full p-2"
                                 >
-                                    Previous
+                                    <GrPrevious className='w-3 h-3'/>
                                 </button>
+                                <span className="text-center text-gray-500">
+                                    Page <span className='font-bold text-gray-700'>{page}</span> of {totalPages}
+                                </span>
                                 <button
                                     onClick={handleNextPage}
                                     disabled={page === totalPages}
-                                    className="w-1/6 px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
+                                    className="bg-gray-300 hover:bg-gray-800 hover:text-white rounded-full p-2"
                                 >
-                                    Next
+                                    <GrNext className='w-3 h-3' />
                                 </button>
                             </div>
                         </div>
-                    </>
+                    </div>
                 )}
             </main>
         </div>
