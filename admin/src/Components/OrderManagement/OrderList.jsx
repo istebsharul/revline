@@ -29,20 +29,19 @@ const OrderList = ({ filteredOrders,setFilteredOrders }) => {
     }
 
     return (
-        <div className="w-full mx-auto p-4 bg-white">
-
-            <div className="w-full bg-gray-100 p-4 rounded-t-lg">
+        <div className="w-full mx-auto p-2 shadow-inner ">
+            <div className="w-full bg-gray-100 p-4 rounded-t-lg shadow-[inset_4px_4px_10px_rgba(0,0,0,0.2)] ">
                 <div className="w-full flex justify-between text-gray-600 font-semibold text-md">
                     <div className="flex-[10]">Index</div>
-                    <div className="flex-[17]">Date</div>
-                    <div className="flex-[17]">Order Id</div>
-                    <div className="flex-[17]">Quote No.</div>
-                    <div className="flex-[20]">Name</div>
-                    <div className="flex-[40]">Email</div>
-                    <div className="flex-[20]">Phone</div>
+                    <div className="flex-[20] pl-1">Date</div>
+                    <div className="flex-[20]">Order Id</div>
+                    <div className="flex-[20]">Quote No.</div>
+                    <div className="flex-[30]">Name</div>
+                    <div className="flex-[50]">Email</div>
+                    <div className="flex-[25]">Phone</div>
                     <div className="flex-[60]">Order Summary</div>
                     <div className="flex-[30]">Status</div>
-                    <div className="flex-[20]">Actions</div>
+                    <div className="flex-[12]">Actions</div>
                 </div>
 
             </div>
@@ -57,7 +56,7 @@ const OrderList = ({ filteredOrders,setFilteredOrders }) => {
             ) : error ? (
                 <div className="text-[#f6251a] text-center">{error}</div>
             ) : (
-                <ul className="divide-y divide-gray-200">
+                <ul className="max-h-[70vh] overflow-auto divide-y divide-gray-200 border-x border-b border-gray-300">
                     {filteredOrders.length>0 && filteredOrders?.map((order, index) => (
                         <OrderListItem key={order._id} order={order} index={index} handleDelete={handleDelete} />
                     ))}
