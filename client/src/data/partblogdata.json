@@ -1,0 +1,546 @@
+{
+  "abs": {
+    "title": "Anti-lock Braking System (ABS)",
+    "summary": [
+      {
+        "text": "ABS",
+        "bold": true
+      },
+      {
+        "text": " (Anti-lock Braking System) enhances vehicle safety by preventing wheels from locking during braking, improving "
+      },
+      {
+        "text": "steering control",
+        "bold": true
+      },
+      {
+        "text": " and reducing stopping distances on slippery surfaces. Developed to "
+      },
+      {
+        "text": "enhance stability",
+        "bold": true
+      },
+      {
+        "text": ", ABS is now a standard feature in most modern vehicles, ensuring a safer driving experience."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599517/Adobe_Express_-_file_3_hgvv8a.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599516/Adobe_Express_-_file_6_u5ckej.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "ABS technology was first introduced in aircraft and later adapted for automobiles to improve braking efficiency and control.",
+    "buyersGuide": {
+      "description": "A properly functioning ABS ensures enhanced vehicle stability and steering control.",
+      "details": [
+        {
+          "heading": "OEM Compatibility",
+          "description": "Ensure the part matches your vehicle's make, model, and year."
+        },
+        {
+          "heading": "Sensor Calibration",
+          "description": "Proper calibration is crucial for accurate wheel speed detection and effective braking."
+        },
+        {
+          "heading": "Condition & Testing",
+          "description": "All our used ABS parts are thoroughly inspected and tested for reliability."
+        },
+        {
+          "heading": "Warranty & Quality Assurance",
+          "description": "Get a warranty-backed, performance-tested ABS component."
+        }
+      ]
+    }
+  },
+  "headlight": {
+    "title": "Headlight",
+    "summary": [
+      {
+        "text": "Headlights",
+        "bold": true
+      },
+      {
+        "text": " provide essential visibility for night driving and adverse weather conditions. Modern headlights use "
+      },
+      {
+        "text": "LED, HID, and halogen technology",
+        "bold": true
+      },
+      {
+        "text": " to enhance brightness and efficiency."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599552/Adobe_Express_-_file_5_geloci.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599551/Adobe_Express_-_file_pdjtee.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599550/Adobe_Express_-_file_4_vgipuh.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599548/Adobe_Express_-_file_2_yr8giu.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 5,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599548/Adobe_Express_-_file_1_y5teav.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "Originally powered by acetylene gas, modern headlights have evolved to offer better illumination and energy efficiency.",
+    "buyersGuide": {
+      "description": "Ensure your used transfer case matches your vehicle’s drivetrain needs.",
+      "details": [
+        {
+          "heading": "Vehicle Compatibility",
+          "description": "Ensure the transfer case matches your vehicle’s drivetrain specifications (4WD or AWD)."
+        },
+        {
+          "heading": "Electronic vs. Manual Shift",
+          "description": "Some vehicles require electronically controlled transfer cases, while others use a manual gear selector."
+        },
+        {
+          "heading": "Heavy-Duty vs. Standard Models",
+          "description": "Choose a heavy-duty transfer case if you frequently tow, off-road, or drive in extreme conditions."
+        },
+        {
+          "heading": "Sealed vs. Serviceable Units",
+          "description": "Some transfer cases require regular maintenance, while others are sealed for life."
+        }
+      ]
+    }
+  },
+  "transfercase": {
+    "title": "Transfer Case",
+    "summary": [
+      {
+        "text": "Transfer Case",
+        "bold": true
+      },
+      {
+        "text": " is a critical component in four-wheel and all-wheel-drive vehicles, distributing power between front and rear axles."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599504/Adobe_Express_-_file_3_f0d1qm.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599502/Adobe_Express_-_file_2_yhyxlg.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599500/Adobe_Express_-_file_y0cspg.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599498/Adobe_Express_-_file_4_kc1wzy.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 5,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599497/Adobe_Express_-_file_1_tszns4.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "Developed for off-road and heavy-duty vehicles, the transfer case ensures optimal power distribution for traction control.",
+    "buyersGuide": {
+      "description": "Ensure your used transfer case matches your vehicle’s drivetrain needs.",
+      "details": [
+        {
+          "heading": "Vehicle Compatibility",
+          "description": "Ensure the transfer case matches your vehicle’s drivetrain specifications (4WD or AWD)."
+        },
+        {
+          "heading": "Electronic vs. Manual Shift",
+          "description": "Some vehicles require electronically controlled transfer cases, while others use a manual gear selector."
+        },
+        {
+          "heading": "Heavy-Duty vs. Standard Models",
+          "description": "Choose a heavy-duty transfer case if you frequently tow, off-road, or drive in extreme conditions."
+        },
+        {
+          "heading": "Sealed vs. Serviceable Units",
+          "description": "Some transfer cases require regular maintenance, while others are sealed for life."
+        }
+      ]
+    }
+  },
+  "brakemastercylinder": {
+    "title": "Brake Master Cylinder",
+    "summary": [
+      {
+        "text": "Brake Master Cylinder",
+        "bold": true
+      },
+      {
+        "text": " is responsible for converting mechanical brake pedal pressure into hydraulic force to operate the braking system."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599486/Adobe_Express_-_file_1_yk9qkq.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599483/Adobe_Express_-_file_3_moltng.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599481/Adobe_Express_-_file_6_f0n6ey.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599480/Adobe_Express_-_file_5_mr5wwq.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 5,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599479/Adobe_Express_-_file_4_pqehu7.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 6,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599478/Adobe_Express_-_file_gy6tcj.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 7,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599475/Adobe_Express_-_file_2_iaphdj.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "The master cylinder has been a key hydraulic component in braking systems since the adoption of disc brakes in automobiles.",
+    "buyersGuide": {
+      "description": "Ensure safe braking performance with a quality-tested brake master cylinder.",
+      "details": [
+        {
+          "heading": "Vehicle Compatibility",
+          "description": "Ensure the master cylinder matches your car’s make, model, and braking system."
+        },
+        {
+          "heading": "Single vs. Dual Reservoir",
+          "description": "Older vehicles may use a single reservoir, while modern cars use dual for added safety."
+        },
+        {
+          "heading": "Material Type",
+          "description": "Choose between cast iron for durability or aluminum for lightweight performance."
+        },
+        {
+          "heading": "Brake Fluid Compatibility",
+          "description": "Verify compatibility with DOT 3, DOT 4, or DOT 5 fluid based on your vehicle’s specifications."
+        }
+      ]
+    }
+  },
+  "powerbrakebooster": {
+    "title": "Power Brake Booster",
+    "summary": [
+      {
+        "text": "Power Brake Booster",
+        "bold": true
+      },
+      {
+        "text": " amplifies the force applied to the brake pedal, making braking more efficient with less effort."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599465/Adobe_Express_-_file_5_zlvkw2.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599464/Adobe_Express_-_file_2_gyao3q.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599462/Adobe_Express_-_file_6_vwvtzp.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599461/Adobe_Express_-_file_3_bdjjfh.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 5,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599460/Adobe_Express_-_file_1_xsz410.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 6,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599459/Adobe_Express_-_file_mcxv79.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "Introduced in the mid-20th century, power brake boosters improved braking efficiency in heavier and larger vehicles.",
+    "buyersGuide": {
+      "description": "Ensure reliable braking assistance with a properly functioning power brake booster.",
+      "details": [
+        {
+          "heading": "Vehicle Compatibility",
+          "description": "Ensure the booster matches your car’s make, model, and braking system."
+        },
+        {
+          "heading": "Vacuum vs. Hydraulic Boosters",
+          "description": "Vacuum boosters are common in gasoline-powered vehicles, while hydraulic boosters are used in diesel and high-performance vehicles."
+        },
+        {
+          "heading": "Single vs. Dual Diaphragm",
+          "description": "Dual-diaphragm boosters provide increased braking force for heavier vehicles."
+        },
+        {
+          "heading": "Brake Pedal Feel",
+          "description": "A properly functioning booster ensures a smooth and responsive braking experience."
+        }
+      ]
+    }
+  },
+  "alternator": {
+    "title": "Alternator",
+    "summary": [
+      {
+        "text": "Alternator",
+        "bold": true
+      },
+      {
+        "text": " generates electrical power to charge the battery and run vehicle electronics while the engine is running."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599446/Adobe_Express_-_file_6_bc1a9b.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599445/Adobe_Express_-_file_4_hnw4to.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599445/Adobe_Express_-_file_3_vhqotu.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599443/Adobe_Express_-_file_5_woulxj.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 5,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599443/Adobe_Express_-_file_7_yljpxi.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 6,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599440/Adobe_Express_-_file_nisk2b.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 7,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599439/Adobe_Express_-_file_1_s3wehz.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "Alternators replaced DC generators in the 1960s, significantly improving vehicle electrical efficiency.",
+    "buyersGuide": {
+      "description": "Ensure your vehicle’s electrical system runs efficiently with a high-quality alternator.",
+      "details": [
+        {
+          "heading": "Amperage Output",
+          "description": "Ensure the alternator meets your vehicle’s power needs, especially if you have additional electronics or accessories."
+        },
+        {
+          "heading": "OEM Compatibility",
+          "description": "Always choose an alternator that fits your vehicle’s make, model, and engine type."
+        },
+        {
+          "heading": "Pulley Type & Belt Compatibility",
+          "description": "Verify that the alternator pulley matches your vehicle’s system for smooth operation."
+        },
+        {
+          "heading": "Voltage Regulation",
+          "description": "Some alternators include built-in voltage regulators, while others require an external regulator."
+        }
+      ]
+    }
+  },
+  "accompressor": {
+    "title": "A/C Compressor",
+    "summary": [
+      {
+        "text": "A/C Compressor",
+        "bold": true
+      },
+      {
+        "text": " is responsible for pressurizing and circulating refrigerant in a vehicle’s air conditioning system."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599405/Adobe_Express_-_file_4_awjpls.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599405/Adobe_Express_-_file_5_e5yxrz.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599404/Adobe_Express_-_file_3_ywj7n2.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599404/Adobe_Express_-_file_2_n6qedg.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 5,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599403/Adobe_Express_-_file_vwkxnd.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 6,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599403/Adobe_Express_-_file_1_f5op91.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "First introduced in luxury cars in the 1930s, A/C systems became standard in most vehicles by the late 20th century.",
+    "buyersGuide": {
+      "description": "Ensure efficient cooling performance with a well-matched A/C compressor.",
+      "details": [
+        {
+          "heading": "Vehicle Compatibility",
+          "description": "Ensure the compressor matches your vehicle’s make, model, and refrigerant type."
+        },
+        {
+          "heading": "OEM vs. Aftermarket",
+          "description": "OEM compressors provide factory-fit performance and reliability."
+        },
+        {
+          "heading": "Refrigerant Type",
+          "description": "Verify compatibility with R-134a, R-1234yf, or older refrigerants."
+        },
+        {
+          "heading": "Clutch vs. Clutchless Design",
+          "description": "Some compressors include an electromagnetic clutch, while others operate with a variable displacement system."
+        }
+      ]
+    }
+  },
+  "condensor": {
+    "title": "Condensor",
+    "summary": [
+      {
+        "text": "A/C Condenser",
+        "bold": true
+      },
+      {
+        "text": " is a key component of the air conditioning system, responsible for releasing heat from refrigerant to the outside air."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599390/Adobe_Express_-_file_4_eb7ay2.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599388/Adobe_Express_-_file_5_hwhbh8.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599387/Adobe_Express_-_file_3_yq9jjl.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599386/Adobe_Express_-_file_6_ydiyms.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 5,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599384/Adobe_Express_-_file_wiceka.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 6,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599384/Adobe_Express_-_file_2_t6o9ya.png",
+        "altText": "Item 4"
+      },
+      {
+        "id": 7,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599384/Adobe_Express_-_file_1_aauhyb.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "Condensers have been essential to automotive climate control since the introduction of modern A/C systems in vehicles.",
+    "buyersGuide": {
+      "description": "Ensure optimal cooling efficiency with a high-quality A/C condenser.",
+      "details": [
+        {
+          "heading": "Vehicle Compatibility",
+          "description": "Ensure the condenser matches your vehicle’s make, model, and refrigerant type."
+        },
+        {
+          "heading": "OEM vs. Aftermarket",
+          "description": "OEM condensers are designed for factory-fit performance and durability."
+        },
+        {
+          "heading": "Material & Coating",
+          "description": "Look for corrosion-resistant aluminum to ensure a long lifespan."
+        },
+        {
+          "heading": "Cooling Fins & Tubing",
+          "description": "A well-designed condenser improves heat dissipation and refrigerant efficiency."
+        }
+      ]
+    }
+  }
+}

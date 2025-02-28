@@ -143,9 +143,8 @@ function ShippingHandlingPage() {
         <div className='py-4'>
           <h2 className='text-lg font-medium'>Contact Us</h2>
           <p className=''>
-            • Phone: xxx-xxx-xxxx<br />
+            • Phone: +1 888 632 0709<br />
             • Email: Support@revlineautoparts.com<br />
-            • Website: www.revlineautoparts.com
           </p>
         </div>
       </div>

@@ -1,15 +1,12 @@
-// PartCarousel.jsx
 import React from 'react';
 import {
     StackedCarousel,
     ResponsiveContainer,
 } from 'react-stacked-center-carousel';
-// Importing Fab and icons from Material UI v5
 import { Fab } from '@mui/material';
-import { ArrowBack, ArrowForward } from '@mui/icons-material'; // Correct imports for icons
+import { ArrowBack, ArrowForward } from '@mui/icons-material';
 
-// Carousel items with image and altText
-const carouselItems = [
+const defaultCarouselItems = [
     {
         id: 1,
         imageUrl: 'https://res.cloudinary.com/dp3xz2kbh/image/upload/v1735485731/revlineautoparts/Assets/Blogs/shxcwxhi4mcfurivynlk.png',
@@ -17,7 +14,7 @@ const carouselItems = [
     },
     {
         id: 2,
-        imageUrl: 'https://res.cloudinary.com/dp3xz2kbh/image/upload/v1735543848/revlineautoparts/Assets/Blogs/ygyri8j71j8yke24mntz.png',
+        imageUrl: 'https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740602194/revlineautoparts/Assets/Blogs/wyn6admaohteq0mzsmbg.png',
         altText: 'Item 2',
     },
     {
@@ -37,12 +34,12 @@ const carouselItems = [
     },
 ];
 
-const PartCarousel = () => {
+const PartCarousel = ({ items = defaultCarouselItems, title }) => {
     const carouselRef = React.useRef();
 
     return (
-        <div className='h-min'>
-            <h2 className="text-3xl font-bold text-center mb-8">Best Sellers</h2>
+        <div className='h-full'>
+            <h2 className="text-3xl font-bold text-center mb-8">{title || 'Most Popular'}</h2>
             <div className="w-full md:py-10 relative">
                 <ResponsiveContainer
                     carouselRef={carouselRef}
@@ -55,7 +52,7 @@ const PartCarousel = () => {
                         return (
                             <StackedCarousel
                                 ref={carouselRef}
-                                data={carouselItems}
+                                data={items}
                                 slideComponent={Card}
                                 slideWidth={parentWidth < 800 ? parentWidth - 40 : 230}
                                 carouselWidth={parentWidth}
@@ -71,13 +68,13 @@ const PartCarousel = () => {
                 <div className="w-10 h-10 absolute flex justify-center items-center top-1/2 left-5 z-10 transform -translate-y-1/2 bg-red-500 shadow-lg rounded-full">
                     <ArrowBack
                         onClick={() => carouselRef.current?.goBack()}
-                        className='text-white'
+                        className='text-white cursor-pointer'
                     />
                 </div>
                 <div className="w-10 h-10 flex justify-center items-center absolute top-1/2 right-5 z-10 transform -translate-y-1/2 bg-red-500 shadow-lg rounded-full">
                     <ArrowForward
                         onClick={() => carouselRef.current?.goNext()}
-                        className='text-white'
+                        className='text-white cursor-pointer'
                     />
                 </div>
             </div>
@@ -89,10 +86,11 @@ const Card = React.memo(function Card({ data, dataIndex }) {
     const { imageUrl, altText } = data[dataIndex];
 
     return (
-        <div className="relative w-full md:h-72 2xl:p-2 p-16">
+        <div className="relative w-full md:h-72 2xl:p-4 p-10">
             <img
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 src={imageUrl}
+                alt={altText}
                 draggable="false"
             />
         </div>

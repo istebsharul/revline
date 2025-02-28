@@ -19,6 +19,7 @@ import ShippingHandlingPage from '../Pages/Landing/ShippingHandlingPage';
 import OptInPage from '../Pages/Landing/Opt-InPage';
 import BlogsPage from '../Pages/Landing/BlogsPage';
 import BlogPage from '../Pages/Landing/BlogPage';
+import PartsBlogsPage from '../Pages/Landing/PartsBlogsPage';
 
 function UserRoutes() {
   return (
@@ -38,6 +39,7 @@ function UserRoutes() {
       <Route path='opt-in' element={<OptInPage />} />
       <Route path='blogs/:make' element={<BlogsPage/>} />
       <Route path='blogs' element={<BlogPage/>} />
+      <Route path='parts/:part' element={<PartsBlogsPage/>} />
       
       {/* Protected Routes */}
       <Route

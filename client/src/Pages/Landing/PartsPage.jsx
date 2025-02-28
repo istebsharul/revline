@@ -2,7 +2,9 @@ import React from 'react';
 import { useState } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import Banner from '../../Components/User/Banner';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { MdArrowOutward } from "react-icons/md";
+
 
 const categories = [
   {
@@ -171,9 +173,70 @@ const categories = [
   }
 ];
 
+
+const items = [
+  {
+    id: 1,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+    altText: "abs",
+    title: "ABS",
+    description: "Enhance your vehicle's braking efficiency with a high-quality Anti-lock Braking System (ABS), designed for better control and safety."
+  },
+  {
+    id: 2,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599552/Adobe_Express_-_file_5_geloci.png",
+    altText: "headlight",
+    title: "Headlight",
+    description: "Upgrade your visibility with a premium car headlight, offering bright illumination and improved safety for night driving."
+  },
+  {
+    id: 3,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599504/Adobe_Express_-_file_3_f0d1qm.png",
+    altText: "transfercase",
+    title: "Transfer Case",
+    description: "Ensure smooth power distribution between the front and rear wheels with a durable transfer case, perfect for 4WD and AWD vehicles."
+  },
+  {
+    id: 4,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599486/Adobe_Express_-_file_1_yk9qkq.png",
+    altText: "brakemastercylinder",
+    title: "Brake Master Cylinder",
+    description: "Maintain precise braking performance with a reliable brake master cylinder, essential for safe and responsive braking."
+  },
+  {
+    id: 5,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599465/Adobe_Express_-_file_5_zlvkw2.png",
+    altText: "powerbrakemaster",
+    title: "Power Brake Master",
+    description: "Improve stopping power with a power brake master cylinder, ensuring smooth and efficient braking in all driving conditions."
+  },
+  {
+    id: 6,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599446/Adobe_Express_-_file_6_bc1a9b.png",
+    altText: "alternator",
+    title: "Alternator",
+    description: "Keep your vehicle’s electrical system running smoothly with a high-performance alternator, delivering consistent power output."
+  },
+  {
+    id: 7,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599405/Adobe_Express_-_file_4_awjpls.png",
+    altText: "accompressor",
+    title: "AC Compressor",
+    description: "Stay cool on the road with a top-quality AC compressor, ensuring efficient cooling and climate control for your vehicle."
+  },
+  {
+    id: 8,
+    imageUrl: "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599390/Adobe_Express_-_file_4_eb7ay2.png",
+    altText: "condensor",
+    title: "Condensor",
+    description: "Optimize your vehicle’s air conditioning system with a high-efficiency condenser, providing excellent cooling performance."
+  }
+];
+
 const PartsPage = () => {
   const [openCategory, setOpenCategory] = useState(categories[0].name);
   const navigate = useNavigate();
+  const [expandedId, setExpandedId] = useState(null);
 
   const handleToggle = (categoryName) => {
     setOpenCategory((prevCategory) =>
@@ -193,7 +256,64 @@ const PartsPage = () => {
           All Parts
         </p>
       </div>
+
+      <div className='md:w-4/5 my-8'>
+        {/* <PartCarousel title={'Best Seller'}/> */}
+        <h1 className='text-3xl text-red-500 font-bold text-center my-8'> Best Seller</h1>
+        <div className="w-full flex flex-wrap gap-4 justify-center">
+          {items.map((item) => {
+            const isExpanded = expandedId === item.id;
+            return (
+              <div
+                key={item.id}
+                className="md:w-[250px] w-[150px] flex flex-col justify-center items-center border rounded-xl hover:shadow-md md:p-4 p-2"
+              >
+                <img
+                  src={item.imageUrl}
+                  alt={item.altText}
+                  className="md:w-[250px] w-full md:h-[200px] object-contain rounded"
+                />
+                <div className="flex flex-col w-full ">
+
+                  {/* Title */}
+                  <div className="w-full flex justify-between items-center">
+                    <h3 className="w-4/5 md:text-lg text-sm text-red-500 font-semibold m-2">{item.title}</h3>
+
+                    {/* View More Button (Visible Only on Hover) */}
+                    <button
+                      onClick={() => navigate(`/parts/${item.altText}`)}
+                      className="w-min border border-red-500 hover:bg-red-500 hover:text-white p-1 rounded-full duration-300 flex justify-center items-center group"
+                    >
+                      <MdArrowOutward className="md:w-6 md:h-6 transition-transform duration-300 group-hover:rotate-45" />
+                    </button>
+                  </div>
+
+                  {/* Description with Ellipsis and "Show More" */}
+                  <p
+                    className={`text-gray-700 md:text-sm text-xs px-2 ${isExpanded ?"" : "line-clamp-2 overflow-hidden"
+                      }`}
+                  >
+                    {item.description}
+                  </p>
+
+                  {!isExpanded && (
+                    <button
+                      onClick={() => setExpandedId(item.id)}
+                      className="text-black  md:text-sm text-xs font-semibold hover:underline self-start px-2"
+                    >
+                      Show More...
+                    </button>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+      </div>
+
       <div className="w-full py-10 md:py-20 flex flex-col justify-center items-center">
+        <h1 className='text-3xl text-red-500 font-bold text-center my-8'> All Parts</h1>
         {categories.map((category) => (
           <div key={category.name} className="w-full md:w-3/5 my-4 px-4 md:px-0">
             <div
