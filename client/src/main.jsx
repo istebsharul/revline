@@ -7,6 +7,7 @@ import App from './App';
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import ScrollToTop from './Components/ScrollToTop';
+import { HelmetProvider } from "react-helmet-async";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,7 +20,9 @@ root.render(
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <ScrollToTop />
+          <HelmetProvider>
             <App />
+          </HelmetProvider>
         </QueryClientProvider>
       </BrowserRouter>
     </Provider>
