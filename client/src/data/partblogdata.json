@@ -27,12 +27,12 @@
     "carouselItems": [
       {
         "id": 1,
-        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
         "altText": "Item 1"
       },
       {
         "id": 2,
-        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
         "altText": "Item 2"
       },
       {

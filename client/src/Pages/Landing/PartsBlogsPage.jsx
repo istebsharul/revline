@@ -74,18 +74,78 @@ function PartsBlogsPage() {
                 </div>
             )}
 
-            <div className='w-full md:w-2/3 2xl:mt-4 p-4'>
+            {/* <div className='w-full md:w-2/3 2xl:mt-4 p-4'>
                 <ul className='w-full flex border-black border-b p-2 gap-1'>
                     <li className='hover:underline' ><a href='/parts'>All Parts</a></li> {'>'}
                     <li className='text-red-600 hover:underline capitalize'>{part}</li>
                 </ul>
-            </div>
+            </div> */}
+            <nav aria-label="breadcrumb" className='w-full md:w-2/3 2xl:mt-4 p-4'>
+                <ul className="w-full flex justify-start p-2 gap-1  border-black border-b">
+                    <li className="hover:underline">
+                        <a href="/parts">All Parts</a>
+                    </li>{'>'}
+                    <li aria-current="page" className="text-red-600 hover:underline capitalize">
+                        {part}
+                    </li>
+                </ul>
+            </nav>
+
 
             <Helmet>
-                <title>{`Buy Used ${data?.title} Parts | High-Quality Auto Parts`}</title>
-                <meta name="description" content={data.summary} />
-                <meta name="keywords" content={`Used ${data?.title} Parts, Buy ${data?.title} Auto Parts, Affordable ${data?.title} Parts, Best ${data?.title} Parts`} />
+                <title>Buy Used {data?.title} Parts | High-Quality Auto Parts</title>
+                <meta name="description" content={`Looking for high-quality used ${data?.title} parts? Get affordable, reliable, and performance-tested auto parts with fast shipping. Satisfaction guaranteed! Call now: +1-888-632-0709.`} />
+
+                <meta name="keywords" content={`Used ${data?.title} Parts, Buy ${data?.title} Auto Parts, Affordable ${data?.title} Parts, Best ${data?.title} Parts, ${data?.title} Parts for Sale, Discount ${data?.title} Parts, OEM ${data?.title} Parts, Used ${data?.title} Car Parts`} />
+
+                {/* Open Graph Tags for Facebook */}
+                <meta property="og:title" content={`Buy Used ${data?.title} Parts | Affordable & Reliable`} />
+                <meta property="og:description" content={`Looking for high-quality used ${data?.title} parts? Get affordable, reliable, and performance-tested auto parts with fast shipping. Satisfaction guaranteed! Call now: +1-888-632-0709.`} />
+                <meta property="og:image" content={data?.carouselItems[0].imageUrl || "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.png"} />
+                <meta property="og:url" content={`https://revlineautoparts.com/parts/${part}`} />
+                <meta property="og:type" content="product" />
+                <meta property="og:site_name" content="Revline AutoParts" />
+                <meta property="og:price:currency" content="USD" />
+
+                {/* Twitter Card Tags */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={`Buy Used ${data?.title} Parts`} />
+                <meta name="twitter:description" content={`Looking for high-quality used ${data?.title} parts? Get affordable, reliable, and performance-tested auto parts with fast shipping. Satisfaction guaranteed! Call now: +1-888-632-0709.`} />
+
+                {/* Canonical URL to Prevent Duplicate Content Issues */}
+                <link rel="canonical" href={`https://revlineautoparts.com/parts/${part}`} />
+
+                {/* JSON-LD Structured Data for SEO */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Product",
+                        "name": `Used ${data?.title} Parts`,
+                        "description": `Looking for high-quality used ${data?.title} parts? Get affordable, reliable, and performance-tested auto parts with fast shipping.`,
+                        "image": data?.carouselItems[0].imageUrl || "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.png",
+                        "brand": {
+                            "@type": "Brand",
+                            "name": "Revline AutoParts"
+                        },
+                        "offers": {
+                            "@type": "Offer",
+                            "url": `https://revlineautoparts.com/parts/${part}`,
+                            "priceCurrency": "USD",
+                            "availability": "https://schema.org/InStock",
+                            "seller": {
+                                "@type": "Organization",
+                                "name": "Revline AutoParts"
+                            }
+                        },
+                        "mainEntityOfPage": {
+                            "@type": "WebPage",
+                            "@id": `https://revlineautoparts.com/parts/${part}`
+                        }
+                    }, null, 2)}
+                </script>
             </Helmet>
+
+
 
             <div className='w-full sm:w-4/5 lg:w-2/3 space-y-32 flex justify-center items-center flex-col'>
                 {/* Summary */}
@@ -99,73 +159,73 @@ function PartsBlogsPage() {
                             </h1>
                         )}
                         <div className='flex flex-col-reverse md:flex-row justify-between items-center w-full'>
-                                <div className='w-11/12 md:w-3/5 space-y-4 text-center md:text-left md:mt-0 mt-5'>
-                                    <div className='space-y-2'>
-                                        {/* Subtitle */}
-                                        <div className='font-semibold text-lg'>
-                                            Buy High-Quality <span className="capitalize">{data?.title}</span> Used Auto Parts - Affordable & Reliable Solutions
-                                        </div>
-                                        {/* Dynamically Styled Summary */}
-                                        {data.summary && (
-                                            <p className="text-gray-700">
-                                                {data.summary.map((item, index) =>
-                                                    item.bold ? <strong key={index}>{item.text}</strong> : item.text
-                                                )}
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    <div className='space-y-2'>
-                                        <div className='md:w-full  flex flex-col md:flex-row justify-between items-center'>
-                                            <div className='md:w-1/2'>
-                                                <h2 className='font-semibold text-lg'>
-                                                    Order Your <span className="capitalize">{data?.title}</span> Used Parts from Revline Autoparts Today!
-                                                </h2>
-                                                <p className='text-gray-700'>
-                                                    Don’t compromise on safety—choose <span className='font-semibold text-black'>Revline AutoParts</span> for <span className='font-semibold text-black'>high-quality</span>, tested <span className="capitalize font-bold">{part} Used Parts </span> that provide a cost-effective and dependable solution. Browse our inventory and get the right part for your vehicle at the best price!
-                                                    Shop Now & Drive Safely with Revline AutoParts!
-                                                </p>
-                                            </div>
-                                            <div className="md:w-1/2 flex-shrink-0">
-                                                <AutoSlider images={data.carouselItems} />
-                                            </div>
-                                        </div>
-                                        <p className='w-full text-gray-700'>
-                                            At <span className='font-semibold text-black'>Revline AutoParts</span>, we provide high-quality used OEM <span className="capitalize font-semibold text-black">{part}</span> parts, ensuring perfect compatibility, tested performance, and affordability for your vehicle.
+                            <div className='w-11/12 md:w-3/5 space-y-4 text-center md:text-left md:mt-0 mt-5'>
+                                <div className='space-y-2'>
+                                    {/* Subtitle */}
+                                    <h2 className='font-semibold text-lg'>
+                                        Buy High-Quality <span className="capitalize">{data?.title}</span> Used Auto Parts - Affordable & Reliable Solutions
+                                    </h2>
+                                    {/* Dynamically Styled Summary */}
+                                    {data.summary && (
+                                        <p className="text-gray-700">
+                                            {data.summary.map((item, index) =>
+                                                item.bold ? <strong key={index}>{item.text}</strong> : item.text
+                                            )}
                                         </p>
-                                    </div>
+                                    )}
+                                </div>
 
+                                <div className='space-y-2'>
+                                    <div className='md:w-full  flex flex-col md:flex-row justify-between items-center'>
+                                        <div className='md:w-1/2'>
+                                            <h2 className='font-semibold text-lg'>
+                                                Order Your <span className="capitalize">{data?.title}</span> Used Parts from Revline Autoparts Today!
+                                            </h2>
+                                            <p className='text-gray-700'>
+                                                Don’t compromise on safety—choose <span className='font-semibold text-black'>Revline AutoParts</span> for <span className='font-semibold text-black'>high-quality</span>, tested <span className="capitalize font-bold">{part} Used Parts </span> that provide a cost-effective and dependable solution. Browse our inventory and get the right part for your vehicle at the best price!
+                                                Shop Now & Drive Safely with Revline AutoParts!
+                                            </p>
+                                        </div>
+                                        <div className="md:w-1/2 flex-shrink-0">
+                                            <AutoSlider images={data.carouselItems} />
+                                        </div>
+                                    </div>
+                                    <p className='w-full text-gray-700'>
+                                        At <span className='font-semibold text-black'>Revline AutoParts</span>, we provide high-quality used OEM <span className="capitalize font-semibold text-black">{part}</span> parts, ensuring perfect compatibility, tested performance, and affordability for your vehicle.
+                                    </p>
                                 </div>
-                                <div className='w-11/12 md:w-2/5'>
-                                    <MultiStepForm />
-                                </div>
+
                             </div>
+                            <div className='w-11/12 md:w-2/5'>
+                                <MultiStepForm />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className="w-full flex flex-wrap justify-center gap-6 bg-gray-100">
-                        {[
-                            { img: costEffective, title: "Cost Effective" },
-                            { img: tested, title: "100% Tested" },
-                            { img: ecoFriendly, title: "Eco Friendly" },
-                            { img: wideCompatibility, title: "Compatibility" },
-                            { img: fastShipping, title: "Fast Shipping" },
-                        ].map((item, index) => (
-                            <div
-                                key={index}
-                                className={`flex flex-col items-center text-center p-4 group`}
-                            >
-                                <img
-                                    src={item.img}
-                                    alt={item.title}
-                                    className="w-16 h-16 object-contain mb-3 transition-all duration-300 group-hover:transform group-hover:-translate-y-2"
-                                />
-                                <h1 className="text-md font-semibold text-red-500 transition-all duration-300">
-                                    {item.title}
-                                </h1>
-                            </div>
-                        ))}
-                    </div>
+                    {[
+                        { img: costEffective, title: "Cost Effective" },
+                        { img: tested, title: "100% Tested" },
+                        { img: ecoFriendly, title: "Eco Friendly" },
+                        { img: wideCompatibility, title: "Compatibility" },
+                        { img: fastShipping, title: "Fast Shipping" },
+                    ].map((item, index) => (
+                        <div
+                            key={index}
+                            className={`flex flex-col items-center text-center p-4 group`}
+                        >
+                            <img
+                                src={item.img}
+                                alt={item.title}
+                                className="w-16 h-16 object-contain mb-3 transition-all duration-300 group-hover:transform group-hover:-translate-y-2"
+                            />
+                            <h1 className="text-md font-semibold text-red-500 transition-all duration-300">
+                                {item.title}
+                            </h1>
+                        </div>
+                    ))}
+                </div>
 
 
                 {/* History */}
@@ -189,7 +249,7 @@ function PartsBlogsPage() {
 
 
             <div className='flex justify-center items-center mb-20'>
-               <BuyersGuide part={data?.title} description={data?.buyersGuide?.description} details={data?.buyersGuide?.details}/>
+                <BuyersGuide part={data?.title} description={data?.buyersGuide?.description} details={data?.buyersGuide?.details} />
             </div>
 
             <div className='w-full h-full md:w-4/5'>
