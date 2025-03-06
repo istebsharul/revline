@@ -4,22 +4,22 @@ import VideoComponent from '../User/VideoComponent';
 
 // Dynamically import 15 images
 import brand1 from '../../Assets/Company/audi.webp';
-import brand2 from '../../Assets/Company/bentley.png';
-import brand3 from '../../Assets/Company/bmw.png';
-import brand4 from '../../Assets/Company/chevrolet.png';
-import brand5 from '../../Assets/Company/ford.png';
+import brand2 from '../../Assets/Company/bentley.webp';
+import brand3 from '../../Assets/Company/bmw.webp';
+import brand4 from '../../Assets/Company/chevrolet.webp';
+import brand5 from '../../Assets/Company/ford.webp';
 import brand6 from '../../Assets/Company/honda.webp';
-import brand7 from '../../Assets/Company/hyundai.png';
-import brand8 from '../../Assets/Company/jaguar.png';
-import brand9 from '../../Assets/Company/jeep.png';
-import brand10 from '../../Assets/Company/kia.png';
-import brand11 from '../../Assets/Company/lamborghini.png';
-import brand12 from '../../Assets/Company/mclaren.png';
-import brand13 from '../../Assets/Company/mercedes.png';
-import brand14 from '../../Assets/Company/mitsubishi.png';
-import brand15 from '../../Assets/Company/toyota.png';
+import brand7 from '../../Assets/Company/hyundai.webp';
+import brand8 from '../../Assets/Company/jaguar.webp';
+import brand9 from '../../Assets/Company/jeep.webp';
+import brand10 from '../../Assets/Company/kia.webp';
+import brand11 from '../../Assets/Company/lamborghini.webp';
+import brand12 from '../../Assets/Company/mclaren.webp';
+import brand13 from '../../Assets/Company/mercedes.webp';
+import brand14 from '../../Assets/Company/mitsubishi.webp';
+import brand15 from '../../Assets/Company/toyota.webp';
 
-// import car from '../../Assets/web/car.png';
+// import car from '../../Assets/web/car.webp';
 
 // Array of brand images
 const brandImages = [

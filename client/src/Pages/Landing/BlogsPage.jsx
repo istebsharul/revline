@@ -9,25 +9,26 @@ import Models from '../../Components/Blogs/Models';
 import BlogParts from '../../Components/Blogs/BlogParts';
 import MultiStepForm from '../../Components/User/Form/MultiStepForm';
 import blogdata from '../../data/blogdata.json';
+import { Helmet } from "react-helmet-async";
 
-import Ford from '../../Assets/Company/ford.png';
-import Toyota from '../../Assets/Company/toyota.png';
-import Chevrolet from '../../Assets/Company/chevrolet.png';
+import Ford from '../../Assets/Company/ford.webp';
+import Toyota from '../../Assets/Company/toyota.webp';
+import Chevrolet from '../../Assets/Company/chevrolet.webp';
 import Honda from '../../Assets/Company/honda.webp';
-import Nissan from '../../Assets/Company/nissan.png';
-import Hyundai from '../../Assets/Company/hyundai.png';
-import Kia from '../../Assets/Company/kia.png';
-import Jeep from '../../Assets/Company/jeep.png';
-import Subaru from '../../Assets/Company/subaru.png';
-import Dodge from '../../Assets/Company/dodge.png';
-import GMC from '../../Assets/Company/gmc.png';
-import Volkswagen from '../../Assets/Company/volkswagen.png';
-import Mazda from '../../Assets/Company/mazda.png';
-import Ram from '../../Assets/Company/ram.png';
-import Buick from '../../Assets/Company/buick.png';
-import Chrysler from '../../Assets/Company/chrysler.png';
-import Mitsubishi from '../../Assets/Company/mitsubishi.png';
-import Fiat from '../../Assets/Company/fiat.png';
+import Nissan from '../../Assets/Company/nissan.webp';
+import Hyundai from '../../Assets/Company/hyundai.webp';
+import Kia from '../../Assets/Company/kia.webp';
+import Jeep from '../../Assets/Company/jeep.webp';
+import Subaru from '../../Assets/Company/subaru.webp';
+import Dodge from '../../Assets/Company/dodge.webp';
+import GMC from '../../Assets/Company/gmc.webp';
+import Volkswagen from '../../Assets/Company/volkswagen.webp';
+import Mazda from '../../Assets/Company/mazda.webp';
+import Ram from '../../Assets/Company/ram.webp';
+import Buick from '../../Assets/Company/buick.webp';
+import Chrysler from '../../Assets/Company/chrysler.webp';
+import Mitsubishi from '../../Assets/Company/mitsubishi.webp';
+import Fiat from '../../Assets/Company/fiat.webp';
 
 const getCompanyLogoUrl = {
     ford: Ford,
@@ -48,13 +49,13 @@ const getCompanyLogoUrl = {
     chrysler: Chrysler,
     mitsubishi: Mitsubishi,
     fiat: Fiat,
-  };
+};
 
 function BlogsPage() {
     const { make } = useParams('make');
     const [isOpen, setIsOpen] = useState(false);
-    
-    function getMakeData (make){
+
+    function getMakeData(make) {
         return blogdata[make] || 'Make not found';
     }
 
@@ -103,6 +104,46 @@ function BlogsPage() {
                 </div>
             )}
 
+            <Helmet>
+                <title>Buy Used {make} Auto Parts | High-Quality & Affordable</title>
+                <meta name="description" content={`Looking for high-quality used ${make} auto parts? Get affordable, reliable, and performance-tested ${make} parts with fast shipping. Satisfaction guaranteed! Call now: +1-888-632-0709.`} />
+
+                <meta name="keywords" content={`Used ${make} Parts, Buy ${make} Auto Parts, Affordable ${make} Parts, Best ${make} Parts, ${make} Parts for Sale, Discount ${make} Parts, OEM ${make} Parts, Used ${make} Car Parts`} />
+
+                {/* Open Graph Tags for Facebook */}
+                <meta property="og:title" content={`Buy Used ${make} Auto Parts | Affordable & Reliable`} />
+                <meta property="og:description" content={`Looking for high-quality used ${make} parts? Get affordable, reliable, and performance-tested auto parts with fast shipping. Satisfaction guaranteed! Call now: +1-888-632-0709.`} />
+                <meta property="og:image" content={getCompanyLogoUrl[make] || "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.webp"} />
+                <meta property="og:url" content={`https://revlineautoparts.com/blogs/${make}`} />
+                <meta property="og:type" content="website" />
+                <meta property="og:site_name" content="Revline AutoParts" />
+
+                {/* Twitter Card Tags */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={`Buy Used ${make} Auto Parts`} />
+                <meta name="twitter:description" content={`Looking for high-quality used ${make} parts? Get affordable, reliable, and performance-tested auto parts with fast shipping. Satisfaction guaranteed! Call now: +1-888-632-0709.`} />
+
+                {/* Canonical URL to Prevent Duplicate Content Issues */}
+                <link rel="canonical" href={`https://revlineautoparts.com/blogs/${make}`} />
+
+                {/* JSON-LD Structured Data for SEO */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Brand",
+                        "name": `${make}`,
+                        "description": `Looking for high-quality used ${make} auto parts? Get affordable, reliable, and performance-tested ${make} parts with fast shipping.`,
+                        "image": getCompanyLogoUrl[make] || "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.webp",
+                        "url": `https://revlineautoparts.com/blogs/${make}`,
+                        "sameAs": [
+                            `https://www.facebook.com/profile.php?id=61566917829480`,
+                            `https://x.com/revlineautopart`,
+                            `https://www.instagram.com/revlineautoparts`
+                        ]
+                    }, null, 2)}
+                </script>
+            </Helmet>
+
             <div className='w-full md:w-3/5 2xl:mt-4 p-4'>
                 <ul className='w-full flex border-black border-b p-2 gap-1'>
                     <li className='hover:underline' ><a href='/blogs'>Home</a></li> {'>'}
@@ -128,7 +169,7 @@ function BlogsPage() {
                         <BlogCTA togglePopup={togglePopup} />
                     </div>
                     <div className='w-full md:w-1/3'>
-                        <img className="w-full" src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1735587867/revlineautoparts/Assets/Blogs/tjpzqlkbf0dkpm3ef5sq.png" alt="" />
+                        <img className="w-full" src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1735587867/revlineautoparts/Assets/Blogs/tjpzqlkbf0dkpm3ef5sq.webp" alt="" />
                     </div>
                 </div>
 
@@ -165,7 +206,7 @@ function BlogsPage() {
                         <div className="w-full md:w-1/4">
                             <img
                                 className="w-full rounded-lg"
-                                src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1735482327/revlineautoparts/Assets/Blogs/fky7apz3selw6qudrpn8.png"
+                                src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1735482327/revlineautoparts/Assets/Blogs/fky7apz3selw6qudrpn8.webp"
                                 alt="Ford Parts"
                             />
                         </div>
@@ -192,7 +233,7 @@ function BlogsPage() {
             <div className='w-full md:w-3/5 p-6'>
                 <Models models={data?.models} />
                 <BlogParts parts={data?.parts} />
-                
+
                 {/* Banner */}
                 <div className='w-full flex justify-center items-center my-20'>
                     <div className='w-full relative'>
