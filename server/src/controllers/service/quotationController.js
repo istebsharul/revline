@@ -1,4 +1,3 @@
-import generatePdf from '../../services/generatePdf.js';
 import {sendOrdersMail} from '../../utils/sendMail.js';
 import asyncErrors from '../../middlewares/catchAsyncErrors.js';
 import Order from '../../models/order.js';
@@ -7,6 +6,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 import path from 'path';
 import { sendSmsNotification } from '../../utils/smsService.js';
+import { addFollowUpJob } from '../../queue/followUpEmailQueue.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const filePath = path.resolve(__dirname, '../../services/emailContent.html');
@@ -91,6 +91,8 @@ export const sendQuotation = asyncErrors(async (req, res) => {
     });
 
     await sendSmsNotification({type:'quotation',to:customerPhone,data: {amount:quoted_price, orderId}});
+
+    await addFollowUpJob({orderId,quoteNumber,email:customerEmail,phone:customerPhone});
 
     logger.info(`Quotation sent to ${customerEmail} for ${customerName}.`);
 

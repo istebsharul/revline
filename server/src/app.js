@@ -17,7 +17,7 @@ import rateLimit from 'express-rate-limit';
 const app = express();
 
 const limiter = rateLimit({
-    windowMs: 5 * 60 * 1000, // 5 minutes
+    windowMs: 1 * 60 * 1000, // 1 minutes
     max: 100, // limit each IP to 100 requests per windowMs
     standardHeaders: true,
     legacyHeaders: true,
@@ -45,6 +45,28 @@ app.get('/health', (req, res) => {
         timestamp: new Date(),
     });
 });
+
+import { createBullBoard } from '@bull-board/api';
+import { BullMQAdapter } from '@bull-board/api/bullMQAdapter.js';
+import { ExpressAdapter } from '@bull-board/express';
+import { Queue } from "bullmq";
+import redis from "./config/redisConfig.js"; // Ensure correct Redis config path
+
+// Create Express adapter for Bull Board
+const serverAdapter = new ExpressAdapter();
+serverAdapter.setBasePath('/admin/queues'); 
+
+// Define the queue
+const followUpEmailQueue = new Queue("followUpEmailQueue", { connection: redis });
+
+// Setup Bull Board UI
+createBullBoard({
+  queues: [new BullMQAdapter(followUpEmailQueue)],
+  serverAdapter,
+});
+
+// Mount Bull Board to the app
+app.use('/admin/queues', serverAdapter.getRouter());
 
 app.use('/api/v1/auth', userRoutes);
 app.use('/api/v1/admin-auth', adminRoutes);
