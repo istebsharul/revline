@@ -69,6 +69,258 @@
       ]
     }
   },
+  "abs-modules": {
+    "title": "ABS Module",
+    "summary": [
+      {
+        "text": "ABS Module",
+        "bold": true
+      },
+      {
+        "text": " is the electronic control unit that processes data from wheel sensors to regulate braking force."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599517/Adobe_Express_-_file_3_hgvv8a.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599516/Adobe_Express_-_file_6_u5ckej.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "ABS modules have evolved with advancements in electronic stability control and integrated vehicle safety systems.",
+    "buyersGuide": {
+      "description": "A functioning ABS module ensures accurate brake modulation and vehicle stability.",
+      "details": [
+        {
+          "heading": "Electronic Compatibility",
+          "description": "Ensure the module matches your vehicle's electronic braking system."
+        },
+        {
+          "heading": "Programming Requirements",
+          "description": "Some modules may require professional reprogramming upon installation."
+        },
+        {
+          "heading": "Condition & Testing",
+          "description": "All our ABS modules are tested to ensure proper operation."
+        }
+      ]
+    }
+  },
+  "abs-pump": {
+    "title": "ABS Pump",
+    "summary": [
+      {
+        "text": "ABS Pump",
+        "bold": true
+      },
+      {
+        "text": " is responsible for maintaining hydraulic pressure in the braking system to prevent wheel lockup."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599517/Adobe_Express_-_file_3_hgvv8a.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599516/Adobe_Express_-_file_6_u5ckej.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "ABS pumps have evolved to provide improved hydraulic control and response times in modern vehicles.",
+    "buyersGuide": {
+      "description": "A high-quality ABS pump ensures efficient braking pressure management.",
+      "details": [
+        {
+          "heading": "Hydraulic Compatibility",
+          "description": "Ensure the pump is compatible with your braking system."
+        },
+        {
+          "heading": "Condition & Testing",
+          "description": "All our ABS pumps are tested to ensure proper functionality."
+        }
+      ]
+    }
+  },
+  "abs-actuator": {
+    "title": "ABS Actuator",
+    "summary": [
+      {
+        "text": "ABS Actuator",
+        "bold": true
+      },
+      {
+        "text": " controls the modulation of braking pressure to individual wheels to prevent skidding."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599517/Adobe_Express_-_file_3_hgvv8a.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599516/Adobe_Express_-_file_6_u5ckej.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "ABS actuators have evolved with electronic controls to provide precise braking modulation.",
+    "buyersGuide": {
+      "description": "A properly working ABS actuator ensures smooth braking performance.",
+      "details": [
+        {
+          "heading": "Electronic Control",
+          "description": "Ensure the actuator is compatible with your ABS module."
+        },
+        {
+          "heading": "Condition & Testing",
+          "description": "All our ABS actuators are tested to ensure reliable operation."
+        }
+      ]
+    }
+  },
+  "abs-sensor": {
+    "title": "ABS Sensor",
+    "summary": [
+      {
+        "text": "ABS Sensor",
+        "bold": true
+      },
+      {
+        "text": " detects wheel speed and sends data to the ABS module to prevent wheel lockup during braking."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599517/Adobe_Express_-_file_3_hgvv8a.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599516/Adobe_Express_-_file_6_u5ckej.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "ABS sensors have evolved with advancements in digital signal processing for improved accuracy and response times.",
+    "buyersGuide": {
+      "description": "A functioning ABS sensor ensures accurate wheel speed detection and braking control.",
+      "details": [
+        {
+          "heading": "Compatibility",
+          "description": "Ensure the sensor matches your vehicle's ABS system specifications."
+        },
+        {
+          "heading": "Installation & Calibration",
+          "description": "Some sensors require precise alignment and calibration for accurate readings."
+        },
+        {
+          "heading": "Condition & Testing",
+          "description": "All our ABS sensors are tested to ensure proper functionality."
+        }
+      ]
+    }
+  },
+  "abs-control-unit": {
+    "title": "ABS Control Unit",
+    "summary": [
+      {
+        "text": "ABS Control Unit",
+        "bold": true
+      },
+      {
+        "text": " processes sensor data and regulates braking pressure to prevent wheel lockup and improve vehicle stability."
+      }
+    ],
+    "carouselItems": [
+      {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "altText": "Item 1"
+      },
+      {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "altText": "Item 2"
+      },
+      {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599517/Adobe_Express_-_file_3_hgvv8a.png",
+        "altText": "Item 3"
+      },
+      {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599516/Adobe_Express_-_file_6_u5ckej.png",
+        "altText": "Item 4"
+      }
+    ],
+    "history": "The ABS control unit has evolved with advanced microprocessors to enhance braking efficiency and response times.",
+    "buyersGuide": {
+      "description": "A reliable ABS control unit ensures efficient braking pressure management for enhanced safety.",
+      "details": [
+        {
+          "heading": "Compatibility",
+          "description": "Ensure the control unit matches your vehicle’s make and model."
+        },
+        {
+          "heading": "Programming & Installation",
+          "description": "Some units require professional reprogramming after installation."
+        },
+        {
+          "heading": "Condition & Testing",
+          "description": "All our ABS control units are tested for reliability and performance."
+        }
+      ]
+    }
+  },
   "headlight": {
     "title": "Headlight",
     "summary": [

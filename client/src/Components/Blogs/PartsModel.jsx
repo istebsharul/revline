@@ -69,7 +69,7 @@ const vehicleData = [
 const PartsModel = () => {
   return (
     <div className="container mx-auto p-2 mt-4">
-      <h2 className="text-3xl font-bold mb-6">Compatible Vehicles</h2>
+      <h2 className="text-3xl font-bold mb-6">Popular Compatible Vehicles</h2>
 
       {/* List all Makes and Models */}
       <div className="flex flex-col bg-white rounded-lg p-2">
