@@ -13,6 +13,7 @@ import customerSupportRoutes from './routes/customerSupportRoutes.js';
 import ticketRoutes from './routes/ticketRoutes.js';
 import formRoutes from './routes/formRoutes.js';
 import rateLimit from 'express-rate-limit';
+import { purchaseEmailController } from './controllers/service/emailController.js';
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use('/api/v1/service', serviceRoutes);
 app.use('/api/v1/stripe', paypalRoutes);
 app.use('/api/v1/tickets', ticketRoutes);
 app.use('/api/v1/form', formRoutes);
+app.use('/api/v1/email',purchaseEmailController);
 // Use the error handling middleware after all routes and other middleware
 app.use(errorHandler);
 
