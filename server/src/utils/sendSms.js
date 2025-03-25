@@ -17,7 +17,8 @@ const twilioClient = twilio(accountSid, authToken);
  */
 export const sendSms = asyncErrors(async ({ to, message }) => {
     if (!to || !message) {
-        throw new Error("Both 'to' and 'message' fields are required.");
+        logger.error("Both 'to' and 'message' fields are required.");
+        return;
     }
 
     try {

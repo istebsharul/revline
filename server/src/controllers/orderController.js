@@ -3,9 +3,9 @@ import Customer from '../models/customer.js';
 import asyncErrors from '../middlewares/catchAsyncErrors.js';
 import logger from '../utils/logger.js';
 import { sendSmsNotification } from '../utils/smsService.js';
-import { sendDeliveryConfirmationEmail, sendProcessingUpdateEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail, sendPartNotAvailableEmail, sendAccountActivationEmail, sendWelcomeBackEmail } from '../utils/emailService.js';
+import { sendDeliveryConfirmationEmail, sendProcessingUpdateEmail, sendReturnConfirmationEmail, sendShippingUpdateEmail, sendPartNotAvailableEmail, sendAccountActivationEmail, sendWelcomeBackEmail, sendFeedbackRequestEmail } from '../utils/emailService.js';
 import { ObjectId } from 'mongodb';
-import mongoose from 'mongoose';
+import { addReviewRequestJob } from '../queue/reviewRequestEmailQueue.js';
 
 // Create a new order
 export const createOrder = asyncErrors(async (req, res) => {
@@ -407,9 +407,10 @@ export const updateOrder = asyncErrors(async (req, res) => {
                     sendSmsNotification({
                         type: 'order_delivered',
                         to: existingOrder.customer.phone,
-                        data: { orderId, feedbackLink: 'https://g.page/r/CVl0S1321maCEBM/review' }
+                        data: { orderId, orderDetails: existingOrder?.order_summary }
                     });
-                    sendDeliveryConfirmationEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId, feedbackLink: 'https://g.page/r/CVl0S1321maCEBM/review' });
+                    sendDeliveryConfirmationEmail({ email: existingOrder.customer.email, name: existingOrder.customer.name, orderId, feedbackLink: 'https://g.page/r/CVl0S1321maCEBM/review',orderDetails:existingOrder?.order_summary });
+                    addReviewRequestJob({ orderId,email: existingOrder.customer.email,name:existingOrder.customer.name, phone: existingOrder.customer.phone,orderDetails: existingOrder?.order_summary });
                     break;  // Add 'break' here to avoid fall-through
                 case "Return Initiated":
                     logger.info(`Sending 'Return Initiated' SMS to ${existingOrder.customer.phone} for Order #${orderId}`);

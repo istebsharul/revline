@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 // Define a schema for the order summary without an automatic _id field
 const OrderSummarySchema = new mongoose.Schema({
-  part_code: { type: String, trim: true },
+  part_code: { type: String, trim: true, default: '' },
   year: { type: String, trim: true },
   make: { type: String, trim: true },
   model: { type: String, trim: true },

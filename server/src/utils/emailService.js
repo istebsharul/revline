@@ -238,22 +238,21 @@ Revline Auto Parts
 };
 
 export const sendDeliveryConfirmationEmail = async (clientData) => {
-    const { email, name, orderId, feedbackLink } = clientData;
+    const { email, name, orderId, feedbackLink, orderDetails } = clientData;
     logger.info(`Sending delivery confirmation email for order ${orderId} to ${email}`);
-
     const message = `
 Dear ${name},
 
-We are pleased to confirm that your order has been delivered.
+We are pleased to confirm that your order ${orderDetails?.part_name} of ${orderDetails?.year} ${orderDetails?.make} ${orderDetails?.model} has been delivered.
 
 We hope everything arrived in excellent condition and meets your expectations. If you have any questions or need assistance, please don't hesitate to contact us.
 
 Enjoy your new auto parts, and thank you for choosing Revline Auto Parts!
-
-We would love to hear about your experience. Please share your feedback here: ${feedbackLink}.
     
 Warm regards,
-        
+
+Adam Reed
+(+1 775 350-1908)
 Sales Team
 Revline Auto Parts
     `;
@@ -272,51 +271,64 @@ Revline Auto Parts
 };
 
 export const sendFeedbackRequestEmail = async (clientData) => {
-    const { email, name, feedbackLink } = clientData;
+    const { email, name, feedbackLink, orderDetails } = clientData;
     logger.info(`Sending feedback request email to ${email}`);
-
     const message = `
-Dear ${name},
+Hi ${name},
 
-Thank you for your recent purchase! We'd love to hear about your experience.
+We hope you're loving your recent purchase — the ${orderDetails?.year} ${orderDetails?.make} ${orderDetails?.model} ${orderDetails?.part_name} — from Revline Auto Parts.
 
-Please take a moment to share your feedback: [Submit Feedback](${feedbackLink})
+We’re always looking to improve, and your feedback plays a big role in that. If you could spare just a minute to share your experience, we’d be truly grateful.
 
-Your thoughts help us improve and continue to serve you better.
+👉 <a href="${feedbackLink}" target="_blank" style="color: blue; text-decoration: underline;">Click here to leave a review</a>
 
-Best regards,
-Customer Service Team
+As a thank-you, we’ll send $10 back to your original payment method.
+
+Once your review is submitted, simply reply to this email or call us at 1-888 632 0709 to let us know — and we’ll process your appreciation credit right away.
+
+Thanks again for being part of the Revline family. We’re here if you ever need anything!
+
+Best regards,  
+
+Customer Experience Team 
 Revline Auto Parts
     `;
 
     try {
         await sendMail({
             email,
-            subject: 'We Value Your Feedback!',
+            subject: `Your Opinion Matters, ${name} — Get $10 for Sharing It`,
             message,
+            isHtml: true,  // Ensure your email service supports HTML
         });
         logger.info(`Successfully sent feedback request email to ${email}`);
     } catch (error) {
         logger.error(`Failed to send feedback request email to ${email}`, error);
-        
     }
 };
 
-export const sendPromotionalEmail = async (clientData) => {
-    const { email, name, promoDetails } = clientData;
-    logger.info(`Sending promotional email to ${email}`);
+
+export const sendFollowUpEmail = async (clientData) => {
+    const { name, email, orderDetails } = clientData;
+    logger.info(`Sending follow up email to ${email}`);
 
     const message = `
 Dear ${name},
-        
-Exciting news! Here's an exclusive offer just for you:
-        
-    ${promoDetails}
-        
-Hurry, this offer is available for a limited time only. Visit us now to grab your deal!
-        
+
+We noticed you left some items in your Order. These quality auto parts are still waiting for you!
+
+Your Items:-
+    - ${orderDetails?.year}, ${orderDetails?.make}, ${orderDetails?.model}, ${orderDetails?.part_name}
+
+Need assistance or have questions? Our team is ready to help Call Now! +1 888 632 0709.
+
+As a special incentive, use COUPON CODE for a FLAT $10 discount on your order.
+
+We look forward to serving you soon!
+
 Best regards,
-        
+
+Adam Reed
 Customer Service Team
 Revline Auto Parts
     `;
@@ -324,7 +336,7 @@ Revline Auto Parts
     try {
         await sendMail({
             email,
-            subject: 'Exclusive Offer Just for You!',
+            subject: `Don't Miss Out, ${name} Complete Your Purchase Today`,
             message,
         });
         logger.info(`Successfully sent promotional email to ${email}`);
@@ -455,7 +467,6 @@ Revline Auto Parts
         logger.error(`Failed to send confirmation email for Ticket ID: ${ticketId}. Error: ${error.message}`);
     }
 };
-
 
 export const sendPartNotAvailableEmail = async (clientData) => {
     const { email, name, orderId, orderSummary } = clientData;
