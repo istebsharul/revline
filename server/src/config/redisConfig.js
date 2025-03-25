@@ -1,24 +1,28 @@
-// import Redis from 'ioredis';
-// import dotenv from 'dotenv';
+import { Redis } from "ioredis";
+import dotenv from "dotenv";
 
-// dotenv.config();
+dotenv.config(); // Load environment variables from .env
 
-// const redis = new Redis({
-//     host: process.env.REDIS_HOST,
-//     port: process.env.REDIS_PORT,
-//     username: process.env.REDIS_USER,
-//     password: process.env.REDIS_PASSWORD,
-//     tls:{
-//         rejectUnauthorized: false
-//     }
-// });
+// const redisUrl = 'rediss://red-csrmv856l47c73fhpie0:u6VbnJmFS8GfD7wuuhRh2aWdQHc0MBFa@oregon-keyvalue.render.com:6379';
 
-// redis.on('connect', () => {
-//     console.log('Redis Connected');
-// });
+const redisUrl = process.env.EXTERNAL_REDIS_URL;
 
-// redis.on('error', (err) => {
-//     console.error('Redis Connection Error:', err);
-// });
+if (!redisUrl) {
+  console.error("🚨 Missing EXTERNAL_REDIS_URL. Set it in your environment variables.");
+  process.exit(1);
+}
 
-// export default redis;
+const redis = new Redis(redisUrl, {
+  maxRetriesPerRequest: null, // Helps prevent unexpected reconnections
+  enableReadyCheck: false, // Avoids connection errors
+});
+
+redis.on("connect",(err)=>{
+    console.log("Redis Connected Successfully")
+})
+
+redis.on("error", (err) => {
+  console.error("🚨 Redis Connection Error:", err);
+});
+
+export default redis;

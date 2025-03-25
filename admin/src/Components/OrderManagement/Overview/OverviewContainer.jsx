@@ -31,21 +31,22 @@ const OverviewContainer = ({ order }) => {
   };
 
   const handleSave = async () => {
-    try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${orderDetails._id}`, orderDetails, {
+    await toast.promise(
+      axios.put(`${import.meta.env.VITE_API_URL}/api/v1/orders/${orderDetails._id}`, orderDetails, {
         headers: {
-          'Content-Type': 'application/json', // Ensures the payload is sent in JSON format
+          'Content-Type': 'application/json',
         },
-      });
-      setIsEditing(false);
-      console.log('Updated Successfully!');
-      toast.success('Updated Successfully!');
-    } catch (err) {
-      // toast.error(err);
-      toast.error(err.response.data.message);
-      console.error('Failed to update order details:', err);
-    }
+      }),
+      {
+        loading: 'Saving...',
+        success: 'Updated Successfully!',
+        error: (err) => err.response?.data?.message || 'Could not save.',
+      }
+    )
+    .then(() => setIsEditing(false))
+    .catch((err) => console.error('Failed to update order details:', err));
   };
+  
 
   return (
     <div className="w-full overflow-y-auto">
