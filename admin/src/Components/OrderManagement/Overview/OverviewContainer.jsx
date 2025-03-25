@@ -102,7 +102,7 @@ const OverviewContainer = ({ order }) => {
             <QuotationDetails quotationDetails={orderDetails.quotations} />
             <InvoiceDetails invoiceDetails={orderDetails.invoices} />
             <PaymentDetails paymentDetails={orderDetails.payment_details} />
-            <OrderDispositionDetails trackingLink={orderDetails.order_summary?.part_code} orderDispositionDetails={orderDetails.order_disposition_details} isEditing={isEditing} setOrderDetails={setOrderDetails} />
+            <OrderDispositionDetails trackingLink={orderDetails.order_summary?.part_code} orderDispositionDetails={orderDetails.order_disposition_details} isEditing={isEditing} setOrderDetails={setOrderDetails} partDetails={orderDetails?.order_summary} customerDetails={orderDetails?.shipping_details}/>
           </>
         )}
 

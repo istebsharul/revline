@@ -501,3 +501,67 @@ Revline Auto Parts
         
     }
 }
+
+export const sendPurchaseOrderEmail = async (clientData) => {
+    const { email, partName, year, make, model, customerAddress, customerName } = clientData;
+
+    // Validate input data
+    if (!email || !partName || !year || !make || !model || !customerAddress || !customerName) {
+        console.error('Missing required client data fields', { clientData });
+        return;
+    }
+
+    // Compose the email content
+    const subject = `Order Confirmation for ${partName} - ${year} ${make} ${model}`;
+    const message = `
+Hello Dear,
+
+I hope this message finds you well.
+
+I am writing to confirm the order for the ${partName} for the ${year} ${make} ${model}. As we have already discussed, I would like to proceed with the purchase.
+
+Company Information:
+Company Name: Revline Auto Parts, LLC
+Address: 187 E. Warm Springs Rd. Suite B NV152, Las Vegas, NV 89119
+Contact Number: +1 775-350-1908
+Email: Support@revlineautoparts.com
+
+Card Details:
+Name: P A Mohammed Mansoor
+Card Number: 5342 7110 9075 7269
+Expiration: 12/30
+CVC: 827
+
+Customer Shipping Information:
+Name: ${customerName}
+Address: ${customerAddress}
+
+Part Information:
+Part Requested: ${partName} for ${year} ${make} ${model}
+
+Please provide the next steps for completing the order and the payment instructions. Let me know if any further documentation or details are required.
+
+Looking forward to your confirmation and further instructions.
+
+Best regards,
+
+Mohammed Mansoor
+
+Revline Auto Parts, LLC
+Support@revlineautoparts.com
++1 775-350-1908
+    `;
+
+    // Send the email
+    try {
+        await sendOrdersMail({
+            email,
+            subject,
+            message,
+        });
+        console.log(message);
+        console.log('Order confirmation email sent successfully');
+    } catch (error) {
+        console.error('Error sending order confirmation email:', error);
+    }
+};
