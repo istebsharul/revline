@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config(); // Load environment variables from .env
 
-const redisUrl = 'rediss://red-csrmv856l47c73fhpie0:u6VbnJmFS8GfD7wuuhRh2aWdQHc0MBFa@oregon-keyvalue.render.com:6379';
+// const redisUrl = 'rediss://red-csrmv856l47c73fhpie0:u6VbnJmFS8GfD7wuuhRh2aWdQHc0MBFa@oregon-keyvalue.render.com:6379';
+
+const redisUrl = process.env.EXTERNAL_REDIS_URL;
 
 if (!redisUrl) {
   console.error("🚨 Missing EXTERNAL_REDIS_URL. Set it in your environment variables.");
