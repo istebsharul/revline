@@ -90,9 +90,9 @@ export const sendQuotation = asyncErrors(async (req, res) => {
       htmlContent: htmlTemplate,
     });
 
-    await sendSmsNotification({type:'quotation',to:customerPhone,data: {amount:quoted_price, orderId}});
+    await sendSmsNotification({type:'quotation',to:customerPhone,data: {name:customerName,part_name:order?.order_summary?.part_name, amount:quoted_price, orderId}});
 
-    await addFollowUpJob({orderId,quoteNumber,email:customerEmail,phone:customerPhone});
+    await addFollowUpJob({orderId,quoteNumber,name:customerName,email:customerEmail,phone:customerPhone, orderDetails:order?.order_summary, followUpCount:1});
 
     logger.info(`Quotation sent to ${customerEmail} for ${customerName}.`);
 

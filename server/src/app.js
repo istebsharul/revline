@@ -58,10 +58,11 @@ serverAdapter.setBasePath('/admin/queues');
 
 // Define the queue
 const followUpEmailQueue = new Queue("followUpEmailQueue", { connection: redis });
+const reviewRequestEmailQueue = new Queue("reviewRequestEmailQueue", { connection: redis });
 
 // Setup Bull Board UI
 createBullBoard({
-  queues: [new BullMQAdapter(followUpEmailQueue)],
+  queues: [new BullMQAdapter(followUpEmailQueue), new BullMQAdapter(reviewRequestEmailQueue)],
   serverAdapter,
 });
 
