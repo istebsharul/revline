@@ -136,7 +136,7 @@ function BlogsPage() {
                         "image": getCompanyLogoUrl[make] || "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.webp",
                         "url": `https://revlineautoparts.com/blogs/${make}`,
                         "sameAs": [
-                            `https://www.facebook.com/profile.php?id=61566917829480`,
+                            `https://www.facebook.com/revlineautoparts`,
                             `https://x.com/revlineautopart`,
                             `https://www.instagram.com/revlineautoparts`
                         ]

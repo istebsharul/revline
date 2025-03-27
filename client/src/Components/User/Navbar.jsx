@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser, logout } from '../../Actions/userActions';
 import { FaUserCircle } from "react-icons/fa";
+import { FiPhoneCall } from "react-icons/fi";
+import { motion } from 'framer-motion';
 
 function Navbar() {
     const [navbar, setNavbar] = useState(false);
@@ -64,7 +66,7 @@ function Navbar() {
 
     return (
         <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 bg-red-400 shadow-lg">
-            <div className="w-full md:h-14 lg:w-4/6 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-1">
+            <div className="w-full md:h-14 lg:w-3/4 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-1">
                 {/* LOGO */}
                 <div className='flex md:flex-col items-center justify-between md:block'>
                     <div className="w-[9rem] p-1">
@@ -83,46 +85,71 @@ function Navbar() {
                     </div>
                 </div>
                 <div className={`${navbar ? 'block' : 'md:w-full md:block md:flex md:justify-self-center hidden'}`}>
-                <div className={`transparent text-black flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0`}>
-                    <ul className="text-black text-sm md:h-fit flex md:flex-row flex-col items-center justify-center md:flex relative">
-                        {['/Home', '/Parts', '/Blogs', '/About', '/Warranty', '/FAQ', '/Shipping', '/Contact'].map((path, index) => (
-                            <li key={index} className="hover:text-[#f6251a] pb-3 text-[1rem] py-2 md:px-6 text-center transform transition-transform hover:translate-y-1">
-                                <Link to={path.toLowerCase()} onClick={() => setNavbar(false)}>
-                                    <div>
-                                        {path.slice(1) || 'Home'}
-                                    </div>
+                    <div className={`transparent text-black flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0`}>
+                        <ul className="text-black text-sm md:h-fit flex md:flex-row flex-col items-center justify-center md:flex relative">
+                            {['/Home', '/Parts', '/Blogs', '/About', '/Warranty', '/FAQ', '/Shipping', '/Contact'].map((path, index) => (
+                                <li key={index} className="hover:text-[#f6251a] pb-3 text-[1rem] py-2 md:px-6 text-center transform transition-transform hover:translate-y-1">
+                                    <Link to={path.toLowerCase()} onClick={() => setNavbar(false)}>
+                                        <div>
+                                            {path.slice(1) || 'Home'}
+                                        </div>
+                                    </Link>
+                                </li>
+                            ))}
+                            <a href="tel:+18886320709" className=''>
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    className="relative px-4 py-2 ml-2 mr-4 bg-[#f6251a] rounded text-nowrap flex justify-center items-center gap-2 text-white overflow-hidden shadow-lg"
+                                >
+                                    {/* Shimmer Effect */}
+                                    <motion.div
+                                        animate={{ x: ["-100%", "100%"] }}
+                                        transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                                        className="absolute inset-0 bg-gradient-to-r from-[#f6251a] via-[#ff7e5f] to-[#f6251a] animate-shimmer"
+                                    />
+
+                                    {/* Button Content */}
+                                    <motion.div className="relative flex items-center gap-2">
+                                        <motion.div
+                                            animate={{ rotate: [-20, 10, -10] }}
+                                            transition={{ repeat: Infinity, duration: 0.5, ease: "linear" }}
+                                        >
+                                            <FiPhoneCall />
+                                        </motion.div>
+                                        888 632 0709
+                                    </motion.div>
+                                </motion.button>
+                            </a>
+                        </ul>
+                    </div>
+                    <div className="flex justify-center items-center md:py-0 py-3 relative decoration-none" ref={dropdownRef}>
+                        <div className="cursor-pointer" onClick={toggleUserDropdown}>
+                            {isLoggedIn ? (
+                                <button><FaUserCircle className="w-7 h-7" /></button>
+                            ) : (
+                                <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-[#f6251a]' to="/login" onClick={() => setNavbar(false)}>LOGIN</Link>
+                            )}
+                        </div>
+                        {isLoggedIn && userDropdown && (
+                            <div className="absolute top-2 right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
+                                <div
+                                    className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                >
+                                    {username}
+                                </div>
+                                <Link to="/orders" onClick={() => setNavbar(false)} className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
+                                    Orders
                                 </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <div className="flex justify-center items-center md:py-0 py-3 relative decoration-none" ref={dropdownRef}>
-                    <div className="cursor-pointer" onClick={toggleUserDropdown}>
-                        {isLoggedIn ? (
-                            <button><FaUserCircle className="w-7 h-7" /></button>
-                        ) : (
-                            <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-[#f6251a]' to="/login" onClick={()=>setNavbar(false)}>LOGIN</Link>
+                                <div
+                                    className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
+                                    onClick={handleLogout}
+                                >
+                                    Logout
+                                </div>
+                            </div>
                         )}
                     </div>
-                    {isLoggedIn && userDropdown && (
-                        <div className="absolute top-2 right-0 mt-10 w-48 bg-white shadow-md rounded-lg">
-                            <div
-                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                            >
-                                {username}
-                            </div>
-                            <Link to="/orders" onClick={()=>setNavbar(false)} className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
-                                Orders
-                            </Link>
-                            <div
-                                className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                                onClick={handleLogout}
-                            >
-                                Logout
-                            </div>
-                        </div>
-                    )}
-                </div>
                 </div>
             </div>
         </nav>
