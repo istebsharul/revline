@@ -32,7 +32,7 @@ export const sendMail = async (options) => {
         </div>
         <!-- Tagline -->
         <div style="display: table-cell; vertical-align: middle; width: 40%; color: white; font-size: 3vh; text-align: center;">
-            <span style="font-style: italic;">Rev Up <span style="color: red;">Your Ride</span><br />
+            <span style="font-style: italic;">Rev Up <span style="color: red;">Your Drive</span><br />
             <span style="color: red;">With the</span> Best Parts</span>
         </div>
         <!-- Right GIF -->
@@ -110,7 +110,7 @@ export const sendOrdersMail = async (options) => {
         </div>
         <!-- Tagline -->
         <div style="display: table-cell; vertical-align: middle; width: 40%; color: white; font-size: 3vh; text-align: center;">
-            <span style="font-style: italic;">Rev Up <span style="color: red;">Your Ride</span><br />
+            <span style="font-style: italic;">Rev Up <span style="color: red;">Your Drive</span><br />
             <span style="color: red;">With the</span> Best Parts</span>
         </div>
         <!-- Right GIF -->
@@ -126,7 +126,7 @@ export const sendOrdersMail = async (options) => {
     <footer style="background-color: black; color: white; padding: 10px; text-align: center; border-radius: 0 0 20px 20px;font-size:2vh">
         <div style="margin-bottom: 5px;">
             <a href="https://www.instagram.com/revlineautoparts" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">Instagram</a>
-            <a href="https://www.facebook.com/profile.php?id=61566917829480" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">Facebook</a>
+            <a href="https://www.facebook.com/revlineautoparts" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">Facebook</a>
             <a href="https://www.youtube.com/@revlineautoparts" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">YouTube</a>
         </div>
         <div>
@@ -183,7 +183,7 @@ export const sendSupportMail = async (options) => {
         </div>
         <!-- Tagline -->
         <div style="display: table-cell; vertical-align: middle; width: 40%; color: white; font-size: 3vh; text-align: center;">
-            <span style="font-style: italic;">Rev Up <span style="color: red;">Your Ride</span><br />
+            <span style="font-style: italic;">Rev Up <span style="color: red;">Your Drive</span><br />
             <span style="color: red;">With the</span> Best Parts</span>
         </div>
         <!-- Right GIF -->
@@ -199,7 +199,7 @@ export const sendSupportMail = async (options) => {
     <footer style="background-color: black; color: white; padding: 10px; text-align: center; border-radius: 0 0 20px 20px;font-size:2vh">
         <div style="margin-bottom: 5px;">
             <a href="https://www.instagram.com/revlineautoparts" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">Instagram</a>
-            <a href="https://www.facebook.com/profile.php?id=61566917829480" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">Facebook</a>
+            <a href="https://www.facebook.com/revlineautoparts" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">Facebook</a>
             <a href="https://www.youtube.com/@revlineautoparts" target="_blank" style="color: white; margin: 0 15px; text-decoration: none;">YouTube</a>
         </div>
         <div>
