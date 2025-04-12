@@ -66,7 +66,7 @@ function Navbar() {
 
     return (
         <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 bg-red-400 shadow-lg">
-            <div className="w-full md:h-14 lg:w-3/4 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-1">
+            <div className="w-full md:h-14 lg:w-4/5 2xl:w-3/4 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-1">
                 {/* LOGO */}
                 <div className='flex md:flex-col items-center justify-between md:block'>
                     <div className="w-[9rem] p-1">

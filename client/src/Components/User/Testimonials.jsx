@@ -1,42 +1,101 @@
 import React, { useState, useEffect } from 'react';
-import { FaArrowLeft, FaArrowRight, FaStar, FaRegStar } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaStar } from 'react-icons/fa';
 import { SiComma } from "react-icons/si";
 
 const testimonials = [
-    { text: "Incredible service! My car runs like new. The staff were professional and friendly. I highly recommend this service for anyone looking for quality work!", name: "Alex Carter", carBrand: "Toyota", rating: 5 },
-    { text: "Fast, efficient, and very friendly. They took the time to explain every detail of the process, and I left feeling completely satisfied with the service.", name: "Rachel Brooks", carBrand: "Honda", rating: 5 },
-    { text: "Trustworthy and knowledgeable team. I feel confident leaving my car in their hands. They handled everything seamlessly. A great experience overall!", name: "David Murphy", carBrand: "Ford", rating: 5 },
-    { text: "Excellent service with clear communication. They handled everything with professionalism and efficiency. I will definitely return for future car care needs!", name: "Jessica Wright", carBrand: "Chevrolet", rating: 5 },
-    { text: "Went above and beyond to get my car fixed. The staff were professional and courteous. Great job overall. I would highly recommend them to anyone!", name: "Luke Davis", carBrand: "BMW", rating: 5 },
-    { text: "The team was friendly, efficient, and made sure my car was in top shape. I am very satisfied with their service and will return in the future.", name: "Emily Morgan", carBrand: "Audi", rating: 5 },
-    { text: "Transparent, reliable, and professional. I’ve finally found a service I can trust with my car. I’m confident in their abilities and recommend them highly!", name: "Liam Robinson", carBrand: "Mercedes-Benz", rating: 5 },
-    { text: "Amazing customer care and attention to detail. They truly care about quality and make sure every job is done right. I highly recommend their service!", name: "Sophia Green", carBrand: "Volkswagen", rating: 5 },
-    { text: "Outstanding work. My car feels brand new after the service. Couldn’t ask for better service. The team was amazing from start to finish.", name: "Ethan King", carBrand: "Nissan", rating: 5 },
-    { text: "Professional, friendly, and skilled team. My car’s performance improved greatly after their service. I will be using them for all my car needs in the future!", name: "Olivia Scott", carBrand: "Hyundai", rating: 5 },
-    { text: "Quick and dependable service. They got me back on the road in no time. I was very impressed with the speed and efficiency of the work done.", name: "Benjamin Lee", carBrand: "Subaru", rating: 5 },
-    { text: "Exceptional care and professionalism. They handled everything perfectly and exceeded my expectations. They’re my top choice for any future car needs!", name: "Amelia Baker", carBrand: "Mazda", rating: 5 },
-    { text: "Couldn't be happier with the thorough service. The team provided clear explanations and outstanding customer support. My car is running like new now.", name: "Daniel Clark", carBrand: "Lexus", rating: 5 },
-    { text: "Great prices and excellent work. I appreciate their dedication to quality. I will definitely be returning for any future car services or repairs.", name: "Isabella Lewis", carBrand: "Acura", rating: 5 },
-    { text: "They explained everything step-by-step, which really helped me feel at ease. Great customer experience. The staff were friendly and knowledgeable throughout.", name: "James Walker", carBrand: "Kia", rating: 5 },
-    { text: "Fantastic service. My car runs perfectly now. They took great care of everything, and I’m very pleased with the results. Highly recommend this service!", name: "Ava Harris", carBrand: "Porsche", rating: 5 },
-    { text: "Fast, fair, and friendly! I found my go-to place for all car services. The team was professional, and the service was excellent from start to finish.", name: "Henry Young", carBrand: "Jaguar", rating: 5 },
-    { text: "The team goes the extra mile to make sure you’re satisfied. Excellent work and service, and they make sure everything is taken care of before you leave.", name: "Mia Perez", carBrand: "Land Rover", rating: 5 },
-    { text: "Top-notch repairs and amazing communication. I highly recommend them to anyone in need of car care. They take the time to do it right every time.", name: "William Campbell", carBrand: "Volvo", rating: 5 },
-    { text: "Trustworthy, efficient, and courteous. A great place for reliable service. They did a wonderful job with my car, and I’m very happy with the results.", name: "Charlotte Mitchell", carBrand: "Infiniti", rating: 5 },
-    { text: "Efficient and knowledgeable service. They’ve earned my trust and business. I’m glad to have found a reliable place to take care of my car needs.", name: "Samuel Carter", carBrand: "Tesla", rating: 4 },
-    { text: "Very impressed with their attention to detail. My car’s performance has improved dramatically! The staff were friendly and ensured everything was done properly.", name: "Chloe Edwards", carBrand: "Mitsubishi", rating: 4 },
-    { text: "The staff truly cares about their customers. A rare and refreshing experience! They went above and beyond to ensure I was satisfied with the service.", name: "Mason Hughes", carBrand: "Mini", rating: 4 },
-    { text: "Best service I’ve experienced! They’re reliable, friendly, and knowledgeable. I highly recommend them for anyone looking for quality car service and repairs.", name: "Ella Long", carBrand: "Fiat", rating: 4 },
-    { text: "Honest and friendly staff. I’m very happy with the results and service. They were transparent throughout the process and made everything easy to understand.", name: "Aiden Carter", carBrand: "Chrysler", rating: 4 },
-    { text: "My car is running like a dream now. Thank you so much for your hard work! The team was professional and made sure everything was taken care of.", name: "Sophie Bennett", carBrand: "Jeep", rating: 4 },
-    { text: "Very pleased with the whole process from start to finish. The service was quick and efficient. I’ll definitely be returning for future car care needs.", name: "Nathan Green", carBrand: "Lincoln", rating: 4 },
-    { text: "Efficient and friendly. My car has never felt better! The staff were professional and made sure to explain every step of the service they performed.", name: "Zoey Sanders", carBrand: "Genesis", rating: 4 },
-    { text: "A very reliable service. I trust them with all my car needs and will definitely return. They did a fantastic job, and my car runs smoothly now.", name: "Oliver Foster", carBrand: "Bentley", rating: 3 },
-    { text: "Amazing service and very knowledgeable staff. They provided a detailed explanation of everything that was done. I’ll definitely return for any future car repairs.", name: "Harper Adams", carBrand: "Rolls-Royce", rating: 4 }
+    
+    {
+        text: "Absolutely flawless experience! I was having trouble finding the correct ABS module for my 2010 Chevy Malibu—dealership said it was discontinued. I reached out to Revline and Adam Reed got back to me the same day. He confirmed the part.",
+        name: "Isabelle Myra",
+        carBrand: "Chevrolet",
+        rating: 5
+    },
+    {
+        text: "Was looking for a 2015 Dodge Charger ABS module and finally found one here at a fair price. They double-checked my VIN before shipping, and the part arrived well-packaged. Installed it over the weekend, and my ABS light is gone. Solid service!",
+        name: "Freddie Davis",
+        carBrand: "Dodge",
+        rating: 5
+    },
+    {
+        text: "Ordered a brake master cylinder from Revline, and I’m happy with how smooth everything went. Shipping was quick, the part fit perfectly, and the price was way better than the local dealer. No complaints at all!",
+        name: "Jacob Brown",
+        carBrand: "Dodge",
+        rating: 5
+    },
+    {
+        text: "I bought an ABS unit for my sedan, and it fits perfectly also condition was just like a new one. Thanks for the such a good customer support, Keep up the good work. Highly recommended.",
+        name: "Istebsharul Bari",
+        carBrand: "Dodge",
+        rating: 5
+    },
+    {
+        text: "I was struggling to find a radio unit for my 1997 Ford Pickup, and Revline had exactly what I needed. It arrived in great condition, plugged it in, and it worked right away. Super smooth process!",
+        name: "Jackson Ward",
+        carBrand: "Ford",
+        rating: 5
+    },
+    {
+        text: "Got the transmission control unit for my Kia Optima. Adam confirmed compatibility with my VIN. Working perfectly ever since!",
+        name: "Jaiden Antwan",
+        carBrand: "Kia",
+        rating: 5
+    },
+    {
+        text: "Ordered from ABS Part, and everything went smoothly. Good quality parts, fast response, and no issues with the process. Will definitely buy again!",
+        name: "MH Vlogs",
+        carBrand: "Dodge",
+        rating: 5
+    },
+    {
+        text: "Product worked but wasn’t cleaned properly. Still had oil residue. Functionally it’s fine, but a quick wipe-down would’ve helped.",
+        name: "Jarrett Houston",
+        carBrand: "Dodge",
+        rating: 4
+    },
+    {
+        text: "Alternator came in used condition as expected. Worked fine. Packaging could have been better.",
+        name: "Alexis Smith",
+        carBrand: "Dodge",
+        rating: 4
+    },
+    {
+        text: "Had been searching for a replacement ABS module for my 2006 Dodge Charger. Adam Reed from Revline made the process painless. Verified the part with my VIN and got it shipped quickly. Installed and working great!",
+        name: "Mehmood Jani",
+        carBrand: "Dodge",
+        rating: 5
+    },
+    {
+        text: "Ordered a throttle body for my Civic Si. Adam checked everything before shipping. Arrived clean and worked perfectly. Very professional team.",
+        name: "Ramzan Choudery",
+        carBrand: "Honda",
+        rating: 5
+    },
+    {
+        text: "Great experience with RevLine Auto Parts! Quick response, quality parts, and smooth transaction. Definitely recommend for anyone looking for reliable auto parts.",
+        name: "Syed Alam",
+        carBrand: "Dodge",
+        rating: 5
+    },
+    {
+        text: "Good experience overall. Took an extra call to confirm fitment but Adam got it sorted.",
+        name: "Ali Ali",
+        carBrand: "Dodge",
+        rating: 4
+    },
+    {
+        text: "Needed a used OEM tail light for my Hyundai Elantra. Adam made sure it matched my trim level and shipped it the same day. It arrived clean and worked perfectly. Great experience!",
+        name: "Mayra Jamal",
+        carBrand: "Hyundai",
+        rating: 5
+    }
 ];
+
 
 function Testimonials() {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const totalRatings = testimonials.reduce((sum, testimonial) => sum + testimonial.rating, 0);
+    const averageRating = (totalRatings / testimonials.length).toFixed(1); // rounded to 1 decimal
+
 
     const handleNext = () => {
         setCurrentIndex((prevIndex) =>
@@ -54,9 +113,9 @@ function Testimonials() {
         const stars = [];
         for (let i = 1; i <= 5; i++) {
             if (i <= rating) {
-                stars.push(<FaStar key={i} className="text-yellow-500 text-xl" />);
+                stars.push(<FaStar key={i} className="text-[#F4B400] text-lg" />);
             } else {
-                stars.push(<FaRegStar key={i} className="text-yellow-500 text-xl" />);
+                stars.push(<FaStar key={i} className="text-gray-500 text-lg" />);
             }
         }
         return stars;
@@ -70,12 +129,16 @@ function Testimonials() {
     return (
         <div className='w-full flex flex-col justify-center items-center bg-gray-100 rounded-2xl'>
             <h1 className='text-center md:text-5xl text-3xl text-[#f6251a] py-10 font-medium'>TESTIMONIALS</h1>
+            <div className='flex justify-end items-end my-2 gap-1 text-xl'>
+                Our <img className='w-20' src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/640px-Google_2015_logo.svg.png" /> reviews <span className='text-xl font-medium'> {averageRating}</span> rating of {testimonials.length} reviews
+            </div>
             <div className='md:w-4/6 w-full flex justify-start p-4'>
                 <div className='flex text-[#f6251a]'>
                     <SiComma className='md:text-4xl rotate-180' />
                     <SiComma className='md:text-4xl rotate-180' />
                 </div>
             </div>
+
 
             <div className='relative w-4/5 md:w-3/5 overflow-hidden rounded-2xl'>
                 <div
@@ -89,7 +152,9 @@ function Testimonials() {
                         >
                             <div className='w-4/5 space-y-2 flex flex-col justify-start py-2 mb-2'>
                                 <div className='flex flex-col justify-between items-start'>
-                                    <div className="flex space-x-1 my-2">
+                                    <div className="flex justify-center items-center space-x-1 my-2">
+                                        <img className='w-8 h-8 mr-1' src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" />
+                                        <span className='text-xl text-[#F4B400] font-medium mr-2'>{testimonial.rating.toPrecision(2)}</span>
                                         {renderStars(testimonial.rating)}
                                     </div>
                                     <p>{testimonial.text}</p>
