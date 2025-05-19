@@ -94,7 +94,7 @@ const UserInfoForm = ({ userData, setUserData, errors }) => {
                     onChange={e => setUserData({ ...userData, zipcode: e.target.value })}
                 />
                 {errors.zipcode && <p className="text-xs text-[#f6251a]">{errors.zipcode}</p>}
-                {location && <p className='text-xs text-red-600 p-1'>{location}</p>}
+                {location && location !== 'Invalid ZIP code' && <p className='text-xs text-red-600 p-1'>{location}</p>}
             </div>
 
             <div className='text-xs text-gray-600 space-y-1'>
