@@ -14,7 +14,7 @@ To access your new account, please set up your secure password by clicking the l
     Create Your Password and Complete Account Setup by clicking the link below
         www.revlineautoparts.com/signup?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}
 
-We have received your order for the ${vehicleData?.part} of the ${vehicleData?.year} ${vehicleData?.make} ${vehicleData?.model}.
+We have received your request for the ${vehicleData?.part} of the ${vehicleData?.year} ${vehicleData?.make} ${vehicleData?.model}.
         
 With your Revline account, you can:
     - Explore Our Catalog: Access a comprehensive range of high-quality auto parts.
@@ -95,7 +95,7 @@ Dear ${name},
 
 Welcome back to Revline Auto Parts! We're thrilled to have you with us again. Your loyalty means the world to us, and we're committed to ensuring every experience exceeds your expectations.
 
-We have received your order for the ${vehicleData?.part} of the ${vehicleData?.year} ${vehicleData?.make} ${vehicleData?.model}.
+We have received your request for the ${vehicleData?.part} of the ${vehicleData?.year} ${vehicleData?.make} ${vehicleData?.model}.
 
 Here's what's waiting for you as a returning member:
     - Tailored Recommendations: Explore auto parts based on your past preferences and orders.
