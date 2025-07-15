@@ -26,8 +26,8 @@ function Footer() {
             <img src="https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812716/revlineautoparts/Logo/tzeavglpto0z7toihv5e.png" width={100} height={100} alt="Logo" className="mx-auto lg:mx-0 w-32 lg:w-3/5" />
             <div className="text-center lg:text-left font-thin text-sm mt-2 lg:mt-0">
               Revline Auto Parts offers a complete range of high-quality auto parts for all vehicles, ensuring reliability and performance at competitive prices. Your trusted source for everything your car needs.
-              {/* <br /><span className='font-light text-sm flex mt-2'><FaLocationDot className='mr-0.5 my-0.5' />
-                8565 South Eastern Avenue, Las Vegas, NV, 89123</span> */}
+              <br /><span className='font-light text-sm flex mt-2'><FaLocationDot className='mr-0.5 my-0.5' />
+                8565 South Eastern Avenue, Las Vegas, NV, 89123</span>
             </div>
             <div></div>
           </div>
