@@ -60,11 +60,10 @@ const HeroSection = forwardRef((props, ref) => {
         </div>
       </div>
 
-      <div className='2xl:w-4/6 md:w-4/5 w-5/6 h-fit relative bg-white md:my-10 my-5 flex shadow-xl rounded-full'>
+      <div className='w-full h-fit relative md:my-10 my-5 flex'>
 
-        <div className="w-full overflow-hidden whitespace-nowrap bg-white p-2 rounded-full">
+        <div className="w-full overflow-hidden whitespace-nowrap p-2">
           <div className="inline-block animate-marquee flex justify-between items-center space-x-4">
-            {/* Duplicate logos to create an infinite loop effect */}
             {brandImages.map((brand, index) => (
               <span key={index} className="text-lg font-bold flex-shrink-0">
                 <img src={brand.src} alt={brand.alt} className="h-10 w-auto" />
@@ -82,8 +81,8 @@ const HeroSection = forwardRef((props, ref) => {
             ))}
           </div>
         </div>
-        <div className='absolute left-0 md:w-1/5 w-1/4 h-full bg-gradient-to-r from-black to white rounded-l-full z-10'></div>
-        <div className='absolute right-0 md:w-1/5 w-1/4 h-full bg-gradient-to-l from-black to white rounded-r-full'></div>
+        <div className='absolute left-0 md:w-1/5 w-1/4 h-full z-10'></div>
+        <div className='absolute right-0 md:w-1/5 w-1/4 h-full '></div>
       </div>
     </div>
   );

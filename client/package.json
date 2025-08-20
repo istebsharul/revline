@@ -39,6 +39,7 @@
     "react-typed": "^2.0.12",
     "recharts": "^2.12.7",
     "redux-persist": "^6.0.0",
+    "swiper": "^11.2.10",
     "tailwind-scrollbar-hide": "^2.0.0"
   },
   "devDependencies": {

@@ -6,6 +6,7 @@ import { loadUser, logout } from '../../Actions/userActions';
 import { FaUserCircle } from "react-icons/fa";
 import { FiPhoneCall } from "react-icons/fi";
 import { motion } from 'framer-motion';
+import SubNavbar from './SubNavbar';
 
 function Navbar() {
     const [navbar, setNavbar] = useState(false);
@@ -65,8 +66,8 @@ function Navbar() {
     };
 
     return (
-        <nav className="w-full flex justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 bg-red-400 shadow-lg">
-            <div className="w-full md:h-14 lg:w-4/5 2xl:w-3/4 md:flex md:justify-between md:items-center md:px-4 md:p-0 p-1">
+        <nav className="w-full flex flex-col justify-center items-center bg-white fixed top-0 left-0 right-0 z-50 shadow-lg">
+            <div className="w-full md:h-14 md:flex md:justify-between md:items-center 2xl:px-64 md:px-32 md:p-0 p-1 z-50 bg-white">
                 {/* LOGO */}
                 <div className='flex md:flex-col items-center justify-between md:block'>
                     <div className="w-[9rem] p-1">
@@ -152,36 +153,11 @@ function Navbar() {
                     </div>
                 </div>
             </div>
+            <div className='z-40'>
+                <SubNavbar/>
+            </div>
         </nav>
     );
 }
 
 export default Navbar;
-
-{/* <div className="w-full h-full md:hidden md:py-0 py-3 relative decoration-none flex justify-center items-center bg-red-400" ref={dropdownRef}>
-                        <div className="cursor-pointer " onClick={toggleUserDropdown}>
-                            {isLoggedIn ? (
-                                <button><FaUserCircle className="w-7 h-7" /></button>
-                            ) : (
-                                <Link className='px-6 py-0.5 border border-red-600 rounded-full text-lg text-[#f6251a]' to="/login">LOGIN</Link>
-                            )}
-                        </div>
-                        {isLoggedIn && userDropdown && (
-                            <div className="absolute right-0 mt-10 w-48 bg-blue-400 shadow-md rounded-lg">
-                                <div
-                                    className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                                >
-                                    {username}
-                                </div>
-                                <Link to="/orders" className='block px-4 py-2 text-gray-700 cursor-pointer hover:bg-red-100 hover:rounded-lg'>
-                                    Orders
-                                </Link>
-                                <div
-                                    className="px-4 py-2 text-gray-700 cursor-pointer hover:bg-gray-100"
-                                    onClick={handleLogout}
-                                >
-                                    Logout
-                                </div>
-                            </div>
-                        )}
-                    </div> */}

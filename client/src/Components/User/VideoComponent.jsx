@@ -1,36 +1,19 @@
-import { useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import carGif from '../../Assets/web/hero_section2.webp';
 
 const VideoComponent = () => {
-  const videoRef = useRef(null);
+  const [gifSrc, setGifSrc] = useState(carGif);
 
-  // useEffect(() => {
-  //   const video = videoRef.current;
-
-  //   if (video) {
-  //     const handleTimeUpdate = () => {
-  //       if(video.currentTime >2.0){
-  //         video.playbackRate = 1.0;
-  //       }else{
-  //         video.playbackRate = 4.0;
-  //       }
-  //     };
-
-  //     video.addEventListener('timeupdate', handleTimeUpdate);
-
-  //     return () => {
-  //       video.removeEventListener('timeupdate', handleTimeUpdate);
-  //     };
-  //   }
-  // }, []);
+  useEffect(() => {
+    // Change src by appending timestamp to force reload on mount
+    setGifSrc(`${carGif}?t=${Date.now()}`);
+  }, []);
 
   return (
-    <video
-      ref={videoRef}
-      src="https://res.cloudinary.com/dp3xz2kbh/video/upload/v1733168667/revlineautoparts/Assets/e4xj5emyf0j3aarqouiy.mp4"
+    <img
+      src={gifSrc}
       className="md:w-[55rem] w-1/2"
-      autoPlay
-      muted
-      playsInline
+      alt="Car animation"
     />
   );
 };

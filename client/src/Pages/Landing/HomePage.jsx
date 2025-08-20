@@ -6,6 +6,7 @@ import HeroSection from '../../Components/User/HeroSection'
 import WhyChooseUs from '../../Components/User/WhyChooseUs'
 import BuyingFlow from '../../Components/User/BuyingFlow'
 import { useLocation } from 'react-router-dom';
+import BestSeller from '../../Components/User/BestSeller'
 
 function HomePage() {
   const flowSectionRef = useRef(null);
@@ -30,10 +31,11 @@ function HomePage() {
   return (
     <div className='w-full bg-gray-100'>
       <HeroSection ref={formRef} id="form"/>
+      <WhyChooseUs/>
       <BestBuyingExperience handleScroll={handleScroll}/>
+      <BestSeller/>
       <BuyingFlow ref={flowSectionRef}/>
       <Tagline/>
-      <WhyChooseUs/>
       <Testimonials/>
     </div>
   )
