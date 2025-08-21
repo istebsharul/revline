@@ -1,140 +1,104 @@
-import React from 'react';
-import { FaCheckCircle, FaDollarSign, FaShippingFast, FaHeadset, FaWrench, FaShieldAlt } from 'react-icons/fa'; // Added new icons
-import { motion } from 'framer-motion';
+
+import React from "react";
+import { FaShieldAlt, FaRegClock, FaCheckCircle, FaLock } from "react-icons/fa";
 
 const WhyChooseUs = () => {
-    const reasons = [
-        {
-            icon: <FaCheckCircle className="text-5xl text-black mb-4" />,
-            title: 'Quality You Can Trust',
-            description: 'We ensure our OEM parts are thoroughly tested and inspected to meet performance expectations, ensuring top reliability.',
-        },
-        {
-            icon: <FaDollarSign className="text-5xl text-black mb-4" />,
-            title: 'Affordable Pricing',
-            description: 'Our competitive prices help you save money while ensuring you receive the highest quality parts available.',
-        },
-        {
-            icon: <FaWrench className="text-5xl text-black mb-4" />, // Using a wrench for "Real-Time Inventory"
-            title: 'Real-Time Inventory',
-            description: 'Our live inventory system guarantees the parts you need are available exactly when you need them.',
-        },
-        {
-            icon: <FaShippingFast className="text-5xl text-black mb-4" />,
-            title: 'Nationwide Shipping',
-            description: 'We provide fast, reliable shipping across the United States, ensuring your parts arrive as quickly as possible.',
-        },
-        {
-            icon: <FaHeadset className="text-5xl text-black mb-4" />,
-            title: 'Expert Assistance',
-            description: 'Our knowledgeable specialists are here to help you find exactly what you need, providing personalized support.',
-        },
-        {
-            icon: <FaShieldAlt className="text-5xl text-black mb-4" />, // Using a shield for "Comprehensive Warranty"
-            title: 'Comprehensive Warranty',
-            description: 'You can enjoy peace of mind with our hassle-free warranty included with every part we sell to you.',
-        },
-        {
-            icon: <FaHeadset className="text-5xl text-black mb-4" />,
-            title: 'Customer Support',
-            description: 'Our dedicated customer service team is committed to answering your questions and ensuring complete satisfaction.',
-        },
-    ];
+  const features = [
+    {
+      icon: <FaShieldAlt className="text-red-500 text-4xl" />,
+      title: "1 YEAR WARRANTY",
+      description: "We offer hassle-free guarantees",
+    },
+    {
+      icon: <FaCheckCircle className="text-red-500 text-4xl" />,
+      title: "QUALITY ASSURED PARTS",
+      description: "All of our parts are quality tested & inspected.",
+    },
+    {
+      icon: <FaRegClock className="text-red-500 text-4xl" />,
+      title: "24 HOUR HANDLING",
+      description:
+        "We ship all products within 24 business hours to the lower 48 states.",
+    },
+    {
+      icon: <FaLock className="text-red-500 text-4xl" />,
+      title: "SECURE TRANSACTIONS",
+      description: "256-BIT level encryption security, certified & verified.",
+    },
+  ];
 
-
-    // Animation variants for Framer Motion
-    const variants = {
-        hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0 },
-    };
-
-    return (
-        <div className="md:pb-40 pb-20">
-            <div className="2xl:w-4/6 md:w-5/6 mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 className='md:text-5xl text-4xl font-inter tracking-tight text-center py-20'>
-                    WHY <span className='text-[#f6251a]'>CHOOSE</span> US?
-                </h1>
-                <div className="flex flex-wrap justify-center">
-                    {reasons.map((reason, index) => (
-                        <motion.div
-                            key={index}
-                            className={`flex flex-col justify-start items-center shadow-xl bg-gray-50 border rounded-xl p-6 text-center hover:shadow 2xl:w-1/5 md:w-1/5 w-full m-4`} // Adjusting width
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ amount: 0.3 }} // Animate when 30% of the element is in view
-                            transition={{ duration: 0.3, delay: index * 0.3 }} // Staggered animations
-                            variants={variants}
-                        >
-                            <div className='pt-4'>{reason.icon}</div>
-                            <h3 className="text-lg font-semibold text-[#f6251a] mt-4">{reason.title}</h3>
-                            <p className="mt-2 text-gray-600">{reason.description}</p>
-                        </motion.div>
-                    ))}
-                </div>
+  return (
+    <section className="bg-white py-16 px-6 md:px-12 lg:px-20">
+      <div className="max-w-6xl mx-auto text-center">
+        <h1 className='text-center md:text-5xl text-3xl py-5 font-medium'>WHY <span className="text-[#f6251a]">CHOOSE</span> US</h1>
+        <p className="md:px-40 md:pb-10 md:text-sm text-xs"><span className="hover:underline hover:text-[#f6251a]">Revlineautoparts.com</span> is the place for the best genuine OEM used auto parts online. With a hassle free, one year warranty, and the highest standards in quality and affordability, you can always rely on us for your parts.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature, index) => (
+            <div
+              key={index}
+              className={`flex flex-col justify items-center text-center md:p-6 p-2 transition-transform duration-300 ${index == features.length-1 ? '': 'md:border-r'}`}
+            >
+              <div className="mb-4">{feature.icon}</div>
+              <h3 className="md:text-lg text-sm font-semibold text-gray-800 mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600 md:text-sm text-xs">{feature.description}</p>
             </div>
+          ))}
         </div>
-    );
+      </div>
+    </section>
+  );
 };
 
 export default WhyChooseUs;
 
 
 // import React from 'react';
-// import { FaCheckCircle, FaDollarSign, FaShippingFast, FaHeadset } from 'react-icons/fa';
-// import { motion } from 'framer-motion';
+// import { FaShippingFast, FaCreditCard, FaShieldAlt, FaCheck } from 'react-icons/fa';
 
 // const WhyChooseUs = () => {
 //     const reasons = [
 //         {
-//             icon: <FaCheckCircle className="text-5xl text-black mb-4" />,
-//             title: 'Quality Parts',
-//             description: 'Our auto parts are fully tested and inspected to ensure top-notch quality.',
+//             icon: <FaShippingFast className="text-3xl text-[#f6251a]" />,
+//             title: 'Nationwide Shipping',
+//             description: 'Shipping the parts you need throughout the United States',
 //         },
 //         {
-//             icon: <FaDollarSign className="text-5xl text-black mb-4" />,
-//             title: 'Affordable Prices',
-//             description: 'We offer competitive pricing on all our products without compromising on quality.',
+//             icon: <FaCreditCard className="text-3xl text-[#f6251a]" />,
+//             title: 'Secure Payment',
+//             description: 'Shop thousands of quality used auto parts.',
 //         },
 //         {
-//             icon: <FaShippingFast className="text-5xl text-black mb-4" />,
-//             title: 'Fast Shipping',
-//             description: 'Get your auto parts delivered quickly with our fast and reliable shipping options.',
+//             icon: <FaShieldAlt className="text-3xl text-[#f6251a]" />,
+//             title: 'Warranty Policies',
+//             description: <>36-Month Parts & Labor Warranty available.</>,
 //         },
 //         {
-//             icon: <FaHeadset className="text-5xl text-black mb-4" />,
-//             title: 'Excellent Support',
-//             description: 'Our support team is available 24/7 to assist you with any questions or concerns.',
+//             icon: <FaCheck className="text-3xl text-[#f6251a]" />,
+//             title: 'Quality Inspection',
+//             description: 'Every part is inspected for quality assurance',
 //         },
 //     ];
 
-//     // Animation variants for Framer Motion
-//     const variants = {
-//         hidden: { opacity: 0, y: 50 },
-//         visible: { opacity: 1, y: 0 },
-//     };
-
 //     return (
-//         <div className="md:pb-40 pb-20 bg-gray-100">
-//             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-//                 <h1 className='md:text-5xl text-4xl font-inter tracking-tight text-center py-20'>
-//                     WHY <span className='text-[#f6251a]'>CHOOSE</span> US?
-//                 </h1>
-//                 <div className="grid place-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-//                     {reasons.map((reason, index) => (
-//                         <motion.div
-//                             key={index}
-//                             className="md:w-full w-4/5 h-full flex flex-col justify-start items-center bg-white rounded-xl p-6 text-center hover:shadow"
-//                             initial="hidden"
-//                             whileInView="visible"
-//                             viewport={{ amount: 0.3 }} // Animate when 30% of the element is in view
-//                             transition={{ duration: 0.5, delay: index * 0.4 }} // Staggered animations
-//                             variants={variants}
+//         <div className="py-6 bg-white [">
+//             <div className="max-w-7xl mx-auto px-6">
+//                 {/* Use grid here with 2 columns on small screens, 4 on sm and above */}
+//                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+//                     {reasons.map((reason, i) => (
+//                         <div
+//                             key={i}
+//                             className={`flex flex-col md:flex-row items-center px-4 text-black max-w-xs mx-auto gap-2 ${i === reasons.length - 1 ? '' : 'md:border-r md:border-gray-300'}`}
 //                         >
-//                             <div className='pt-4'>{reason.icon}</div>
-//                             <h3 className="text-lg font-semibold text-[#f6251a] mt-4">{reason.title}</h3>
-//                             <p className="mt-2 text-gray-600">{reason.description}</p>
-//                         </motion.div>
-//                     ))}
+//                             <div>{reason.icon}</div>
+//                             <div className="w-full flex flex-col justify-center items-center">
+//                                 <h3 className="font-medium md:text-lg text-sm text-nowrap mt-2 mb-1">{reason.title}</h3>
+//                                 <p className="text-xs font-light">{reason.description}</p>
+//                             </div>
+//                         </div>
+//                     ))
+//                     }
 //                 </div>
 //             </div>
 //         </div>

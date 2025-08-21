@@ -12,11 +12,11 @@ function BestBuyingExperience({ handleScroll }) {
         const handleScrollEvent = () => {
             const rect = sectionRef.current.getBoundingClientRect();
             if (rect.top <= window.innerHeight && rect.bottom >= 0) {
-                controls.start({ opacity: 1, y: 0 });
-                setCounterOn(true); // Start counting up when the element is in view
+                controls.start({ opacity: 1, scale: 1 });
+                setCounterOn(true);
             } else {
-                controls.start({ opacity: 0, y: 50 });
-                setCounterOn(false); // Stop counting up when the element exits
+                controls.start({ opacity: 0, scale: 0.95 });
+                setCounterOn(false);
             }
         };
 
@@ -27,36 +27,36 @@ function BestBuyingExperience({ handleScroll }) {
     }, [controls]);
 
     return (
-        <div className='w-full flex flex-col justify-center items-center md:my-40 my-10' ref={sectionRef}>
+        <div className='w-full flex flex-col justify-center items-center md:mb-36 my-10' ref={sectionRef}>
             <div className='text-center md:py-10 py-5'>
                 <motion.h1
                     className='text-5xl font-inter tracking-tight'
-                    initial={{ opacity: 0, y: -50 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={controls}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
                 >
                     BEST <span className='text-[#f6251a]'>BUYING</span> EXPERIENCE
                 </motion.h1>
                 <motion.p
                     className='p-4'
-                    initial={{ opacity: 0, y: -40 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={controls}
-                    transition={{ duration: 0.6, delay: 0.2 }}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
                 >
                     Explore our best-selling auto parts, renowned for their quality and reliability.
                 </motion.p>
             </div>
 
-            <div className='flex justify-center'>
-                <div className='md:w-3/5 w-5/6 flex md:flex-row flex-col md:space-x-3 md:space-y-0 space-y-3'>
+            <div className='flex justify-center p-4'>
+                <div className='2xl:w-2/3 md:w-5/6 flex md:flex-row flex-col md:space-x-3 md:space-y-0 space-y-3'>
                     <motion.div
                         className='relative md:w-1/2 hover:shadow-2xl rounded-xl'
-                        initial={{ opacity: 0, scale: 1 }}
+                        initial={{ opacity: 0, scale: 0.80 }}
                         animate={controls}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                         <img
-                            className={`w-full h-full brightness-50 rounded-xl object-cover`}
+                            className='w-full h-full brightness-50 rounded-xl object-cover'
                             src="https://res.cloudinary.com/drszvaldf/image/upload/v1724191391/revline/vc1m9cfbzhl5gsscpd1m.avif"
                             alt="Bestsellers"
                         />
@@ -70,17 +70,18 @@ function BestBuyingExperience({ handleScroll }) {
                             </a>
                         </div>
                     </motion.div>
+
                     <motion.div
                         className='md:w-1/2 flex flex-col space-y-3'
-                        initial={{ opacity: 0, y: 50 }}
+                        initial={{ opacity: 0, scale: 0.80 }}
                         animate={controls}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
                     >
                         <motion.div
                             className='relative w-full h-2/3 hover:shadow-2xl rounded-xl'
-                            initial={{ opacity: 0, scale: 1 }}
+                            initial={{ opacity: 0, scale: 0.80 }}
                             animate={controls}
-                            transition={{ duration: 0.6 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
                         >
                             <img
                                 className='w-full h-full overflow-hidden brightness-75'
@@ -96,11 +97,12 @@ function BestBuyingExperience({ handleScroll }) {
                                 </a>
                             </div>
                         </motion.div>
+
                         <motion.div
                             className='w-full h-1/3 bg-[#f6251a] rounded-xl flex justify-around p-3 hover:shadow-2xl'
-                            initial={{ opacity: 0, y: 50 }}
+                            initial={{ opacity: 0, scale: 0.80 }}
                             animate={controls}
-                            transition={{ duration: 0.6 }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
                         >
                             <div className='flex flex-col justify-center items-center text-white md:text-lg text-sm'>
                                 <p className='md:text-4xl text-2xl font-semibold'>

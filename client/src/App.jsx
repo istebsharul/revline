@@ -7,6 +7,7 @@ import { Toaster, ToastBar } from 'react-hot-toast';
 import UserRoutes from './Routes/userRoutes';
 import { loadUser } from './Actions/userActions';
 import Call from './Components/CustomerSupport/Call.jsx';
+import SubNavbar from './Components/User/SubNavbar.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -64,10 +65,11 @@ const App = () => {
           />
         )}
       </Toaster>
-
       <Call />
       <Navbar />
-      <UserRoutes />
+      <div className='pt-10'>
+        <UserRoutes />
+      </div>
       <Footer />
     </>
   );

@@ -129,7 +129,7 @@ function Testimonials() {
     return (
         <div className='w-full flex flex-col justify-center items-center bg-gray-100 rounded-2xl'>
             <h1 className='text-center md:text-5xl text-3xl text-[#f6251a] py-10 font-medium'>TESTIMONIALS</h1>
-            <div className='flex justify-end items-end my-2 gap-1 text-xl'>
+            <div className='flex justify-end items-end my-2 gap-1 text-md md:px-10'>
                 Our <img className='w-20' src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/640px-Google_2015_logo.svg.png" /> reviews <span className='text-xl font-medium'> {averageRating}</span> rating of {testimonials.length} reviews
             </div>
             <div className='md:w-4/6 w-full flex justify-start p-4'>
@@ -157,9 +157,9 @@ function Testimonials() {
                                         <span className='text-xl text-[#F4B400] font-medium mr-2'>{testimonial.rating.toPrecision(2)}</span>
                                         {renderStars(testimonial.rating)}
                                     </div>
-                                    <p>{testimonial.text}</p>
+                                    <p className='text-sm'>{testimonial.text}</p>
                                 </div>
-                                <h2 className='font-bold font-sans text-lg'>{testimonial.carBrand}</h2>
+                                <h2 className='font-bold font-sans text-md'>{testimonial.carBrand}</h2>
                                 <h1 className='md:text-3xl text-xl italic font-serif text-right'> -  {testimonial.name}</h1>
                             </div>
                         </div>
