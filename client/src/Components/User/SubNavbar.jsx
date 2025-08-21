@@ -37,16 +37,3 @@ function SubNavbar() {
 }
 
 export default SubNavbar;
-
-
-// import React from "react";
-
-// function SubNavbar() {
-//     return (
-//         <div className='w-full text-white text-center md:text-sm text-xs md:p-2 py-1 bg-red-500'>
-//             Fast Shipping from 60+ U.S. Warehouses | 3-5 Delivery | <span><a>888 632 0709</a></span>
-//         </div>
-//     );
-// }
-
-// export default SubNavbar;

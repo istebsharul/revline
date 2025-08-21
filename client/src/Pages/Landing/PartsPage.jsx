@@ -201,7 +201,7 @@ const PartsPage = () => {
         <BestSeller />
       </div>
 
-      <div className="w-full py-10 md:py-20 flex flex-col justify-center items-center">
+      <div className="w-full py-10 flex flex-col justify-center items-center">
         <h1 className='text-3xl text-red-500 font-bold text-center my-8'>All Parts</h1>
         {categories.map((category) => (
           <div key={category.name} className="w-full md:w-3/5 my-4 px-4 md:px-0">

@@ -31,11 +31,12 @@ function HomePage() {
   return (
     <div className='w-full bg-gray-100'>
       <HeroSection ref={formRef} id="form"/>
-      <WhyChooseUs/>
+      
       <BestBuyingExperience handleScroll={handleScroll}/>
       <BestSeller/>
       <BuyingFlow ref={flowSectionRef}/>
       <Tagline/>
+      <WhyChooseUs/>
       <Testimonials/>
     </div>
   )
