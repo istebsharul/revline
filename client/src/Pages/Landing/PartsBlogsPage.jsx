@@ -58,14 +58,7 @@ function PartsBlogsPage() {
 
 
     return (
-        <div className='flex flex-col justify-center items-center md:pt-10 pt-16 bg-gray-100 relative'>
-            <div className='relative'>
-                <Banner />
-                <p className='absolute md:text-4xl text-2xl inset-0 flex justify-center items-center text-white font-inter capitalize'>
-                    {data?.title}
-                </p>
-            </div>
-
+        <div className='flex flex-col justify-center items-center md:pt-16 pt-16 bg-gray-100 relative'>
             {isOpen && (
                 <div className="w-full h-full bg-black/20 flex justify-center items-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 md:p-10">
                     <div className='w-[28rem] p-10' ref={popupRef}>
