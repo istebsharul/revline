@@ -82,99 +82,86 @@ const items = [
 ];
 
 const BestSeller = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
 
-    const prevRef = useRef(null);
-    const nextRef = useRef(null);
-    const swiperRef = useRef(null);
+  return (
+    <div className="2xl:px-72 md:py-20 md:px-40 p-8 mx-auto flex md:flex-row flex-col gap-6 bg-white">
+      {/* Left section */}
+      <div className="md:w-1/3 flex flex-col justify-center md:text-left text-center">
+        <h1 className="text-4xl text-red-500 font-bold mb-4">
+          <span className="text-black">Best</span> Seller
+        </h1>
+        <p className="text-gray-700">
+          Discover our top-quality auto parts that ensure performance and
+          safety. Browse through our best sellers selected by customers.
+        </p>
+      </div>
 
-    useEffect(() => {
-        if (swiperRef.current) {
-            swiperRef.current.params.navigation.prevEl = prevRef.current;
-            swiperRef.current.params.navigation.nextEl = nextRef.current;
+      {/* Right section */}
+      <div className="md:w-2/3 relative">
+        <Swiper
+          modules={[Navigation, Autoplay]}
+          spaceBetween={20}
+          loop={true}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            1024: { slidesPerView: 2 },
+            1280: { slidesPerView: 3 },
+          }}
+          onBeforeInit={(swiper) => {
+            // Attach custom navigation refs BEFORE Swiper initializes
+            swiper.params.navigation.prevEl = prevRef.current;
+            swiper.params.navigation.nextEl = nextRef.current;
+          }}
+        >
+          {items.map((item) => (
+            <SwiperSlide key={item.id}>
+              <div className="flex flex-col justify-center items-center border rounded-xl hover:shadow-md p-4 h-full">
+                <img
+                  src={item.imageUrl}
+                  alt={item.altText}
+                  className="w-full h-48 object-contain rounded"
+                />
+                <div className="flex flex-col w-full">
+                  <div className="w-full flex justify-between items-center">
+                    <h3 className="w-4/5 text-lg text-red-500 font-semibold">
+                      {item.title}
+                    </h3>
+                    <button
+                      onClick={() => navigate(`/parts/${item.altText}`)}
+                      className="w-min border border-red-500 hover:bg-red-500 hover:text-white p-1 rounded-full duration-300 flex justify-center items-center group"
+                    >
+                      <MdArrowOutward className="w-6 h-6 transition-transform duration-300 group-hover:rotate-45" />
+                    </button>
+                  </div>
+                  <p className="text-gray-700 text-sm px-2 line-clamp-3">
+                    {item.description}
+                  </p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-            swiperRef.current.navigation.destroy(); // reset
-            swiperRef.current.navigation.init();    // reinit
-            swiperRef.current.navigation.update();  // update
-        }
-    }, []);
-
-    return (
-        <div className="2xl:px-72 md:py-20 md:px-40 p-8 mx-auto flex md:flex-row flex-col gap-6 bg-white">
-            {/* Left section */}
-            <div className="md:w-1/3 flex flex-col justify-center md:text-left text-center">
-                <h1 className="text-4xl text-red-500 font-bold mb-4">
-                    <span className="text-black">Best</span> Seller
-                </h1>
-                <p className="text-gray-700">
-                    Discover our top-quality auto parts that ensure performance and
-                    safety. Browse through our best sellers selected by customers.
-                </p>
-            </div>
-
-            {/* Right section */}
-            <div className="md:w-2/3 relative">
-                <Swiper
-                    modules={[Navigation, Autoplay]}
-                    spaceBetween={20}
-                    loop={true}
-                    autoplay={{ delay: 3000, disableOnInteraction: false }}
-                    breakpoints={{
-                        640: { slidesPerView: 1 },
-                        1024: { slidesPerView: 2 },
-                        1280: { slidesPerView: 3 },
-                    }}
-                    onInit={(swiper) => {
-                        swiper.params.navigation.prevEl = prevRef.current;
-                        swiper.params.navigation.nextEl = nextRef.current;
-                        swiper.navigation.init();
-                        swiper.navigation.update();
-                    }}
-                >
-                    {items.map((item) => (
-                        <SwiperSlide key={item.id}>
-                            <div className="flex flex-col justify-center items-center border rounded-xl hover:shadow-md p-4 h-full">
-                                <img
-                                    src={item.imageUrl}
-                                    alt={item.altText}
-                                    className="w-full h-48 object-contain rounded"
-                                />
-                                <div className="flex flex-col w-full">
-                                    <div className="w-full flex justify-between items-center">
-                                        <h3 className="w-4/5 text-lg text-red-500 font-semibold">
-                                            {item.title}
-                                        </h3>
-                                        <button
-                                            onClick={() => navigate(`/parts/${item.altText}`)}
-                                            className="w-min border border-red-500 hover:bg-red-500 hover:text-white p-1 rounded-full duration-300 flex justify-center items-center group"
-                                        >
-                                            <MdArrowOutward className="w-6 h-6 transition-transform duration-300 group-hover:rotate-45" />
-                                        </button>
-                                    </div>
-                                    <p className="text-gray-700 text-sm px-2 line-clamp-3">
-                                        {item.description}
-                                    </p>
-                                </div>
-                            </div>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-                {/* Custom Buttons */}
-                <button
-                    ref={prevRef}
-                    className="w-10 h-10 flex justify-center items-center absolute left-[-20px] top-1/2 -translate-y-1/2 z-10 hover:shadow-lg border bg-[#f6251a] text-white hover:text-white p-2 rounded-full shadow-lg hover:bg-[#f6251a] transition"
-                >
-                    &#8592;
-                </button>
-                <button
-                    ref={nextRef}
-                    className="w-10 h-10 flex justify-center items-center absolute right-[-20px] top-1/2 -translate-y-1/2 z-10 hover:shadow-lg border bg-[#f6251a] text-white hover:text-white p-3 rounded-full shadow-lg hover:bg-[#f6251a] transition"
-                >
-                    &#8594;
-                </button>
-            </div>
-        </div>
-    );
+        {/* Custom Buttons */}
+        <button
+          ref={prevRef}
+          className="w-10 h-10 flex justify-center items-center absolute left-[-20px] top-1/2 -translate-y-1/2 z-10 hover:shadow-lg border bg-[#f6251a] text-white hover:text-white p-2 rounded-full shadow-lg hover:bg-[#f6251a] transition"
+        >
+          &#8592;
+        </button>
+        <button
+          ref={nextRef}
+          className="w-10 h-10 flex justify-center items-center absolute right-[-20px] top-1/2 -translate-y-1/2 z-10 hover:shadow-lg border bg-[#f6251a] text-white hover:text-white p-3 rounded-full shadow-lg hover:bg-[#f6251a] transition"
+        >
+          &#8594;
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default BestSeller;

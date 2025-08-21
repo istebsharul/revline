@@ -7,7 +7,8 @@ import { Toaster, ToastBar } from 'react-hot-toast';
 import UserRoutes from './Routes/userRoutes';
 import { loadUser } from './Actions/userActions';
 import Call from './Components/CustomerSupport/Call.jsx';
-import SubNavbar from './Components/User/SubNavbar.jsx';
+import "swiper/css";
+import "swiper/css/navigation";
 
 const App = () => {
   const dispatch = useDispatch();
