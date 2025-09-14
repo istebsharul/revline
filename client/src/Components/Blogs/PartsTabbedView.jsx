@@ -1,4 +1,5 @@
-import React, { useEffect,useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 const partsData = [
     {
@@ -24,7 +25,7 @@ const partsData = [
     },
     {
         partName: "Headlight",
-        part:"headlight",
+        part: "headlight",
         parts: [
             "Used OEM Headlight Assembly",
             "Used LED Headlight Bulbs",
@@ -45,7 +46,7 @@ const partsData = [
     },
     {
         partName: "Transfer Case",
-        part:"transfercase",
+        part: "transfercase",
         parts: [
             "Used OEM Transfer Case",
             "Used Heavy-Duty Transfer Case",
@@ -66,7 +67,7 @@ const partsData = [
     },
     {
         partName: "Brake Master Cylinder",
-        part:"brakemastercylinder",
+        part: "brakemastercylinder",
         parts: [
             "Used OEM Brake Master Cylinder",
             "Used Dual Reservoir Brake Master Cylinder",
@@ -87,7 +88,7 @@ const partsData = [
     },
     {
         partName: "Power Brake Booster",
-        part:"powerbrakebooster",
+        part: "powerbrakebooster",
         parts: [
             "Used OEM Power Brake Booster",
             "Used Vacuum Power Brake Booster",
@@ -108,7 +109,7 @@ const partsData = [
     },
     {
         partName: "Alternator",
-        part:"alternator",
+        part: "alternator",
         parts: [
             "Used OEM Alternator",
             "Used High-Output Alternator",
@@ -129,7 +130,7 @@ const partsData = [
     },
     {
         partName: "A/C Compressor",
-        part:"accompressor",
+        part: "accompressor",
         parts: [
             "Used OEM A/C Compressor",
             "Used Heavy-Duty A/C Compressor",
@@ -150,7 +151,7 @@ const partsData = [
     },
     {
         partName: "Condenser",
-        part:"condenser",   
+        part: "condenser",
         parts: [
             "Used OEM A/C Condenser",
             "Used Heavy-Duty A/C Condenser",
@@ -203,24 +204,40 @@ const PartsTabbedView = ({ part }) => {
         }
     }, [selectedPart]);
 
+    const capitalizedPart = selectedPart.partName;
+
     return (
         <div className="container mx-auto p-2">
-            <h2 className="text-3xl font-bold mb-6">Best Sellers</h2>
+            <Helmet>
+                <title>{`Used ${capitalizedPart} Parts | OEM & Replacement Options Available`}</title>
+                <meta
+                    name="description"
+                    content={`Shop high-quality used ${capitalizedPart} parts including ${selectedPart.parts.slice(0, 5).join(", ")} and more. Affordable OEM replacements with warranty.`}
+                />
+                <meta
+                    name="keywords"
+                    content={`used ${capitalizedPart} parts, OEM ${capitalizedPart}, replacement ${capitalizedPart}, affordable ${capitalizedPart}, recycled ${capitalizedPart}, second hand ${capitalizedPart}`}
+                />
+                <meta property="og:title" content={`Used ${capitalizedPart} Parts | Affordable OEM Replacements`} />
+                <meta property="og:description" content={`Buy used ${capitalizedPart} parts including ${selectedPart.parts[0]}, ${selectedPart.parts[1]}, and more. OEM-tested & affordable.`} />
+                <meta property="og:type" content="website" />
+            </Helmet>
+
+            <h2 className="md:text-3xl text-xl font-bold mb-6">Top Auto Parts Trusted by Customers</h2>
 
             {/* Horizontal Scrollable Tabs */}
-            <div 
-                ref={containerRef} 
+            <div
+                ref={containerRef}
                 className="w-full overflow-x-auto whitespace-nowrap flex justify-start gap-3 border-b py-3 scrollbar-hide scroll-smooth"
             >
                 {partsData.map((p, index) => (
                     <button
                         key={index}
                         ref={selectedPart.part === p.part ? selectedRef : null} // Attach ref to selected part
-                        className={`px-4 py-2 rounded-md text-sm font-medium ${
-                            selectedPart.part === p.part
+                        className={`px-4 py-2 rounded-md text-sm font-medium ${selectedPart.part === p.part
                                 ? "bg-red-600 text-white"
                                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                        }`}
+                            }`}
                         onClick={() => setSelectedPart(p)}
                     >
                         {p.partName}

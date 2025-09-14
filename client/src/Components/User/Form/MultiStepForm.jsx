@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import VehicleInfoForm from './VehicleInfoForm';
 import VariantTransmissionForm from './VariantTransmissionForm';
 import UserInfoForm from './UserInfoForm';
@@ -6,6 +7,7 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 const MultiStepForm = () => {
+    const { part } = useParams('part');
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
 
@@ -221,12 +223,12 @@ const MultiStepForm = () => {
             <div className='bg-white p-4 rounded-lg shadow-lg border-black'>
                 <div className=''>
                     <div>
-                        <h2 className="text-2xl font-semibold text-left p-2 mb-1 text-black">
-                            {step === 1 ? "Let's find your part!" :
+                        <h1 className="text-xl font-bold text-left p-2 mb-1 text-black">
+                            {step === 1 ? <p>Get Instant <span className='text-[#f6251a]'>{part && part.toUpperCase()}</span> Quote</p> :
                                 step === 2 ? 'You are just 1 step away!' :
-                                    step === 3 ? "You're just a click away!" : <h1 className='font-bold'>FREE SHIPPING 🎉</h1>
+                                    step === 3 ? "You're just a click away!" : <p className='font-bold'>FREE SHIPPING 🎉</p>
                             }
-                        </h2>
+                        </h1>
                         <p>
 
                         </p>

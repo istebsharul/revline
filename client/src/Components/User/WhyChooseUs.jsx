@@ -30,13 +30,14 @@ const WhyChooseUs = () => {
   return (
     <section className="bg-white py-16 px-6 md:px-12 lg:px-20">
       <div className="max-w-6xl mx-auto text-center">
-        <h1 className='text-center md:text-5xl text-3xl py-5 font-medium'>WHY <span className="text-[#f6251a]">CHOOSE</span> US</h1>
-        <p className="md:px-40 md:pb-10 md:text-sm text-xs"><span className="hover:underline hover:text-[#f6251a]">Revlineautoparts.com</span> is the place for the best genuine OEM used auto parts online. With a hassle free, one year warranty, and the highest standards in quality and affordability, you can always rely on us for your parts.</p>
+        <h1 className='md:md:text-5xl text-2xl text-4xl font-inter tracking-tight text-center py-6'>
+          WHY <span className='text-[#f6251a]'>CHOOSE</span> US
+        </h1>        <p className="md:px-40 md:pb-10 md:text-sm text-xs"><span className="hover:underline hover:text-[#f6251a]">Revlineautoparts.com</span> is the place for the best genuine OEM used auto parts online. With a hassle free, one year warranty, and the highest standards in quality and affordability, you can always rely on us for your parts.</p>
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, index) => (
             <div
               key={index}
-              className={`flex flex-col justify items-center text-center md:p-6 p-2 transition-transform duration-300 ${index == features.length-1 ? '': 'md:border-r'}`}
+              className={`flex flex-col justify items-center text-center md:p-6 p-2 transition-transform duration-300 ${index == features.length - 1 ? '' : 'md:border-r'}`}
             >
               <div className="mb-4">{feature.icon}</div>
               <h3 className="md:text-lg text-sm font-semibold text-gray-800 mb-2">

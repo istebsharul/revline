@@ -251,7 +251,7 @@ function PartsBlogsPage() {
 
             <div className='w-full md:w-3/5 p-6'>
                 <PartsTabbedView part={part} />
-                <PartsModel />
+                <PartsModel  part={part}/>
 
                 {/* Banner */}
                 <div className='w-full flex justify-center items-center my-20'>

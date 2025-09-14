@@ -24,7 +24,7 @@ function SubNavbar() {
 
   return (
     <div
-      className={`w-full text-white text-center md:text-sm text-xs p-2 bg-red-500 fixed md:top-14 left-0 transition-transform duration-300 z-40 ${
+      className={`w-full text-white text-center md:text-sm text-xs md:p-2 py-2 bg-[#f6251a] fixed md:top-14 left-0 transition-transform duration-300 z-40 ${
         show ? "translate-y-0" : "-translate-y-full"
       }`}
     >
