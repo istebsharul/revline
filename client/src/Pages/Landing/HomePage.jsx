@@ -7,6 +7,7 @@ import WhyChooseUs from '../../Components/User/WhyChooseUs'
 import BuyingFlow from '../../Components/User/BuyingFlow'
 import { useLocation } from 'react-router-dom';
 import BestSeller from '../../Components/User/BestSeller'
+import FAQ from '../../Components/User/FAQ'
 
 function HomePage() {
   const flowSectionRef = useRef(null);
@@ -36,6 +37,7 @@ function HomePage() {
       <BestSeller/>
       <BuyingFlow ref={flowSectionRef}/>
       <Tagline/>
+      <FAQ/>
       <WhyChooseUs/>
       <Testimonials/>
     </div>
