@@ -4,7 +4,7 @@ const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 function SubCTA2({togglePopup, part}) {
   return (
-    <div className="md:w-full 2xl:max-w-6xl max-w-4xl bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl shadow-md py-4 px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 md:mb-20 mx-10">
+    <div className="md:w-full 2xl:max-w-6xl max-w-4xl bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl shadow-md py-4 px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 md:mb-20 mb-10 mx-10">
       {/* Text Section */}
       <div className="text-center md:text-left space-y-1">
         <h3 className="text-lg sm:text-xl md:text-lg font-semibold">
