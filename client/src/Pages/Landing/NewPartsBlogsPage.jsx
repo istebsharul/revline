@@ -19,6 +19,30 @@ import BuyingFlow from '../../Components/User/BuyingFlow';
 import Testimonials from '../../Components/User/Testimonials';
 import SubCTA from '../../Components/User/Sub-CTA';
 import SubCTA2 from '../../Components/User/SubCTA2';
+import AutoSlider from '../../Components/Blogs/AutoSlider';
+
+const carouselItems = [
+    {
+        "id": 1,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599518/Adobe_Express_-_file_4_gp7kbf.png",
+        "altText": "Item 1"
+    },
+    {
+        "id": 2,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599520/Adobe_Express_-_file_5_ecsmig.png",
+        "altText": "Item 2"
+    },
+    {
+        "id": 3,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599517/Adobe_Express_-_file_3_hgvv8a.png",
+        "altText": "Item 3"
+    },
+    {
+        "id": 4,
+        "imageUrl": "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1740599516/Adobe_Express_-_file_6_u5ckej.png",
+        "altText": "Item 4"
+    }
+];
 
 const reviews = [
     {
@@ -169,13 +193,14 @@ function NewPartsBlogsPage() {
             <div className='w-full space-y-10 py-6 flex justify-center items-center flex-col'>
                 {/* Summary */}
                 <div className='2xl:w-3/5 md:w-4/6 flex md:flex-row flex-col justify-center items-center'>
-                    <div className='md:w-1/2 flex flex-col justify-center md:items-start items-center space-y-4'>
-                        <h1 className='md:w-full w-4/5 md:text-left text-center text-black md:text-5xl text-4xl leading-tight md:pt-16 md:p-0 p-4'>
+                    <div className='md:w-1/2 flex flex-col justify-center md:items-start items-center md:space-y-4'>
+                        <h1 className='md:w-full w-4/5 md:text-left text-center text-black md:text-5xl 2xl:text-5xl text-3xl leading-tight md:pt-16 md:p-0 p-4'>
                             Used <span className='font-semibold italic text-red-600'>ABS</span> Control Modules & <span className='font-semibold italic text-red-600'>ABS</span> Pumps
                         </h1>
-                        <p className='md:text-left md:px-0 px-8 text-center'>Stop hunting across generic parts sites. This page is laser-focused on <strong>ABS modules, ABS pumps,</strong> and <strong>Hydraulic control units</strong> -quality-tested, warrantied, and matched to your VIN.</p>
-                        <div className="flex justify-center items-center overflow-hidden mt-10">
-                            <VideoComponent />
+                        <p className='md:text-left md:px-0 px-8 text-center 2xl:text-lg text-sm'>Stop hunting across generic parts sites. This page is laser-focused on <strong>ABS modules, ABS pumps,</strong> and <strong>Hydraulic control units</strong> -quality-tested, warrantied, and matched to your VIN.</p>
+                        <div className="w-3/4 flex justify-center items-center overflow-hidden">
+                            {/* <VideoComponent /> */}
+                            <AutoSlider images={carouselItems}/>
                         </div>
                     </div>
 

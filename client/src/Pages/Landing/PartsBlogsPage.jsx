@@ -38,9 +38,6 @@ function PartsBlogsPage() {
 
     // Close the popup when clicking outside of it
     useEffect(() => {
-        console.log(data);
-        console.log(blogdata);
-        console.log(part);
         const handleClickOutside = (event) => {
             if (popupRef.current && !popupRef.current.contains(event.target)) {
                 togglePopup(); // Close the popup if clicked outside
@@ -94,7 +91,7 @@ function PartsBlogsPage() {
                 {/* Open Graph Tags for Facebook */}
                 <meta property="og:title" content={`Buy Used ${data?.title} Parts | Affordable & Reliable`} />
                 <meta property="og:description" content={`Looking for high-quality used ${data?.title} parts? Get affordable, reliable, and performance-tested auto parts with fast shipping. Satisfaction guaranteed! Call now: +1-888-632-0709.`} />
-                <meta property="og:image" content={data?.carouselItems[0].imageUrl || "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.png"} />
+                <meta property="og:image" content={data?.carouselItems[0]?.imageUrl || "https://res.cloudinary.com/dp3xz2kbh/image/upload/v1732812894/revlineautoparts/Logo/pfmbwdtq2eswnpcrqghn.png"} />
                 <meta property="og:url" content={`https://revlineautoparts.com/parts/${part}`} />
                 <meta property="og:type" content="product" />
                 <meta property="og:site_name" content="Revline AutoParts" />
