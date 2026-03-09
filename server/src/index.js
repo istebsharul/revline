@@ -10,6 +10,9 @@ const port = process.env.PORT || 4000;
 // Call the database connection function
 connectDatabase();
 
+// Start background workers (email follow-ups & review requests)
+import './queue/worker.js';
+
 // Create HTTP server with Express app
 const server = createServer(app);
 
